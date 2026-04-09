@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# LaTeX build artifacts (book)
+*.aux
+*.log
+*.out
+*.toc
+*.ptb
+
+# Editor
+.vscode/*.log
+
+#Python
+.venv/
