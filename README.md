@@ -1,9 +1,9 @@
 # Void and Form
 
-A single binary distinction -- a type with two provably unequal, covering
-elements -- forces the complete graph K4 as the unique surviving structure.
-This repository contains the machine-verified derivation and its physical
-identification layer.
+The starting point is deliberately minimal: a type with two provably unequal,
+covering elements. From this single distinction, the complete graph K4 is the
+unique surviving structure after exhaustive elimination. This repository
+contains the machine-verified derivation and its physical identification layer.
 
 Both files compile under `agda --safe --without-K` with zero postulates
 and no standard library.
@@ -81,12 +81,18 @@ Form was already forced in Void.
 
 5. **Loop closure** -- The invariant record presupposes D0. The chain
    D0 -> K4 -> record -> D0 is a closed constraint, not an open arrow.
+   `K4-is-inevitable : Distinction → K4Record` (forward) and
+   `record-presupposes-distinction : K4Record → Distinction` (backward)
+   establish the equivalence `Distinction ⟺ K4Record`.
 
 
 ## Projections from K4 (Form)
 
-Form identifies K4 invariants with measured constants. Every equality
-below is a `refl` closed by the type checker. No value was fitted.
+The following values arise internally as exact rational expressions from K4's
+combinatorial invariants. Every equality is a `refl` closed by the type
+checker. No value was fitted. Their comparison to measured constants is
+external to the proof — the computation is theorem, the identification
+is interpretation.
 
 | Quantity | K4 formula | Tree value | Corrected | Measured | Error |
 |----------|-----------|-----------|-----------|----------|-------|
