@@ -140,9 +140,9 @@ in both companion papers, and in this README is verified.
 
 ## License
 
-See repository.
+CC-BY-NC-SA-4.0
 
 
 ## DOI
 
-10.5281/zenodo.17826218
+10.5281/zenodo.19491035
