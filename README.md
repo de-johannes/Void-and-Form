@@ -30,7 +30,7 @@ If the compiler accepted the source, every statement in the PDFs is verified.
 | `Form.lagda.tex` | `Form` | ~6,200 | Identification layer: maps K4 invariants to measured physical constants (`open import Void`) |
 | `papers/VoidCompanionPaper.tex` | -- | ~530 | Companion paper: the formal chain from distinction to K4 |
 | `papers/FormCompanionPaper.tex` | -- | ~530 | Companion paper: the physics record and numerical results |
-| `papers/TableOfContents.md` | -- | ~180 | Part/chapter TOC for both books; key theorem index for AI navigation |
+| `TableOfContents.md` | -- | ~180 | Part/chapter TOC for both books; key theorem index for AI navigation |
 
 Form depends on Void. Compile Void first.
 
