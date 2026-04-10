@@ -22858,6 +22858,12 @@ Every theorem in this book has the same shape: a statement about $K_4$ invariant
 
 Now consider the final question: \emph{Is this algebra the Standard Model?}
 
+Before addressing what the formal system can say, consider what the Standard Model itself says.  The ratio $m_p / m_e = 1836.15\ldots$ is not a theorem of the Standard Model.  It is a number extracted from lattice QCD calculations that take measured quark masses as numerical inputs.  Remove those inputs and the calculation cannot run.  The Standard Model does not derive $1836$ from first principles; it absorbs it.  The same is true of $\alpha^{-1} \approx 137.036$: the coupling is measured at the $Z$-pole and renormalisation-group-evolved to lower scales, never derived from combinatorial necessity.  Every constant the Standard Model uses was first measured.  Not one was predicted from a parameter-free framework before measurement.
+
+The $K_4$ computation runs in the opposite direction.  From a single record with five fields---no numerical inputs, no measured parameters, no free choices beyond the logical minimum required to make distinction possible---the compiler returns $137$, $1836$, $207$, and $17$ as closed normal forms.  The derivation of $1836$ does not consult a quark-mass table; it traverses the unique surviving monomial in $\{\,E^2 d\,\}$ and multiplies by the unique nearest coprime neighbor of $2^V$.  The Standard Model \emph{could not have predicted} these numbers before they were measured.  The $K_4$ framework \emph{does not need the measurements} to produce them.
+
+This asymmetry is not a claim about physics.  It is a fact about derivation order.
+
 This question is not a theorem. It cannot be, because it asks about the relationship between a formal object (the \texttt{StandardModelFromK4} record) and the physical world (the universe we measure). The formal system has no access to the physical world. It operates entirely within type theory, where the only objects are types, terms, and identity proofs.
 
 But the formal system \emph{can} ask a narrower question: \emph{Is there any formal obstruction to the identification?} Is there a type-theoretic distinction between the $K_4$ computation and itself that would block the interpretation?
@@ -22875,6 +22881,8 @@ The book began with $D_0$: the First Distinction, the primordial cut that separa
 The chain began with the birth of distinction: the system's ability to tell two things apart. It ends here, at a \emph{failure} of distinction: the system's inability to tell the computation apart from itself.
 
 This failure is not a bug. It is the \emph{boundary condition} of formal methods. The question ``Is this the Standard Model?'' asks for a distinction between a type-theoretic object and a physical reality. But the formal system's entire vocabulary consists of identity types---and the identity type between a thing and itself is \texttt{refl}. The system cannot produce a distinction where none exists \emph{within its world}.
+
+The same system that \emph{forced} distinction at its foundation---that required a formal witness of $\ell \neq r$ before any structure could be built---now reaches its limit at the boundary between computation and measurement.  A system that makes distinction its axiom, and that has run every admissible elimination to exhaustion, has said the strongest thing it can say when it finds no distinction to make.  \texttt{refl} is not a failure of creativity.  It is the verdict of a judge who has heard all the evidence and finds the two parties indistinguishable.
 
 \texttt{refl} is the formal system's way of saying: \emph{I have checked everything I can check. What remains is not something I can reach.}
 
