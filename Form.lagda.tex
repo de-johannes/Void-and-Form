@@ -2991,8 +2991,126 @@ theorem-tau-bare-classification = record
   ; tau-ratio-is-forced = refl
   ; tau-ratio-is-17 = refl
   }
+\end{code}
 
+%───────────────────────────────────────────────────────────────────────────
+\subsubsection*{Compactification Uniqueness: The Nearest Coprime Neighbor}
+%───────────────────────────────────────────────────────────────────────────
 
+The Clifford dimension $2^V = 16$ arises as an algebraic invariant of the simplex
+structure: it counts the basis elements of $\mathrm{Cl}(\mathbb{R}^V)$.  But 16
+shares its entire prime factorisation with the base product
+$V \cdot E \cdot d \cdot \chi = 144 = 2^4 \cdot 3^2$.
+A mass factor that divides the kinematic base cannot introduce independent spectral
+information---it collapses into the structure it was meant to extend.
+Nature must adjust the Clifford dimension to the nearest value that shares no prime
+factor with the base.  The predecessor $15 = 3 \cdot 5$ carries the factor~$3$ from
+the degree $d = 3$ and is therefore contaminated.  The successor~$17$ is prime,
+coprime to~$144$, and survives as the unique nearest neighbor.
+The compactification $F_2 = 17$ is not designed; it is the only value within distance
+one of~$2^V$ that is algebraically independent of the $K_4$ base.
+
+\medskip
+\noindent
+\textbf{Constraint:}
+The compactification factor must be coprime to the $K_4$ base product
+$V \cdot E \cdot d \cdot \chi = 144$.
+Any shared prime factor would make a mass formula reducible, collapsing the
+compactification factor into the cofactor it was meant to extend.
+
+\noindent
+\textbf{Elimination:}
+Three candidates at distance~$\leq 1$ from $2^V$:
+$\gcd(16, 144) = 16$ (eliminated),
+$\gcd(15, 144) = 3$ (eliminated),
+$\gcd(17, 144) = 1$ (unique survivor).
+
+\noindent
+\textbf{Consequence:}
+$F_2 = \mathrm{suc}(2^V) = 17$ is the unique nearest coprime neighbor
+of the Clifford dimension.
+The operation \texttt{suc} is not chosen---it is the minimal displacement
+forced by the coprimality constraint.
+
+\begin{code}
+-- § The K₄ base product: V·E·d·χ = 4·6·3·2 = 144
+K4-base-product : ℕ
+K4-base-product = vertexCountK4 * edgeCountK4 * degree-K4 * eulerChar-computed
+
+law-base-product-is-144 : K4-base-product ≡ 144
+law-base-product-is-144 = refl
+
+-- § Nearest-neighbor candidates: the three values at distance ≤ 1 from 2^V
+data NearestNeighborCandidate : Set where
+  nn-pred : NearestNeighborCandidate   -- 2^V − 1 = 15
+  nn-self : NearestNeighborCandidate   -- 2^V     = 16
+  nn-suc  : NearestNeighborCandidate   -- 2^V + 1 = 17
+
+eval-nearest-neighbor : NearestNeighborCandidate → ℕ
+eval-nearest-neighbor nn-pred = clifford-dimension ∸ 1
+eval-nearest-neighbor nn-self = clifford-dimension
+eval-nearest-neighbor nn-suc  = suc clifford-dimension
+
+-- § Candidate values
+law-nn-pred-is-15 : eval-nearest-neighbor nn-pred ≡ 15
+law-nn-pred-is-15 = refl
+
+law-nn-self-is-16 : eval-nearest-neighbor nn-self ≡ 16
+law-nn-self-is-16 = refl
+
+law-nn-suc-is-17 : eval-nearest-neighbor nn-suc ≡ 17
+law-nn-suc-is-17 = refl
+
+-- § The Clifford dimension itself is not coprime to the base
+law-cliff-not-coprime : ¬ (gcd clifford-dimension K4-base-product ≡ 1)
+law-cliff-not-coprime ()   -- gcd(16, 144) = 16 ≠ 1
+
+-- § The predecessor fails: 3 | 15 and 3 | 144
+law-pred-cliff-not-coprime : ¬ (gcd (clifford-dimension ∸ 1) K4-base-product ≡ 1)
+law-pred-cliff-not-coprime ()   -- gcd(15, 144) = 3 ≠ 1
+
+-- § The successor passes: 17 is prime, shares no factor with 144
+law-suc-cliff-coprime : gcd (suc clifford-dimension) K4-base-product ≡ 1
+law-suc-cliff-coprime = refl   -- gcd(17, 144) = 1
+
+-- § Exhaustive uniqueness: only suc survives the coprimality filter
+nearest-neighbor-coprime-unique :
+  (c : NearestNeighborCandidate) →
+  gcd (eval-nearest-neighbor c) K4-base-product ≡ 1 →
+  c ≡ nn-suc
+nearest-neighbor-coprime-unique nn-pred ()
+nearest-neighbor-coprime-unique nn-self ()
+nearest-neighbor-coprime-unique nn-suc refl = refl
+
+-- § Classification record: F₂ = suc(2^V) is the unique admissible compactification
+record CompactificationUniqueness : Set where
+  field
+    base-product-is-144 : K4-base-product ≡ 144
+    clifford-is-16 : clifford-dimension ≡ 16
+    self-eliminated :
+      ¬ (gcd clifford-dimension K4-base-product ≡ 1)
+    pred-eliminated :
+      ¬ (gcd (clifford-dimension ∸ 1) K4-base-product ≡ 1)
+    suc-coprime :
+      gcd (suc clifford-dimension) K4-base-product ≡ 1
+    unique-nearest-coprime :
+      (c : NearestNeighborCandidate) →
+      gcd (eval-nearest-neighbor c) K4-base-product ≡ 1 →
+      c ≡ nn-suc
+    suc-is-F₂ : F₂ ≡ suc clifford-dimension
+    F₂-is-17 : F₂ ≡ 17
+
+theorem-compactification-uniqueness : CompactificationUniqueness
+theorem-compactification-uniqueness = record
+  { base-product-is-144 = refl
+  ; clifford-is-16 = refl
+  ; self-eliminated = law-cliff-not-coprime
+  ; pred-eliminated = law-pred-cliff-not-coprime
+  ; suc-coprime = law-suc-cliff-coprime
+  ; unique-nearest-coprime = nearest-neighbor-coprime-unique
+  ; suc-is-F₂ = refl
+  ; F₂-is-17 = refl
+  }
 
 
 -- § End of Bridge code from Void
@@ -3015,14 +3133,69 @@ loop-structure-cross = loop-numerator * loop-denom-QCD  -- 11 × 72 = 792
 
 theorem-loop-cross : loop-structure-cross ≡ 792
 theorem-loop-cross = refl
+\end{code}
 
--- § The Discrete-Continuum Bridge (full correction chain from Void) — Void eliminates the loop numerator (8 → 1 survivor) and forces canonical
+%───────────────────────────────────────────────────────────────────────────
+\subsubsection*{The Discrete-Continuum Bridge}
+%───────────────────────────────────────────────────────────────────────────
 
--- §──────────────────────────────────────────────────────────────────────────
--- § 1. Proton correction: +11/72 = 0.15277̄
--- §    proton-loop, proton-corrected already exported by Void
--- §──────────────────────────────────────────────────────────────────────────
+The integer-valued bare ratios $1836$, $207$, and~$17$ sit at the coarsest
+spectral resolution.  Measurement penetrates finer scales, and the $K_4$ graph
+carries rational corrections at each.  A single spectral invariant drives every
+correction: the loop numerator $E + d + \chi = 11$, the unique coprime survivor
+already extracted by the \texttt{LoopClassification} filtration.  It acts at three
+distinct $K_4$ volumes, one per physical sector; no new parameter enters.
 
+\medskip
+\noindent
+\textbf{Constraint:}
+Every correction fraction must be irreducible and must factor entirely from
+$\{V, E, d, \chi, F_2\}$.  Any numerator that shares a prime with the correction
+denominator collapses the correction into the bare ratio it was meant to extend,
+destroying independent spectral information.
+
+\noindent
+\textbf{Construction:}
+Six correction records are constructed, each as a pair $(p/q)$ with $p = 11$
+(universal loop survivor) or a sector-specific bridge value, and $q$ a canonical
+$K_4$ volume.  All irreducibility conditions are verified by \texttt{refl}.
+
+\noindent
+\textbf{Consequence:}
+The corrected constants $(\alpha^{-1}_{\mathrm{corr}},\; m_p/m_e|_{\mathrm{corr}},\;
+\sin^2\!\theta_W,\; m_\mu/m_e|_{\mathrm{corr}})$ are single-valued; no residual
+parameter survives the constraint chain.
+
+%───────────────────────────────────────────────────────────────────────────
+\subsubsection*{Proton Loop Correction: $+11/72$}
+%───────────────────────────────────────────────────────────────────────────
+
+The bare proton ratio $1836$ is exact only at integer resolution.  The QCD volume
+$V \cdot E \cdot d = 4 \cdot 6 \cdot 3 = 72$ sets the canonical scale at which
+the loop numerator acts.  No other numerator admits the correction: every
+alternative was eliminated by the \texttt{LoopClassification} filtration, leaving
+$11 = E + d + \chi$ as the sole coprime survivor.  The denominator $72$ is not
+chosen; it is the product of the three spatial invariants of $K_4$.
+
+\medskip
+\noindent
+\textbf{Constraint:}
+$\gcd(11, 72) = 1$: the QCD correction must introduce spectral information
+the QCD volume cannot absorb.  Any shared prime factor would reduce the fraction
+and eliminate its independent contribution.
+
+\noindent
+\textbf{Construction:}
+$\texttt{proton-correction} = 11/72$.  Numerator \texttt{loop-numerator} and
+denominator \texttt{loop-denom-QCD} are re-exported from Void.  K$_4$ factorization
+and irreducibility verified by \texttt{refl}.
+
+\noindent
+\textbf{Consequence:}
+$m_p / m_e|_{\mathrm{corr}} = 1836 + 11/72$, uniquely forced once the loop
+survivor and the QCD volume are fixed.
+
+\begin{code}
 -- § Re-export with local aliases for readability
 proton-correction-ℚ : ℚ
 proton-correction-ℚ = proton-loop          -- 11/72
@@ -3048,12 +3221,37 @@ theorem-proton-num-from-K4 = law-proton-loop-from-K4
 
 theorem-proton-den-from-K4 : proton-loop-den ≡ vertexCountK4 * edgeCountK4 * degree-K4
 theorem-proton-den-from-K4 = law-proton-denom-from-K4
+\end{code}
 
--- §──────────────────────────────────────────────────────────────────────────
--- § 2. Electroweak / Weinberg correction: −11/576 → sin²θ_W = 133/576
--- §    weinberg-tree, ew-loop, weinberg-corrected already exported by Void
--- §──────────────────────────────────────────────────────────────────────────
+%───────────────────────────────────────────────────────────────────────────
+\subsubsection*{Electroweak Correction: $-11/576$,\; $\sin^2\!\theta_W = 133/576$}
+%───────────────────────────────────────────────────────────────────────────
 
+The Weinberg angle at tree level is $\sin^2\!\theta_W = \chi / \kappa = 2/8 = 0.25$,
+encoding the ratio of the Euler characteristic to the spectral width $\kappa = 8$.
+The loop survivor $11$ acts again, now at the electroweak volume $\kappa \cdot 72 = 576$.
+The graph carries no independent coupling at each energy scale; the same spectral
+object that corrected the proton traverses the electroweak sector unchanged, amplified
+only by the factor $\kappa$ that distinguishes the EW scale from QCD.
+
+\medskip
+\noindent
+\textbf{Constraint:}
+EW correction must use the universal loop numerator $11$; the EW denominator must
+equal $\kappa \;\times$ QCD volume, with the \emph{same} numerator at both scales.
+
+\noindent
+\textbf{Construction:}
+$\texttt{weinberg-tree} = 2/8$; $\texttt{ew-loop} = 11/576$; the identity
+$\texttt{loop\_denom\_EW} = \texttt{loop\_denom\_QCD} \times \kappa$ is verified
+by \texttt{refl}.
+
+\noindent
+\textbf{Consequence:}
+$\sin^2\!\theta_W = 2/8 - 11/576 = 133/576 \approx 0.231$, consistent with the
+experimentally measured electroweak mixing angle.
+
+\begin{code}
 weinberg-correction-ℚ : ℚ
 weinberg-correction-ℚ = ew-loop            -- 11/576
 
@@ -3078,12 +3276,39 @@ theorem-ew-same-numerator = law-ew-same-numerator
 -- § EW volume decomposition
 theorem-ew-volume-576 : loop-denom-EW ≡ 576
 theorem-ew-volume-576 = law-loop-denom-EW-576
+\end{code}
 
--- §──────────────────────────────────────────────────────────────────────────
--- § 3. Muon correction: −16/69 → 207 − 16/69 = 206.7681̄
--- §    muon-loop, muon-corrected already exported by Void
--- §──────────────────────────────────────────────────────────────────────────
+%───────────────────────────────────────────────────────────────────────────
+\subsubsection*{Muon Inter-Channel Correction: $-16/69$}
+%───────────────────────────────────────────────────────────────────────────
 
+The muon correction bridges two structurally distinct $K_4$ channels: the pure-degree
+channel $d^2 = 9$ and the compactification channel $E + F_2 = 6 + 17 = 23$.  No single
+$K_4$ invariant can bridge them; the bridge numerator must be coprime to both.  The
+unique bridge is $\kappa \cdot \chi = 8 \cdot 2 = 16$, the spinor dimension $2^V$,
+which the \texttt{MuonBridgeClassification} record proves absent from the geometric
+channel ($\gcd(\kappa, d^2) = 1$) and absent from the mixed channel
+($\gcd(\chi, E + F_2) = 1$).  The denominator $69 = d \cdot (E + F_2)$ is the
+channel-survivor product.
+
+\medskip
+\noindent
+\textbf{Constraint:}
+Bridge numerator must be coprime to both channels it connects and must introduce
+genuinely new spectral structure: $\gcd(16, 207) = 1$ forces this independence.
+
+\noindent
+\textbf{Construction:}
+$\texttt{muon-loop} = 16/69$.  Bridge uniqueness proven by exhaustive absurd-pattern
+elimination in \texttt{MuonBridgeClassification}: all other spinor candidates are
+rejected.  $\kappa \cdot \chi = 16$ identified as the spinor dimension by \texttt{refl}.
+
+\noindent
+\textbf{Consequence:}
+$m_\mu / m_e|_{\mathrm{corr}} = 207 - 16/69 \approx 206.768$, the only admissible
+rational extension once the inter-channel bridge is forced.
+
+\begin{code}
 muon-correction-ℚ : ℚ
 muon-correction-ℚ = muon-loop             -- 16/69
 
@@ -3133,12 +3358,37 @@ theorem-muon-bridge-unique-export = theorem-muon-bridge-unique
 -- § Full classification
 theorem-muon-bridge-full : MuonBridgeClassification
 theorem-muon-bridge-full = theorem-muon-bridge-classification
+\end{code}
 
--- §──────────────────────────────────────────────────────────────────────────
--- § 4. Tau correction: −28/153 → 17 − 28/153 = 16.8170̄
--- §    tau-loop, tau-corrected already exported by Void
--- §──────────────────────────────────────────────────────────────────────────
+%───────────────────────────────────────────────────────────────────────────
+\subsubsection*{Tau Correction: $-28/153$}
+%───────────────────────────────────────────────────────────────────────────
 
+The tau/muon bare ratio $F_2 = 17$ is itself subject to a spectral correction.
+All three tau channels contribute to the numerator: $d^2 + F_2 + \chi = 9 + 17 + 2 = 28$.
+The denominator $d^2 \cdot F_2 = 9 \cdot 17 = 153$ is the degree-compactification
+product.  Irreducibility $\gcd(28, 153) = 1$ (verified by \texttt{refl}) confirms
+that the tau correction draws from all three channels simultaneously; omitting any
+one would collapse the fraction or destroy coprimality.
+
+\medskip
+\noindent
+\textbf{Constraint:}
+The tau correction must draw from all three tau spectral channels and be irreducible
+with respect to the degree-compactification product.  Coprimality with each sub-factor
+individually ($d^2$ and $F_2$) forces this.
+
+\noindent
+\textbf{Construction:}
+$\texttt{tau-loop} = 28/153$; numerator $= d^2 + F_2 + \chi$, denominator
+$= d^2 \cdot F_2$.  Full classification via \texttt{TauCorrectionClassification}.
+
+\noindent
+\textbf{Consequence:}
+$m_\tau / m_\mu|_{\mathrm{corr}} = 17 - 28/153 \approx 16.817$, uniquely forced
+by the three-channel tau structure and the coprimality constraint.
+
+\begin{code}
 tau-correction-ℚ : ℚ
 tau-correction-ℚ = tau-loop               -- 28/153
 
@@ -3174,12 +3424,38 @@ theorem-tau-coprime-comp = law-tau-survivor-coprime-comp
 -- § Full classification with uniqueness elimination
 theorem-tau-full : TauCorrectionClassification
 theorem-tau-full = theorem-tau-correction-classification
+\end{code}
 
--- §──────────────────────────────────────────────────────────────────────────
--- § 5. Fine-structure correction: +11/306 → α⁻¹ = 137 + 11/306 = 137.0359̄
--- §    alpha-correction, alpha-corrected already exported by Void
--- §──────────────────────────────────────────────────────────────────────────
+%───────────────────────────────────────────────────────────────────────────
+\subsubsection*{Fine-Structure Correction: $+11/306$}
+%───────────────────────────────────────────────────────────────────────────
 
+The integer fine-structure constant $\alpha^{-1} = 137$ sits at a resolution coarser
+than electromagnetic measurement.  The full coupling volume $d \cdot E \cdot F_2 =
+3 \cdot 6 \cdot 17 = 306$ captures the complete coupling chain: degree, edge count,
+compactification.  The universal loop survivor $11 = E + d + \chi$ acts at this scale
+as it does at every other.  The $K_4$ graph carries no independent coupling for each
+sector; the same spectral object that corrected the proton and the Weinberg angle
+reaches the electromagnetic sector unchanged.
+
+\medskip
+\noindent
+\textbf{Constraint:}
+$\gcd(11, 306) = 1$: the fine-structure correction must be irreducible with respect
+to the full coupling volume.  Coprimality with each of the three factors individually
+($d^2$, $E$, $F_2$) is verified.
+
+\noindent
+\textbf{Construction:}
+$\texttt{alpha-correction} = 11/306$; $306 = d \cdot E \cdot F_2$, expressed entirely
+in $K_4$ invariants.  Full classification via \texttt{CouplingVolumeClassification}.
+
+\noindent
+\textbf{Consequence:}
+$\alpha^{-1}_{\mathrm{corr}} = 137 + 11/306 \approx 137.036$, the only admissible
+rational extension of the spectral fine-structure integer.
+
+\begin{code}
 alpha-correction-ℚ : ℚ
 alpha-correction-ℚ = alpha-correction     -- 11/306
 
@@ -3211,12 +3487,39 @@ theorem-alpha-coprime-F2 = law-alpha-corr-coprime-F2
 -- § Coupling volume classification
 theorem-alpha-volume-class : CouplingVolumeClassification
 theorem-alpha-volume-class = theorem-coupling-volume-classification
+\end{code}
 
--- §──────────────────────────────────────────────────────────────────────────
--- § 6. Baryon fraction correction: −1/102 → 8/51 ≈ 0.1569
--- §    baryon-corr-vol exported by Void; baryon-corrected assembled here.
--- §──────────────────────────────────────────────────────────────────────────
+%───────────────────────────────────────────────────────────────────────────
+\subsubsection*{Baryon Fraction Correction: $8/51$}
+%───────────────────────────────────────────────────────────────────────────
 
+The baryonic matter fraction $\Omega_b$ requires an extension factor coprime to the
+gauge connection count $E = 6$.  No baryon correction can share structure with the
+edge stratum; any shared prime would reduce the fraction into the gauge sector,
+destroying its independent contribution.  The \texttt{BaryonExtensionClassification}
+exhaustively confirms that $F_2 = 17$ is the unique $K_4$ extension coprime to $E$.
+The corrected numerator $F_2 - 1 = 16 = 2^V = \kappa \cdot \chi$ is again the spinor
+dimension: the same compactification step that generated $F_2$ now governs the baryon sector.
+
+\medskip
+\noindent
+\textbf{Constraint:}
+Extension factor must be coprime to $E = 6$; the corrected fraction must be irreducible.
+$F_2 = 17$ is the unique survivor of this filter (proven by exhaustive elimination in
+\texttt{bec-coprime-filter}).
+
+\noindent
+\textbf{Construction:}
+Correction volume $E \cdot F_2 = 102$; reduced fraction $= 8/51$ with numerator
+$(F_2 - 1)/2 = 8 = 2^{V-1}$ and denominator $102/2 = 51$.  The corrected
+fraction is assembled here since Void exports no $\texttt{baryon-corrected} \in \mathbb{Q}$.
+
+\noindent
+\textbf{Consequence:}
+$\Omega_b|_{\mathrm{corr}} = 8/51 \approx 0.157$, the only admissible baryonic
+fraction consistent with the $K_4$ gauge-edge coprimality requirement.
+
+\begin{code}
 -- § Correction volume: E × F₂ = 6 × 17 = 102
 theorem-baryon-vol-102 : baryon-corr-vol ≡ 102
 theorem-baryon-vol-102 = law-baryon-corr-vol
@@ -3250,9 +3553,7 @@ theorem-baryon-full = theorem-baryon-correction-classification
 baryon-corrected : ℚ
 baryon-corrected = (+suc 7) / (ℕ-to-ℕ⁺ 50)   -- 8/51
 
--- §──────────────────────────────────────────────────────────────────────────
--- § Correction chain summary
--- §──────────────────────────────────────────────────────────────────────────
+-- § Correction chain summary: all six corrections share loop numerator 11 = E + d + χ
 
 -- § All six corrections share the loop numerator 11 = E + d + χ
 -- § (muon/tau/baryon use different sector-specific numerators but the same source)
