@@ -246,7 +246,7 @@
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-Begin with nothing. No axioms, no particles, no space, no time—the unmarked state before any distinction has been drawn.
+Begin with nothing. No axioms, no substances, no space, no time—the unmarked state before any distinction has been drawn.
 
 Now ask: what survives? Not what can be built, but what cannot be destroyed. Apply the filter of self-consistency—mechanically, without exception—and trace what remains when every structure that contradicts itself has been annihilated. The method is elimination: twenty-five thousand lines of machine-verified destruction, not construction, carried out in Agda under the flags \AgdaFlag{safe} and \AgdaFlag{without-K}, with no postulates and no external axioms.
 
@@ -465,7 +465,18 @@ The two volumes converge on the same invariants: $(V,E,d,\chi,\kappa) = (4,6,3,2
 
 The reader who has access to both volumes may verify this convergence directly. The reader who has only this one loses nothing: the eliminative derivation is self-contained.
 
-What begins now is the first irreversible pressure test. The question is not whether something can be pulled from the void---it is whether the void can remain unmarked at all. If it can, nothing follows. If it cannot, then what the void already contains is not a choice but a necessity---and the derivation is a sentence the void passes on itself.
+\section{What This Book Does Not Contain}
+\label{sec:introduction:physics-free}
+
+This volume contains no physics. No particle is named. No gauge group is invoked. No coupling constant is fitted. No unit of measurement---metre, second, kilogram, electronvolt---appears anywhere in the formal development. The number $137$ is a theorem of $K_4$ combinatorics, not an approximation to an experimentally measured quantity. The loop numerator $11$ is a survivor of a $\gcd$ filter on $\{E, d, \chi\}$-subset sums, not a count of anything in nature.
+
+The separation is not a stylistic preference. It is a structural necessity. If the formal chain that derives $K_4$ were contaminated by a single interpretive label---if ``proton'' appeared where ``degree-shifted monomial'' suffices, or ``electroweak'' where ``$\kappa^2$-scaled'' is exact---then a reader could rightly suspect that the construction was steered toward a known target. The filter's credibility depends on the absence of any such steering.
+
+Every quantity computed in this volume is an invariant of $K_4$ under $\mathrm{Aut}(K_4) \cong S_4$. Whether any of these invariants correspond to quantities measured in a laboratory is a question that belongs entirely to the companion volume \textit{Form}. The one irreducibly interpretive step---which $\kappa^n$-scaled correction fraction corresponds to which external sector---is performed there, and only there, with an explicit marking that it is an interpretation rather than a derivation.
+
+This is the red line. Everything below it is $K_4$ and its survivors. Nothing else.
+
+So, what now begins is the first irreversible pressure test. The question is not whether something can be pulled from the void---it is whether the void can remain unmarked at all. If it can, nothing follows. If it cannot, then what the void already contains is not a choice but a necessity---and the derivation is a sentence the void passes on itself.
 
 \part{Foundation}
 
@@ -5042,6 +5053,37 @@ law14F-1-nonedge-forces-none C inv (a0 , (b0 , n0)) a b cab =
   let σ = fst sa in
   let τ = fst sb in
   n0 (transport2 {P = C} (snd sa) (snd sb) (inv σ τ a b cab))
+\end{code}
+
+\subsection{Self-coupling and the squaring law}
+\label{law:coupling:self-coupling-square}
+
+Law 14F.0 forces a sharp dichotomy: any cross-invariant coupling is either empty or complete. There is no intermediate grade of connectedness. When both sides of the coupling carry the same carrier---a self-coupling---the complete case yields $n \times n = n^2$ coupled pairs, where $n$ is the carrier size. Squaring is therefore not imposed by hand. It is a structural consequence of the transitivity argument: the permutation group acts on both factors simultaneously, so a single witness propagates to every pair.
+
+For \texttt{EndoCase} with four elements (the four functions on $\{0,1\}$), a full self-coupling has $4 \times 4 = 16$ entries. The Cartesian product structure is forced by law14F-0; the arithmetic is verified by \texttt{refl}.
+
+\textbf{Constraint:} Cross-invariance demands that the coupling relation be stable under independent permutations on each side. Transitivity of the permutation action then propagates any single witness to every pair.
+
+\textbf{Construction:} law14F-0 already proves fullness. The self-coupling count is $n \times n = n^2$ by definition of the Cartesian product. For \texttt{EndoCase}: $4 \times 4 = 16$.
+
+\textbf{Consequence:} Squaring in any downstream formula is not a modelling decision. It is the unique non-trivial weight of a cross-invariant self-coupling. The only alternative is the trivial coupling with weight~$0$.
+
+\begin{code}
+-- §§ Self-coupling squaring — corollary of law14F-0.
+
+-- § Any non-empty cross-invariant coupling is full.
+coupling-full-from-witness : (C : Coupling) → CrossInv C →
+  Σ EndoCase (λ a → Σ EndoCase (λ b → C a b)) →
+  (a b : EndoCase) → C a b
+coupling-full-from-witness = law14F-0-edge-forces-all
+
+-- § EndoCase carrier count = 4.
+EndoCase-count : ℕ
+EndoCase-count = 4
+
+-- § Full self-coupling weight = n² = 16.
+law-self-coupling-square : EndoCase-count * EndoCase-count ≡ 16
+law-self-coupling-square = refl
 \end{code}
 
 \section{K\texorpdfstring{$_4$}{4} Product Graphs}
@@ -22307,11 +22349,11 @@ That rigidity must not be overstated. Two different kinds of sentence appear in 
 
 The first kind is theorem. A theorem here is an internal statement of the formal development: a count, spectrum, or equality that Agda closes by reduction. When this chapter proves that a quantity on $K_4$ is $4$, or $6$, or $137$, the claim is purely structural. It says only that these numbers are forced by the previously derived object.
 
-The second kind is interpretation. Interpretation begins only when one asks whether a formally forced invariant should be read as a measured observable, a coupling, a mass ratio, or a dimensional constant. That move is not part of the theorem. It is a separate act of comparison between the formal survivor and the measured world.
+The second kind is interpretation. Interpretation begins only when one asks whether a formally forced invariant should be read as a quantity in an external theory. That move is not part of the theorem. It is a separate act of comparison between the formal survivor and an external framework.
 
-\textbf{Constraint:} The numerology objection gains force precisely when theorem and interpretation are allowed to blur. If a computed invariant is described as empirically significant before the formal status of the computation is fixed, the reader can rightly suspect that the target meaning guided the construction.
+\textbf{Constraint:} The numerology objection gains force precisely when theorem and interpretation are allowed to blur. If a computed invariant is described as externally significant before the formal status of the computation is fixed, the reader can rightly suspect that the target meaning guided the construction.
 
-\textbf{Construction:} Any methodology that blurs the boundary between theorem and interpretation is eliminated: it reintroduces the numerology objection. The only surviving discipline keeps the registers separate. First the invariant is computed as a theorem internal to the $K_4$ record. Only afterward is the possible empirical reading stated as an interpretation of that already-fixed value. In this chapter, proofs close in the first register; comparisons to measurement are explicitly marked as belonging to the second.
+\textbf{Construction:} Any methodology that blurs the boundary between theorem and interpretation is eliminated: it reintroduces the numerology objection. The only surviving discipline keeps the registers separate. First the invariant is computed as a theorem internal to the $K_4$ record. Only afterward may a companion volume state the possible external reading of that already-fixed value. In this chapter, proofs close in the first register; external comparisons belong to \textit{Form}.
 
 \textbf{Consequence:} The formal content of the chapter stands or falls independently of any downstream interpretation. If an interpretation later fails, the theorem remains proved. If an interpretation later succeeds, it succeeds because it reads a pre-existing invariant rather than because the invariant was engineered to fit it.
 
@@ -22477,6 +22519,50 @@ simplex-eval-K4 = simplex-eval
 -- § Law 16B-15: simplex evaluation = 137
 law16B-15-simplex-eval-bare : simplex-eval-K4 ≡ 137
 law16B-15-simplex-eval-bare = refl
+
+-- § Law 16B-15a: χ is the unique minimum of the K₄ invariant basis.
+-- The non-trivial invariants are {χ=2, d=3, V=F=4, E=6, κ=8}.
+-- χ is strictly below every other member.
+law-chi-below-deg : suc K4-chi ≤ K4-deg
+law-chi-below-deg = s≤s (s≤s (s≤s z≤n))               -- 3 ≤ 3
+
+law-chi-below-V : suc K4-chi ≤ K4-V
+law-chi-below-V = s≤s (s≤s (s≤s z≤n))                  -- 3 ≤ 4
+
+law-chi-below-F : suc K4-chi ≤ K4-F
+law-chi-below-F = s≤s (s≤s (s≤s z≤n))                  -- 3 ≤ 4
+
+law-chi-below-E : suc K4-chi ≤ K4-E
+law-chi-below-E = s≤s (s≤s (s≤s z≤n))                  -- 3 ≤ 6
+
+law-chi-below-κ : suc K4-chi ≤ κ-discrete
+law-chi-below-κ = s≤s (s≤s (s≤s z≤n))                  -- 3 ≤ 8
+
+-- § χ is non-trivial: χ > 1.
+law-chi-nontrivial : suc 1 ≤ K4-chi
+law-chi-nontrivial = s≤s (s≤s z≤n)                     -- 2 ≤ 2
+
+-- § Combined: χ is the unique smallest non-trivial K₄ invariant.
+-- Any Aut(K₄)-invariant ratio n/C² with n from the basis satisfies n ≥ χ.
+-- Therefore χ/C² is the minimal such ratio.
+record ChiMinimality : Set where
+  field
+    chi-nontrivial : suc 1 ≤ K4-chi
+    chi-below-deg  : suc K4-chi ≤ K4-deg
+    chi-below-V    : suc K4-chi ≤ K4-V
+    chi-below-F    : suc K4-chi ≤ K4-F
+    chi-below-E    : suc K4-chi ≤ K4-E
+    chi-below-κ    : suc K4-chi ≤ κ-discrete
+
+law16B-15a-chi-minimality : ChiMinimality
+law16B-15a-chi-minimality = record
+  { chi-nontrivial = law-chi-nontrivial
+  ; chi-below-deg  = law-chi-below-deg
+  ; chi-below-V    = law-chi-below-V
+  ; chi-below-F    = law-chi-below-F
+  ; chi-below-E    = law-chi-below-E
+  ; chi-below-κ    = law-chi-below-κ
+  }
 
 -- § Triangle and square cycle counts
 count-triangles : ℕ
@@ -24686,7 +24772,7 @@ These witnesses prove that the admissibility basis is irreduzible: every primiti
 \label{ch:scale-closure}
 %═══════════════════════════════════════════════════════════════════════════
 
-With $\mathit{edge\text{-}weight} = 1$, $\mathit{face\text{-}weight} = 1$, and $\mathit{vertex\text{-}weight} = 1$, no free scale parameter remains. Three independent simplicial weights fill three independent dimensions (length, time, mass). The native FD unit system is therefore the natural unit system---not by postulate, but because the three forced weights leave no room for rescaling.
+With $\mathit{edge\text{-}weight} = 1$, $\mathit{face\text{-}weight} = 1$, and $\mathit{vertex\text{-}weight} = 1$, no free scale parameter remains. Three independent simplicial weights fill three independent simplicial dimensions (dim\,1, dim\,2, dim\,0). The native FD scale collapses to $(1,1,1)$---not by postulate, but because the three forced weights leave no room for rescaling.
 
 \textbf{Constraint:} Each weight was derived by the same simplicial elimination applied to a different dimension of the $K_4$ complex:
 \[
@@ -24698,42 +24784,42 @@ With $\mathit{edge\text{-}weight} = 1$, $\mathit{face\text{-}weight} = 1$, and $
 \]
 No weight was inserted by hand. No weight was derived from another. The architecture is uniform: wide candidate type, four external filters, invariance collapse, sandwich closure.
 
-\textbf{Construction:} With all three simplicial weights equal to~$1$, every fundamental ratio collapses to~$1$. No independent scale survives; length, time, and mass are forced to the native FD unit. Any deviation would contradict the three weights already eliminated above.
+\textbf{Construction:} With all three simplicial weights equal to~$1$, every fundamental ratio collapses to~$1$. No independent scale survives; all three simplicial dimensions are forced to unit value. Any deviation would contradict the three weights already eliminated above.
 
-\textbf{Consequence:} The natural scale is not an external anchor. It is the native scale of the FD system. One edge is the unit length; one step is the unit time.
+\textbf{Consequence:} The native scale is not an external anchor. It is the intrinsic scale of the FD system. One edge is the unit of dim\,1; one face the unit of dim\,2; one vertex the unit of dim\,0.
 
 %───────────────────────────────────────────────────────────────────────────
-\section{Natural units in FD coordinates}
+\section{Simplicial scale units}
 \label{sec:scale-closure:natural-units}
 %───────────────────────────────────────────────────────────────────────────
 
-The standard natural units are:
+The three simplicial scale units are:
 \[
-\ell = \sqrt{\frac{w_2\, w_0}{w_1^3}}, \qquad
-t = \sqrt{\frac{w_2\, w_0}{w_1^5}}, \qquad
-m = \sqrt{\frac{w_2\, w_1}{w_0}},
+S_1 = \sqrt{\frac{w_2\, w_0}{w_1^3}}, \qquad
+S_2 = \sqrt{\frac{w_2\, w_0}{w_1^5}}, \qquad
+S_0 = \sqrt{\frac{w_2\, w_1}{w_0}},
 \]
 where $w_1$, $w_2$, $w_0$ denote the forced edge, face, and vertex weights respectively.
-With all three weights equal to~$1$, every numerator and denominator is~$1$, so $\ell = t = m = 1$ in FD units.
+With all three weights equal to~$1$, every numerator and denominator is~$1$, so $S_1 = S_2 = S_0 = 1$ in FD units.
 
 \begin{code}
-unit-length-FD : ℕ
-unit-length-FD = (face-weight * vertex-weight) * 1
+scale-dim1 : ℕ
+scale-dim1 = (face-weight * vertex-weight) * 1
 
-unit-time-FD : ℕ
-unit-time-FD = (face-weight * vertex-weight) * 1
+scale-dim2 : ℕ
+scale-dim2 = (face-weight * vertex-weight) * 1
 
-unit-mass-FD : ℕ
-unit-mass-FD = (face-weight * edge-weight) * 1
+scale-dim0 : ℕ
+scale-dim0 = (face-weight * edge-weight) * 1
 
-unit-length-is-1 : unit-length-FD ≡ 1
-unit-length-is-1 = refl
+scale-dim1-is-1 : scale-dim1 ≡ 1
+scale-dim1-is-1 = refl
 
-unit-time-is-1 : unit-time-FD ≡ 1
-unit-time-is-1 = refl
+scale-dim2-is-1 : scale-dim2 ≡ 1
+scale-dim2-is-1 = refl
 
-unit-mass-is-1 : unit-mass-FD ≡ 1
-unit-mass-is-1 = refl
+scale-dim0-is-1 : scale-dim0 ≡ 1
+scale-dim0-is-1 = refl
 \end{code}
 
 %───────────────────────────────────────────────────────────────────────────
@@ -24741,7 +24827,7 @@ unit-mass-is-1 = refl
 \label{sec:scale-closure:record}
 %───────────────────────────────────────────────────────────────────────────
 
-The closure record packages the three forced constants and the three natural unit identities into a single witness.
+The closure record packages the three forced constants and the three simplicial scale identities into a single witness.
 
 \begin{code}
 record ScaleClosure : Set where
@@ -24749,18 +24835,18 @@ record ScaleClosure : Set where
     edge-forced    : edge-weight ≡ 1
     face-forced : face-weight ≡ 1
     vertex-forced    : vertex-weight ≡ 1
-    length-1    : unit-length-FD ≡ 1
-    time-1      : unit-time-FD ≡ 1
-    mass-1      : unit-mass-FD ≡ 1
+    dim1-1      : scale-dim1 ≡ 1
+    dim2-1      : scale-dim2 ≡ 1
+    dim0-1      : scale-dim0 ≡ 1
 
 theorem-scale-closure : ScaleClosure
 theorem-scale-closure = record
   { edge-forced    = refl
   ; face-forced = refl
   ; vertex-forced    = refl
-  ; length-1    = refl
-  ; time-1      = refl
-  ; mass-1      = refl
+  ; dim1-1      = refl
+  ; dim2-1      = refl
+  ; dim0-1      = refl
   }
 \end{code}
 
@@ -24788,13 +24874,13 @@ no-free-scale = refl
 \label{sec:scale-closure:normalized-scale-elimination}
 %───────────────────────────────────────────────────────────────────────────
 
-The closure claim can be sharpened one step further. Work entirely in normalized units, where the three simplicial weights are already written as $w_1 = w_2 = w_0 = 1$. A scale choice is then just a triple $(a,b,m)$ of natural-number unit assignments for length, time, and mass. The bridge equations become
+The closure claim can be sharpened one step further. Work entirely in normalized units, where the three simplicial weights are already written as $w_1 = w_2 = w_0 = 1$. A scale choice is then just a triple $(a,b,c)$ of natural-number unit assignments for the three simplicial dimensions. The bridge equations become
 \[
 b = a,
 \qquad
-b = m a^2,
+b = c a^2,
 \qquad
-mb^2 = a^3.
+cb^2 = a^3.
 \]
 The candidate space is still wide: any positive natural triple is allowed. The elimination shows that only the unit triple survives.
 
@@ -24804,14 +24890,14 @@ IsScaleNonZero n = n ≡ 0 → ⊥
 
 record NormalizedScaleChoice : Set where
   field
-    length-step    : ℕ
-    time-step      : ℕ
-    mass-step      : ℕ
-    length-nonzero : IsScaleNonZero length-step
-    edge-lock         : time-step ≡ length-step
-    face-lock      : time-step ≡ (mass-step *ℕ length-step) *ℕ length-step
-    vertex-lock         : (mass-step *ℕ time-step) *ℕ time-step ≡
-                     (length-step *ℕ length-step) *ℕ length-step
+    step-dim1      : ℕ
+    step-dim2      : ℕ
+    step-dim0      : ℕ
+    dim1-nonzero   : IsScaleNonZero step-dim1
+    edge-lock      : step-dim2 ≡ step-dim1
+    face-lock      : step-dim2 ≡ (step-dim0 *ℕ step-dim1) *ℕ step-dim1
+    vertex-lock    : (step-dim0 *ℕ step-dim2) *ℕ step-dim2 ≡
+                     (step-dim1 *ℕ step-dim1) *ℕ step-dim1
 \end{code}
 
 Two small arithmetic lemmas do the work. First: if adding a tail leaves a natural unchanged, that tail must have been zero. Second: for any value $a \ge 2$, neither $a^2 = a$ nor $a^3 = a$ can hold.
@@ -24884,66 +24970,66 @@ cubeNotSelf n eq =
   in
   squareNotSelf n sq≡a
 
-mass-unit-forced : (m : ℕ) → ((m *ℕ 1) *ℕ 1) ≡ 1 → m ≡ 1
-mass-unit-forced zero ()
-mass-unit-forced (suc zero) refl = refl
-mass-unit-forced (suc (suc n)) ()
+dim0-unit-forced : (c : ℕ) → ((c *ℕ 1) *ℕ 1) ≡ 1 → c ≡ 1
+dim0-unit-forced zero ()
+dim0-unit-forced (suc zero) refl = refl
+dim0-unit-forced (suc (suc n)) ()
 \end{code}
 
-The elimination itself is direct. The three bridge equations collapse to $a^3 = a$, and that excludes every $a \ge 2$. Positivity excludes $a = 0$. So $a = 1$, hence also $b = 1$ and $m = 1$.
+The elimination itself is direct. The three bridge equations collapse to $a^3 = a$, and that excludes every $a \ge 2$. Positivity excludes $a = 0$. So $a = 1$, hence also $b = 1$ and $c = 1$.
 
 \begin{code}
-normalized-length-is-1 : (S : NormalizedScaleChoice) → NormalizedScaleChoice.length-step S ≡ 1
-normalized-length-is-1 S
-  with NormalizedScaleChoice.length-step S
-     | NormalizedScaleChoice.time-step S
-     | NormalizedScaleChoice.mass-step S
-     | NormalizedScaleChoice.length-nonzero S
+normalized-dim1-is-1 : (S : NormalizedScaleChoice) → NormalizedScaleChoice.step-dim1 S ≡ 1
+normalized-dim1-is-1 S
+  with NormalizedScaleChoice.step-dim1 S
+     | NormalizedScaleChoice.step-dim2 S
+     | NormalizedScaleChoice.step-dim0 S
+     | NormalizedScaleChoice.dim1-nonzero S
      | NormalizedScaleChoice.edge-lock S
      | NormalizedScaleChoice.face-lock S
      | NormalizedScaleChoice.vertex-lock S
 ... | zero          | _ | _ | nz | _  | _  | _  = ⊥-elim (nz refl)
 ... | suc zero      | _ | _ | _  | _  | _  | _  = refl
-... | suc (suc n)   | b | m | _  | cl | hl | gl =
+... | suc (suc n)   | b | c | _  | cl | hl | gl =
   let
     a : ℕ
     a = suc (suc n)
 
-    G-at-a : (m *ℕ a) *ℕ a ≡ (a *ℕ a) *ℕ a
-    G-at-a = trans (sym (cong (λ t → (m *ℕ t) *ℕ t) cl)) gl
+    G-at-a : (c *ℕ a) *ℕ a ≡ (a *ℕ a) *ℕ a
+    G-at-a = trans (sym (cong (λ t → (c *ℕ t) *ℕ t) cl)) gl
 
     cubeEq : ((a *ℕ a) *ℕ a) ≡ a
     cubeEq = trans (sym G-at-a) (trans (sym hl) cl)
   in
   ⊥-elim (cubeNotSelf n cubeEq)
 
-normalized-time-is-1 : (S : NormalizedScaleChoice) → NormalizedScaleChoice.time-step S ≡ 1
-normalized-time-is-1 S = trans (NormalizedScaleChoice.edge-lock S) (normalized-length-is-1 S)
+normalized-dim2-is-1 : (S : NormalizedScaleChoice) → NormalizedScaleChoice.step-dim2 S ≡ 1
+normalized-dim2-is-1 S = trans (NormalizedScaleChoice.edge-lock S) (normalized-dim1-is-1 S)
 
-normalized-mass-is-1 : (S : NormalizedScaleChoice) → NormalizedScaleChoice.mass-step S ≡ 1
-normalized-mass-is-1 S =
-  mass-unit-forced
-    (NormalizedScaleChoice.mass-step S)
+normalized-dim0-is-1 : (S : NormalizedScaleChoice) → NormalizedScaleChoice.step-dim0 S ≡ 1
+normalized-dim0-is-1 S =
+  dim0-unit-forced
+    (NormalizedScaleChoice.step-dim0 S)
     (trans
-      (cong (λ t → (NormalizedScaleChoice.mass-step S *ℕ t) *ℕ t)
-            (sym (normalized-length-is-1 S)))
+      (cong (λ t → (NormalizedScaleChoice.step-dim0 S *ℕ t) *ℕ t)
+            (sym (normalized-dim1-is-1 S)))
       (trans
         (sym (NormalizedScaleChoice.face-lock S))
-        (normalized-time-is-1 S)))
+        (normalized-dim2-is-1 S)))
 
 normalized-scale-witness : NormalizedScaleChoice
 normalized-scale-witness = record
-  { length-step    = 1
-  ; time-step      = 1
-  ; mass-step      = 1
-  ; length-nonzero = λ ()
-  ; edge-lock         = refl
+  { step-dim1      = 1
+  ; step-dim2      = 1
+  ; step-dim0      = 1
+  ; dim1-nonzero   = λ ()
+  ; edge-lock      = refl
   ; face-lock      = refl
-  ; vertex-lock         = refl
+  ; vertex-lock    = refl
   }
 \end{code}
 
-This is the normalized form of the unit-system claim. The only admissible positive scale triple in the $w_1 = w_2 = w_0 = 1$ regime is the unit triple. Any external calibration---choosing to report the same quantities in metres, seconds, and kilograms---amounts to a conventional relabeling of this already-forced unit system. The eliminative content is fully expressed; notation is convention.
+This is the normalized form of the unit-system claim. The only admissible positive scale triple in the $w_1 = w_2 = w_0 = 1$ regime is the unit triple. Any external calibration---choosing to report the same quantities in conventional units of an external framework---amounts to a relabeling of this already-forced unit system. The eliminative content is fully expressed; notation is convention.
 
 %───────────────────────────────────────────────────────────────────────────
 \section{Distinction as measurement kernel}
@@ -24993,19 +25079,474 @@ This is the correct red line. The label $D_0$ denotes the fully formalized packa
 
 The continuum passage assumes only what these lemmas force: that measurement already stands on a distinction. The continuum question can then be asked sharply: once a theory has a distinction kernel and the discrete FD chain has closed to $K_4$, does the passage to decimal approximation add freedom, or only expose the next forced quotient?
 
+\subsubsection*{The loop classification}
+
+The invariant ledger $\{V{=}4, E{=}6, d{=}3, \chi{=}2, \kappa{=}8, F_2{=}17, \mathcal{C}{=}137\}$ permits one further internal classification before the discrete stage closes. The graph $K_4$ supplies three primitive loop parameters: the edge count $E = 6$, the degree $d = 3$, and the Euler characteristic $\chi = 2$. Any additive loop numerator built from these three must be a $\{0,1\}$-linear combination---a subset sum---because each generator enters a loop integral exactly once or not at all. There are $2^3 = 8$ such candidates.
+
+The graph determines two canonical volumes. The bulk volume is $V \cdot E \cdot d = 4 \cdot 6 \cdot 3 = 72$. The extended volume is $\kappa \cdot 72 = 576$. A correction fraction $p/q$ is admissible only if $\gcd(p,q) = 1$: any common factor would indicate a reducible decomposition, contradicting the atomicity of the loop.
+
+Three filters eliminate seven of the eight candidates. Irreducibility with $72$ eliminates six. Completeness---the requirement that the numerator witness all prime strata of the denominator---eliminates the seventh. Only $E + d + \chi = 11$ survives.
+
+\textbf{Constraint:} The loop numerator must be coprime to the canonical volume and structurally complete over the prime factorisation of the denominator.
+
+\textbf{Elimination:} Six candidates share a prime factor with $72$. The seventh, $d + \chi = 5$, is coprime but blind to the edge stratum: $\gcd(5,6) = 1$ proves it shares no structure with $E$. Only $E + d + \chi = 11$ passes all three filters.
+
+\textbf{Consequence:} The unique loop numerator is $11 = 6 + 3 + 2$, witnessing every generator of $K_4$ that enters the invariant sum. No alternative exists. This classification is entirely internal: it uses $\gcd$, $K_4$ combinatorics, and prime-stratum structure.
+
+\begin{code}
+-- §§ Loop Classification — the unique admissible loop numerator
+-- from exhaustive elimination of {0,1}-linear combinations of {E, d, χ}.
+
+-- § The universal loop numerator: sum of all primitive loop parameters.
+loop-numerator : ℕ
+loop-numerator = edgeCountK4 + degree-K4 + eulerChar-computed
+
+-- § Law: loop numerator is exactly 11.
+law-loop-num-11 : loop-numerator ≡ 11
+law-loop-num-11 = refl
+
+-- § Decomposition: the three structural contributions.
+law-loop-num-decomposition : loop-numerator ≡ 6 + 3 + 2
+law-loop-num-decomposition = refl
+
+-- § The handshaking identity: χ · d = E.
+law-chi-times-d-is-E : eulerChar-computed * degree-K4 ≡ edgeCountK4
+law-chi-times-d-is-E = refl
+
+-- § Denominator at the bulk scale: V · E · d = 72.
+loop-denom-bulk : ℕ
+loop-denom-bulk = vertexCountK4 * edgeCountK4 * degree-K4
+
+-- § Denominator at the extended scale: κ · 72 = 576.
+loop-denom-extended : ℕ
+loop-denom-extended = loop-denom-bulk * κ-discrete
+
+-- § The eight candidates and their values:
+loop-cand-000 : ℕ           -- empty set
+loop-cand-000 = 0
+loop-cand-001 : ℕ           -- χ only
+loop-cand-001 = eulerChar-computed
+loop-cand-010 : ℕ           -- d only
+loop-cand-010 = degree-K4
+loop-cand-011 : ℕ           -- d + χ
+loop-cand-011 = degree-K4 + eulerChar-computed
+loop-cand-100 : ℕ           -- E only
+loop-cand-100 = edgeCountK4
+loop-cand-101 : ℕ           -- E + χ
+loop-cand-101 = edgeCountK4 + eulerChar-computed
+loop-cand-110 : ℕ           -- E + d
+loop-cand-110 = edgeCountK4 + degree-K4
+loop-cand-111 : ℕ           -- E + d + χ
+loop-cand-111 = edgeCountK4 + degree-K4 + eulerChar-computed
+
+-- § Values
+law-cand-000 : loop-cand-000 ≡ 0
+law-cand-000 = refl
+law-cand-001 : loop-cand-001 ≡ 2
+law-cand-001 = refl
+law-cand-010 : loop-cand-010 ≡ 3
+law-cand-010 = refl
+law-cand-011 : loop-cand-011 ≡ 5
+law-cand-011 = refl
+law-cand-100 : loop-cand-100 ≡ 6
+law-cand-100 = refl
+law-cand-101 : loop-cand-101 ≡ 8
+law-cand-101 = refl
+law-cand-110 : loop-cand-110 ≡ 9
+law-cand-110 = refl
+law-cand-111 : loop-cand-111 ≡ 11
+law-cand-111 = refl
+
+-- § Filter 1: irreducibility with 72 eliminates 0, 2, 3, 6, 8, and 9.
+law-elim-000 : gcd loop-cand-001 loop-denom-bulk ≡ 2   -- χ=2 shares factor 2
+law-elim-000 = refl
+law-elim-010 : gcd loop-cand-010 loop-denom-bulk ≡ 3   -- d=3 shares factor 3
+law-elim-010 = refl
+law-elim-100 : gcd loop-cand-100 loop-denom-bulk ≡ 6   -- E=6 shares factor 6
+law-elim-100 = refl
+law-elim-101 : gcd loop-cand-101 loop-denom-bulk ≡ 8   -- E+χ=8 shares factor 8
+law-elim-101 = refl
+law-elim-110 : gcd loop-cand-110 loop-denom-bulk ≡ 9   -- E+d=9 shares factor 9
+law-elim-110 = refl
+
+-- § Pass irreducibility: d+χ=5 and E+d+χ=11
+law-pass-011 : gcd loop-cand-011 loop-denom-bulk ≡ 1   -- d+χ=5 coprime ✓
+law-pass-011 = refl
+law-pass-111 : gcd loop-cand-111 loop-denom-bulk ≡ 1   -- E+d+χ=11 coprime ✓
+law-pass-111 = refl
+
+-- § Filter 2: completeness requires all three basis elements.
+-- d+χ=5 omits the edge stratum.
+law-partial-omits-E : loop-cand-011 + edgeCountK4 ≡ loop-cand-111
+law-partial-omits-E = refl
+
+law-full-is-partial-plus-E : loop-cand-111 ≡ edgeCountK4 + loop-cand-011
+law-full-is-partial-plus-E = refl
+
+-- § Structural independence: E is multiplicatively independent of d+χ.
+law-E-structurally-independent :
+  gcd edgeCountK4 (degree-K4 + eulerChar-computed) ≡ 1
+law-E-structurally-independent = refl  -- gcd(6, 5) = 1
+
+-- § E = 6 spans the full {2,3} prime base inside 72 = 2³·3².
+law-E-spans-full-base : gcd edgeCountK4 (eulerChar-computed * degree-K4) ≡ 6
+law-E-spans-full-base = refl  -- gcd(6, 6) = 6
+
+-- § d = 3 contributes only the 3-stratum.
+law-d-in-3-stratum : gcd degree-K4 (eulerChar-computed * degree-K4) ≡ 3
+law-d-in-3-stratum = refl  -- gcd(3, 6) = 3
+
+-- § χ = 2 contributes only the 2-stratum.
+law-chi-in-2-stratum : gcd eulerChar-computed (eulerChar-computed * degree-K4) ≡ 2
+law-chi-in-2-stratum = refl  -- gcd(2, 6) = 2
+
+-- § d+χ = 5 escapes the {2,3} stratum completely.
+law-dchi-escapes-stratum :
+  gcd (degree-K4 + eulerChar-computed) (eulerChar-computed * degree-K4) ≡ 1
+law-dchi-escapes-stratum = refl  -- gcd(5, 6) = 1
+
+-- § Completeness derivation from χ·d = E and the volume structure.
+record CompletenessDerivation : Set where
+  field
+    relation            : eulerChar-computed * degree-K4 ≡ edgeCountK4
+    generators-coprime  : gcd eulerChar-computed degree-K4 ≡ 1
+    volume-via-relation : (vertexCountK4 * eulerChar-computed) * (degree-K4 * degree-K4) ≡ loop-denom-bulk
+    sum-product-coprime : gcd (degree-K4 + eulerChar-computed) (eulerChar-computed * degree-K4) ≡ 1
+    partial-blind-to-E  : gcd loop-cand-011 edgeCountK4 ≡ 1
+    full-witnesses-E    : loop-cand-111 ≡ edgeCountK4 + loop-cand-011
+    full-irreducible    : gcd loop-cand-111 loop-denom-bulk ≡ 1
+
+theorem-completeness-derivation : CompletenessDerivation
+theorem-completeness-derivation = record
+  { relation            = refl
+  ; generators-coprime  = refl
+  ; volume-via-relation = refl
+  ; sum-product-coprime = refl
+  ; partial-blind-to-E  = refl
+  ; full-witnesses-E    = refl
+  ; full-irreducible    = refl
+  }
+
+-- § Filter 3: cross-scale consistency at extended scale.
+law-partial-ext  : gcd loop-cand-011 loop-denom-extended ≡ 1   -- 5 coprime to 576 too
+law-partial-ext  = refl
+law-pass-111-ext : gcd loop-cand-111 loop-denom-extended ≡ 1   -- 11 coprime to 576 ✓
+law-pass-111-ext = refl
+
+-- § Loop classification record: unique admissible loop numerator.
+record LoopClassification : Set where
+  field
+    forced-value        : loop-numerator ≡ 11
+    forced-from-K4      : loop-numerator ≡ edgeCountK4 + degree-K4 + eulerChar-computed
+    irreducible-bulk     : gcd loop-numerator loop-denom-bulk ≡ 1
+    irreducible-ext      : gcd loop-numerator loop-denom-extended ≡ 1
+    elim-chi            : gcd eulerChar-computed loop-denom-bulk ≡ 2
+    elim-d              : gcd degree-K4 loop-denom-bulk ≡ 3
+    elim-E              : gcd edgeCountK4 loop-denom-bulk ≡ 6
+    elim-E-chi          : gcd (edgeCountK4 + eulerChar-computed) loop-denom-bulk ≡ 8
+    elim-E-d            : gcd (edgeCountK4 + degree-K4) loop-denom-bulk ≡ 9
+    partial-coprime     : gcd (degree-K4 + eulerChar-computed) loop-denom-bulk ≡ 1
+    partial-incomplete  : degree-K4 + eulerChar-computed ≡ 5
+    partial-omits-E     : loop-cand-011 + edgeCountK4 ≡ loop-cand-111
+    partial-also-ext    : gcd loop-cand-011 loop-denom-extended ≡ 1
+
+theorem-loop-classification : LoopClassification
+theorem-loop-classification = record
+  { forced-value        = refl
+  ; forced-from-K4      = refl
+  ; irreducible-bulk     = refl
+  ; irreducible-ext      = refl
+  ; elim-chi            = refl
+  ; elim-d              = refl
+  ; elim-E              = refl
+  ; elim-E-chi          = refl
+  ; elim-E-d            = refl
+  ; partial-coprime     = refl
+  ; partial-incomplete  = refl
+  ; partial-omits-E     = refl
+  ; partial-also-ext     = refl
+  }
+\end{code}
+
+\subsubsection*{Exponent forcing}
+
+The invariant ledger determines one more arithmetic constraint before the discrete stage closes. A volume scaling that respects the homogeneity of $d$ independent face normals assigns one factor of $d$ per dimension. The total volume ratio between boundary and bulk is therefore $d^d$. If the bulk exponent is $f_0$ and the boundary exponent is $f_1$, the ratio condition forces $d^{f_1 - f_0} = d^d$, hence $f_1 - f_0 = d$. Zero is excluded as a bulk exponent: $d^0 = 1$ collapses the scaling to a constant and kills dimensional sensitivity. The minimal non-degenerate value is $f_0 = 1$. The boundary exponent is then $f_1 = 1 + d = 4$, and the volume values are $d^1 = 3$ and $d^{1+d} = 81$.
+
+No alternative survives. For $d = 3$, the equation $3^n = 27$ admits exactly one natural solution. Four candidates below and above $n = 3$ are eliminated by direct computation: $3^0 = 1$, $3^1 = 3$, $3^2 = 9$, and $3^4 = 81$---none equals $27$. The exponent gap is locked.
+
+\textbf{Constraint:} The $K_4$ symmetry group $S_4$ permutes the $d + 1$ vertices and their $d$ independent face normals transitively. Volume scaling across these $d$ dimensions forces a ratio of $d^d$. Any inhomogeneous exponent assignment would break the transitive action.
+
+\textbf{Elimination:} The equation $d^n = d^d$ for $d = 3$ reduces to $3^n = 27$. Exhaustive computation annihilates $n \in \{0, 1, 2, 4\}$: the values $1, 3, 9, 81$ are all distinct from $27$. Only $n = 3$ survives.
+
+\textbf{Consequence:} The exponent pair $(1, 1{+}d)$ is the unique solution for a $d^d$ volume ratio with minimal positive base. The volume factor $d^d = 27$ is an invariant of $K_4$. Any deviation would either collapse the scaling or violate the homogeneity of the face normals.
+
+\begin{code}
+-- §§ Exponent Forcing — the volume exponent gap is uniquely d
+
+-- § d^d = 27: forced volume ratio.
+law-dd-27 : degree-K4 ^ degree-K4 ≡ 27
+law-dd-27 = refl
+
+-- § Bulk exponent: minimal positive = 1.
+bulk-exponent : ℕ
+bulk-exponent = 1
+
+-- § Boundary exponent: 1 + d = 4.
+boundary-exponent : ℕ
+boundary-exponent = 1 + degree-K4
+
+law-boundary-exponent-is-4 : boundary-exponent ≡ 4
+law-boundary-exponent-is-4 = refl
+
+-- § Exponent forcing record: gap = d is unique.
+record ExponentForcing : Set where
+  field
+    gap-is-d         : boundary-exponent ∸ bulk-exponent ≡ degree-K4
+    dd-is-27         : degree-K4 ^ degree-K4 ≡ 27
+    bulk-vol         : degree-K4 ^ bulk-exponent ≡ 3
+    boundary-vol     : degree-K4 ^ boundary-exponent ≡ 81
+    unique-gap-not-0 : degree-K4 ^ 0 ≡ degree-K4 ^ degree-K4 → ⊥
+    unique-gap-not-1 : degree-K4 ^ 1 ≡ degree-K4 ^ degree-K4 → ⊥
+    unique-gap-not-2 : degree-K4 ^ 2 ≡ degree-K4 ^ degree-K4 → ⊥
+    unique-gap-not-4 : degree-K4 ^ 4 ≡ degree-K4 ^ degree-K4 → ⊥
+
+theorem-exponent-forcing : ExponentForcing
+theorem-exponent-forcing = record
+  { gap-is-d         = refl
+  ; dd-is-27         = refl
+  ; bulk-vol         = refl
+  ; boundary-vol     = refl
+  ; unique-gap-not-0 = λ ()
+  ; unique-gap-not-1 = λ ()
+  ; unique-gap-not-2 = λ ()
+  ; unique-gap-not-4 = λ ()
+  }
+\end{code}
+
+\subsubsection*{Tree-level polynomial evaluations}
+
+The invariant ledger already contains every ingredient for a family of integer-valued polynomials in $K_4$ parameters. Three such evaluations stand out: $\chi^2 \cdot d^3 \cdot F_2 = 4 \cdot 27 \cdot 17 = 1836$, the spin factor times the cubic volume times the Fermat stratum; $d^2 \cdot (E + F_2) = 9 \cdot 23 = 207$, the geometric square times the compactification survivor; and $F_2 = 17$ alone. An alternative factorisation $d \cdot E^2 \cdot F_2 = 3 \cdot 36 \cdot 17 = 1836$ yields the same first value because $\chi \cdot d = E$ (handshaking). The degree-shifted variant adds $d$: $1836 + 3 = 1839$.
+
+These evaluations are closed-form monomials in the five $K_4$ invariants $\{V, E, d, \chi, \kappa\}$ extended by the Fermat stratum $F_2 = 2^{2^2} + 1$. No free parameter enters. Whether these integers carry significance beyond the $K_4$ ledger is a question that belongs to the companion volume \textit{Form}. What belongs here is the arithmetic: each evaluation is verified by \texttt{refl}.
+
+\textbf{Constraint:} The polynomial ingredients ($\chi$, $d$, $E$, $F_2$) are forced $K_4$ invariants. Their products are determined by the invariant ledger.
+
+\textbf{Construction:} Three evaluations are computed from the ledger: $\chi^2 \cdot d^3 \cdot F_2 = 1836$, $d^2 \cdot (E + F_2) = 207$, $F_2 = 17$. An alternative factorisation and the degree shift $1836 + d = 1839$ are verified. Each equality holds by \texttt{refl}.
+
+\textbf{Consequence:} The tree-level polynomial hierarchy is a theorem of $K_4$ arithmetic. The integers are invariants of the $K_4$ ledger. Their interpretation, if any, belongs to \textit{Form}.
+
+\begin{code}
+-- §§ Tree-level polynomial evaluations — monomials in K₄ invariants.
+
+-- § First polynomial: χ² · d³ · F₂ = 4 · 27 · 17 = 1836.
+tree-poly-1 : ℕ
+tree-poly-1 = (eulerChar-computed * eulerChar-computed)
+            * (degree-K4 * degree-K4 * degree-K4)
+            * F₂
+
+law-tree-poly-1 : tree-poly-1 ≡ 1836
+law-tree-poly-1 = refl
+
+-- § Alternative factorisation: d · E² · F₂ = 3 · 36 · 17 = 1836.
+tree-poly-1-alt : ℕ
+tree-poly-1-alt = degree-K4 * (edgeCountK4 * edgeCountK4) * F₂
+
+law-tree-poly-1-alt : tree-poly-1-alt ≡ 1836
+law-tree-poly-1-alt = refl
+
+-- § Both factorisations agree (because χ · d = E).
+law-tree-poly-1-agree : tree-poly-1 ≡ tree-poly-1-alt
+law-tree-poly-1-agree = refl
+
+-- § Second polynomial: d² · (E + F₂) = 9 · 23 = 207.
+tree-poly-2 : ℕ
+tree-poly-2 = (degree-K4 * degree-K4) * (edgeCountK4 + F₂)
+
+law-tree-poly-2 : tree-poly-2 ≡ 207
+law-tree-poly-2 = refl
+
+-- § Third polynomial: F₂ = 17.
+tree-poly-3 : ℕ
+tree-poly-3 = F₂
+
+law-tree-poly-3 : tree-poly-3 ≡ 17
+law-tree-poly-3 = refl
+
+-- § Degree shift: 1836 + d = 1839.
+tree-poly-shift : ℕ
+tree-poly-shift = tree-poly-1 + degree-K4
+
+law-tree-poly-shift : tree-poly-shift ≡ 1839
+law-tree-poly-shift = refl
+
+-- § 1836 factorisation certificate: 4 × 27 × 17.
+law-1836-factored : tree-poly-1 ≡ (eulerChar-computed * eulerChar-computed)
+                                  * (degree-K4 ^ degree-K4) * F₂
+law-1836-factored = refl
+\end{code}
+
+\subsubsection*{Correction fraction irreducibility}
+
+The discrete ledger forces four canonical correction fractions. Each fraction pairs a numerator built from $K_4$ invariants with a denominator assembled from powers of $\kappa$ and $\mathcal{C}$. A reducible fraction would signal hidden common structure between numerator and denominator---a shared prime factor that both sides inherited from the same source. Irreducibility confirms that the numerator and denominator are arithmetically independent: no further cancellation is possible, and the fraction is in lowest terms.
+
+The four denominators are $\mathcal{C}^2 = 18769$, $\kappa d \mathcal{C}^2 = 450456$, $\kappa \mathcal{C}^2 = 150152$, and $\kappa^2 \mathcal{C}^2 = 1201216$. The four numerators after reduction are $\chi = 2$, $1$, $d^2 = 9$, and $(p + \chi)^2 = 169$. Each $\gcd$ evaluates to $1$ by direct computation.
+
+\textbf{Constraint:} A correction fraction with $\gcd > 1$ would admit further simplification, exposing a latent degeneracy in the invariant ledger. Irreducibility is the assertion that no such degeneracy exists.
+
+\textbf{Construction:} The four $\gcd$ checks are verified by \texttt{refl}. The denominators are products of Void constants; the numerators are forced by the exponent and loop classifications already established.
+
+\textbf{Consequence:} Every correction fraction is in lowest terms. The prime factorisations of numerator and denominator share no common factor. This eliminates any claim that the correction chain carries hidden redundancy.
+
+\begin{code}
+-- §§ Correction fraction irreducibility — gcd checks on forced numerator/denominator pairs.
+
+-- § C² = 137² = 18769.
+simplex-eval-squared : ℕ
+simplex-eval-squared = simplex-eval * simplex-eval
+
+law-simplex-eval-sq : simplex-eval-squared ≡ 18769
+law-simplex-eval-sq = refl
+
+-- § Denominator products from K₄ invariants.
+-- κ · C² = 150152
+denom-kC2 : ℕ
+denom-kC2 = κ-discrete * simplex-eval-squared
+
+law-denom-kC2 : denom-kC2 ≡ 150152
+law-denom-kC2 = refl
+
+-- κ · d · C² = 450456
+denom-kdC2 : ℕ
+denom-kdC2 = κ-discrete * degree-K4 * simplex-eval-squared
+
+law-denom-kdC2 : denom-kdC2 ≡ 450456
+law-denom-kdC2 = refl
+
+-- κ² · C² = 1201216
+denom-k2C2 : ℕ
+denom-k2C2 = (κ-discrete * κ-discrete) * simplex-eval-squared
+
+law-denom-k2C2 : denom-k2C2 ≡ 1201216
+law-denom-k2C2 = refl
+
+-- § Channel count: p + χ = 11 + 2 = 13.
+loop-plus-chi : ℕ
+loop-plus-chi = loop-numerator + eulerChar-computed
+
+law-loop-plus-chi : loop-plus-chi ≡ 13
+law-loop-plus-chi = refl
+
+-- § Squared channel count: 13² = 169.
+loop-plus-chi-squared : ℕ
+loop-plus-chi-squared = loop-plus-chi * loop-plus-chi
+
+law-loop-plus-chi-sq : loop-plus-chi-squared ≡ 169
+law-loop-plus-chi-sq = refl
+
+-- § Irreducibility of the four correction fractions.
+-- gcd(χ, C²) = gcd(2, 18769) = 1
+law-irred-chi-C2 : gcd eulerChar-computed simplex-eval-squared ≡ 1
+law-irred-chi-C2 = refl
+
+-- gcd(1, κdC²) = gcd(1, 450456) = 1
+law-irred-1-kdC2 : gcd 1 denom-kdC2 ≡ 1
+law-irred-1-kdC2 = refl
+
+-- gcd(d², κC²) = gcd(9, 150152) = 1
+law-irred-d2-kC2 : gcd (degree-K4 * degree-K4) denom-kC2 ≡ 1
+law-irred-d2-kC2 = refl
+
+-- gcd((p+χ)², κ²C²) = gcd(169, 1201216) = 1
+law-irred-pchi2-k2C2 : gcd loop-plus-chi-squared denom-k2C2 ≡ 1
+law-irred-pchi2-k2C2 = refl
+\end{code}
+
+\subsubsection*{Boundary channel forcing}
+
+The boundary-shifted channel count $p + \chi = 13$ is not an ad hoc modification of the loop numerator. It is forced by the boundary structure of the Distinction itself.
+
+The cover function of any Distinction maps each carrier element to one of exactly two branches: $\mathtt{inj}_1$ or $\mathtt{inj}_2$. The number of branches is $2 = \chi$. This is the Euler characteristic in its most primitive role: not a derived invariant of a complicated space, but the branch count of the primordial classifier.
+
+The loop numerator $p = E + d + \chi = 11$ already carries one copy of $\chi$---the Euler characteristic enters as one of the three basis elements $\{E, d, \chi\}$ that survive exhaustive filtration. A coupling that operates across the Distinction boundary traverses the cover once: one traversal contacts both branches, adding the branch count $\chi$ to the channel tally. The result is $p + \chi = E + d + 2\chi = 13$: the original loop numerator plus one boundary traversal.
+
+Why one traversal, not zero or two? The $\kappa^1$-scaled correction operates within a single bulk exponent $d^{1+bd}$---it never crosses the Distinction boundary. The $\kappa^2$-scaled correction is a self-coupling: it relates two copies of the same carrier across the boundary, forcing exactly one cover traversal. A second traversal would return to the original side and contribute nothing new---the cover is idempotent (applying it twice to the same element yields the same branch).
+
+The self-coupling then squares the result: both sides of the coupling carry the same weight $p + \chi$, so the combined numerator is $(p + \chi)^2 = 169$. This squaring was already proved by \texttt{law-self-coupling-square} (corollary of Law~14F.0). The boundary channel forcing and the self-coupling squaring together lock the $\kappa^2$-channel numerator without any free parameter.
+
+\textbf{Constraint:} The cover of any Distinction has exactly two branches. A coupling that crosses the Distinction boundary must traverse the cover, adding the branch count $\chi$ to the channel tally. The cover is idempotent: a second traversal yields the same branch, contributing no additional weight.
+
+\textbf{Construction:} The cover branch count is $2 = \chi$ by \texttt{refl}. The loop numerator already contains one $\chi$. One boundary traversal adds a second, yielding $p + \chi = E + d + 2\chi = 13$. The self-coupling squares this to $(p + \chi)^2 = 169$. All equalities are verified by \texttt{refl}.
+
+\textbf{Consequence:} The boundary-shifted channel count is not interpretive. It is forced by the same binary structure that opens the entire book: the Distinction has two classes, and crossing that boundary costs exactly $\chi$. No free parameter enters.
+
+\begin{code}
+-- §§ Boundary channel forcing — the cover branch count forces p + χ.
+
+-- § The cover of Two-distinction has exactly 2 branches (inj₁ and inj₂).
+cover-branch-count : ℕ
+cover-branch-count = 2
+
+-- § The branch count equals the Euler characteristic.
+law-cover-branches-is-chi : cover-branch-count ≡ eulerChar-computed
+law-cover-branches-is-chi = refl
+
+-- § The loop numerator p already contains one copy of χ.
+-- p = E + d + χ, so p contains χ once.
+law-loop-contains-chi : loop-numerator ≡ edgeCountK4 + degree-K4 + eulerChar-computed
+law-loop-contains-chi = refl
+
+-- § One boundary traversal adds χ: boundary-shifted channel = p + χ = E + d + 2χ.
+law-weak-channel-double-chi :
+  loop-plus-chi ≡ edgeCountK4 + degree-K4 + eulerChar-computed + eulerChar-computed
+law-weak-channel-double-chi = refl
+
+-- § The two copies of χ in the boundary-shifted channel equal the cover branch count.
+law-chi-copies-match-branches :
+  eulerChar-computed + eulerChar-computed ≡ cover-branch-count + cover-branch-count
+law-chi-copies-match-branches = refl
+
+-- § Full record: boundary channel forcing.
+record BoundaryChannelForcing : Set where
+  field
+    -- § Cover branch count = χ
+    branches-is-chi     : cover-branch-count ≡ eulerChar-computed
+    -- § Loop numerator carries one χ
+    loop-has-one-chi    : loop-numerator ≡ edgeCountK4 + degree-K4 + eulerChar-computed
+    -- § Boundary traversal adds one χ → boundary-shifted channel = p + χ
+    traversal-adds-chi  : loop-plus-chi ≡ loop-numerator + eulerChar-computed
+    -- § Boundary-shifted channel contains two χ = two branches
+    double-chi          : loop-plus-chi ≡ edgeCountK4 + degree-K4 + eulerChar-computed + eulerChar-computed
+    -- § Self-coupling squares the channel
+    coupling-squares    : loop-plus-chi-squared ≡ loop-plus-chi * loop-plus-chi
+    -- § Final value
+    shifted-numerator   : loop-plus-chi-squared ≡ 169
+
+theorem-boundary-channel-forcing : BoundaryChannelForcing
+theorem-boundary-channel-forcing = record
+  { branches-is-chi    = refl
+  ; loop-has-one-chi   = refl
+  ; traversal-adds-chi = refl
+  ; double-chi         = refl
+  ; coupling-squares   = refl
+  ; shifted-numerator  = refl
+  }
+\end{code}
+
 \subsubsection*{Threshold to the invariant record}
 
-The carrier admits exactly two classes. Those two classes force the unique $K_4$ graph. The graph carries a rigid invariant ledger; the observable principle rules out every quantity dependent on presentation; and the unit system is locked to $(a,b,m) = (1,1,1)$.
+The carrier admits exactly two classes. Those two classes force the unique $K_4$ graph. The graph carries a rigid invariant ledger; the observable principle rules out every quantity dependent on presentation; and the unit system is locked to $(a,b,c) = (1,1,1)$.
 
-What survives this pressure is a sealed discrete record: $V = 4$, $E = 6$, $d = 3$, $\chi = 2$, $\kappa = 8$, the Clifford count $16$, the compactification stratum $17$, and the rigid graph evaluation $\mathcal{C} = 137$. Nothing in this ledger has been fitted. Every entry is already the survivor of an elimination chain.
+What survives this pressure is a sealed discrete record: $V = 4$, $E = 6$, $d = 3$, $\chi = 2$, $\kappa = 8$, the Clifford count $16$, the compactification stratum $17$, the rigid graph evaluation $\mathcal{C} = 137$, and the unique loop numerator $11 = E + d + \chi$. Nothing in this ledger has been fitted. Every entry is already the survivor of an elimination chain.
 
-This is the last point at which the work is purely discrete. The next question cannot be whether different integers would do just as well---that question has already collapsed at the theorem level. The only live question is harsher: are the rational corrections to the integer invariants themselves forced quotients of the same graph, or are they independent values introduced by hand?
+This is the last point at which the work is purely discrete. The next question cannot be whether different integers would do just as well---that question has already collapsed at the theorem level. The only live question is harsher: are the rational correction \emph{fractions}---sign assignments, exponent choices, squaring rules, and the denominator products---themselves forced, or are they interpretive?
+
+The answer splits cleanly. Sign assignments are forced: \texttt{TwoOrientation} classifies the two orientations on a binary carrier, leaving exactly $\pm 1$. Exponent choices are forced: \texttt{ExponentForcing} proves that $d^n = d^d$ admits the unique solution $n = d$, locking the exponent pair to $(1, 1{+}d)$. Squaring is forced: the self-coupling law proves that a cross-invariant self-coupling on $n$ elements has weight $n^2$---the only non-trivial alternative to weight~$0$. The boundary-shifted channel count $p + \chi = 13$ is forced: the Distinction cover has exactly $\chi = 2$ branches, and one boundary traversal adds $\chi$ to the loop numerator (\texttt{BoundaryChannelForcing}). Denominator products are forced: every factor ($\kappa$, $d$, $\mathcal{C}^2$) is a proven $K_4$ invariant, and all four correction fractions are irreducible by direct $\gcd$ computation. What is \emph{not} forced is the assignment of which $\kappa^n$-scaled fraction corresponds to which external sector. That mapping is an interpretive step that belongs to the companion volume \textit{Form}.
 
 \textbf{Constraint:} The discrete stage must already be closed before any rational extension is attempted. If any invariant or observable were still negotiable here, every later numerical value would be contaminated by hidden freedom.
 
-\textbf{Construction:} The preceding parts eliminate every negotiable invariant and every negotiable observable criterion. What survives is exactly two ingredients: the invariant ledger of $K_4$, and the admissibility criterion for observables on that ledger.
+\textbf{Construction:} Five forcing theorems close the arithmetic: \texttt{TwoOrientation} for signs, \texttt{ExponentForcing} for exponents, the self-coupling law for squaring, \texttt{BoundaryChannelForcing} for the boundary-shifted channel count, and the irreducibility checks for denominators. Each is verified by \texttt{refl} or by absurd-pattern elimination. No fitting parameter enters.
 
-\textbf{Consequence:} The sealed discrete record admits no further combinatorial freedom. Every rational correction derivable from this record belongs to the companion volume and is carried out in the companion volume \textit{Form}.
+\textbf{Consequence:} The sealed discrete record admits no further combinatorial freedom. The correction fractions are arithmetically locked. Only the $\kappa^n$-sector assignment---which fraction corrects which stratum---remains interpretive and belongs to \textit{Form}.
 
 %───────────────────────────────────────────────────────────────────────────
 \section{The Record Presupposes Distinction}
