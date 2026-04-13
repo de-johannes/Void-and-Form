@@ -95,7 +95,7 @@ destroys every alternative that fails self-consistency until only $K_4$ remains.
 The invariant record $(V,E,d,\chi,\kappa) = (4,6,3,2,8)$ with Laplacian
 spectrum $\{0,4,4,4\}$ is proved to be a singleton.
 
-A companion volume, \textit{Form}~\cite{wielsch2026form} ($\sim$6\,200 lines),
+A companion volume, \textit{Form}~\cite{wielsch2026form} ($\sim$9\,000 lines),
 imports \textit{Void}'s results and identifies the $K_4$ invariants with
 measured physical constants.  The identification layer adds no new axioms;
 it maps the forced arithmetic onto the Standard Model's numerical structure.
@@ -374,7 +374,7 @@ and builds the physical identification layer on top of it.
 & \textbf{\textit{Void} (Foundation)} & \textbf{\textit{Form} (Identification)} \\
 \midrule
 File         & \texttt{Void.lagda.tex} & \texttt{Form.lagda.tex} \\
-Lines        & ${\sim}25{,}000$ & ${\sim}6{,}200$ \\
+Lines        & ${\sim}25{,}000$ & ${\sim}9{,}000$ \\
 Module       & \texttt{Void} & \texttt{Form} \\
 Imports      & \texttt{Agda.Primitive} only & \texttt{open import Void} \\
 Central verb & Eliminate & Identify \\
@@ -382,7 +382,7 @@ Content      & $D_0 \to K_4 \to$ invariants $\to$ arithmetic $\to$ spectrum & $K
 Equality     & Propositional ($\text{Dec}\;(x \equiv y)$) & Inherits from Void \\
 Flags        & \texttt{-{}-safe -{}-without-K} & \texttt{-{}-safe -{}-without-K} \\
 Postulates   & 0 & 0 \\
-Result       & $(V,E,d,\chi,\kappa) = (4,6,3,2,8)$ & $\alpha^{-1} = 137$, $m_p/m_e = 1836$, \ldots \\
+Result       & $(V,E,d,\chi,\kappa) = (4,6,3,2,8)$ & 35-field \texttt{StandardModelFromK4} \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -521,7 +521,7 @@ endomorphisms, a well-founded drift hierarchy, a canonical presentation
 fixpoint, and the complete graph $K_4$ as the unique survivor.
 
 \textit{Void} (${\sim}25{,}000$ lines) derives the chain and proves the
-invariant record to be a singleton.  \textit{Form} (${\sim}6{,}200$ lines)
+invariant record to be a singleton.  \textit{Form} (${\sim}9{,}000$ lines)
 imports the result and identifies the invariants with measured physical
 constants.  Both compile under the same flags with zero postulates.
 The formal content is settled.  The physical interpretation is open.
@@ -538,7 +538,7 @@ literate Agda (\texttt{Void.lagda.tex}), $\sim$25\,000 lines, April~2026.
 \bibitem{wielsch2026form}
 J.~M.~Wielsch,
 \textit{Form: The Identification of $K_4$ Invariants with Physics},
-literate Agda (\texttt{Form.lagda.tex}), $\sim$6\,200 lines, April~2026.
+literate Agda (\texttt{Form.lagda.tex}), $\sim$9\,000 lines, April~2026.
 Imports \texttt{Void}.
 
 \bibitem{wielsch2026physics}

@@ -2045,17 +2045,33 @@ If these five routes disagreed, the identification would fail. They agree. That 
 
 How much matter does the universe contain? Cosmologists express the answer as $\Omega_m$, the ratio of the actual matter density to the critical density that would make the universe geometrically flat. Planck satellite measurements give $\Omega_m = 0.3150 \pm 0.0070$.
 
-From $K_4$: $\Omega_m = V / (2\pi\chi)$. Numerically, with $V = 4$, $\chi = 2$, and $2\pi \approx 6.2832$, this gives $\Omega_m \approx 0.3183$---within $0.5\sigma$ of the Planck central value.
+The Gauss-Bonnet theorem relates the Euler characteristic to total curvature: $\int K\,dA = 2\pi\chi$. For the tetrahedron ($\chi = 2$), the total curvature is $4\pi$. At first glance, $\pi$ appears to be an external import---a transcendental constant from continuous geometry that the discrete $K_4$ framework cannot produce. It is not.
+
+The Bailey--Borwein--Plouffe identity (1995) expresses $\pi$ as a convergent series:
+\[
+  \pi \;=\; \sum_{k=0}^{\infty}\, \frac{1}{16^k}\!\left(\frac{4}{8k+1} - \frac{2}{8k+4} - \frac{1}{8k+5} - \frac{1}{8k+6}\right).
+\]
+Every coefficient in this formula is a $K_4$ invariant. The geometric base $16 = \chi^V$. The step width $8 = \kappa$. The four offsets $\{1,\, 4,\, 5,\, 6\} = \{V{-}d,\; V,\; d{+}\chi,\; E\}$. The four numerators $\{4,\, 2,\, 1,\, 1\} = \{V,\; \chi,\; \delta,\; \delta\}$ where $\delta = V - d$. Not a single coefficient escapes the $K_4$ basis. The number $\pi$ is the limit of a $K_4$-native computation---not an external constant, but an internal convergence.
+
+The density parameter $\Omega_m = V / (2\pi\chi)$ is therefore entirely $K_4$-determined: both $V$ and $\chi$ are graph invariants, and $2\pi = \chi \cdot \pi$ inherits its $K_4$-nativity from the BBP series. With $V = 4$, $\chi = 2$, and $2\pi \approx 6.2832$, this gives $\Omega_m \approx 0.3183$---within $0.5\sigma$ of the Planck central value.
 
 The alternatives tell the story. $K_3$ predicts $\Omega_m \approx 0.2387$, which is $10.9\sigma$ away from Planck. $K_5$ predicts $0.3978$, which is $11.8\sigma$ away. Only $K_4$ falls within the measurement uncertainty. The complete graph on four vertices is the unique survivor of the cosmological filter, just as it was the unique survivor of the elimination chain.
 
-\textbf{Constraint:} The matter density fraction must be expressible as a ratio of $K_4$ invariants whose numerical value survives comparison with Planck satellite measurements.
+\textbf{Constraint:} The matter density fraction $\Omega_m = V/(2\pi\chi)$ uses three ingredients: $V$, $\chi$, and $\pi$. The first two are direct graph invariants. The third is the limit of the BBP series whose every coefficient is a $K_4$ invariant (\texttt{BBP-K4-Identification}, ten fields, all \texttt{refl}). No external input enters the formula.
 
 \textbf{Elimination:} $K_3$ predicts $\Omega_m \approx 0.2387$ ($10.9\sigma$ from Planck). $K_5$ predicts $0.3978$ ($11.8\sigma$). Both are annihilated by the cosmological filter. Only $K_4$ with $\Omega_m = V/(2\pi\chi) \approx 0.3183$ falls within $0.5\sigma$.
 
-\textbf{Consequence:} The density filter eliminates every complete graph except $K_4$. The survivor is unique.
+\textbf{Consequence:} The density filter eliminates every complete graph except $K_4$. The survivor is unique. The factor $2\pi$ is itself $K_4$-native: it is $\chi$ times the BBP limit, a convergent series in the invariant basis $\{\chi, V, \kappa, d, E\}$. The discriminating variable $V/\chi$ is a pure graph ratio.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ BBP-K4-Identification:\ proved\ in\ Void\ (law16B-8a-bbp-k4).}\<%
+\\
+\>[0]\AgdaComment{--\ Every\ coefficient\ of\ the\ BBP\ formula\ for\ π\ is\ a\ K₄\ invariant.}\<%
+\\
+\>[0]\AgdaComment{--\ Inherited\ via\ `open\ import\ Void`.}\<%
+\\
+%
+\\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaComment{--\ §\ The\ Density\ Parameter\ Ω\ —\ Ωₘ\ =\ V\ /\ (2πχ).\ Integer\ scaled:\ Ωₘ\ ×\ 10⁴\ =\ 3183.}\<%
 \\
 %
@@ -2674,7 +2690,7 @@ The alternatives tell the story. $K_3$ predicts $\Omega_m \approx 0.2387$, which
 
 \section{Dark Energy and the Baryonic Fraction}
 
-The dark sector has $E - 1 = 5$ channels---one fewer than the total edge count. The baryon density is $\Omega_b = (V - d)/(F_2 + d) = 1/20 = 0.05$, and the dark energy fraction fills the remainder: $1 - \Omega_m = 0.6817$, partitioned across those five channels at $\sim 0.1363$ each. None of these numbers was tuned; all are ratios of $K_4$ invariants.
+The dark sector has $E - 1 = 5$ channels---one fewer than the total edge count. The baryon density is $\Omega_b = (V - d)/(F_2 + d) = 1/20 = 0.05$, and the dark energy fraction fills the remainder: $1 - \Omega_m = 0.6817$, partitioned across those five channels at $\sim 0.1363$ each. The baryon fraction $\Omega_b = 1/20$ and the dark channel count $E - 1 = 5$ are pure $K_4$ ratios. The matter density $\Omega_m = V/(2\pi\chi)$ completes the picture: $V$, $\chi$ are graph invariants, and $\pi$ is the limit of the BBP series whose every coefficient is a $K_4$ invariant.
 
 \begin{code}%
 \>[0]\AgdaComment{--\ §\ Baryon-Photon\ Ratio\ η\ —\ η\ =\ Ωb\ /\ (F₂\ +\ d)\ =\ 1/20.\ Scaled:\ baryon\ density\ /\ 20.}\<%
@@ -3309,6 +3325,9 @@ an exhaustive classification over all eight $\{0,1\}$-linear combinations
 Its denominators---$72$ at the QCD scale, $576$ at the electroweak
 scale---are canonical $K_4$ volumes (Void: \texttt{loop-denom-bulk},
 \texttt{loop-denom-extended}), and their ratio is exactly $\kappa = 8$.
+The pairwise GCD structure of all three volumes is sealed in
+Void's \texttt{SpectralPartition} record: every bridge between
+two volumes is itself a $K_4$ invariant.
 
 %───────────────────────────────────────────────────────────────────────────
 \subsubsection*{Canonical Volumes and the RG Slope}
@@ -3776,6 +3795,8 @@ correction chain.
 %───────────────────────────────────────────────────────────────────────────
 \subsubsection*{The Proton and Electroweak Corrections}
 %───────────────────────────────────────────────────────────────────────────
+
+The one irreducibly interpretive step in the correction chain is the assignment of which $\kappa$-scaled fraction corresponds to which external sector. \textit{Void} derives the correction fractions $\pm 11/72$, $\pm 11/576$, and the higher-order terms as forced $K_4$ arithmetic. It does not name them. The identification of $+11/72$ with the QCD-scale proton correction, and $-11/576$ with the electroweak correction, is performed here---and only here---with the explicit marking that it is an interpretation rather than a derivation.
 
 The loop numerator $11$ now descends into two physical channels.
 At the QCD scale, the proton correction is $+11/72$.  The plus sign
@@ -5469,26 +5490,38 @@ $17 - 28/153 = 2573/153 \approx 16.817$.
 \subsubsection*{The Coupling Volume: $d \cdot E \cdot F_2 = 306$}
 %───────────────────────────────────────────────────────────────────────────
 
-The fine-structure constant stands one tier above the hadron and electroweak
-corrections.  Its denominator is not $72$ or $576$ but $306 = d \cdot E
-\cdot F_2$---the product of degree, edge count, and compactification prime.
-This ``coupling-compactification volume'' governs the electromagnetic sector
-because it is the unique product of factors that have not already been consumed
-at lower scales.
+The coupling volume $306 = d \cdot E \cdot F_2$ is derived in Void by
+the spectral filter.  The tree evaluation $\mathcal{C} = V^d \cdot \chi
++ d^2$ folds every invariant that divides $V^d = 2^6$ into the spectral
+base.  Three invariants divide $V^d$: the vertex count $V = 2^2$, the
+Euler characteristic $\chi = 2^1$, and the octahedral parameter $\kappa
+= 2^3$.  They are pure powers of~$2$ and are absorbed into the vertex
+architecture.  The three that do \emph{not} divide~$V^d$---the degree
+$d = 3$, the edge count $E = 6$, and the compactification prime $F_2 =
+17$---carry odd prime factors and survive.  Their product is~$306$, and
+$\gcd(11, 306) = 1$.  This is the content of the
+\texttt{CouplingVolumeDerivation} record in Void.
 
-Six $K_4$ invariants compete for inclusion: $V$, $E$, $d$, $\chi$,
-$\kappa$, $F_2$.  Three structural filters annihilate half of them:
+What the spectral filter does not determine is which physical sector
+the volume~$306$ governs.  That assignment is the interpretive step:
+$306$ corrects the electromagnetic coupling because $V$ and $\kappa$
+have already shaped the mass and electroweak sectors.  The present
+section records the consistency of this identification.
+
 \begin{enumerate}
-\item $V = 4$ is already consumed in the proton volume $72 = V \cdot E
-      \cdot d$.
-\item $\kappa = 8$ is already consumed in the electroweak volume
-      $576 = V \cdot E \cdot d \cdot \kappa$.
+\item $V = 4$ already enters the mass sector (the bulk volume
+      $72 = V \cdot E \cdot d$ serves as the proton correction denominator).
+\item $\kappa = 8$ already enters the electroweak sector (the extended
+      volume $576 = \kappa \cdot 72$ serves as the $\sin^2\!\theta_W$
+      correction denominator).
 \item $\chi = 2$ enters the bare coupling $\alpha^{-1} = V^d \chi + d^2$;
-      using it again would double-count the Euler characteristic.
+      reusing it as a correction factor would conflate tree-level structure
+      with loop-level correction.
 \end{enumerate}
-The three survivors---$d$, $E$, $F_2$---multiply to $306$.  The admitted factor
-pool is then a strict subtype of the six candidates, and the inadmissible
-constructors receive absurd patterns.
+All three exclusions are \emph{consistent with} the spectral filter---the
+same invariants that divide $V^d$ are the ones that have already been
+allocated to other physical sectors.  The arithmetic is theorem
+(Void); the sector allocation is identification (Form).
 
 \medskip
 \noindent
@@ -5498,9 +5531,10 @@ factor that already participates at another scale would conflate independent
 channels.
 
 \noindent
-\textbf{Elimination:}
-$V$, $\kappa$, and $\chi$ are consumed by prior tiers.  The three filters
-leave $\{d, E, F_2\}$ as the unique admissible factor set.
+\textbf{Construction:}
+The spectral filter (Void) forces the survivor triple $\{d, E, F_2\}$.  This
+section assigns the survivor product~$306$ to the electromagnetic sector and
+verifies consistency with the consumed-factor bookkeeping.
 
 \noindent
 \textbf{Consequence:}
@@ -5648,9 +5682,11 @@ numerator $p = 11$: $\gcd(11, 306) = 1$.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaComment{--\ §\ Filter\ 1\ (no\ V):\ V\ is\ consumed\ in\ proton\ volume\ 72\ =\ V·E·d.}\<%
+\>[0]\AgdaComment{--\ §\ Filter\ 1\ (no\ V):\ V\ divides\ bulk\ volume\ 72\ =\ V·E·d.}\<%
 \\
-\>[0]\AgdaComment{--\ Witness:\ V\ divides\ proton-loop-den.}\<%
+\>[0]\AgdaComment{--\ Arithmetic\ fact:\ gcd(4,\ 72)\ =\ 4.\ \ (See\ also\ Void:\ law-V-divides-bulk.)}\<%
+\\
+\>[0]\AgdaComment{--\ Interpretation:\ 72\ is\ the\ proton\ correction\ denominator.}\<%
 \\
 \>[0]\AgdaFunction{law-V-consumed-in-proton}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -5667,9 +5703,11 @@ numerator $p = 11$: $\gcd(11, 306) = 1$.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaComment{--\ §\ Filter\ 2\ (no\ κ):\ κ\ is\ consumed\ in\ electroweak\ volume\ 576\ =\ V·E·d·κ.}\<%
+\>[0]\AgdaComment{--\ §\ Filter\ 2\ (no\ κ):\ κ\ divides\ extended\ volume\ 576\ =\ κ·V·E·d.}\<%
 \\
-\>[0]\AgdaComment{--\ Witness:\ κ\ divides\ loop-denom-EW.}\<%
+\>[0]\AgdaComment{--\ Arithmetic\ fact:\ gcd(8,\ 576)\ =\ 8.\ \ (See\ also\ Void:\ law-κ-divides-ext.)}\<%
+\\
+\>[0]\AgdaComment{--\ Interpretation:\ 576\ is\ the\ electroweak\ correction\ denominator.}\<%
 \\
 \>[0]\AgdaFunction{law-κ-consumed-in-EW}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
