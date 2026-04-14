@@ -153,6 +153,45 @@ in both companion papers, and in this README is verified.
 - All infrastructure (equality, negation, decidability, N, Z, Q, R) built from scratch in Void
 
 
+## On Shoulders
+
+None of this is new in the way that matters. The marked/unmarked
+distinction is Spencer-Brown (1969). The observer as constitutive
+act is von Foerster (1973) and Luhmann (1984). The idea that the
+universe bootstraps from a binary cut is Wheeler's "it from bit"
+(1989). The eliminative method — what cannot survive self-consistency
+falls — is the oldest move in philosophy, from Parmenides through
+Kant's transcendental arguments to modern constructive type theory.
+
+What is new is the compiler.
+
+This project is one person, several AI assistants, and eighteen months
+of work that started from zero knowledge of Agda, formal mathematics,
+and mathematical physics. The starting question was not "derive the
+fine-structure constant" — it was "where is the dark matter?" The
+answer came top-down: if you take the thinkers above seriously, and if
+you ask what the minimal formal content of any binary observation must
+be, and if you let the type checker — not intuition — decide what
+survives, you arrive at K4. Not by choice. By elimination.
+
+The physics I write is crackhead physics. I have no training in it.
+I do not need training in it. I can see when data has structure. I can
+see when SU-groups align with levels of a graph. I can see that K4
+must fold, that the centroid matters, that D0 is unavoidable, that Pi
+hides in K4's total curvature. Seeing is not proving — but the proofs
+are in the files, and the compiler accepted them.
+
+I make no claim that this is physics. The claim is narrower and
+harder to dismiss: from a single binary distinction, under
+`--safe --without-K` with zero postulates, the type checker verifies
+that the K4 invariants produce the numbers that physicists measure.
+Every equality is `refl`. There are no free parameters. Show me
+where the freedom enters, or explain why I should stop.
+
+If it were this simple — just K4, folded, information distinguishing
+itself, running over time — would that be so terrible?
+
+
 ## Companion Papers
 
 - `papers/VoidCompanionPaper.tex` -- The formal chain: distinction, four-case classification, drift acyclicity, presentation fixpoint, K4 uniqueness.
