@@ -1,131 +1,154 @@
 # Void and Form
 
-The starting point is deliberately minimal: a type with two provably unequal,
-covering elements. From this single distinction, the complete graph K4 is the
-unique surviving structure after exhaustive elimination. This repository
-contains the machine-verified derivation and its physical identification layer.
+## The Cut
 
-Both files compile under `agda --safe --without-K` with zero postulates
-and no standard library.
+Draw a distinction.
 
+That is the entire input. Not a field, not a particle, not a
+spacetime — a single binary separation. This side, not that side.
+Spencer-Brown called it the *mark* (1969). Wheeler called it
+*it from bit* (1989). In constructive type theory, it is a type
+with two provably unequal, exhaustively covering elements:
 
-## PDFs
-
-| Document | Link |
-|----------|------|
-| Void (eliminative derivation) | [latex/Void.pdf](https://github.com/de-johannes/Void-and-Form/blob/main/latex/Void.pdf) |
-| Form (identification layer) | [latex/Form.pdf](https://github.com/de-johannes/Void-and-Form/blob/main/latex/Form.pdf) |
-| Companion paper: Void | [papers/VoidCompanionPaper.pdf](https://github.com/de-johannes/Void-and-Form/blob/main/papers/VoidCompanionPaper.pdf) |
-| Companion paper: Form | [papers/FormCompanionPaper.pdf](https://github.com/de-johannes/Void-and-Form/blob/main/papers/FormCompanionPaper.pdf) |
-
-All PDFs are compiled from the literate Agda source (agda --latex + xelatex).
-If the compiler accepted the source, every statement in the PDFs is verified.
-
-
-## Files
-
-| File | Module | Lines | Role |
-|------|--------|------:|------|
-| `Void.lagda.tex` | `Void` | ~25,000 | Eliminative derivation: distinction to K4, arithmetic, spectral theory, singleton record |
-| `Form.lagda.tex` | `Form` | ~6,200 | Identification layer: maps K4 invariants to measured physical constants (`open import Void`) |
-| `papers/VoidCompanionPaper.tex` | -- | ~530 | Companion paper: the formal chain from distinction to K4 |
-| `papers/FormCompanionPaper.tex` | -- | ~530 | Companion paper: the physics record and numerical results |
-| `TableOfContents.md` | -- | ~180 | Part/chapter TOC for both books; key theorem index for AI navigation |
-
-Form depends on Void. Compile Void first.
-
-
-## Architecture
-
-```
-Distinction (D0)
-    |
-    v  [elimination]
-K4  (V=4, E=6, d=3, chi=2, kappa=8)
-    |
-    v  [singleton proof]
-K4Record  (unique invariant record)
-    |
-    v  [open import Void]
-Form  (identification with measured constants)
+```agda
+data Two : Set where
+  L : Two
+  R : Two
 ```
 
-Void is self-contained. It derives K4, builds the natural numbers, integers,
-rationals, and reals from the graph's structure, computes the Laplacian
-spectrum {0,4,4,4}, and proves the invariant record is a singleton. No
-number system is imported; every algebraic law is a theorem.
-
-Form imports Void's definitions and identifies the forced invariants with
-physical quantities. No new axiom enters. Every number that appears in
-Form was already forced in Void.
+No axioms. No postulates. No standard library. One distinction,
+and the question: what does self-consistency force from here?
 
 
-## Five Proofs
+## What Survives
 
-1. **Two-distinction** -- The minimal distinction type `data Two = L | R` is
-   constructed with zero assumptions. Coverage and separation are verified.
-   Every other distinction is isomorphic to this one (`two-normal-form`).
+The answer is not chosen. It is what remains after everything
+unstable has been eliminated.
 
-2. **Four-case endomorphism classification** -- Every endomorphism of a
-   distinction is one of exactly four cases: constL, constR, id, dual. The
-   classification is sound, injective, and unique. All six pairs are provably
-   distinct. This gives K4.
+A distinction has endomorphisms — maps from itself to itself.
+There are exactly four: two constants, the identity, and the swap.
+That classification is exhaustive, sound, and unique. Four vertices,
+six edges between them. The complete graph K4 — a tetrahedron.
 
-3. **K4 presentation uniqueness** (`law13-1-presentation-iso`) -- Any
-   alternative vertex type equipped with the same interface produces a graph
-   isomorphic to the canonical K4. No presentation freedom survives.
+No other graph survives. The derivation is a chain of five proofs:
 
-4. **K4Record singleton** (`K4Record-singleton`) -- The 17-field invariant
-   record of K4 has exactly one inhabitant. Proved via Hedberg's theorem
-   (decidable equality on N implies UIP) and record eta.
+1. **Two-distinction** — The minimal distinction `L | R` is
+   constructed with zero assumptions. Every other distinction is
+   isomorphic to it.
+2. **Four-case classification** — Every endomorphism falls into
+   exactly one of four cases. All six pairs are provably distinct.
+   This gives four vertices and six edges: K4.
+3. **Presentation uniqueness** — Any alternative vertex type with
+   the same interface produces a graph isomorphic to the canonical
+   K4. No freedom survives.
+4. **Singleton record** — The 17-field invariant record of K4 has
+   exactly one inhabitant. One graph, one set of numbers.
+5. **Loop closure** — The record presupposes the distinction it
+   was derived from. The chain D0 → K4 → record → D0 is closed.
 
-5. **Loop closure** -- The invariant record presupposes D0. The chain
-   D0 -> K4 -> record -> D0 is a closed constraint, not an open arrow.
-   `K4-is-inevitable : Distinction → K4Record` (forward) and
-   `record-presupposes-distinction : K4Record → Distinction` (backward)
-   establish the equivalence `Distinction ⟺ K4Record`.
+Each step is machine-verified in Agda under `--safe --without-K`.
+The compiler is the only arbiter.
 
 
-## Projections from K4 (Form)
+## What It Carries
 
-The following values arise internally as exact rational expressions from K4's
-combinatorial invariants. Every equality is a `refl` closed by the type
-checker. No value was fitted. Their comparison to measured constants is
-external to the proof — the computation is theorem, the identification
-is interpretation.
+K4 has six combinatorial invariants. They are not parameters — they
+are theorems of the graph:
 
-| Quantity | K4 formula | Tree value | Corrected | Measured | Tension |
-|----------|-----------|-----------|-----------|----------|-------|
-| alpha^{-1} | V^d * chi + d^2 | 137 | 137.035999076 | 137.035999084(21) | 0.4σ |
-| m_p / m_e | chi^2 * d^3 * F2 | 1836 | 1836.15267344 | 1836.15267343(11) | 0.08σ |
-| m_mu / m_e | d^2 * (E + F2) | 207 | 206.7682824 | 206.7682830(46) | 0.12σ |
-| m_tau / m_mu | F2 | 17 | 16.8170 | 16.8170 | < 1σ |
-| sin^2 theta_W | chi / kappa | 0.25 | 0.23121 | 0.23121(4) | 0.001σ |
-| Omega_b / Omega_m | kappa / (kappa*E + d) | 8/51 | 0.1569 | 0.157 | 0.1% |
-| Spacetime | V = 3+1 | 4 | -- | 4 | exact |
-| Generations | d = V-1 | 3 | -- | 3 | exact |
-| kappa | 2V | 8 | -- | 8piG | exact |
-| Lambda | d | 3 | -- | >0 | -- |
+| Invariant | Definition | Value |
+|-----------|-----------|------:|
+| V (vertices) | \|K4\| | 4 |
+| E (edges) | V(V−1)/2 | 6 |
+| d (degree) | V − 1 | 3 |
+| χ (Euler) | V + F − E | 2 |
+| κ (coupling) | 2V | 8 |
+| C (evaluation) | V^d · χ + d² | 137 |
 
-Four tiers of correction sharpen the tree-level values. The universal
-loop numerator 11 is forced by exhaustive elimination among all
-{0,1}-linear combinations of {E, d, chi}. The denominators 72 (QCD)
-and 576 (EW) are canonical products of K4 invariants. The second-order
-term for alpha^{-1} adds 295/(306 * 137^2), closing the gap to 0.4σ.
-The electromagnetic projection ±chi/C^2 shifts each mass ratio by
-±2/137^2; the sign is determined by whether the mass formula is a pure
-power product (bulk, sigma = −1) or contains an additive combination
-of invariants (boundary, sigma = +1). The strong volume correction
-+d^(1+b*d)/(kappa*d^2*C^2) adds 1/450456 for bulk observables and
-9/150152 for boundary observables; the ratio d^d = 27 counts the
-additional projection channels opened by the boundary sum. The weak
-mixing correction +(p+chi)^2/(kappa^2*C^2) = 169/1201216 applies
-exclusively to sin^2 theta_W, closing it from 3.5σ to 0.001σ; mass
-ratios do not receive this term because they carry no isospin mixing.
-The three correction tiers correspond to U(1), SU(3), SU(2) — the
-gauge structure emerges from which observables require which corrections.
-After the full chain, every observable closes below measurement
-uncertainty. Every classification and every sign is verified by `refl`.
+From these six numbers, exact rational expressions produce every
+value in the table below. No value was fitted. The computation is
+theorem; the identification with measured constants is interpretation.
+
+| Quantity | K4 formula | Tree | Corrected | Measured | Tension |
+|----------|-----------|-----:|----------:|----------|--------:|
+| α⁻¹ | V^d·χ + d² | 137 | 137.035999076 | 137.035999084(21) | 0.4σ |
+| m_p/m_e | χ²·d³·F₂ | 1836 | 1836.15267344 | 1836.15267343(11) | 0.08σ |
+| m_μ/m_e | d²·(E+F₂) | 207 | 206.7682824 | 206.7682830(46) | 0.12σ |
+| m_τ/m_μ | F₂ | 17 | 16.8170 | 16.8170 | < 1σ |
+| sin²θ_W | χ/κ | 0.25 | 0.23121 | 0.23121(4) | 0.001σ |
+| Ω_b/Ω_m | κ/(κE+d) | 8/51 | 0.1569 | 0.157 | 0.1% |
+
+Four correction tiers sharpen the tree values. The loop numerator
+11 = E + d + χ is forced by exhaustive elimination. The denominators
+72 and 576 are canonical products of K4 invariants. The sign of each
+correction is determined by the d-content of its numerator (Void:
+`SignForcing`). After the full chain, every observable closes below
+measurement uncertainty. Every classification and every sign is
+verified by `refl`.
+
+
+## The Line
+
+Everything to the left of this line is `refl`. Everything to the
+right is physics.
+
+| | Formal (Void) | Empirical |
+|---|---|---|
+| **Content** | K4 invariants produce these numbers | These numbers match what labs measure |
+| **Arbiter** | Agda compiler | Experiment |
+| **Free parameters** | Zero | Auxiliary hypotheses adjustable |
+| **Theory-ladenness** | None | Every measurement is interpreted |
+
+The formal derivation cannot tell you whether 137 has anything to do
+with electromagnetism. The empirical measurement cannot tell you
+whether its value is free or forced. These are different modes of
+knowledge, and neither subsumes the other.
+
+This repository does not claim to be physics. It claims that K4's
+invariants produce the numbers that physicists measure, that
+every equality is `refl`, and that no free parameter enters.
+
+Show me where the freedom enters, or explain why the numbers match.
+
+
+## On Shoulders
+
+None of this is new in the way that matters. The marked/unmarked
+distinction is Spencer-Brown (1969). The observer as constitutive
+act is von Foerster (1973) and Luhmann (1984). The universe
+bootstrapping from a binary cut is Wheeler (1989). The eliminative
+method — what cannot survive self-consistency falls — is the oldest
+move in philosophy, from Parmenides through Kant to modern
+constructive type theory.
+
+Standing on shoulders — or, as it turned out, inheriting a pile
+of debts. What is new is only the tool: a compiler that does not
+negotiate.
+
+This project began eighteen months ago with a question about dark
+matter. That failed — as thoroughly as a question can fail. But
+failure has a direction: it points away from what does not work.
+Away from particles. Away from models. Toward the thing every model
+already presupposes but never examines. Strip away dark matter,
+strip away fields, strip away spacetime. What remains? A cut. This
+against that. Marked against unmarked.
+
+The author has no training in formal mathematics or mathematical
+physics. What the author has is pattern recognition — the ability
+to see structure in data, to see when group ranks align with graph
+levels, when a tetrahedron must fold. Seeing is not proving. But
+the proofs are in the files, written with AI assistants and verified
+by a compiler that does not care who wrote them.
+
+Working with AI on an open-ended problem is dangerous. A stochastic
+machine that sounds authoritative is worse than ignorance — it is
+confident ignorance. The antidote is constraint. Force the machine
+onto a deterministic playing field: not simulation but proof, not
+exploration but elimination, not Python but Agda. The narrower the
+rules, the more honest the output. Treat AI as a proof assistant,
+never as an oracle.
+
+If it were this simple — just K4, folded, information distinguishing
+itself, running over time — would that be so terrible?
 
 
 ## Verification
@@ -137,66 +160,48 @@ agda --safe --without-K Void.lagda.tex
 agda --safe --without-K Form.lagda.tex
 ```
 
-Requires Agda >= 2.6.4. No dependencies beyond `Agda.Primitive`.
-
-If both files type-check, every theorem stated in this repository,
-in both companion papers, and in this README is verified.
-
-
-## Formal Environment
+Requires Agda ≥ 2.6.4. No dependencies beyond `Agda.Primitive`.
+If both files type-check, every theorem in this repository is verified.
 
 - Language: Agda
 - Flags: `--safe --without-K`
 - Postulates: 0
 - Standard library: none
-- Proof methods: `refl`, absurdity witnesses (lambda ()), ordering chains
-- All infrastructure (equality, negation, decidability, N, Z, Q, R) built from scratch in Void
+- Proof methods: `refl`, absurdity witnesses `(λ ())`, ordering chains
+- All infrastructure (N, Z, Q, R) built from scratch in Void
 
 
-## On Shoulders
+## Files
 
-None of this is new in the way that matters. The marked/unmarked
-distinction is Spencer-Brown (1969). The observer as constitutive
-act is von Foerster (1973) and Luhmann (1984). The idea that the
-universe bootstraps from a binary cut is Wheeler's "it from bit"
-(1989). The eliminative method — what cannot survive self-consistency
-falls — is the oldest move in philosophy, from Parmenides through
-Kant's transcendental arguments to modern constructive type theory.
+| File | Lines | Role |
+|------|------:|------|
+| `Void.lagda.tex` | ~26,000 | Eliminative derivation: distinction → K4 → arithmetic → spectral theory → singleton record |
+| `Form.lagda.tex` | ~9,000 | Identification layer: maps K4 invariants to measured constants (`open import Void`) |
+| `papers/VoidCompanionPaper.tex` | ~530 | Companion paper: the formal chain |
+| `papers/FormCompanionPaper.tex` | ~530 | Companion paper: the physics record |
+| `papers/TableOfContents.md` | ~180 | Chapter index for AI navigation |
 
-What is new is the compiler.
+```
+Distinction (D0)
+    │
+    ▼  [elimination]
+K4  (V=4, E=6, d=3, χ=2, κ=8)
+    │
+    ▼  [singleton proof]
+K4Record  (unique invariant record)
+    │
+    ▼  [open import Void]
+Form  (identification with measured constants)
+```
 
-This project is one person, several AI assistants, and eighteen months
-of work that started from zero knowledge of Agda, formal mathematics,
-and mathematical physics. The starting question was not "derive the
-fine-structure constant" — it was "where is the dark matter?" The
-answer came top-down: if you take the thinkers above seriously, and if
-you ask what the minimal formal content of any binary observation must
-be, and if you let the type checker — not intuition — decide what
-survives, you arrive at K4. Not by choice. By elimination.
+Form depends on Void. Compile Void first.
 
-The physics I write is crackhead physics. I have no training in it.
-I do not need training in it. I can see when data has structure. I can
-see when SU-groups align with levels of a graph. I can see that K4
-must fold, that the centroid matters, that D0 is unavoidable, that Pi
-hides in K4's total curvature. Seeing is not proving — but the proofs
-are in the files, and the compiler accepted them.
-
-I make no claim that this is physics. The claim is narrower and
-harder to dismiss: from a single binary distinction, under
-`--safe --without-K` with zero postulates, the type checker verifies
-that the K4 invariants produce the numbers that physicists measure.
-Every equality is `refl`. There are no free parameters. Show me
-where the freedom enters, or explain why I should stop.
-
-If it were this simple — just K4, folded, information distinguishing
-itself, running over time — would that be so terrible?
-
-
-## Companion Papers
-
-- `papers/VoidCompanionPaper.tex` -- The formal chain: distinction, four-case classification, drift acyclicity, presentation fixpoint, K4 uniqueness.
-- `papers/FormCompanionPaper.tex` -- The physics record: numerical results, theorem/interpretation boundary, falsifiability conditions.
-- `papers/TableOfContents.md` -- Part/chapter TOC for both books with key theorem names. Designed for rapid AI orientation.
+| Document | Link |
+|----------|------|
+| Void (539 pages) | [latex/Void.pdf](https://github.com/de-johannes/Void-and-Form/blob/main/latex/Void.pdf) |
+| Form (202 pages) | [latex/Form.pdf](https://github.com/de-johannes/Void-and-Form/blob/main/latex/Form.pdf) |
+| Companion: Void | [papers/VoidCompanionPaper.pdf](https://github.com/de-johannes/Void-and-Form/blob/main/papers/VoidCompanionPaper.pdf) |
+| Companion: Form | [papers/FormCompanionPaper.pdf](https://github.com/de-johannes/Void-and-Form/blob/main/papers/FormCompanionPaper.pdf) |
 
 
 ## License
