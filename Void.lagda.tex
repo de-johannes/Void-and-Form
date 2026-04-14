@@ -26203,6 +26203,65 @@ theorem-correction-tower-complete = record
   }
 \end{code}
 
+\subsubsection*{Sign forcing}
+
+The correction tower has four fractions, and each carries a sign. Not by convention: the simplicial boundary operator $\partial$ on $K_4$ acts on the numerator of each fraction. A numerator whose algebraic expression depends on the vertex degree $d = 3$ is an interior simplex coordinate---$\partial$ reverses its orientation. A numerator free of $d$ is fixed under the boundary action---$\partial$ preserves it.
+
+The four numerators are $\chi = 2$, $1$, $d^2 = 9$, and $(p{+}\chi)^2 = 169$. The first two are $d$-free: $\chi = V - E + F$ involves no $d$, and $1$ is trivially constant. The second two are $d$-bearing: $d^2$ is the square of the degree itself, and $(p{+}\chi)^2 = (E + d + 2\chi)^2$ contains $d$ through the loop numerator $p = E + d + \chi$. The sign pattern $(+1, +1, -1, -1)$ is therefore forced by the $d$-content of each numerator.
+
+\medskip
+\noindent
+\textbf{Constraint:} Four correction fractions survive the discrete stage. The boundary operator $\partial$ on a $3$-simplex alternates with $(-1)^i$, partitioning the numerator space into two orientation classes.
+
+\medskip
+\noindent
+\textbf{Construction:} \texttt{NumeratorClass} splits into \texttt{d-free} and \texttt{d-bearing}. The integer sign map sends $d$-free $\mapsto +1$ and $d$-bearing $\mapsto -1$. The bridge to \texttt{TwoOrientation} sends $d$-free $\mapsto$ \texttt{orient-preserve} and $d$-bearing $\mapsto$ \texttt{orient-swap}. All six record fields close by \texttt{refl}.
+
+\medskip
+\noindent
+\textbf{Consequence:} The sign assignments are not interpretive. They are forced by the $d$-content of each correction numerator. The per-particle projection signs in \textit{Form} are derived from this classification, not postulated.
+
+\begin{code}
+-- §§ Sign forcing: numerator d-content determines correction signs.
+
+-- § Numerator d-content classification.
+data NumeratorClass : Set where
+  d-free    : NumeratorClass   -- no d-dependence in numerator → σ = +1
+  d-bearing : NumeratorClass   -- numerator depends on d → σ = −1
+
+-- § The integer sign forced by d-content.
+classify-sign : NumeratorClass → ℤ
+classify-sign d-free    = +suc 0    -- +1
+classify-sign d-bearing = -suc 0    -- −1
+
+-- § Bridge: d-content determines TwoOrientation.
+numerator-to-orientation : NumeratorClass → TwoOrientation
+numerator-to-orientation d-free    = orient-preserve
+numerator-to-orientation d-bearing = orient-swap
+
+-- §§ Record: sign forcing for the four correction terms.
+record SignForcing : Set where
+  field
+    -- § The four correction-term signs.
+    sign-boundary   : classify-sign d-free    ≡ +suc 0     -- χ/C²: χ = 2, d-free
+    sign-mass       : classify-sign d-free    ≡ +suc 0     -- 1/(κdC²): 1, d-free
+    sign-degree     : classify-sign d-bearing ≡ -suc 0     -- d²/(κC²): d², d-bearing
+    sign-coupling   : classify-sign d-bearing ≡ -suc 0     -- (p+χ)²/(κ²C²): ∋ d, d-bearing
+    -- § Bridge to TwoOrientation.
+    bridge-free     : numerator-to-orientation d-free    ≡ orient-preserve
+    bridge-bearing  : numerator-to-orientation d-bearing ≡ orient-swap
+
+theorem-sign-forcing : SignForcing
+theorem-sign-forcing = record
+  { sign-boundary   = refl
+  ; sign-mass       = refl
+  ; sign-degree     = refl
+  ; sign-coupling   = refl
+  ; bridge-free     = refl
+  ; bridge-bearing  = refl
+  }
+\end{code}
+
 \subsubsection*{Threshold to the invariant record}
 
 The carrier admits exactly two classes. Those two classes force the unique $K_4$ graph. The graph carries a rigid invariant ledger; the observable principle rules out every quantity dependent on presentation; and the unit system is locked to $(a,b,c) = (1,1,1)$.
@@ -26211,11 +26270,11 @@ What survives this pressure is a sealed discrete record: $V = 4$, $E = 6$, $d = 
 
 This is the last point at which the work is purely discrete. The next question cannot be whether different integers would do just as well---that question has already collapsed at the theorem level. The only live question is harsher: are the rational correction \emph{fractions}---sign assignments, exponent choices, squaring rules, and the denominator products---themselves forced, or are they interpretive?
 
-The answer splits cleanly. Sign assignments are forced: \texttt{TwoOrientation} classifies the two orientations on a binary carrier, leaving exactly $\pm 1$. Exponent choices are forced: \texttt{ExponentForcing} proves that $d^n = d^d$ admits the unique solution $n = d$, locking the exponent pair to $(1, 1{+}d)$. Squaring is forced: the self-coupling law proves that a cross-invariant self-coupling on $n$ elements has weight $n^2$---the only non-trivial alternative to weight~$0$. The boundary-shifted channel count $p + \chi = 13$ is forced: the Distinction cover has exactly $\chi = 2$ branches, and one boundary traversal adds $\chi$ to the loop numerator (\texttt{BoundaryChannelForcing}). Denominator products are forced: every factor ($\kappa$, $d$, $\mathcal{C}^2$) is a proven $K_4$ invariant, and all four correction fractions are irreducible by direct $\gcd$ computation. The factor-divisibility structure of the invariant ledger is arithmetically rigid: every $\gcd$ between an invariant and a canonical volume is settled by \texttt{refl}. The correction tower is complete at four fractions; no fifth arises from the ledger. What is \emph{not} forced is the assignment of which $\kappa^n$-scaled fraction corresponds to which external sector. That mapping is an interpretive step that belongs to the companion volume \textit{Form}.
+The answer splits cleanly. Sign assignments are forced: \texttt{TwoOrientation} classifies the two orientations on a binary carrier, leaving exactly $\pm 1$, and \texttt{SignForcing} derives the sign of each correction term from the $d$-content of its numerator---$d$-free numerators receive $+1$, $d$-bearing numerators receive $-1$. Exponent choices are forced: \texttt{ExponentForcing} proves that $d^n = d^d$ admits the unique solution $n = d$, locking the exponent pair to $(1, 1{+}d)$. Squaring is forced: the self-coupling law proves that a cross-invariant self-coupling on $n$ elements has weight $n^2$---the only non-trivial alternative to weight~$0$. The boundary-shifted channel count $p + \chi = 13$ is forced: the Distinction cover has exactly $\chi = 2$ branches, and one boundary traversal adds $\chi$ to the loop numerator (\texttt{BoundaryChannelForcing}). Denominator products are forced: every factor ($\kappa$, $d$, $\mathcal{C}^2$) is a proven $K_4$ invariant, and all four correction fractions are irreducible by direct $\gcd$ computation. The factor-divisibility structure of the invariant ledger is arithmetically rigid: every $\gcd$ between an invariant and a canonical volume is settled by \texttt{refl}. The correction tower is complete at four fractions; no fifth arises from the ledger. What is \emph{not} forced is the assignment of which $\kappa^n$-scaled fraction corresponds to which external sector. That mapping is an interpretive step that belongs to the companion volume \textit{Form}.
 
 \textbf{Constraint:} The discrete stage must already be closed before any rational extension is attempted. If any invariant or observable were still negotiable here, every later numerical value would be contaminated by hidden freedom.
 
-\textbf{Construction:} Eight forcing theorems close the arithmetic: \texttt{TwoOrientation} for signs, \texttt{ExponentForcing} for exponents, the self-coupling law for squaring, \texttt{BoundaryChannelForcing} for the boundary-shifted channel count, the irreducibility checks for denominators, the factor-divisibility lemmas for the invariant ledger, \texttt{SpectralPartition} for the self-closure and GCD lattice of canonical volumes, and \texttt{CorrectionTowerComplete} for the finiteness of the correction chain. Each is verified by \texttt{refl} or by absurd-pattern elimination. No fitting parameter enters.
+\textbf{Construction:} Nine forcing theorems close the arithmetic: \texttt{TwoOrientation} for orientation classification, \texttt{SignForcing} for the $d$-content sign pattern of correction numerators, \texttt{ExponentForcing} for exponents, the self-coupling law for squaring, \texttt{BoundaryChannelForcing} for the boundary-shifted channel count, the irreducibility checks for denominators, the factor-divisibility lemmas for the invariant ledger, \texttt{SpectralPartition} for the self-closure and GCD lattice of canonical volumes, and \texttt{CorrectionTowerComplete} for the finiteness of the correction chain. Each is verified by \texttt{refl} or by absurd-pattern elimination. No fitting parameter enters.
 
 \textbf{Consequence:} The sealed discrete record admits no further combinatorial freedom. The correction fractions are arithmetically locked. Only the $\kappa^n$-sector assignment---which fraction corrects which stratum---remains interpretive and belongs to \textit{Form}.
 

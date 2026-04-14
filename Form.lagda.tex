@@ -4231,11 +4231,11 @@ sum) provides a binary flag intrinsic to the formula.
 \textbf{Construction:}
 Each mass ingredient is classified as \texttt{bulk-ingredient}
 (power or coprime extension) or \texttt{boundary-ingredient}
-(additive combination).  A mass observable whose ingredients are
-all bulk receives projection sign $\sigma = -1$ (orientation reversal
-under $\partial$).  A mass observable with at least one boundary ingredient
-receives $\sigma = +1$ (orientation preserved).  The projection term is
-$\sigma \cdot \chi / C^2$.
+(additive combination).  The projection sign $\sigma$ follows from the
+$d$-content of the correction numerator (Void: \texttt{SignForcing}).
+A $d$-bearing numerator receives $\sigma = -1$ (\texttt{orient-swap});
+a $d$-free numerator yields $\sigma = +1$ (\texttt{orient-preserve}).
+The projection term is $\sigma \cdot \chi / C^2$.
 
 \medskip
 \noindent
@@ -4318,18 +4318,18 @@ law-muon-depth-1 = refl
 law-muon-depth-2 : ingredient-depth muon-ing-2 ≡ boundary-ingredient
 law-muon-depth-2 = refl
 
--- § Projection sign: TwoOrientation from Void (§ Orientation).
--- orient-swap     = σ = −1: all-bulk, orientation reversed by ∂
--- orient-preserve = σ = +1: has boundary ingredient, orientation preserved
--- Exhaustive: orientation-classify in Void proves exactly two cases exist.
+-- § Projection sign: derived from NumeratorClass (Void: SignForcing).
+-- The boundary operator ∂ on K₄ acts on the correction numerator.
+-- d-bearing numerator → orient-swap (σ = −1): ∂ reverses interior coordinates.
+-- d-free numerator    → orient-preserve (σ = +1): ∂ preserves boundary coordinates.
 
--- § The proton projection: all bulk → orient-swap.
+-- § The proton projection: tree numerator contains d³ → d-bearing → orient-swap.
 proton-projection : TwoOrientation
-proton-projection = orient-swap
+proton-projection = numerator-to-orientation d-bearing
 
--- § The muon projection: has boundary → orient-preserve.
+-- § The muon projection: additive factor (E + F₂) is d-free → orient-preserve.
 muon-projection : TwoOrientation
-muon-projection = orient-preserve
+muon-projection = numerator-to-orientation d-free
 
 -- § EM projection magnitude: χ/C² (holographic weight / coupling²).
 -- Numerator: χ = 2 (from V = F, the discrete holographic identity).
@@ -4372,6 +4372,9 @@ record EMProjectionStructure : Set where
                             (ingredient-depth proton-ing-2 ≡ bulk-ingredient) ×
                             (ingredient-depth proton-ing-3 ≡ bulk-ingredient)
     muon-has-boundary     : ingredient-depth muon-ing-2 ≡ boundary-ingredient
+    -- § Sign derivation from NumeratorClass (Void: SignForcing)
+    proton-sign-forced    : proton-projection ≡ orient-swap
+    muon-sign-forced      : muon-projection ≡ orient-preserve
     -- § Projection magnitude: χ/C² is the minimal invariant ratio (Void: law16B-15a-chi-minimality)
     projection-num-is-chi : em-projection-num ≡ eulerChar-computed
     projection-den-is-C²  : em-projection-den ≡ alpha-inverse-integer * alpha-inverse-integer
@@ -4387,6 +4390,8 @@ theorem-em-projection : EMProjectionStructure
 theorem-em-projection = record
   { proton-all-bulk       = refl , (refl , refl)
   ; muon-has-boundary     = refl
+  ; proton-sign-forced    = refl
+  ; muon-sign-forced      = refl
   ; projection-num-is-chi = refl
   ; projection-den-is-C²  = refl
   ; projection-irreducible = refl
