@@ -779,6 +779,8 @@ $\kappa$       & gravitational coupling & 8 \\
 
 Each row is falsifiable. If the fine-structure constant turns out to be $138$ instead of $137$, the identification fails---not the mathematics. The mathematics is $V^d \cdot \chi + d^2 = 137$, and that is \texttt{refl}. The physics is ``$137 = \alpha^{-1}$,'' and that is experiment.
 
+The asymmetry here is not rhetorical---it is epistemological. The formal side carries zero auxiliary hypotheses: the compiler accepts or rejects, and no Duhem-shielded escape exists. The empirical side carries all of them: detector models, calibration chains, background subtraction, the entire interpretive apparatus of experimental physics. This asymmetry determines who bears the burden of proof when derivation and measurement are compared (Chapter~\ref{ch:predictions}, \textit{The Epistemological Asymmetry}).
+
 Think of it as a dictionary. The left column is a language that \textit{Void} speaks fluently. The right column is a language that accelerators and telescopes speak fluently. This book claims they are translations of each other. Whether they are is not a question for the type checker.
 
 \begin{code}%
@@ -28436,6 +28438,35 @@ A derivation with zero free parameters makes rigid predictions. The following me
 \end{enumerate}
 
 The formal computation---the theorem level---cannot be falsified by measurement. It is a mathematical fact. The interpretation---the comparison level---can be and is subject to experimental refutation via the criteria above.
+
+\section*{The Epistemological Asymmetry}
+
+The falsification criteria above presuppose that experiment is the final arbiter. That is correct---but it is not the whole story. A subtlety hides inside the word ``measurement'' that philosophy of science has understood for a century and that physics routinely ignores.
+
+Every observation is theory-laden (Hanson, 1958; Kuhn, 1962; Feyerabend, 1975). When CODATA reports $\alpha^{-1} = 137.035\,999\,177(21)$, that number is not raw data. It is the output of a long interpretive chain: quantum electrodynamics provides the theoretical model, the anomalous magnetic moment of the electron provides the observable, atom interferometry or electron $g{-}2$ experiments provide the raw signal, and a sequence of radiative corrections, calibration steps, and systematic error budgets converts that signal into the final digit string. Each link in this chain carries auxiliary hypotheses that could, in principle, be revised.
+
+This is the Duhem--Quine thesis: no single measurement ever falsifies a theory in isolation, because the prediction depends on the conjunction of the theory \emph{and} its auxiliary hypotheses. If $\alpha^{-1}$ were measured to be $138$ tomorrow, the immediate response would not be ``QED is wrong'' but rather ``which systematic was underestimated?''---and rightly so.
+
+The formal side of this book faces no such ambiguity. The derivation $V^d \cdot \chi + d^2 = 137$ has exactly one input (the primordial distinction $D_0$), exactly one method (constructive type theory under \texttt{--safe --without-K}), and exactly one arbiter (the Agda compiler). There are no auxiliary hypotheses to shield. The derivation either type-checks or it does not. There is no Duhem escape.
+
+The asymmetry can be read from a table:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+ & \textbf{$K_4$ Derivation (\textit{Void})} & \textbf{Empirical $\alpha^{-1}$} \\
+\midrule
+\textbf{Presuppositions} & \texttt{--safe --without-K}, nothing else & QED, detector model, calibration, \ldots \\
+\textbf{Free parameters} & Zero & Auxiliary hypotheses adjustable \\
+\textbf{Falsifiability} & Mechanical: type-checks or fails & Duhem--Quine: never isolated \\
+\textbf{Theory-ladenness} & None (purely formal) & Maximal (every measurement is interpreted) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+This does not make the formal side ``better'' than the empirical side. It makes them \emph{different}. The formal derivation cannot tell you whether the number $137$ has anything to do with electromagnetism. The empirical measurement cannot tell you whether its value is free or forced. The two modes of knowledge are complementary, and neither subsumes the other.
+
+But the asymmetry does determine where the burden of proof falls. When a zero-parameter derivation and a theory-laden measurement agree to ten significant figures, the question is not ``why should we trust the derivation?'' The derivation has no moving parts. The question is ``how many of the measurement's auxiliary hypotheses are load-bearing?'' Duhem and Quine answered that question a century ago: all of them.
 
 \begin{code}%
 \>[0]\AgdaComment{--\ §\ Falsification\ —\ What\ kills\ the\ framework.\ Zero\ free\ parameters\ ⟹\ rigid\ predictions.}\<%
