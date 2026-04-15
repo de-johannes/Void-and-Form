@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'Void.lagda.tex'
-      - 'Form.lagda.tex'
       - '.github/workflows/release-ci.yml'
 
 permissions:
@@ -37,8 +36,7 @@ jobs:
       - name: Verify Agda (--safe --without-K)
         run: |
           set -e
-          agda --safe --without-K Void.lagda.tex 2>&1 | tee agda-compile.log && \
-          agda --safe --without-K Form.lagda.tex 2>&1 | tee -a agda-compile.log
+          agda --safe --without-K Void.lagda.tex 2>&1 | tee agda-compile.log
           echo "Agda verification passed"
 
 
@@ -46,7 +44,7 @@ jobs:
       - name: Create verification manifest
         run: |
           {
-            echo "=== VOID AND FORM VERIFICATION MANIFEST ==="
+            echo "=== VOID VERIFICATION MANIFEST ==="
             echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
             echo "Commit: ${{ github.sha }}"
             echo "Agda Version: 2.7.0.1"
@@ -57,9 +55,7 @@ jobs:
             echo ""
             echo "=== CHECKSUMS ==="
             sha256sum Void.lagda.tex
-            sha256sum Form.lagda.tex
             sha256sum Void.agdai 2>/dev/null || true
-            sha256sum Form.agdai 2>/dev/null || true
           } > verification-manifest.txt
 
       - name: Upload artifacts
@@ -68,7 +64,6 @@ jobs:
           name: release-artifacts
           path: |
             Void.agdai
-            Form.agdai
             verification-manifest.txt
             agda-compile.log
 
@@ -102,13 +97,13 @@ jobs:
           set -euo pipefail
           PREV_TAG="$(git describe --tags --abbrev=0 2>/dev/null || true)"
           {
-            echo "## Void and Form — ${{ steps.sha.outputs.short }}"
+            echo "## Void — ${{ steps.sha.outputs.short }}"
             echo ""
             echo "A machine-verified derivation from logical distinction to K₄,"
             echo "compiled under \`--safe --without-K\`."
             echo ""
             echo "### Included"
-            echo "- **Void.agdai** / **Form.agdai** — compiled Agda interfaces"
+            echo "- **Void.agdai** — compiled Agda interfaces"
             echo "- **verification-manifest.txt** — build provenance"
             echo ""
             if [ -n "$PREV_TAG" ]; then
@@ -121,7 +116,7 @@ jobs:
             echo ""
             echo "**Verify locally:**"
             echo "\`\`\`"
-            echo "agda --safe --without-K Void.lagda.tex && agda --safe --without-K Form.lagda.tex"
+            echo "agda --safe --without-K Void.lagda.tex"
             echo "\`\`\`"
           } > CHANGELOG.md
 
@@ -134,19 +129,17 @@ jobs:
           subject-path: |
             vaf-${{ steps.sha.outputs.short }}.zip
             artifacts/Void.agdai
-            artifacts/Form.agdai
             artifacts/verification-manifest.txt
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.run_number }}
-          name: "Void and Form v${{ github.run_number }} (${{ steps.sha.outputs.short }})"
+          name: "Void v${{ github.run_number }} (${{ steps.sha.outputs.short }})"
           body_path: CHANGELOG.md
           draft: false
           prerelease: false
           files: |
             vaf-${{ steps.sha.outputs.short }}.zip
             artifacts/Void.agdai
-            artifacts/Form.agdai
             artifacts/verification-manifest.txt
