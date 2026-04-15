@@ -30,6 +30,3 @@ agda --latex Void.lagda.tex
 cd latex
 xelatex Void.tex
 ```
-
-## Note on Interpretations
-The `.lagda.tex` file consists exclusively of machine-verified mathematics. Any speculative or phenomenological interpretations of the stable invariants found within are strictly segregated from the formally verified type theory and maintained elsewhere.
