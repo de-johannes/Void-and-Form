@@ -22004,6 +22004,622 @@ and the formal closure of the chain is verified.
 
 
 %═══════════════════════════════════════════════════════════════════════════
+\chapter{Cauchy Completeness of \texorpdfstring{$\mathbb{R}$}{R}}
+\label{ch:reals-cauchy-completeness}
+%═══════════════════════════════════════════════════════════════════════════
+
+The construction of $\mathbb{R}$ given so far supplies the completion
+of $\mathbb{Q}$ as a setoid of Cauchy sequences. The next theorem must
+also be made formal: every Cauchy sequence of real numbers itself
+converges to a real number. The standard diagonal argument is carried
+out below, using only the rational $\varepsilon$-machinery and the
+embedding $\mathbb{Q} \hookrightarrow \mathbb{R}$ already constructed.
+
+%───────────────────────────────────────────────────────────────────────────
+\section{Auxiliary natural number maximum}
+\label{sec:reals-completeness:max-nat}
+%───────────────────────────────────────────────────────────────────────────
+
+The diagonal argument repeatedly takes the maximum of finitely many
+natural numbers. A small explicit definition with the two
+inequality witnesses is sufficient.
+
+\begin{code}
+-- § Maximum on ℕ.
+maxℕ : ℕ → ℕ → ℕ
+maxℕ zero    n       = n
+maxℕ (suc m) zero    = suc m
+maxℕ (suc m) (suc n) = suc (maxℕ m n)
+
+-- § Left bound.
+≤-maxℕˡ : (m n : ℕ) → m ≤ maxℕ m n
+≤-maxℕˡ zero    n       = z≤n
+≤-maxℕˡ (suc m) zero    = ≤-refl (suc m)
+≤-maxℕˡ (suc m) (suc n) = s≤s (≤-maxℕˡ m n)
+
+-- § Right bound.
+≤-maxℕʳ : (m n : ℕ) → n ≤ maxℕ m n
+≤-maxℕʳ zero    n       = ≤-refl n
+≤-maxℕʳ (suc m) zero    = z≤n
+≤-maxℕʳ (suc m) (suc n) = s≤s (≤-maxℕʳ m n)
+\end{code}
+
+
+%───────────────────────────────────────────────────────────────────────────
+\section{The rational schedule \texorpdfstring{$1/(n+1)$}{1/(n+1)}}
+\label{sec:reals-completeness:half-to}
+%───────────────────────────────────────────────────────────────────────────
+
+The diagonal construction needs a vanishing sequence of positive
+rational tolerances indexed by~$\mathbb{N}$. The rationals
+$1/(n+1)$ are the natural choice. They are defined by directly using
+the positive denominator \texttt{mkℕ⁺ n} and inherit positivity from the
+positive numerator \texttt{oneℤ}.
+
+\begin{code}
+-- § Schedule of rational tolerances 1/(n+1).
+halfTo : ℕ → ℚ
+halfTo n = oneℤ / mkℕ⁺ n
+
+-- § Positivity of the schedule.
+halfTo-pos : (n : ℕ) → 0ℚ <ℚ halfTo n
+halfTo-pos n = 0<ℤnum→0<ℚ (halfTo n) (0<ℤ-pos zero)
+\end{code}
+
+The order on the schedule is decreasing in~$n$: a larger index
+yields a smaller tolerance. The proof reduces to the integer
+inequality $+\!\suc m \le +\!\suc n$ obtained from~$m \le n$.
+
+\begin{code}
+-- § Monotone decrease: m ≤ n → halfTo n ≤ halfTo m.
+halfTo-mono : (m n : ℕ) → m ≤ n → halfTo n ≤ℚ halfTo m
+halfTo-mono m n m≤n =
+  let
+    -- Goal: oneℤ *ℤ ⁺toℤ (mkℕ⁺ m) ≤ℤ oneℤ *ℤ ⁺toℤ (mkℕ⁺ n).
+    base : (suc m) ≤ (suc n)
+    base = s≤s m≤n
+
+    int-le : (+suc m) ≤ℤ (+suc n)
+    int-le = base
+
+    lhsEq : (oneℤ *ℤ ⁺toℤ (mkℕ⁺ m)) ≡ (+suc m)
+    lhsEq = *ℤ-one-left (+suc m)
+
+    rhsEq : (oneℤ *ℤ ⁺toℤ (mkℕ⁺ n)) ≡ (+suc n)
+    rhsEq = *ℤ-one-left (+suc n)
+
+    step : (+suc m) ≤ℤ (+suc n)
+    step = int-le
+  in
+  ≤ℤ-resp-≡ˡ (sym lhsEq) (≤ℤ-resp-≡ʳ (sym rhsEq) step)
+\end{code}
+
+The Archimedean property is the corresponding existence statement:
+for every positive rational~$\varepsilon$, some index~$N$ makes
+$1/(N+1)$ strictly smaller than~$\varepsilon$. The witness is read
+directly off the denominator of~$\varepsilon$: choosing
+$N = \mathtt{⁺toℕ}\,b$ where $b$ is the denominator of~$\varepsilon$
+suffices, because the resulting product~$a \cdot (b+1)$ strictly
+exceeds~$b$ whenever $a$ is positive.
+
+\begin{code}
+-- § Mixed strict/weak transitivity on ℤ.
+<≤ℤ→<ℤ-loc : {x y z : ℤ} → x <ℤ y → y ≤ℤ z → x <ℤ z
+<≤ℤ→<ℤ-loc {x} {y} {z} (x≤y , y≰x) y≤z =
+  ≤ℤ-trans {x} {y} {z} x≤y y≤z ,
+  (λ z≤x → y≰x (≤ℤ-trans {y} {z} {x} y≤z z≤x))
+
+-- § Archimedean property of the schedule.
+halfTo-arch : (ε : ℚ) → 0ℚ <ℚ ε → Σ ℕ (λ N → halfTo N <ℚ ε)
+halfTo-arch (a / mkℕ⁺ k) εpos =
+  let
+    nWit : Σ ℕ (λ m → a ≡ +suc m)
+    nWit = positive-num-witnessℚ (a / mkℕ⁺ k) εpos
+
+    m : ℕ
+    m = fst nWit
+
+    aEq : a ≡ +suc m
+    aEq = snd nWit
+
+    -- The chosen schedule index.
+    N : ℕ
+    N = suc k
+
+    -- ⁺toℤ (mkℕ⁺ N) = +suc (suc k).
+    -- The strict inequality on integers we ultimately need:
+    --   oneℤ *ℤ +suc k <ℤ a *ℤ +suc (suc k).
+
+    one≤a : oneℤ ≤ℤ a
+    one≤a = ≤ℤ-resp-≡ʳ (sym aEq) (s≤s z≤n)
+
+    -- Step 1: oneℤ *ℤ +suc (suc k) ≤ℤ a *ℤ +suc (suc k).
+    step₁ : (oneℤ *ℤ ⁺toℤ (mkℕ⁺ (suc k))) ≤ℤ (a *ℤ ⁺toℤ (mkℕ⁺ (suc k)))
+    step₁ = ≤ℤ-mul-pos-right oneℤ a (mkℕ⁺ (suc k)) one≤a
+
+    -- Reduce the LHS of step₁ to +suc (suc k).
+    lhs₁Eq : (oneℤ *ℤ ⁺toℤ (mkℕ⁺ (suc k))) ≡ (+suc (suc k))
+    lhs₁Eq = *ℤ-one-left (+suc (suc k))
+
+    -- Strict step: +suc k <ℤ +suc (suc k).
+    sucStep : (+suc k) <ℤ (+suc (suc k))
+    sucStep = (s≤s (≤-step k)) , λ p → suc≤-impossible (suc k) p
+
+    -- Reduce LHS of the goal to +suc k.
+    goalLhsEq : (oneℤ *ℤ ⁺toℤ (mkℕ⁺ k)) ≡ (+suc k)
+    goalLhsEq = *ℤ-one-left (+suc k)
+
+    -- Combine: +suc k <ℤ +suc (suc k) ≤ℤ a *ℤ +suc (suc k).
+    chained : (+suc k) <ℤ (a *ℤ ⁺toℤ (mkℕ⁺ (suc k)))
+    chained = <≤ℤ→<ℤ-loc sucStep (≤ℤ-resp-≡ˡ lhs₁Eq step₁)
+
+    -- Rewrite via aEq on the RHS of the goal direction is not needed,
+    -- since a appears on the right already.
+
+    -- Rewrite LHS of the final goal.
+    goal-int : (oneℤ *ℤ ⁺toℤ (mkℕ⁺ k)) <ℤ (a *ℤ ⁺toℤ (mkℕ⁺ (suc k)))
+    goal-int =
+      <ℤ-resp-≡ˡ (sym goalLhsEq) chained
+  in
+  N , goal-int
+\end{code}
+
+
+%───────────────────────────────────────────────────────────────────────────
+\section{Cauchy sequences of reals and the diagonal}
+\label{sec:reals:cauchyR-diag}
+%───────────────────────────────────────────────────────────────────────────
+
+A sequence of real numbers is Cauchy when, viewed through any rational
+tolerance~$\varepsilon$, two sufficiently late members eventually agree
+to within~$\varepsilon$ on every coordinate. The condition cannot
+demand uniform agreement, since each real has its own internal
+modulus; it must require eventual rational closeness on a tail.
+
+The candidate limit is fixed by the same numerical material that
+defines the sequence: from each $r_n$, choose the index that already
+stabilises~$r_n$ to within~$1/(n+1)$, and read off that rational. The
+resulting diagonal lives in~$\mathbb{Q}$ by construction; whether it is
+Cauchy in~$\mathbb{Q}$ and whether the original sequence converges to
+it, are the two propositions to be discharged.
+
+\textbf{Constraint:} A real number is, by definition, a Cauchy
+sequence of rationals. A sequence of reals is therefore a
+two-parameter array of rationals, and ``convergence'' must be phrased
+without invoking a metric on~$\mathbb{R}$ that has not yet been
+constructed. The only tool available is the rational metric on each
+column. \textbf{Construction:} The Cauchy condition demands eventual
+$\varepsilon$-closeness coordinatewise; the candidate limit is the
+diagonal sequence assembled from each row's own stabilisation index.
+\textbf{Consequence:} No new metric structure on~$\mathbb{R}$ is
+required to state completeness, and the limit is computed by the same
+finite recipe that underlies the Cauchy data.
+
+\begin{code}
+-- § Cauchy condition for a sequence of reals (eventual ε-closeness on a tail).
+record IsCauchyℝ (r : ℕ → ℝ) : Set where
+  field
+    cauchyℝ : (ε : ℚ) → 0ℚ <ℚ ε →
+      Σ ℕ (λ N → (m n : ℕ) → N ≤ m → N ≤ n →
+        Σ ℕ (λ K → (k : ℕ) → K ≤ k →
+          distℚ (seq (r m) k) (seq (r n) k) <ℚ ε))
+
+-- § Convergence of a sequence of reals to a limit, again via tail closeness.
+record _converges-to_ (r : ℕ → ℝ) (x : ℝ) : Set where
+  field
+    convℝ : (ε : ℚ) → 0ℚ <ℚ ε →
+      Σ ℕ (λ N → (n : ℕ) → N ≤ n →
+        Σ ℕ (λ K → (k : ℕ) → K ≤ k →
+          distℚ (seq (r n) k) (seq x k) <ℚ ε))
+
+-- § Stable index of a real x at tolerance halfTo n.
+diag-cauchyIdx : (x : ℝ) → ℕ → ℕ
+diag-cauchyIdx x n =
+  fst (IsCauchy.cauchy (isCauchy x) (halfTo n) (halfTo-pos n))
+
+-- § Diagonal sequence: nth value is x = (r n) sampled at its own stable index.
+diagSeq : (ℕ → ℝ) → ℕ → ℚ
+diagSeq r n = seq (r n) (diag-cauchyIdx (r n) n)
+
+-- § Beyond the stable index, the sequence stays within halfTo n of the diagonal.
+diagSeq-stable :
+  (r : ℕ → ℝ) → (n k : ℕ) → diag-cauchyIdx (r n) n ≤ k →
+  distℚ (diagSeq r n) (seq (r n) k) <ℚ halfTo n
+diagSeq-stable r n k K≤k =
+  let
+    pack = IsCauchy.cauchy (isCauchy (r n)) (halfTo n) (halfTo-pos n)
+    K    = fst pack
+    bnd  = snd pack
+  in
+    bnd K k (≤-refl K) K≤k
+\end{code}
+
+The diagonal is itself a rational Cauchy sequence. The standard
+$\varepsilon/4$ accounting carries over: the schedule
+$\eta = \mathtt{εQuarter}\,\delta$ controls the two ``side''
+distances coming from the stabilising indices, while the middle
+distance is bounded by~$\delta = \mathtt{εQuarter}\,\varepsilon$
+through the Cauchy property of the source sequence of reals.
+
+\textbf{Constraint:} The diagonal must converge in~$\mathbb{Q}$;
+otherwise it cannot serve as a representative of a real limit.
+\textbf{Construction:} Two triangle inequalities decompose the
+distance between two diagonal terms into one stabilising error per
+row plus one middle error; a single $\varepsilon/4$ budget closes
+all three contributions. \textbf{Consequence:} Every Cauchy sequence
+of reals produces a canonical rational Cauchy sequence, hence a
+candidate real limit; nothing further than the Cauchy data is
+required to construct that limit.
+
+\begin{code}
+-- § Diagonal of a Cauchy sequence of reals is itself Cauchy in ℚ.
+diagSeq-cauchy :
+  (r : ℕ → ℝ) → IsCauchyℝ r → IsCauchy (diagSeq r)
+diagSeq-cauchy r icR = record
+  { cauchy = λ ε εpos →
+      let
+        δ : ℚ
+        δ = εQuarter ε
+
+        δpos : 0ℚ <ℚ δ
+        δpos = εQuarter-pos ε
+
+        η : ℚ
+        η = εQuarter δ
+
+        ηpos : 0ℚ <ℚ η
+        ηpos = εQuarter-pos δ
+
+        ηNonneg : 0ℚ ≤ℚ η
+        ηNonneg = <ℚ→≤ℚ {0ℚ} {η} ηpos
+
+        δNonneg : 0ℚ ≤ℚ δ
+        δNonneg = <ℚ→≤ℚ {0ℚ} {δ} δpos
+
+        -- Bounds at the η level: η+η ≤ δ.
+        η+η≃εHalfδ : (η +ℚ η) ≃ℚ εHalf δ
+        η+η≃εHalfδ = εQuarter+εQuarter≃εHalf δ
+
+        η+η≤εHalfδ : (η +ℚ η) ≤ℚ εHalf δ
+        η+η≤εHalfδ = ≃ℚ→≤ℚˡ {η +ℚ η} {εHalf δ} η+η≃εHalfδ
+
+        εHalfδ<δ : εHalf δ <ℚ δ
+        εHalfδ<δ = εHalf<ε δ δpos
+
+        εHalfδ≤δ : εHalf δ ≤ℚ δ
+        εHalfδ≤δ = <ℚ→≤ℚ {εHalf δ} {δ} εHalfδ<δ
+
+        η+η≤δ : (η +ℚ η) ≤ℚ δ
+        η+η≤δ = ≤ℚ-trans {η +ℚ η} {εHalf δ} {δ} η+η≤εHalfδ εHalfδ≤δ
+
+        δ+δ<ε : (δ +ℚ δ) <ℚ ε
+        δ+δ<ε = εQuarter-double<ε ε εpos
+
+        -- IsCauchyℝ pack at η (mid bound).
+        packR = IsCauchyℝ.cauchyℝ icR η ηpos
+        N₂    = fst packR
+        boundR = snd packR
+
+        -- halfTo-arch at η: halfTo N₁ <ℚ η.
+        packH = halfTo-arch η ηpos
+        N₁    = fst packH
+        N₁<η  : halfTo N₁ <ℚ η
+        N₁<η  = snd packH
+
+        N₁≤η  : halfTo N₁ ≤ℚ η
+        N₁≤η  = <ℚ→≤ℚ {halfTo N₁} {η} N₁<η
+
+        N : ℕ
+        N = maxℕ N₁ N₂
+      in
+        N , (λ m n N≤m N≤n →
+          let
+            N₁≤m : N₁ ≤ m
+            N₁≤m = ≤-trans (≤-maxℕˡ N₁ N₂) N≤m
+
+            N₁≤n : N₁ ≤ n
+            N₁≤n = ≤-trans (≤-maxℕˡ N₁ N₂) N≤n
+
+            N₂≤m : N₂ ≤ m
+            N₂≤m = ≤-trans (≤-maxℕʳ N₁ N₂) N≤m
+
+            N₂≤n : N₂ ≤ n
+            N₂≤n = ≤-trans (≤-maxℕʳ N₁ N₂) N≤n
+
+            -- halfTo bounds.
+            halfm≤η : halfTo m ≤ℚ η
+            halfm≤η = ≤ℚ-trans {halfTo m} {halfTo N₁} {η}
+              (halfTo-mono N₁ m N₁≤m) N₁≤η
+
+            halfn≤η : halfTo n ≤ℚ η
+            halfn≤η = ≤ℚ-trans {halfTo n} {halfTo N₁} {η}
+              (halfTo-mono N₁ n N₁≤n) N₁≤η
+
+            -- Cauchyℝ middle bound: pick a common k below.
+            packMid = boundR m n N₂≤m N₂≤n
+            K₃      = fst packMid
+            mid     : (k : ℕ) → K₃ ≤ k → distℚ (seq (r m) k) (seq (r n) k) <ℚ η
+            mid     = snd packMid
+
+            di_m = diag-cauchyIdx (r m) m
+            di_n = diag-cauchyIdx (r n) n
+
+            kInner : ℕ
+            kInner = maxℕ di_m di_n
+
+            k : ℕ
+            k = maxℕ K₃ kInner
+
+            K₃≤k : K₃ ≤ k
+            K₃≤k = ≤-maxℕˡ K₃ kInner
+
+            kI≤k : kInner ≤ k
+            kI≤k = ≤-maxℕʳ K₃ kInner
+
+            di_m≤k : di_m ≤ k
+            di_m≤k = ≤-trans (≤-maxℕˡ di_m di_n) kI≤k
+
+            di_n≤k : di_n ≤ k
+            di_n≤k = ≤-trans (≤-maxℕʳ di_m di_n) kI≤k
+
+            -- Three pieces.
+            S1 : ℚ
+            S1 = distℚ (diagSeq r m) (seq (r m) k)
+
+            S3 : ℚ
+            S3 = distℚ (seq (r m) k) (seq (r n) k)
+
+            S4 : ℚ
+            S4 = distℚ (seq (r n) k) (diagSeq r n)
+
+            S1< : S1 <ℚ halfTo m
+            S1< = diagSeq-stable r m k di_m≤k
+
+            S1≤η : S1 ≤ℚ η
+            S1≤η = ≤ℚ-trans {S1} {halfTo m} {η}
+              (<ℚ→≤ℚ {S1} {halfTo m} S1<) halfm≤η
+
+            S3<η : S3 <ℚ η
+            S3<η = mid k K₃≤k
+
+            S3≤η : S3 ≤ℚ η
+            S3≤η = <ℚ→≤ℚ {S3} {η} S3<η
+
+            -- Symmetry on S4: diagSeq-stable gives the swapped form.
+            S4-sym : distℚ (diagSeq r n) (seq (r n) k) ≃ℚ S4
+            S4-sym = distℚ-sym (diagSeq r n) (seq (r n) k)
+
+            S4-sym-le : distℚ (diagSeq r n) (seq (r n) k) ≤ℚ S4
+            S4-sym-le = ≃ℚ→≤ℚˡ {distℚ (diagSeq r n) (seq (r n) k)} {S4} S4-sym
+
+            S4-sym-ge : S4 ≤ℚ distℚ (diagSeq r n) (seq (r n) k)
+            S4-sym-ge = ≃ℚ→≤ℚˡ {S4} {distℚ (diagSeq r n) (seq (r n) k)}
+              (≃ℚ-sym {distℚ (diagSeq r n) (seq (r n) k)} {S4} S4-sym)
+
+            S4< : S4 <ℚ halfTo n
+            S4< = ≤<ℚ→<ℚ {S4} {distℚ (diagSeq r n) (seq (r n) k)} {halfTo n}
+              S4-sym-ge (diagSeq-stable r n k di_n≤k)
+
+            S4≤η : S4 ≤ℚ η
+            S4≤η = ≤ℚ-trans {S4} {halfTo n} {η}
+              (<ℚ→≤ℚ {S4} {halfTo n} S4<) halfn≤η
+
+            -- Sum bounds.
+            S1Nonneg : 0ℚ ≤ℚ S1
+            S1Nonneg = distℚ-nonneg (diagSeq r m) (seq (r m) k)
+
+            S3Nonneg : 0ℚ ≤ℚ S3
+            S3Nonneg = distℚ-nonneg (seq (r m) k) (seq (r n) k)
+
+            S4Nonneg : 0ℚ ≤ℚ S4
+            S4Nonneg = distℚ-nonneg (seq (r n) k) (diagSeq r n)
+
+            S3+S4≤η+η : (S3 +ℚ S4) ≤ℚ (η +ℚ η)
+            S3+S4≤η+η = ≤ℚ-sum≤double-nonneg S3 S4 η
+              S3Nonneg S4Nonneg ηNonneg S3≤η S4≤η
+
+            S3+S4≤δ : (S3 +ℚ S4) ≤ℚ δ
+            S3+S4≤δ = ≤ℚ-trans {S3 +ℚ S4} {η +ℚ η} {δ}
+              S3+S4≤η+η η+η≤δ
+
+            S3+S4Nonneg : 0ℚ ≤ℚ (S3 +ℚ S4)
+            S3+S4Nonneg = 0≤ℚ-+ℚ S3 S4 S3Nonneg S4Nonneg
+
+            S1≤δ : S1 ≤ℚ δ
+            S1≤δ = ≤ℚ-trans {S1} {η} {δ}
+              S1≤η (≤ℚ-trans {η} {η +ℚ η} {δ}
+                (≤ℚ-add-nonneg-right η η ηNonneg) η+η≤δ)
+
+            total≤δ+δ : (S1 +ℚ (S3 +ℚ S4)) ≤ℚ (δ +ℚ δ)
+            total≤δ+δ = ≤ℚ-sum≤double-nonneg S1 (S3 +ℚ S4) δ
+              S1Nonneg S3+S4Nonneg δNonneg S1≤δ S3+S4≤δ
+
+            total<ε : (S1 +ℚ (S3 +ℚ S4)) <ℚ ε
+            total<ε = ≤<ℚ→<ℚ {S1 +ℚ (S3 +ℚ S4)} {δ +ℚ δ} {ε}
+              total≤δ+δ δ+δ<ε
+
+            -- Triangle assembly.
+            tri-inner : distℚ (seq (r m) k) (diagSeq r n) ≤ℚ (S3 +ℚ S4)
+            tri-inner = distℚ-triangle (seq (r m) k) (seq (r n) k) (diagSeq r n)
+
+            tri-outer : distℚ (diagSeq r m) (diagSeq r n) ≤ℚ
+              (S1 +ℚ distℚ (seq (r m) k) (diagSeq r n))
+            tri-outer = distℚ-triangle (diagSeq r m) (seq (r m) k) (diagSeq r n)
+
+            -- Combine: S1 + distℚ(seq r m k, diagSeq r n) ≤ S1 + (S3 + S4).
+            outer-bnd : (S1 +ℚ distℚ (seq (r m) k) (diagSeq r n)) ≤ℚ
+              (S1 +ℚ (S3 +ℚ S4))
+            outer-bnd = ≤ℚ-+ℚ-mono-left S1
+              (distℚ (seq (r m) k) (diagSeq r n)) (S3 +ℚ S4) tri-inner
+
+            full≤ : distℚ (diagSeq r m) (diagSeq r n) ≤ℚ (S1 +ℚ (S3 +ℚ S4))
+            full≤ = ≤ℚ-trans
+              {distℚ (diagSeq r m) (diagSeq r n)}
+              {S1 +ℚ distℚ (seq (r m) k) (diagSeq r n)}
+              {S1 +ℚ (S3 +ℚ S4)}
+              tri-outer outer-bnd
+          in
+            ≤<ℚ→<ℚ {distℚ (diagSeq r m) (diagSeq r n)}
+                    {S1 +ℚ (S3 +ℚ S4)} {ε}
+              full≤ total<ε)
+  }
+\end{code}
+
+The diagonal already lives in~$\mathbb{R}$: package the rational
+Cauchy sequence with its Cauchy proof to obtain the candidate limit.
+Two further rounds of the same triangle bookkeeping then show that the
+original sequence of reals converges to it, where convergence is
+again read coordinatewise on the rational tails.
+
+\textbf{Constraint:} The candidate limit must be inhabited by a real
+number, and the original sequence must approach it in the only sense
+available---rational closeness on a tail. \textbf{Construction:} The
+limit is the record built from the diagonal sequence and its Cauchy
+proof; convergence is obtained by inserting the diagonal as the middle
+point of a single triangle, where one side is bounded by
+\texttt{diagSeq-stable} and the other by the diagonal's own Cauchy
+modulus. \textbf{Consequence:} $\mathbb{R}$, defined as Cauchy
+sequences of rationals modulo eventual closeness, is itself
+sequentially complete: every Cauchy sequence of reals has a real
+limit.
+
+\begin{code}
+-- § The diagonal packaged as a real number: the limit candidate.
+diagℝ : (r : ℕ → ℝ) → IsCauchyℝ r → ℝ
+diagℝ r ic = mkℝ (diagSeq r) (diagSeq-cauchy r ic)
+
+-- § Convergence: each row r n approximates the diagonal limit.
+diagℝ-converges :
+  (r : ℕ → ℝ) → (ic : IsCauchyℝ r) →
+  r converges-to diagℝ r ic
+diagℝ-converges r ic = record
+  { convℝ = λ ε εpos →
+      let
+        η : ℚ
+        η = εQuarter ε
+
+        ηpos : 0ℚ <ℚ η
+        ηpos = εQuarter-pos ε
+
+        ηNonneg : 0ℚ ≤ℚ η
+        ηNonneg = <ℚ→≤ℚ {0ℚ} {η} ηpos
+
+        η+η<ε : (η +ℚ η) <ℚ ε
+        η+η<ε = εQuarter-double<ε ε εpos
+
+        -- diagSeq is Cauchy; pack at η.
+        ic-diag : IsCauchy (diagSeq r)
+        ic-diag = diagSeq-cauchy r ic
+
+        packD = IsCauchy.cauchy ic-diag η ηpos
+        N_d   : ℕ
+        N_d   = fst packD
+        diagBnd : (m n : ℕ) → N_d ≤ m → N_d ≤ n →
+                  distℚ (diagSeq r m) (diagSeq r n) <ℚ η
+        diagBnd = snd packD
+
+        -- halfTo schedule control.
+        packH = halfTo-arch η ηpos
+        N_h   : ℕ
+        N_h   = fst packH
+        N_h<η : halfTo N_h <ℚ η
+        N_h<η = snd packH
+
+        N_h≤η : halfTo N_h ≤ℚ η
+        N_h≤η = <ℚ→≤ℚ {halfTo N_h} {η} N_h<η
+
+        N : ℕ
+        N = maxℕ N_d N_h
+      in
+        N , (λ n N≤n →
+          let
+            N_d≤n : N_d ≤ n
+            N_d≤n = ≤-trans (≤-maxℕˡ N_d N_h) N≤n
+
+            N_h≤n : N_h ≤ n
+            N_h≤n = ≤-trans (≤-maxℕʳ N_d N_h) N≤n
+
+            di_n : ℕ
+            di_n = diag-cauchyIdx (r n) n
+
+            K : ℕ
+            K = maxℕ di_n N_d
+
+            di_n≤K : di_n ≤ K
+            di_n≤K = ≤-maxℕˡ di_n N_d
+
+            N_d≤K : N_d ≤ K
+            N_d≤K = ≤-maxℕʳ di_n N_d
+
+            halfn≤η : halfTo n ≤ℚ η
+            halfn≤η = ≤ℚ-trans {halfTo n} {halfTo N_h} {η}
+              (halfTo-mono N_h n N_h≤n) N_h≤η
+          in
+            K , (λ k K≤k →
+              let
+                di_n≤k : di_n ≤ k
+                di_n≤k = ≤-trans di_n≤K K≤k
+
+                N_d≤k : N_d ≤ k
+                N_d≤k = ≤-trans N_d≤K K≤k
+
+                S1 : ℚ
+                S1 = distℚ (seq (r n) k) (diagSeq r n)
+
+                S2 : ℚ
+                S2 = distℚ (diagSeq r n) (diagSeq r k)
+
+                -- S1 bound via symmetry of distℚ + diagSeq-stable.
+                S1-sym : distℚ (diagSeq r n) (seq (r n) k) ≃ℚ S1
+                S1-sym = distℚ-sym (diagSeq r n) (seq (r n) k)
+
+                S1-sym-ge : S1 ≤ℚ distℚ (diagSeq r n) (seq (r n) k)
+                S1-sym-ge = ≃ℚ→≤ℚˡ {S1} {distℚ (diagSeq r n) (seq (r n) k)}
+                  (≃ℚ-sym {distℚ (diagSeq r n) (seq (r n) k)} {S1} S1-sym)
+
+                S1<halfn : S1 <ℚ halfTo n
+                S1<halfn = ≤<ℚ→<ℚ
+                  {S1} {distℚ (diagSeq r n) (seq (r n) k)} {halfTo n}
+                  S1-sym-ge (diagSeq-stable r n k di_n≤k)
+
+                S1≤η : S1 ≤ℚ η
+                S1≤η = ≤ℚ-trans {S1} {halfTo n} {η}
+                  (<ℚ→≤ℚ {S1} {halfTo n} S1<halfn) halfn≤η
+
+                S2<η : S2 <ℚ η
+                S2<η = diagBnd n k N_d≤n N_d≤k
+
+                S2≤η : S2 ≤ℚ η
+                S2≤η = <ℚ→≤ℚ {S2} {η} S2<η
+
+                S1Nonneg : 0ℚ ≤ℚ S1
+                S1Nonneg = distℚ-nonneg (seq (r n) k) (diagSeq r n)
+
+                S2Nonneg : 0ℚ ≤ℚ S2
+                S2Nonneg = distℚ-nonneg (diagSeq r n) (diagSeq r k)
+
+                sum≤ : (S1 +ℚ S2) ≤ℚ (η +ℚ η)
+                sum≤ = ≤ℚ-sum≤double-nonneg S1 S2 η
+                  S1Nonneg S2Nonneg ηNonneg S1≤η S2≤η
+
+                sum<ε : (S1 +ℚ S2) <ℚ ε
+                sum<ε = ≤<ℚ→<ℚ {S1 +ℚ S2} {η +ℚ η} {ε} sum≤ η+η<ε
+
+                tri : distℚ (seq (r n) k) (diagSeq r k) ≤ℚ (S1 +ℚ S2)
+                tri = distℚ-triangle (seq (r n) k) (diagSeq r n) (diagSeq r k)
+              in
+                ≤<ℚ→<ℚ {distℚ (seq (r n) k) (diagSeq r k)} {S1 +ℚ S2} {ε}
+                  tri sum<ε))
+  }
+
+-- § Cauchy completeness of ℝ: every Cauchy sequence of reals converges.
+ℝ-cauchy-complete :
+  (r : ℕ → ℝ) → IsCauchyℝ r → Σ ℝ (λ x → r converges-to x)
+ℝ-cauchy-complete r ic = diagℝ r ic , diagℝ-converges r ic
+\end{code}
+
+
+%═══════════════════════════════════════════════════════════════════════════
 \part{Derived Constants of \texorpdfstring{$K_4$}{K4}}
 %═══════════════════════════════════════════════════════════════════════════
 
