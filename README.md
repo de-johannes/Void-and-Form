@@ -84,18 +84,26 @@ the development establishes the following.
      is determined, not chosen —
      [L29174–29207](Void.lagda.tex#L29174-L29207).
 
-6. **Cauchy completeness of $\mathbb{R}$.** Every Cauchy sequence of
-   real numbers has a real limit. The limit is constructed as the
-   diagonal sequence $\mathtt{diagSeq}\,r\,n = \mathtt{seq}\,(r_n)\,K_n$,
-   where $K_n$ is the internal stabilisation index of $r_n$ at
-   tolerance $1/(n+1)$:
+6. **Sequential completeness of the present construction of $\mathbb{R}$.**
+   $\mathbb{R}$ here is the Cauchy-sequence representation: a real is
+   a pair `(seq , isCauchy)` with `seq : ℕ → ℚ` and an explicit
+   modulus `isCauchy`, and equality is the setoid relation `_≃ℝ_` of
+   eventual $\varepsilon$-closeness. Within this representation,
+   every Cauchy sequence of reals (in the sense of `IsCauchyℝ`,
+   coordinatewise on rational tails) has a limit. The limit is built
+   as the diagonal sequence
+   $\mathtt{diagSeq}\,r\,n = \mathtt{seq}\,(r_n)\,K_n$, where $K_n$ is
+   the internal stabilisation index of $r_n$ at tolerance $1/(n+1)$:
    ```agda
    ℝ-cauchy-complete :
      (r : ℕ → ℝ) → IsCauchyℝ r → Σ ℝ (λ x → r converges-to x)
    ```
    The proof uses two triangle inequalities and an $\varepsilon/4$
-   accounting; no quotient type, no choice, no completion functor is
-   invoked.
+   accounting; no quotient type, no choice, and no completion functor
+   is invoked. The result is not novel content about the real line; it
+   is the statement that this particular minimal, self-contained
+   constructive presentation of $\mathbb{R}$ closes up under its own
+   notion of Cauchy convergence.
    References:
    [Void.lagda.tex L22200–22215](Void.lagda.tex#L22200-L22215) (`IsCauchyℝ`,
    `_converges-to_`),
