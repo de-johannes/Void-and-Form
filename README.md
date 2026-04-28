@@ -30,7 +30,27 @@ Martin-Löf type theory with the flags `--safe --without-K`, no
 postulates, and no imports beyond what is defined in the file itself,
 the development establishes the following.
 
-1. **Endomorphism classification.** The function space `Two → Two`
+1. **Uniqueness of binary distinction.** Let `Distinction : Set₁` be
+   the type of carriers `S` equipped with two designated points
+   `ℓ r : S`, a separation witness `ℓ ≠ r`, and a cover
+   `(x : S) → (x ≡ ℓ) ⊎ (x ≡ r)`. Every inhabitant of `Distinction`
+   is boundary-preservingly isomorphic to the canonical inhabitant
+   `Two-distinction` built on `Two`:
+   ```agda
+   two-normal-form :
+     (d : Distinction) → DistinctionIso d Two-distinction
+   ```
+   This is the formal statement that `Two` is not one possible binary
+   base among many but the unique normal form for any MLTT structure
+   carrying two distinguishable, exhaustive points. The further
+   classification of orientations shows that the only ambiguity in
+   the isomorphism is whether boundaries are preserved or swapped.
+   References:
+   [Void.lagda.tex L792–800](Void.lagda.tex#L792-L800) (`Distinction`),
+   [L1551–1570](Void.lagda.tex#L1551-L1570) (`DistinctionIso`),
+   [L1633–1642](Void.lagda.tex#L1633-L1642) (`two-normal-form`).
+
+2. **Endomorphism classification.** The function space `Two → Two`
    admits exactly four inhabitants up to pointwise equality. They are
    enumerated by an inductive type `EndoCase` with constructors
    `case-constL`, `case-constR`, `case-id`, `case-dual`, and the
@@ -45,7 +65,7 @@ the development establishes the following.
    [L1150–1346](Void.lagda.tex#L1150-L1346) (classification module),
    [L1385–1460](Void.lagda.tex#L1385-L1460) (top-level witnesses).
 
-2. **Closure on four vertices.** The closure of the four-case structure
+3. **Closure on four vertices.** The closure of the four-case structure
    under composition is the complete graph $K_4$. Closures on three
    vertices fail by absurd-pattern elimination; closures with more than
    four vertices add structure that is not forced by the four cases.
@@ -53,7 +73,7 @@ the development establishes the following.
    Reference:
    [Void.lagda.tex L24314–24371](Void.lagda.tex#L24314-L24371).
 
-3. **Uniqueness of the closure record.** `K4Record` is inhabited and
+4. **Uniqueness of the closure record.** `K4Record` is inhabited and
    any two inhabitants are propositionally equal:
    ```agda
    k4Record-inhabited : K4Record
@@ -62,7 +82,7 @@ the development establishes the following.
    Reference:
    [Void.lagda.tex L24507–24690](Void.lagda.tex#L24507-L24690).
 
-4. **Loop closure.** The existence of an inhabitant of `K4Record`
+5. **Loop closure.** The existence of an inhabitant of `K4Record`
    entails the original separation witness on `Two`:
    ```agda
    record-presupposes-distinction : K4Record → Two-distinction
@@ -70,11 +90,12 @@ the development establishes the following.
    Reference:
    [Void.lagda.tex L29267–29290](Void.lagda.tex#L29267-L29290).
 
-5. **Forced numerical invariants.** The following identities hold by
+6. **Forced numerical invariants.** The following identities hold by
    reduction; the witness in every case is `refl`:
    - `eulerChar-computed ≡ 2` —
      [L23728–23744](Void.lagda.tex#L23728-L23744).
-   - `simplex-eval ≡ 137` —
+   - `simplex-eval ≡ 137`, evaluating $V^d \cdot \chi + d^2$ at the
+     forced values $V=4$, $d=3$, $\chi=2$ —
      [L8881–8904](Void.lagda.tex#L8881-L8904).
    - `loop-numerator ≡ 11`, where `loop-numerator = E + d + χ` and the
      eight admissible subset candidates are eliminated to one by absurd
@@ -84,7 +105,7 @@ the development establishes the following.
      is determined, not chosen —
      [L29174–29207](Void.lagda.tex#L29174-L29207).
 
-6. **Sequential completeness of the present construction of $\mathbb{R}$.**
+7. **Sequential completeness of the present construction of $\mathbb{R}$.**
    $\mathbb{R}$ here is the Cauchy-sequence representation: a real is
    a pair `(seq , isCauchy)` with `seq : ℕ → ℚ` and an explicit
    modulus `isCauchy`, and equality is the setoid relation `_≃ℝ_` of
@@ -239,7 +260,53 @@ This is the entire input to the development. References:
 
 ---
 
-## 3. Classification of `Two → Two`
+## 3. Uniqueness of binary distinction
+
+The choice of `Two` as the base type is not a notational preference.
+Inside `Void.lagda.tex` it is shown that any MLTT structure carrying
+two distinguishable, exhaustive points coincides with `Two` up to
+boundary-preserving isomorphism. Such structures are captured by the
+record
+
+```agda
+record Distinction : Set₁ where
+  field
+    S     : Set
+    ℓ     : S
+    r     : S
+    ℓ≠r   : ℓ ≠ r
+    cover : (x : S) → (x ≡ ℓ) ⊎ (x ≡ r)
+```
+
+and the normal-form theorem
+
+```agda
+two-normal-form :
+  (d : Distinction) → DistinctionIso d Two-distinction
+```
+
+states that every inhabitant `d : Distinction` is isomorphic to the
+canonical `Two-distinction` by an isomorphism that sends
+boundary points to boundary points. The orientation classification
+that follows shows that the only freedom in this isomorphism is a
+global swap of the two boundary roles.
+
+This is the formal version, inside MLTT, of the statement that
+`Two` is the unique normal form for binary distinction. It does *not*
+claim that every describable structure reduces to binary
+distinctions; that would be a meta-theoretic statement about the
+family of all theories, not a theorem inside one. The result here is
+the internal one and exactly the one that is provable.
+
+References:
+[Void.lagda.tex L792–800](Void.lagda.tex#L792-L800) (`Distinction`),
+[L1551–1570](Void.lagda.tex#L1551-L1570) (`DistinctionIso`),
+[L1633–1642](Void.lagda.tex#L1633-L1642) (`two-normal-form`),
+[L1700–1750](Void.lagda.tex#L1700-L1750) (orientation classification).
+
+---
+
+## 4. Classification of `Two → Two`
 
 The four endomorphism cases are enumerated by
 
@@ -272,7 +339,7 @@ References:
 
 ---
 
-## 4. Closure on four vertices
+## 5. Closure on four vertices
 
 The four-case structure is asked to close under composition. A closure
 on three vertices fails: any attempt to identify two distinct cases
@@ -294,7 +361,7 @@ Reference: [Void.lagda.tex L24314–24371](Void.lagda.tex#L24314-L24371).
 
 ---
 
-## 5. Uniqueness and the loop
+## 6. Uniqueness and the loop
 
 ```agda
 k4Record-inhabited             : K4Record
@@ -314,7 +381,7 @@ References:
 
 ---
 
-## 6. Forced numerical invariants
+## 7. Forced numerical invariants
 
 Once the closure record is fixed, several integer-valued quantities are
 determined. Each of the following holds by reduction; the witness in
@@ -332,11 +399,11 @@ reducing eight admissible subset candidates to one via absurd-pattern
 elimination.
 
 These are claims internal to the formal development. They carry no
-physical content here; see Section 8.
+physical content here; see Section 9.
 
 ---
 
-## 7. Verification
+## 8. Verification
 
 ```sh
 agda --safe --without-K Void.lagda.tex
@@ -348,7 +415,7 @@ uniqueness statement above has been checked. The file declares no
 
 ---
 
-## 8. The interpretive layer
+## 9. The interpretive layer
 
 The companion file [Form.lagda.tex](Form.lagda.tex) imports `Void` and
 proposes identifications between Void-internal invariants and physical
@@ -373,20 +440,32 @@ References:
 
 ---
 
-## 9. What is and is not claimed
+## 10. What is and is not claimed
 
 Claimed and machine-verified inside `Void.lagda.tex`:
 
-- Sections 3–6 above, in full, under `--safe --without-K` with no
-  postulates and no library imports.
+- Sections 3–7 above, in full, under `--safe --without-K` with no
+  postulates and no library imports. In particular: `Two` is the
+  unique normal form of binary distinction inside MLTT (§3); the
+  endomorphism space of `Two` has exactly four inhabitants up to
+  pointwise equality (§4); their composition closure is uniquely
+  $K_4$ (§5); the closure record is a singleton and entails the
+  original separation witness (§6); the listed numerical invariants
+  evaluate to the stated integers by `refl` (§7).
 
 Hypothesised inside `Form.lagda.tex`:
 
-- That the Void-internal invariants of Section 6 project onto specific
+- That the Void-internal invariants of Section 7 project onto specific
   physical observables. These carry the tag `physical-identification`.
 
-Not claimed:
+Not claimed inside `Void.lagda.tex`:
 
+- That every describable structure reduces to binary distinctions.
+  This is a meta-theoretic statement about the entire family of
+  formal theories and is not formalisable as an internal theorem of
+  MLTT. The internal counterpart that *is* proved is §3:
+  any structure that already carries the data of two distinguishable,
+  exhaustive points is isomorphic to `Two`.
 - That the physical identifications of `Form.lagda.tex` are correct.
 - That the Form layer adds mathematical content beyond what is already
   present in `Void.lagda.tex`.
