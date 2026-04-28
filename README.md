@@ -499,12 +499,12 @@ two-normal-form-ℓ  : ∀ {ℓ} (d : Distinction-ℓ ℓ) →
 ```
 giving the same theorem at every universe level `Setₙ`, uniformly by a
 single definition. Agda's universe polymorphism makes this a routine
-extension of §3; it is not yet expanded in `Void.lagda.tex` because
-the unlevelled form is sufficient for everything that follows. It
-remains, however, an *infinite family* of theorems, one per level,
-not a single statement quantifying over all levels — quantification
-over all levels would require a `Setω`-statement, which `--without-K`
-and consistency forbid.
+extension of §3; it is not expanded in `Void.lagda.tex` because Tier 2
+yields a family of theorems with the same proof, no new invariant, and
+no single quantifier over all levels — the latter would require a
+`Setω`-statement, which `--without-K` and consistency forbid. The
+unlevelled form is therefore sufficient for everything that follows
+in this book.
 
 **Tier 3 — quantification over the family of all formal languages
 (not formalisable in any single theory).**
@@ -528,6 +528,69 @@ seriously here and not crossed.
 
 The formal arc of this work therefore reaches exactly as far as
 Tier 1 reaches, and exactly stops where Tier 3 begins.
+
+---
+
+## 12. The directed dependency: distinction → logic → mathematics → physics
+
+The preceding sections have stayed inside what `Void.lagda.tex` proves,
+and §11 has marked the boundary at which internal proof must stop. The
+present section names a structural reading of the two volumes that
+*uses* those proofs but does not extend them. It is a reading, not a
+theorem.
+
+The two volumes, taken together, exhibit a directed dependency:
+
+> distinction ⊏ logic ⊏ mathematics ⊏ physics
+
+Each step is the *minimal* stabilisation that the previous one admits,
+and each step strictly presupposes the previous one. The dependency is
+one-way; the reverse arrows do not type-check.
+
+- **distinction ⊏ logic.** Without a separation witness on a
+  two-element carrier, the constructive infrastructure of
+  `Void.lagda.tex` — negation, decidability on `Two`, the absurd
+  patterns that drive every elimination — is vacuous. This is not a
+  metaphor: the proofs in §§3–5 use `distinct : ℓ ≠ r` directly.
+  Remove it and the file does not type-check.
+- **logic ⊏ mathematics.** Part V of `Void.lagda.tex` constructs
+  $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$ on top of the
+  four-case classification and its decidable equality. The algebraic
+  laws are theorems, not postulates. No arithmetic is granted;
+  arithmetic is forced.
+- **mathematics ⊏ physics.** `Form.lagda.tex` opens with
+  `open import Void` and adds no mathematical content of its own.
+  Every physical identification is tagged `physical-identification`
+  (§9) and depends literally on the invariants exported by
+  `Void.lagda.tex`. If a single invariant in `Void` were to disappear,
+  the corresponding identification in `Form` would fail to type-check.
+
+The reading that follows from this is structural: under the minimal
+grant fixed in §1, **logic is the minimal stabilisation of distinction
+in the form of decidability; mathematics is its extension to
+relational and iterative structure; and physics is the further binding
+of that structure to empirical invariants.** The three are not
+independent disciplines arranged side by side. They are nested
+stabilisations of the same underlying act of separation, and the
+nesting is directed.
+
+**What is and is not claimed here.** This is *not* a theorem inside
+MLTT. A theorem of the form *"every formal discipline is a
+stabilisation of distinction"* would quantify over the family of all
+formal theories and would therefore live at the Tier 3 boundary
+identified in §11 — the boundary that Tarski's undefinability of truth
+and Gödel's incompleteness forbid any single theory from crossing
+internally. What *is* claimed here is the architectural observation
+that, *within the scope of the two volumes*, the dependency runs in
+exactly this direction and in no other. `Form` cannot stand without
+`Void`; `Void` cannot stand without its initial separation witness.
+The reverse compositions have no inhabitants.
+
+The reader should therefore take this section as a guide to how the
+two volumes fit together, not as a proof that this is the only
+possible architecture for any conceivable formal discipline. The proof
+reaches only as far as Tier 1 reaches; the architectural reading
+explains *why the proofs at Tier 1 are worth carrying out at all*.
 
 ---
 
