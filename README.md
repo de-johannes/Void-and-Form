@@ -472,6 +472,65 @@ Not claimed inside `Void.lagda.tex`:
 
 ---
 
+## 11. The reach of the universal claim
+
+The statement of §3 — that every distinction is isomorphic to `Two` —
+is a *genuine universal claim inside MLTT*. It is worth being precise
+about how far that universality extends and where it stops, because
+the boundary is exactly Gödel's and Tarski's.
+
+**Tier 1 — quantification over `Set` (proved here).**
+`Distinction : Set₁` is a record over carriers `S : Set`. The theorem
+`two-normal-form : (d : Distinction) → DistinctionIso d Two-distinction`
+therefore quantifies, internally, over *every type in `Set`* that
+carries the data of two distinguishable, exhaustive points. There is
+no parameter, no representative chosen by the proof; the same witness
+works uniformly. This is the maximal universal claim that MLTT can
+make on a single fixed universe level — and it is proved, not asserted.
+
+**Tier 2 — quantification across the universe hierarchy (uniform,
+not yet spelled out).**
+By making the level explicit one obtains a universe-polymorphic
+family
+```agda
+Distinction-ℓ      : (ℓ : Level) → Set (lsuc ℓ)
+two-normal-form-ℓ  : ∀ {ℓ} (d : Distinction-ℓ ℓ) →
+                    DistinctionIso-ℓ d (Two-distinction-ℓ ℓ)
+```
+giving the same theorem at every universe level `Setₙ`, uniformly by a
+single definition. Agda's universe polymorphism makes this a routine
+extension of §3; it is not yet expanded in `Void.lagda.tex` because
+the unlevelled form is sufficient for everything that follows. It
+remains, however, an *infinite family* of theorems, one per level,
+not a single statement quantifying over all levels — quantification
+over all levels would require a `Setω`-statement, which `--without-K`
+and consistency forbid.
+
+**Tier 3 — quantification over the family of all formal languages
+(not formalisable in any single theory).**
+A statement of the form
+> *every describable structure reduces to binary distinctions*
+
+quantifies not over types but over *theories, languages, formal
+systems*. A structure that lives in a different formal language —
+ZFC, classical higher-order logic, a yet uninvented system — is not a
+type in any `Setₙ` of the present development. The family of all such
+languages cannot be the domain of an internal quantifier in any one
+of them; this is precisely the content of Gödel's incompleteness and
+Tarski's undefinability of truth. The strongest internal counterpart
+available is Tier 1 above, and the ladder cannot be climbed further
+inside MLTT alone. Whatever is true at this third tier can be
+articulated as a programmatic stance, or as an external statement
+within a richer metatheory (for instance a model-theoretic statement
+in ZFC about the class of nontrivial structures), but it cannot
+appear as a theorem of `Void.lagda.tex`. This boundary is taken
+seriously here and not crossed.
+
+The formal arc of this work therefore reaches exactly as far as
+Tier 1 reaches, and exactly stops where Tier 3 begins.
+
+---
+
 ## Files
 
 - [Void.lagda.tex](Void.lagda.tex) — formal development.
