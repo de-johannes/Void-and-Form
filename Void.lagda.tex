@@ -274,15 +274,19 @@
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-This work provides a fully mechanised, constructive derivation of fundamental combinatorial and topological invariants starting from the minimal premise of distinguishability. The formal execution is carried out in Martin-Löf type theory, formalised in Agda under \AgdaFlag{safe} and \AgdaFlag{without-K}; the structure forced by the derivation is not treated as an artefact of that formal language. Under these minimal conditions, the complete graph on four vertices ($K_4$) is the unique structure that survives the strict sequence of logical and symmetric elimination filters.
+A single assumption is granted: it is possible to separate two outcomes. Nothing else. No carrier, no arithmetic, no geometry, no measurement scale. The remainder of this volume traces, in fully mechanised Martin-Löf type theory under \AgdaFlag{safe} and \AgdaFlag{without-K}, what is forced by that grant alone and what is annihilated by it.
 
-Instead of constructing mathematical objects from sets or categories, the method is eliminative. The text traces what remains when unstable alternatives are systematically tested inside the type checker and rejected when they collapse. The central machine-verified result is absolute at its endpoint: under the stated minimal conditions, the formalization of indistinguishability forces exactly one non-trivial combinatorial object, $K_4$.
+The entry into the development is itself a uniqueness theorem, not a choice. Any type-theoretic structure that carries two distinguishable, exhaustive points is shown to be boundary-preservingly isomorphic to the canonical two-point base. The two-point base is therefore not an option among many; it is the unique normal form for binary distinction inside the formal setting. The orientation classification that follows determines the only residual ambiguity in the isomorphism—a global swap of the two boundary roles—and exhausts it.
 
-The surviving structure is rigid and specific. From the invariants forced at that stage—its vertex count $V=4$, its Laplacian spectrum $\{0,4,4,4\}$, its Fermat prime $F_2 = 17$, and its Euler characteristic $\chi = 2$—the standard number systems ($\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$) and their algebraic laws follow sequentially by constructive derivation. No arithmetic axioms are added beyond the formal framework; the resulting properties are proved inside it.
+From this entry, the eliminative chain proceeds without addition. The endomorphism space of the base type contains exactly four inhabitants up to pointwise equality. Their composition closure on three vertices fails by absurd-pattern elimination; on more than four vertices it adds structure unsupported by the four cases. The closure that survives is the complete graph on four vertices, $K_4$. Its representation record is inhabited, propositionally unique, and stable under the orbit tests carried out in Part~VI.
 
-Two independent constructive routes converge on this result. First, the eliminative formalisation of an unmarked state isolates distinction as the minimal non-vacuous starting point of the development. Second, the measurement kernel derives the same boundary from observational separation. The book's final theorem proves that any admissible invariant record structurally presupposes a distinction.
+The numerical invariants attached to that survivor are determined by reduction. The Euler characteristic evaluates to $2$, the simplex expression $V^d \cdot \chi + d^2$ at the forced values $V=4$, $d=3$, $\chi=2$ evaluates to $137$, and the loop numerator $E + d + \chi$ evaluates to $11$ after eight subset candidates are eliminated by absurd patterns. The witness in every case is \texttt{refl}; no parameter is free.
 
-This document serves both as a mathematical text and as the source code for its own verification. The complete derivation is contained in twenty-five thousand lines of Agda under the flags \AgdaFlag{safe} and \AgdaFlag{without-K}.
+The standard number systems $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$ are then constructed inside the same formal environment. Their algebraic laws are proved, not posited. The sequential completeness of the present construction of $\mathbb{R}$—every Cauchy sequence of reals admits a limit, built from the row-internal stabilisation indices—closes the analytic layer without invoking quotient types or choice.
+
+The chain returns to its origin. The final theorem of the book establishes that any admissible invariant record on the surviving structure already presupposes the original separation witness. Distinction enters as the minimal grant; it re-emerges as a structural consequence of the closed record. The argument is therefore not an open arrow from premise to conclusion but a closed loop that admits no alternative endpoint.
+
+The complete derivation lives inside twenty-five thousand lines of literate Agda under \AgdaFlag{safe} and \AgdaFlag{without-K}, with no postulates and no library imports. The text and its verifier are the same file.
 
 \section*{Inheritance}
 \addcontentsline{toc}{chapter}{Inheritance}
@@ -30425,34 +30429,13 @@ recognition of what the premise already contains.
 \chapter{Conclusion}
 \label{ch:conclusion}
 
-A specific discrete structure has emerged from the chain: the complete
-graph $K_4$ together with its invariant ledger. The graph is not merely
-named at the end; it is the object for which the representation record
-is inhabited, unique, and stable under automorphism. Its observable
-data are those quantities that survive the orbit tests, the rigidity
-lemmas, and the singleton argument.
+The chain that opened with a single separation witness has returned to it. The two-point base entered as the unique normal form for binary distinction; the complete graph $K_4$ emerged as the unique closure of its four endomorphism cases; the invariant record attached to that closure was inhabited and propositionally unique; and the final theorem of Part~VI proved that any inhabitant of that record already carries the original separation witness. Distinction enters as the minimal grant, and distinction re-emerges as a consequence. The arrow does not extend; it closes.
 
-The role of distinction is now also fixed. It appears first as the
-minimal inhabited cut, then again as the outcome kernel of binary
-measurement, and finally as the structure presupposed by any admissible
-\texttt{K4Record}. These are not three separate doctrines. They are
-three routes through the same formal dependency: a theory that can
-separate two outcomes already has the kernel from which the discrete
-record is obtained.
+What survives at the endpoint is therefore not a structure that was selected from a catalogue of possibilities. It is the only inhabitant that did not collapse under the eliminative pressure of the preceding chapters. The numerical data attached to the survivor—the vertex count, the Laplacian spectrum, the Euler characteristic, the simplex value $137$, the loop numerator $11$—are determined by reduction. None of them carries a free parameter, and none of them was chosen.
 
-The book has also separated what has been proved from what has not.
-It has not derived dynamics, empirical constants, or a continuum
-theory. It has not claimed that the invariant ledger is already a full
-physical model. What it has proved is narrower and therefore sharper:
-inside the stated constructive setting, the discrete record attached to
-$K_4$ is the unique closed endpoint of the elimination chain.
+The boundary of the proof is equally definite. No dynamics is derived here, no empirical constant is fixed by measurement, no continuum theory is supplied by the formal apparatus. The claim is narrower and therefore harder to attack: under the stated minimal grant, the discrete record attached to $K_4$ is the unique closed endpoint of the elimination chain, and the chain runs from distinction back to distinction without any external addition.
 
-For that reason the conclusion is not another construction. The
-remaining work cannot be done by adding one more invariant to the same
-list. The internal loops have closed: distinction yields the record;
-the record presupposes distinction; binary measurement supplies the
-distinction; and an independent Pythagorean test recovers the same
-complete graph. The discrete argument has reached its boundary.
+For that reason the conclusion is not another construction. The internal loops have closed. The two-point base is forced as the normal form; the four cases are forced by coverage; their closure is forced to $K_4$; the invariant record is forced as a singleton; and the singleton presupposes the original distinction. The discrete argument has reached its boundary.
 
 This completes the proof of the discrete kernel.
 
@@ -30461,22 +30444,14 @@ This completes the proof of the discrete kernel.
 \addcontentsline{toc}{chapter}{Outlook}
 %─────────────────────────────────────────────────────────────────────────────
 
-This volume has ended at the point where the discrete kernel is closed.
-A natural continuation is not to repeat the elimination, but to ask
-what can be built once the kernel is accepted as fixed data.
+The discrete kernel is closed; the natural continuation does not repeat the elimination. It asks what can be carried by the kernel once it is accepted as fixed data. Any such continuation must respect the constraints that have been proved: the singleton record, the automorphism invariants, the unit scale, the measurement kernel, and the arithmetic closure of the correction ledger. These do not by themselves determine a theory of dynamics or an empirical interpretation. They determine the discrete ground on which such a theory would have to stand.
 
-Any such continuation must respect the constraints proved here: the
-singleton record, the automorphism invariants, the unit scale, the
-measurement kernel, and the arithmetic closure of the correction
-ledger. These conditions do not by themselves determine a full theory
-of dynamics or empirical interpretation. They determine the discrete
-ground on which such a theory would have to stand.
+Two boundaries are worth naming explicitly, because they limit how far the universal claim of this book may legitimately be carried. First, the normal-form theorem quantifies internally over every type in the universe of the formal setting, not over the family of all formal theories; the latter is a meta-theoretic object whose universal closure is excluded by Tarski's undefinability of truth and by Gödel's incompleteness. Second, the present formalisation lives at a single universe level; a routine universe-polymorphic restatement is available but adds no new mathematical content. The reach of the proof is exactly Tier~1 of these three.
 
-Those questions belong beyond the present text. The present text ends
-where its own task ends: with the closed discrete record and the proof
-that it cannot be detached from distinction.
+Within those boundaries, the present text ends where its own task ends: with the closed discrete record, the universal normal-form theorem at its entrance, and the proof that the record cannot be detached from distinction.
 
 \end{document}
+
 
 
 % Mon Apr 27, 2026
