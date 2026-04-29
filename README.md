@@ -394,6 +394,11 @@ every case is `refl`.
 | `loop-numerator ≡ 11` | [L27951–28010](Void.lagda.tex#L27951-L28010) |
 | `theorem-sign-forcing` | [L29174–29207](Void.lagda.tex#L29174-L29207) |
 
+Inside the $70$-monomial pool of degree $\leq 4$ in $(V,E,d,\chi)$
+fixed by the same forced values, the integer $137$ admits exactly one
+pair-sum decomposition. The enumeration is a property test on the
+output of `simplex-eval`, not a search for it.
+
 `loop-numerator` is defined as `E + d + χ` and is established by
 reducing eight admissible subset candidates to one via absurd-pattern
 elimination.
