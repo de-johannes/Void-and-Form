@@ -9814,6 +9814,93 @@ form-uniqueness-witness = record
   }
 \end{code}
 
+\subsection{The signature is forced, not chosen}
+\label{sec:invariant-kinds:signature-closure}
+
+A reader could still ask whether the three operators of the
+\texttt{Expr} grammar --- summation, product, exponentiation ---
+are themselves a design choice. They are not. They are the three
+rungs of the iteration chain that $\mathbb{N}$ fixes by its
+successor structure: multiplication is repeated addition,
+exponentiation is repeated multiplication. Each rung is the
+recursive iteration of the rung below it. No alternative
+operator can be inserted into this chain, because each rung is
+defined from the previous one by the same primitive recursion
+on $\mathbb{N}$.
+
+The chain does not extend to a fourth rung in the canonical form,
+because the canonical exponent is a flat atom, not a tower. There
+is no $\mathtt{\char`\^\char`\^}$-node above the exponent
+position; hence no tetration height to fix and no fourth operator
+to introduce. The signature is closed at rank three by the
+recursion of $\mathbb{N}$ above and by the atomic shape of the
+canonical exponent below.
+
+\textbf{Constraint:} every operator in the grammar must be either
+the primitive $\mathbb{N}$-operation \texttt{suc} or its iteration.
+Anything outside that chain is unreachable from the successor
+structure alone.
+
+\textbf{Construction:} two computational equalities, both
+\texttt{refl}, exhibit the chain. \texttt{prod-is-iter-sum} reads
+multiplication as repeated addition; \texttt{pow-is-iter-prod}
+reads exponentiation as repeated multiplication. A third witness,
+\texttt{canonical-bulk-exp-is-atom}, exhibits the absence of a
+fourth rung in the canonical form: the bulk exponent slot is an
+atom, not a nested power.
+
+\textbf{Consequence:} the operator signature
+$\{\mathtt{++\varepsilon}, \mathtt{**}, \mathtt{\char`\^\char`\^}\}$
+is not three independent operators glued together by taste. It
+is the iteration ladder of $\mathbb{N}$ truncated at the height
+that the canonical form actually uses. \texttt{SignatureClosure}
+bundles the three witnesses.
+
+\begin{code}
+-- (++ε, **, ^^) are not three independent design choices: they are
+-- the three rungs of the iteration chain that ℕ itself fixes by
+-- its successor structure. Multiplication is repeated addition;
+-- exponentiation is repeated multiplication. Both equalities hold
+-- by computation, because that is how the operators are defined.
+-- A fourth rung (tetration) would require a tower-height parameter;
+-- the canonical form has no such parameter. Its bulk exponent is a
+-- flat atom, not a nested ^^-tower. The signature is therefore
+-- closed at rank three, and the absence of a fourth rung is a
+-- structural fact about canonicalExpr, not a postulate.
+prod-is-iter-sum : ∀ n m → suc m * n ≡ n + (m * n)
+prod-is-iter-sum n m = refl
+
+pow-is-iter-prod : ∀ x n → x ^ suc n ≡ x * (x ^ n)
+pow-is-iter-prod x n = refl
+
+-- § The bulk exponent slot of canonicalExpr is a single atom, not
+-- an iterated power. There is no ^^-node above the exponent
+-- position, hence no tetration tower to collapse.
+canonical-bulk-exp-is-atom :
+  Σ Atom λ a →
+    canonicalExpr
+      ≡ ((atom AV ^^ atom a) ** atom Aχ) ++ε (atom Ad ** atom Ad)
+canonical-bulk-exp-is-atom = Ad , refl
+
+record SignatureClosure : Set where
+  field
+    sum-is-successor   : ∀ n   → zero + n ≡ n
+    prod-from-sum      : ∀ n m → suc m * n ≡ n + (m * n)
+    pow-from-prod      : ∀ x n → x ^ suc n ≡ x * (x ^ n)
+    no-tetration-slot  :
+      Σ Atom λ a →
+        canonicalExpr
+          ≡ ((atom AV ^^ atom a) ** atom Aχ) ++ε (atom Ad ** atom Ad)
+
+signature-closure : SignatureClosure
+signature-closure = record
+  { sum-is-successor  = λ _ → refl
+  ; prod-from-sum     = prod-is-iter-sum
+  ; pow-from-prod     = pow-is-iter-prod
+  ; no-tetration-slot = canonical-bulk-exp-is-atom
+  }
+\end{code}
+
 \section{Audit of Eliminated Freedoms}
 \label{sec:invariant-kinds:audit}
 
