@@ -3377,7 +3377,12 @@ forced by this coprimality.
 The bulk term draws on the spectral kind ($V$, $\kappa$) and
 the topological kind ($\chi$); the boundary term draws on the
 algebraic kind ($d$).  The three kinds are disjoint constructors
-of an \texttt{InvariantKind} datatype, so no mixing occurs.
+of a \texttt{CouplingKind} datatype, so no mixing occurs.
+\textit{Void} already supplies a four-kind atom taxonomy
+(\texttt{InvariantKind}: configurational, relational, directional,
+topological); the present datatype is a different, coarser
+classification specific to the binomial decomposition of $137$,
+and is therefore introduced under its own name.
 The decomposition $128 + 9 = 137$ is the \emph{unique} additive
 partition of a $\{2,3\}$-coprime number into two $\{2,3\}$-smooth
 primitive terms---proved below by exhaustive pair elimination over
@@ -3438,50 +3443,53 @@ law-coupling-decomposition : bulk-spectral + geometric-sq ≡ 137
 law-coupling-decomposition = refl
 
 
--- § The three invariant kinds of K₄
-data InvariantKind : Set where
-  spectral    : InvariantKind   -- λ: Laplacian eigenvalue
-  topological : InvariantKind   -- χ: Euler characteristic
-  algebraic   : InvariantKind   -- d: vertex degree
+-- § The three coupling-side kinds of the K₄ binomial 128 + 9 = 137.
+-- This is Form's coarser, decomposition-specific taxonomy; the
+-- four-kind atom taxonomy InvariantKind imported from Void remains
+-- in scope and unchanged.
+data CouplingKind : Set where
+  spectral-coupling    : CouplingKind   -- λ: Laplacian eigenvalue
+  topological-coupling : CouplingKind   -- χ: Euler characteristic
+  algebraic-coupling   : CouplingKind   -- d: vertex degree
 
 -- § Each factor in the coupling formula carries a unique kind
-lambda-kind : InvariantKind
-lambda-kind = spectral
+lambda-kind : CouplingKind
+lambda-kind = spectral-coupling
 
-chi-kind : InvariantKind
-chi-kind = topological
+chi-kind : CouplingKind
+chi-kind = topological-coupling
 
-deg-kind : InvariantKind
-deg-kind = algebraic
+deg-kind : CouplingKind
+deg-kind = algebraic-coupling
 
 -- § Disjointness: distinct constructors have no common identification
-spectral≠topological : spectral ≠ topological
+spectral≠topological : spectral-coupling ≠ topological-coupling
 spectral≠topological ()
 
-spectral≠algebraic : spectral ≠ algebraic
+spectral≠algebraic : spectral-coupling ≠ algebraic-coupling
 spectral≠algebraic ()
 
-topological≠algebraic : topological ≠ algebraic
+topological≠algebraic : topological-coupling ≠ algebraic-coupling
 topological≠algebraic ()
 
 -- § Bulk and boundary draw on disjoint kinds → forced additive combination
-record BulkBoundaryIndependence : Set where
+record CouplingBulkBoundaryIndependence : Set where
   field
-    bulk-kind₁            : InvariantKind
-    bulk-kind₂            : InvariantKind
-    boundary-kind         : InvariantKind
-    bulk-is-spectral      : bulk-kind₁ ≡ spectral
-    bulk-is-topological   : bulk-kind₂ ≡ topological
-    boundary-is-algebraic : boundary-kind ≡ algebraic
-    kinds-disjoint₁       : spectral ≠ algebraic
-    kinds-disjoint₂       : topological ≠ algebraic
+    bulk-kind₁            : CouplingKind
+    bulk-kind₂            : CouplingKind
+    boundary-kind         : CouplingKind
+    bulk-is-spectral      : bulk-kind₁ ≡ spectral-coupling
+    bulk-is-topological   : bulk-kind₂ ≡ topological-coupling
+    boundary-is-algebraic : boundary-kind ≡ algebraic-coupling
+    kinds-disjoint₁       : spectral-coupling ≠ algebraic-coupling
+    kinds-disjoint₂       : topological-coupling ≠ algebraic-coupling
     decomposition-forced  : bulk-spectral + geometric-sq ≡ 137
 
-theorem-bulk-boundary-independent : BulkBoundaryIndependence
-theorem-bulk-boundary-independent = record
-  { bulk-kind₁            = spectral
-  ; bulk-kind₂            = topological
-  ; boundary-kind         = algebraic
+theorem-coupling-bulk-boundary-independent : CouplingBulkBoundaryIndependence
+theorem-coupling-bulk-boundary-independent = record
+  { bulk-kind₁            = spectral-coupling
+  ; bulk-kind₂            = topological-coupling
+  ; boundary-kind         = algebraic-coupling
   ; bulk-is-spectral      = refl
   ; bulk-is-topological   = refl
   ; boundary-is-algebraic = refl
