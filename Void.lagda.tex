@@ -2639,7 +2639,103 @@ Distinctionℓ-determined d f g fℓ≡gℓ fr≡gr =
   Distinctionℓ-elim d
     (subst (λ y → f y ≡ g y) refl fℓ≡gℓ)
     (subst (λ y → f y ≡ g y) refl fr≡gr)
+\end{code}
 
+\section{Tier 2 Normal Form}
+\label{sec:tier2-normal-form}
+
+The base-level normal-form theorem of Chapter~\ref{ch:two-normal-form} stated that every \texttt{Distinction} is isomorphic to \texttt{Two}. Once classification data themselves are lifted into higher universes, the same statement must hold there too, or the hierarchy would generate distinctions that escape the very normal form on which the base-level result rests. The structural force is uniformity: a distinction at level $\ell$ that admitted a wider classification than at level $0$ would let the hierarchy add information by mere relabelling, and the entire drift construction would lose its meaning.
+
+\textbf{Constraint:} the proof of \texttt{two-normal-form} consumed nothing about its carrier beyond the four fields of a \texttt{Distinction}. Those fields exist verbatim in \texttt{Distinctionℓ}. Any normal-form claim that held at level $0$ must therefore hold at every level $\ell$, by the very same construction.
+
+\textbf{Construction:} a level-polymorphic two-element type \texttt{Twoℓ}, a level-polymorphic distinction \texttt{Two-distinctionℓ}, and a level-polymorphic boundary-preserving isomorphism record \texttt{DistinctionIsoℓ} are introduced. The maps \texttt{toTwoℓ}, \texttt{fromTwoℓ}, and the round-trip identities mirror their base-level counterparts. The theorem \texttt{two-normal-formℓ} then exhibits the isomorphism for every level $\ell$ uniformly.
+
+\textbf{Consequence:} the normal-form result is closed under the universe hierarchy. The base case is no longer an isolated theorem at level $0$; it is the level-$0$ instance of a single statement that holds at every level. The reach of the universal claim is sharpened: Tier 1 (level $0$) was already proved; Tier 2 (every level $\ell$) is now proved by the same construction. The remaining outer boundary -- a single quantifier ranging over the entire universe hierarchy at once -- is not an artefact of this development but the Girard limit of any consistent type theory; no internal proof can cross it.
+
+\begin{code}
+-- § Level-polymorphic two-element type.
+data Twoℓ {ℓ : Level} : Set ℓ where
+  Lℓ : Twoℓ
+  Rℓ : Twoℓ
+
+-- § Lℓ and Rℓ are distinct at every level.
+Twoℓ-L≠R : {ℓ : Level} → Lℓ {ℓ} ≠ Rℓ {ℓ}
+Twoℓ-L≠R ()
+
+-- § Exhaustive two-class coverage for Twoℓ.
+Twoℓ-cover : {ℓ : Level} → (x : Twoℓ {ℓ}) → (x ≡ Lℓ) ⊎ (x ≡ Rℓ)
+Twoℓ-cover Lℓ = inj₁ refl
+Twoℓ-cover Rℓ = inj₂ refl
+
+-- § Twoℓ as a level-polymorphic Distinction.
+Two-distinctionℓ : (ℓ : Level) → Distinctionℓ ℓ
+Two-distinctionℓ ℓ = record
+  { S     = Twoℓ
+  ; ℓ₀    = Lℓ
+  ; r₀    = Rℓ
+  ; ℓ₀≠r₀ = Twoℓ-L≠R
+  ; cover = Twoℓ-cover
+  }
+
+-- § Boundary-preserving isomorphism between distinctions at level ℓ.
+record DistinctionIsoℓ {ℓ : Level} (d₁ d₂ : Distinctionℓ ℓ) : Set ℓ where
+  field
+    to      : S d₁ → S d₂
+    from    : S d₂ → S d₁
+    to-from : (y : S d₂) → to (from y) ≡ y
+    from-to : (x : S d₁) → from (to x) ≡ x
+    to-ℓ₀   : to (ℓ₀ d₁) ≡ ℓ₀ d₂
+    to-r₀   : to (r₀ d₁) ≡ r₀ d₂
+
+open DistinctionIsoℓ public
+
+-- § The canonical boundary-preserving map to Twoℓ.
+toTwoℓ : {ℓ : Level} (d : Distinctionℓ ℓ) → S d → Twoℓ {ℓ}
+toTwoℓ d x with cover d x
+... | inj₁ _ = Lℓ
+... | inj₂ _ = Rℓ
+
+-- § The canonical embedding from Twoℓ.
+fromTwoℓ : {ℓ : Level} (d : Distinctionℓ ℓ) → Twoℓ {ℓ} → S d
+fromTwoℓ d Lℓ = ℓ₀ d
+fromTwoℓ d Rℓ = r₀ d
+
+-- § toTwoℓ sends ℓ₀ to Lℓ.
+toTwoℓ-ℓ₀ : {ℓ : Level} (d : Distinctionℓ ℓ) → toTwoℓ d (ℓ₀ d) ≡ Lℓ
+toTwoℓ-ℓ₀ d with cover d (ℓ₀ d)
+... | inj₁ _   = refl
+... | inj₂ ℓ≡r = ⊥-elim (ℓ₀≠r₀ d ℓ≡r)
+
+-- § toTwoℓ sends r₀ to Rℓ.
+toTwoℓ-r₀ : {ℓ : Level} (d : Distinctionℓ ℓ) → toTwoℓ d (r₀ d) ≡ Rℓ
+toTwoℓ-r₀ d with cover d (r₀ d)
+... | inj₂ _   = refl
+... | inj₁ r≡ℓ = ⊥-elim (ℓ₀≠r₀ d (sym r≡ℓ))
+
+-- § fromTwoℓ ∘ toTwoℓ is the identity.
+fromTwoℓ-toTwoℓ : {ℓ : Level} (d : Distinctionℓ ℓ) → (x : S d) → fromTwoℓ d (toTwoℓ d x) ≡ x
+fromTwoℓ-toTwoℓ d x with cover d x
+... | inj₁ x≡ℓ = sym x≡ℓ
+... | inj₂ x≡r = sym x≡r
+
+-- § toTwoℓ ∘ fromTwoℓ is the identity.
+toTwoℓ-fromTwoℓ : {ℓ : Level} (d : Distinctionℓ ℓ) → (t : Twoℓ {ℓ}) → toTwoℓ d (fromTwoℓ d t) ≡ t
+toTwoℓ-fromTwoℓ d Lℓ = toTwoℓ-ℓ₀ d
+toTwoℓ-fromTwoℓ d Rℓ = toTwoℓ-r₀ d
+
+-- § Tier 2 normal form: every level-polymorphic distinction is isomorphic to Twoℓ.
+two-normal-formℓ : {ℓ : Level} (d : Distinctionℓ ℓ) → DistinctionIsoℓ d (Two-distinctionℓ ℓ)
+two-normal-formℓ d = record
+  { to      = toTwoℓ d
+  ; from    = fromTwoℓ d
+  ; to-from = toTwoℓ-fromTwoℓ d
+  ; from-to = fromTwoℓ-toTwoℓ d
+  ; to-ℓ₀   = toTwoℓ-ℓ₀ d
+  ; to-r₀   = toTwoℓ-r₀ d
+  }
+\end{code}
+
+\begin{code}
 -- § A boundary-preserving lift: target distinction + embedding + boundary proofs.
 record LiftedBP {ℓ : Level} (d : Distinctionℓ ℓ) : Set (lsuc (lsuc ℓ)) where
   field

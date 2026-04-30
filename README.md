@@ -526,46 +526,41 @@ no parameter, no representative chosen by the proof; the same witness
 works uniformly. This is the maximal universal claim that MLTT can
 make on a single fixed universe level — and it is proved, not asserted.
 
-**Tier 2 — quantification across the universe hierarchy (uniform,
-not yet spelled out).**
-By making the level explicit one obtains a universe-polymorphic
-family
+**Tier 2 — quantification across the universe hierarchy (proved).**
+The level-polymorphic carrier
 ```agda
-Distinction-ℓ      : (ℓ : Level) → Set (lsuc ℓ)
-two-normal-form-ℓ  : ∀ {ℓ} (d : Distinction-ℓ ℓ) →
-                    DistinctionIso-ℓ d (Two-distinction-ℓ ℓ)
+Distinctionℓ : (ℓ : Level) → Set (lsuc ℓ)
 ```
-giving the same theorem at every universe level `Setₙ`, uniformly by a
-single definition. Agda's universe polymorphism makes this a routine
-extension of §3; it is not expanded in `Void.lagda.tex` because Tier 2
-yields a family of theorems with the same proof, no new invariant, and
-no single quantifier over all levels — the latter would require a
-`Setω`-statement, which `--without-K` and consistency forbid. The
-unlevelled form is therefore sufficient for everything that follows
-in this book.
+([Void.lagda.tex L2512](Void.lagda.tex#L2512)) carries the same four
+fields as the base record at every level. The level-polymorphic
+two-element type, the canonical distinction, the boundary-preserving
+isomorphism record, and the normal-form theorem
+```agda
+two-normal-formℓ :
+  ∀ {ℓ} (d : Distinctionℓ ℓ) → DistinctionIsoℓ d (Two-distinctionℓ ℓ)
+```
+are proved by the same construction as the base case; the proof is the
+literal level-polymorphic transport of the base-level proof. Tier 2 is
+therefore not a mere routine extension waiting to be done — it is
+discharged in the text itself, in the section
+`Tier 2 Normal Form` immediately following the level-polymorphic
+helpers.
 
-**Tier 3 — quantification over the family of all formal languages
-(not formalisable in any single theory).**
-A statement of the form
-> *every describable structure reduces to binary distinctions*
-
-quantifies not over types but over *theories, languages, formal
-systems*. A structure that lives in a different formal language —
-ZFC, classical higher-order logic, a yet uninvented system — is not a
-type in any `Setₙ` of the present development. The family of all such
-languages cannot be the domain of an internal quantifier in any one
-of them; this is precisely the content of Gödel's incompleteness and
-Tarski's undefinability of truth. The strongest internal counterpart
-available is Tier 1 above, and the ladder cannot be climbed further
-inside MLTT alone. Whatever is true at this third tier can be
-articulated as a programmatic stance, or as an external statement
-within a richer metatheory (for instance a model-theoretic statement
-in ZFC about the class of nontrivial structures), but it cannot
-appear as a theorem of `Void.lagda.tex`. This boundary is taken
-seriously here and not crossed.
+**Tier 3 — quantification ranging over the entire universe hierarchy
+at once (impossible in any consistent type theory).**
+A single quantifier `(ℓ : Level) → …` does not range over Levels
+themselves; it ranges over the values of an external `Level` type, and
+the resulting statement lives in `Setω`. To collapse this further into
+*one* universe holding *all* universes, one would need `Setω : Setω`
+or its equivalent. This is exactly the Russell–Girard barrier: any
+type theory that admits such a self-containing universe is
+inconsistent. The boundary is therefore not a defect of `Void.lagda.tex`;
+it is the boundary that *every* consistent type theory must respect.
+The strongest internal universal claim available is Tier 2 above, and
+the next step cannot be taken inside any sound system.
 
 The formal arc of this work therefore reaches exactly as far as
-Tier 1 reaches, and exactly stops where Tier 3 begins.
+Tier 2 reaches, and exactly stops where Tier 3 begins.
 
 ---
 
