@@ -1705,6 +1705,12 @@ preserve≠swap ()
 
 swap≠preserve : orient-swap ≡ orient-preserve → ⊥
 swap≠preserve ()
+
+-- § Type-level closure: TwoOrientation has exactly two inhabitants.
+TwoOrientation-exhaustive :
+  ∀ (o : TwoOrientation) → (o ≡ orient-preserve) ⊎ (o ≡ orient-swap)
+TwoOrientation-exhaustive orient-preserve = inj₁ refl
+TwoOrientation-exhaustive orient-swap     = inj₂ refl
 \end{code}
 
 The inverse law therefore forces the boundary images of any equivalence to remain distinct. The classifier below inspects the image of $\ell$ and thereby decides between the two resulting orientations; the exhaustiveness proof below closes the classification.
@@ -1914,6 +1920,12 @@ data OrientationCase : Set where
   case-preserve : OrientationCase
   case-swap     : OrientationCase
 
+-- § Type-level closure: OrientationCase has exactly two inhabitants.
+OrientationCase-exhaustive :
+  ∀ (c : OrientationCase) → (c ≡ case-preserve) ⊎ (c ≡ case-swap)
+OrientationCase-exhaustive case-preserve = inj₁ refl
+OrientationCase-exhaustive case-swap     = inj₂ refl
+
 -- § Interpret an orientation case as a map.
 orientationInterpret : (d : Distinction) → OrientationCase → S d → Two
 orientationInterpret d case-preserve = toTwo d
@@ -1983,6 +1995,12 @@ of the two surviving forms, and that form is uniquely determined.
 data AutCase : Set where
   case-id   : AutCase
   case-dual : AutCase
+
+-- § Type-level closure: AutCase has exactly two inhabitants.
+AutCase-exhaustive :
+  ∀ (c : AutCase) → (c ≡ case-id) ⊎ (c ≡ case-dual)
+AutCase-exhaustive case-id   = inj₁ refl
+AutCase-exhaustive case-dual = inj₂ refl
 
 -- § Interpret an automorphism case.
 autInterpret : (d : Distinction) → AutCase → S d → S d
@@ -4774,6 +4792,13 @@ data Three : Set where
   v2 : Three
   v3 : Three
 
+-- § Type-level closure: Three has exactly three inhabitants.
+Three-exhaustive :
+  ∀ (t : Three) → (t ≡ v1) ⊎ (t ≡ v2) ⊎ (t ≡ v3)
+Three-exhaustive v1 = inj₁ refl
+Three-exhaustive v2 = inj₂ (inj₁ refl)
+Three-exhaustive v3 = inj₂ (inj₂ refl)
+
 -- § Pigeonhole on Three: four pairwise distinct values do not fit.
 no-four-distinct-Three :
   (a b c d : Three) →
@@ -5298,6 +5323,11 @@ data Bool : Set where
   false : Bool
 
 {-# BUILTIN BOOL  Bool  #-}
+
+-- § Type-level closure: Bool has exactly two inhabitants.
+Bool-exhaustive : ∀ (b : Bool) → (b ≡ true) ⊎ (b ≡ false)
+Bool-exhaustive true  = inj₁ refl
+Bool-exhaustive false = inj₂ refl
 {-# BUILTIN TRUE  true  #-}
 {-# BUILTIN FALSE false #-}
 
@@ -9704,6 +9734,19 @@ evalE (e ^^ f)   = evalE e ^ evalE f
 evalE (e ** f)   = evalE e * evalE f
 evalE (e ++ε f)  = evalE e + evalE f
 
+-- § Type-level closure: every Expr is built from one of the four
+-- constructors. No fifth syntactic operator can inhabit Expr.
+Expr-head-exhaustive :
+  ∀ (e : Expr)
+    → (Σ Atom λ a → e ≡ atom a)
+    ⊎ (Σ Expr λ x → Σ Expr λ y → e ≡ x ^^ y)
+    ⊎ (Σ Expr λ x → Σ Expr λ y → e ≡ x ** y)
+    ⊎ (Σ Expr λ x → Σ Expr λ y → e ≡ x ++ε y)
+Expr-head-exhaustive (atom a)   = inj₁ (a , refl)
+Expr-head-exhaustive (x ^^ y)   = inj₂ (inj₁ (x , (y , refl)))
+Expr-head-exhaustive (x ** y)   = inj₂ (inj₂ (inj₁ (x , (y , refl))))
+Expr-head-exhaustive (x ++ε y)  = inj₂ (inj₂ (inj₂ (x , (y , refl))))
+
 -- § The shape predicate. The structural equation is named, not
 -- chosen: it is the bulk-plus-boundary form derived from
 -- BulkBoundaryIndependence (top-level coproduct on disjoint kinds),
@@ -12056,6 +12099,18 @@ data K4SpectrumSlot : Set where
   spectrum-four₁ : K4SpectrumSlot
   spectrum-four₂ : K4SpectrumSlot
   spectrum-four₃ : K4SpectrumSlot
+
+-- § Type-level closure: K4SpectrumSlot has exactly four inhabitants.
+K4SpectrumSlot-exhaustive :
+  ∀ (s : K4SpectrumSlot)
+    → (s ≡ spectrum-zero)
+    ⊎ (s ≡ spectrum-four₁)
+    ⊎ (s ≡ spectrum-four₂)
+    ⊎ (s ≡ spectrum-four₃)
+K4SpectrumSlot-exhaustive spectrum-zero  = inj₁ refl
+K4SpectrumSlot-exhaustive spectrum-four₁ = inj₂ (inj₁ refl)
+K4SpectrumSlot-exhaustive spectrum-four₂ = inj₂ (inj₂ (inj₁ refl))
+K4SpectrumSlot-exhaustive spectrum-four₃ = inj₂ (inj₂ (inj₂ refl))
 
 K4-spectrum-value : K4SpectrumSlot → ℕ
 K4-spectrum-value spectrum-zero  = 0
@@ -16022,6 +16077,11 @@ data Gen : Set where
   Lg : Gen
   Jg : Gen
 
+-- § Type-level closure: Gen has exactly two inhabitants.
+Gen-exhaustive : ∀ (g : Gen) → (g ≡ Lg) ⊎ (g ≡ Jg)
+Gen-exhaustive Lg = inj₁ refl
+Gen-exhaustive Jg = inj₂ refl
+
 data List (A : Set) : Set where
   []  : List A
   _∷_ : A → List A → List A
@@ -16063,6 +16123,18 @@ data WordCase : Set where
   Lpow  : ℕ → WordCase
   Jpow  : ℕ → WordCase
   mixed : WordCase
+
+-- § Type-level closure: WordCase has exactly four head-forms.
+WordCase-head-exhaustive :
+  ∀ (w : WordCase)
+    → (w ≡ empty)
+    ⊎ (Σ ℕ λ n → w ≡ Lpow n)
+    ⊎ (Σ ℕ λ n → w ≡ Jpow n)
+    ⊎ (w ≡ mixed)
+WordCase-head-exhaustive empty     = inj₁ refl
+WordCase-head-exhaustive (Lpow n)  = inj₂ (inj₁ (n , refl))
+WordCase-head-exhaustive (Jpow n)  = inj₂ (inj₂ (inj₁ (n , refl)))
+WordCase-head-exhaustive mixed     = inj₂ (inj₂ (inj₂ refl))
 
 caseOp : WordCase → Op
 caseOp empty     = idOp
@@ -28894,6 +28966,14 @@ matching-edges : K4Matching → K4Edge × K4Edge
 matching-edges m01-23 = e01 , e23
 matching-edges m02-13 = e02 , e13
 matching-edges m03-12 = e03 , e12
+
+-- § Type-level closure: K4Matching has exactly three inhabitants.
+K4Matching-exhaustive :
+  ∀ (m : K4Matching)
+    → (m ≡ m01-23) ⊎ (m ≡ m02-13) ⊎ (m ≡ m03-12)
+K4Matching-exhaustive m01-23 = inj₁ refl
+K4Matching-exhaustive m02-13 = inj₂ (inj₁ refl)
+K4Matching-exhaustive m03-12 = inj₂ (inj₂ refl)
 \end{code}
 
 The three constructors list the obvious candidates, but the classification theorem still has to show that there is no fourth matching. It does so by case analysis on the partner of $v_0$.
@@ -31256,6 +31336,12 @@ its translation into the two orientation classes.
 data NumeratorClass : Set where
   d-free    : NumeratorClass   -- no d-dependence in numerator → σ = +1
   d-bearing : NumeratorClass   -- numerator depends on d → σ = −1
+
+-- § Type-level closure: NumeratorClass has exactly two inhabitants.
+NumeratorClass-exhaustive :
+  ∀ (n : NumeratorClass) → (n ≡ d-free) ⊎ (n ≡ d-bearing)
+NumeratorClass-exhaustive d-free    = inj₁ refl
+NumeratorClass-exhaustive d-bearing = inj₂ refl
 
 -- § The integer sign forced by d-content.
 classify-sign : NumeratorClass → ℤ
