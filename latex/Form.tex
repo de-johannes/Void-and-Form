@@ -9438,7 +9438,12 @@ forced by this coprimality.
 The bulk term draws on the spectral kind ($V$, $\kappa$) and
 the topological kind ($\chi$); the boundary term draws on the
 algebraic kind ($d$).  The three kinds are disjoint constructors
-of an \texttt{InvariantKind} datatype, so no mixing occurs.
+of a \texttt{CouplingKind} datatype, so no mixing occurs.
+\textit{Void} already supplies a four-kind atom taxonomy
+(\texttt{InvariantKind}: configurational, relational, directional,
+topological); the present datatype is a different, coarser
+classification specific to the binomial decomposition of $137$,
+and is therefore introduced under its own name.
 The decomposition $128 + 9 = 137$ is the \emph{unique} additive
 partition of a $\{2,3\}$-coprime number into two $\{2,3\}$-smooth
 primitive terms---proved below by exhaustive pair elimination over
@@ -9622,31 +9627,37 @@ and neither can absorb the other.
 \\[\AgdaEmptyExtraSkip]%
 %
 \\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaComment{--\ §\ The\ three\ invariant\ kinds\ of\ K₄}\<%
+\>[0]\AgdaComment{--\ §\ The\ three\ coupling-side\ kinds\ of\ the\ K₄\ binomial\ 128\ +\ 9\ =\ 137.}\<%
+\\
+\>[0]\AgdaComment{--\ This\ is\ Form's\ coarser,\ decomposition-specific\ taxonomy;\ the}\<%
+\\
+\>[0]\AgdaComment{--\ four-kind\ atom\ taxonomy\ InvariantKind\ imported\ from\ Void\ remains}\<%
+\\
+\>[0]\AgdaComment{--\ in\ scope\ and\ unchanged.}\<%
 \\
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
-\AgdaDatatype{InvariantKind}\AgdaSpace{}%
+\AgdaDatatype{CouplingKind}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
 \>[0][@{}l@{\AgdaIndent{0}}]%
-\>[2]\AgdaInductiveConstructor{spectral}%
-\>[14]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{InvariantKind}%
-\>[32]\AgdaComment{--\ λ:\ Laplacian\ eigenvalue}\<%
+\>[2]\AgdaInductiveConstructor{spectral-coupling}%
+\>[23]\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{CouplingKind}%
+\>[40]\AgdaComment{--\ λ:\ Laplacian\ eigenvalue}\<%
 \\
 %
-\>[2]\AgdaInductiveConstructor{topological}\AgdaSpace{}%
+\>[2]\AgdaInductiveConstructor{topological-coupling}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{InvariantKind}%
-\>[32]\AgdaComment{--\ χ:\ Euler\ characteristic}\<%
+\AgdaDatatype{CouplingKind}%
+\>[40]\AgdaComment{--\ χ:\ Euler\ characteristic}\<%
 \\
 %
-\>[2]\AgdaInductiveConstructor{algebraic}%
-\>[14]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{InvariantKind}%
-\>[32]\AgdaComment{--\ d:\ vertex\ degree}\<%
+\>[2]\AgdaInductiveConstructor{algebraic-coupling}%
+\>[23]\AgdaSymbol{:}\AgdaSpace{}%
+\AgdaDatatype{CouplingKind}%
+\>[40]\AgdaComment{--\ d:\ vertex\ degree}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -9654,31 +9665,31 @@ and neither can absorb the other.
 \\
 \>[0]\AgdaFunction{lambda-kind}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{InvariantKind}\<%
+\AgdaDatatype{CouplingKind}\<%
 \\
 \>[0]\AgdaFunction{lambda-kind}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{spectral}\<%
+\AgdaInductiveConstructor{spectral-coupling}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{chi-kind}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{InvariantKind}\<%
+\AgdaDatatype{CouplingKind}\<%
 \\
 \>[0]\AgdaFunction{chi-kind}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{topological}\<%
+\AgdaInductiveConstructor{topological-coupling}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{deg-kind}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{InvariantKind}\<%
+\AgdaDatatype{CouplingKind}\<%
 \\
 \>[0]\AgdaFunction{deg-kind}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{algebraic}\<%
+\AgdaInductiveConstructor{algebraic-coupling}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
@@ -9686,9 +9697,9 @@ and neither can absorb the other.
 \\
 \>[0]\AgdaFunction{spectral≠topological}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaInductiveConstructor{spectral}\AgdaSpace{}%
+\AgdaInductiveConstructor{spectral-coupling}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≠}}\AgdaSpace{}%
-\AgdaInductiveConstructor{topological}\<%
+\AgdaInductiveConstructor{topological-coupling}\<%
 \\
 \>[0]\AgdaFunction{spectral≠topological}\AgdaSpace{}%
 \AgdaSymbol{()}\<%
@@ -9697,9 +9708,9 @@ and neither can absorb the other.
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{spectral≠algebraic}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaInductiveConstructor{spectral}\AgdaSpace{}%
+\AgdaInductiveConstructor{spectral-coupling}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≠}}\AgdaSpace{}%
-\AgdaInductiveConstructor{algebraic}\<%
+\AgdaInductiveConstructor{algebraic-coupling}\<%
 \\
 \>[0]\AgdaFunction{spectral≠algebraic}\AgdaSpace{}%
 \AgdaSymbol{()}\<%
@@ -9708,9 +9719,9 @@ and neither can absorb the other.
 \\[\AgdaEmptyExtraSkip]%
 \>[0]\AgdaFunction{topological≠algebraic}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaInductiveConstructor{topological}\AgdaSpace{}%
+\AgdaInductiveConstructor{topological-coupling}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≠}}\AgdaSpace{}%
-\AgdaInductiveConstructor{algebraic}\<%
+\AgdaInductiveConstructor{algebraic-coupling}\<%
 \\
 \>[0]\AgdaFunction{topological≠algebraic}\AgdaSpace{}%
 \AgdaSymbol{()}\<%
@@ -9720,7 +9731,7 @@ and neither can absorb the other.
 \>[0]\AgdaComment{--\ §\ Bulk\ and\ boundary\ draw\ on\ disjoint\ kinds\ →\ forced\ additive\ combination}\<%
 \\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
-\AgdaRecord{BulkBoundaryIndependence}\AgdaSpace{}%
+\AgdaRecord{CouplingBulkBoundaryIndependence}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Set}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
@@ -9731,52 +9742,52 @@ and neither can absorb the other.
 \>[2][@{}l@{\AgdaIndent{0}}]%
 \>[4]\AgdaField{bulk-kind₁}%
 \>[26]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{InvariantKind}\<%
+\AgdaDatatype{CouplingKind}\<%
 \\
 %
 \>[4]\AgdaField{bulk-kind₂}%
 \>[26]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{InvariantKind}\<%
+\AgdaDatatype{CouplingKind}\<%
 \\
 %
 \>[4]\AgdaField{boundary-kind}%
 \>[26]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{InvariantKind}\<%
+\AgdaDatatype{CouplingKind}\<%
 \\
 %
 \>[4]\AgdaField{bulk-is-spectral}%
 \>[26]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaField{bulk-kind₁}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaInductiveConstructor{spectral}\<%
+\AgdaInductiveConstructor{spectral-coupling}\<%
 \\
 %
 \>[4]\AgdaField{bulk-is-topological}%
 \>[26]\AgdaSymbol{:}\AgdaSpace{}%
 \AgdaField{bulk-kind₂}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaInductiveConstructor{topological}\<%
+\AgdaInductiveConstructor{topological-coupling}\<%
 \\
 %
 \>[4]\AgdaField{boundary-is-algebraic}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaField{boundary-kind}\AgdaSpace{}%
 \AgdaOperator{\AgdaDatatype{≡}}\AgdaSpace{}%
-\AgdaInductiveConstructor{algebraic}\<%
+\AgdaInductiveConstructor{algebraic-coupling}\<%
 \\
 %
 \>[4]\AgdaField{kinds-disjoint₁}%
 \>[26]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaInductiveConstructor{spectral}\AgdaSpace{}%
+\AgdaInductiveConstructor{spectral-coupling}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≠}}\AgdaSpace{}%
-\AgdaInductiveConstructor{algebraic}\<%
+\AgdaInductiveConstructor{algebraic-coupling}\<%
 \\
 %
 \>[4]\AgdaField{kinds-disjoint₂}%
 \>[26]\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaInductiveConstructor{topological}\AgdaSpace{}%
+\AgdaInductiveConstructor{topological-coupling}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{≠}}\AgdaSpace{}%
-\AgdaInductiveConstructor{algebraic}\<%
+\AgdaInductiveConstructor{algebraic-coupling}\<%
 \\
 %
 \>[4]\AgdaField{decomposition-forced}%
@@ -9789,11 +9800,11 @@ and neither can absorb the other.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{theorem-bulk-boundary-independent}\AgdaSpace{}%
+\>[0]\AgdaFunction{theorem-coupling-bulk-boundary-independent}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
-\AgdaRecord{BulkBoundaryIndependence}\<%
+\AgdaRecord{CouplingBulkBoundaryIndependence}\<%
 \\
-\>[0]\AgdaFunction{theorem-bulk-boundary-independent}\AgdaSpace{}%
+\>[0]\AgdaFunction{theorem-coupling-bulk-boundary-independent}\AgdaSpace{}%
 \AgdaSymbol{=}\AgdaSpace{}%
 \AgdaKeyword{record}\<%
 \\
@@ -9801,19 +9812,19 @@ and neither can absorb the other.
 \>[2]\AgdaSymbol{\{}\AgdaSpace{}%
 \AgdaField{bulk-kind₁}%
 \>[26]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{spectral}\<%
+\AgdaInductiveConstructor{spectral-coupling}\<%
 \\
 %
 \>[2]\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{bulk-kind₂}%
 \>[26]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{topological}\<%
+\AgdaInductiveConstructor{topological-coupling}\<%
 \\
 %
 \>[2]\AgdaSymbol{;}\AgdaSpace{}%
 \AgdaField{boundary-kind}%
 \>[26]\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{algebraic}\<%
+\AgdaInductiveConstructor{algebraic-coupling}\<%
 \\
 %
 \>[2]\AgdaSymbol{;}\AgdaSpace{}%
