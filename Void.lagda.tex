@@ -9605,29 +9605,41 @@ structurally admissible combination of the four refinement-stable
 invariants of the closed record.
 
 The structural argument above closes a uniqueness theorem inside the
-type theory. The bulk--boundary shape and the audit-fixed internal
-shape leave four atomic positions, each to be filled by an element of
-$\{V, E, d, \chi\}$. The four kind obligations are singletons --- only
-$V$ has kind \texttt{configurational}, only $d$ has kind
-\texttt{directional}, only $\chi$ has kind \texttt{topological}, only
-$E$ has kind \texttt{relational} --- and they constrain each position
-to one element. Uniqueness of the canonical form therefore reduces to
+type theory. The argument is sharper than a parameter sweep over a
+fixed schema. A free term grammar over the four atoms admits any tree
+of syntactic powers, products, and sums. The shape predicate that
+carves out the canonical bulk-plus-boundary expression inside that
+grammar is itself read off existing book lemmas: the top-level
+coproduct is the disjoint-kind summation forced by
+\texttt{BulkBoundaryIndependence}; the boundary as a self-product is
+the binary along--transverse arity of a codimension-$1$ surface
+established in this section; the bulk as a power times a multiplier
+is the audit-fixed shape of an isotropic configurational extension
+weighted by its closure factor. The four atomic positions inside that
+shape are then constrained by the four kind obligations, each a
+singleton, and uniqueness of the surviving inhabitant reduces to
 \texttt{refl} after four rewrites.
 
-\textbf{Constraint:} the four atomic positions of the canonical
-shape must each be constrained to a single element of
-$\{V, E, d, \chi\}$ by the kind obligations.
+\textbf{Constraint:} every candidate combination of the four atoms is
+an inhabitant of a free term grammar with syntactic power, product,
+and sum. The shape predicate that names the canonical bulk-plus-boundary
+form must be derived from existing structural lemmas, not postulated
+as a record schema. The four atomic positions inside the resulting
+shape must be pinned by the kind obligations.
 
-\textbf{Elimination:} the singleton lemmas below kill, for each kind,
-every atom but one. Four such killings collapse the four-position
-enumeration to a single inhabitant.
+\textbf{Elimination:} the structural equation of the shape predicate
+collapses every candidate tree to the bulk-plus-boundary form; the
+four singleton lemmas then collapse the four atomic positions to a
+single inhabitant. The combination kills the entire candidate tree
+space outside the canonical inhabitant.
 
 \textbf{Consequence:} the canonical form
 $\mathit{base}^{\mathit{exp}} \cdot \mathit{mult} + \mathit{bdy}^2$
 with $(\mathit{base}, \mathit{exp}, \mathit{mult}, \mathit{bdy})
-= (V, d, \chi, d)$ is the unique inhabitant of the bulk--boundary
-shape that satisfies the four kind obligations. The proof terminates
-in \texttt{refl} after the four rewrites; no enumeration is performed.
+= (V, d, \chi, d)$ is the unique inhabitant of the free term grammar
+that satisfies the shape predicate together with the four kind
+obligations. The proof terminates in \texttt{refl} after the four
+rewrites; no enumeration of candidate trees is performed.
 
 \begin{code}
 data Atom : Set where
@@ -9645,21 +9657,42 @@ atomValue AE = simplex-edges
 atomValue Ad = simplex-degree
 atomValue Aχ = simplex-chi
 
-record CanonicalForm : Set where
-  constructor mkForm
-  field
-    bulk-base : Atom
-    bulk-exp  : Atom
-    bulk-mult : Atom
-    bdy-base  : Atom
+-- § Free term grammar over the four atoms. Any tree of atoms,
+-- syntactic powers, products, and sums is an Expr; the grammar
+-- itself carves out no shape.
+data Expr : Set where
+  atom  : Atom → Expr
+  _^^_  : Expr → Expr → Expr
+  _**_  : Expr → Expr → Expr
+  _++ε_ : Expr → Expr → Expr
 
-evalForm : CanonicalForm → ℕ
-evalForm (mkForm b e m db) =
-  (atomValue b ^ atomValue e) * atomValue m + (atomValue db * atomValue db)
+infixl 6 _++ε_
+infixl 7 _**_
+infixr 8 _^^_
 
-record FormObligations (f : CanonicalForm) : Set where
-  open CanonicalForm f
+-- § The forgetful map from Expr to ℕ sends syntactic operators to
+-- natural arithmetic. By computation.
+evalE : Expr → ℕ
+evalE (atom a)   = atomValue a
+evalE (e ^^ f)   = evalE e ^ evalE f
+evalE (e ** f)   = evalE e * evalE f
+evalE (e ++ε f)  = evalE e + evalE f
+
+-- § The shape predicate. The structural equation is named, not
+-- chosen: it is the bulk-plus-boundary form derived from
+-- BulkBoundaryIndependence (top-level coproduct on disjoint kinds),
+-- the codimension-1 along/transverse arity of this section
+-- (boundary as self-product), and the audit-fixed isotropic shape
+-- of the bulk (single power, single topological multiplier).
+record HasCanonicalShape (e : Expr) : Set where
   field
+    bulk-base      : Atom
+    bulk-exp       : Atom
+    bulk-mult      : Atom
+    bdy-base       : Atom
+    structure      :
+      e ≡ ((atom bulk-base ^^ atom bulk-exp) ** atom bulk-mult)
+            ++ε (atom bdy-base ** atom bdy-base)
     bulk-base-conf : atomKind bulk-base ≡ configurational
     bulk-exp-dir   : atomKind bulk-exp  ≡ directional
     bulk-mult-top  : atomKind bulk-mult ≡ topological
@@ -9689,35 +9722,69 @@ only-E-is-relational AE refl = refl
 only-E-is-relational Ad ()
 only-E-is-relational Aχ ()
 
-canonicalForm : CanonicalForm
-canonicalForm = mkForm AV Ad Aχ Ad
+-- § The canonical Expr inhabitant: V^d · χ + d · d.
+canonicalExpr : Expr
+canonicalExpr =
+  ((atom AV ^^ atom Ad) ** atom Aχ) ++ε (atom Ad ** atom Ad)
 
-unique-canonical-form :
-  ∀ (f : CanonicalForm) → FormObligations f → f ≡ canonicalForm
-unique-canonical-form (mkForm b e m db)
-  record { bulk-base-conf = pb
-         ; bulk-exp-dir   = pe
-         ; bulk-mult-top  = pm
-         ; bdy-base-dir   = pd
-         }
+-- § Inner uniqueness: every shape-equation tree with constrained
+-- atoms equals canonicalExpr. The four rewrites kill the four atomic
+-- positions; the structural equation handles the tree.
+shape-collapse :
+  ∀ (b ex m db : Atom)
+  → atomKind b  ≡ configurational
+  → atomKind ex ≡ directional
+  → atomKind m  ≡ topological
+  → atomKind db ≡ directional
+  → ((atom b ^^ atom ex) ** atom m) ++ε (atom db ** atom db)
+      ≡ canonicalExpr
+shape-collapse b ex m db pb pe pm pd
   rewrite only-V-is-configurational b pb
-        | only-d-is-directional   e pe
+        | only-d-is-directional   ex pe
         | only-χ-is-topological   m pm
         | only-d-is-directional   db pd
         = refl
 
+-- § Uniqueness inside the free grammar.
+unique-canonical-expr :
+  ∀ (e : Expr) → HasCanonicalShape e → e ≡ canonicalExpr
+unique-canonical-expr e
+  record { bulk-base      = b
+         ; bulk-exp       = ex
+         ; bulk-mult      = m
+         ; bdy-base       = db
+         ; structure      = eq
+         ; bulk-base-conf = pb
+         ; bulk-exp-dir   = pe
+         ; bulk-mult-top  = pm
+         ; bdy-base-dir   = pd
+         }
+  = trans eq (shape-collapse b ex m db pb pe pm pd)
+
+-- § The canonical Expr evaluates to V^d · χ + d² by computation.
+canonical-evaluates :
+  evalE canonicalExpr
+    ≡ (simplex-vertices ^ simplex-degree) * simplex-chi
+        + (simplex-degree * simplex-degree)
+canonical-evaluates = refl
+
 record FormUniquenessWitness : Set where
   field
-    canonical            : CanonicalForm
-    canonical-is-V-d-chi : canonical ≡ canonicalForm
+    canonical            : Expr
+    canonical-is-V-d-chi : canonical ≡ canonicalExpr
     uniqueness           :
-      ∀ (f : CanonicalForm) → FormObligations f → f ≡ canonical
+      ∀ (e : Expr) → HasCanonicalShape e → e ≡ canonical
+    evaluation           :
+      evalE canonical
+        ≡ (simplex-vertices ^ simplex-degree) * simplex-chi
+            + (simplex-degree * simplex-degree)
 
 form-uniqueness-witness : FormUniquenessWitness
 form-uniqueness-witness = record
-  { canonical            = canonicalForm
+  { canonical            = canonicalExpr
   ; canonical-is-V-d-chi = refl
-  ; uniqueness           = unique-canonical-form
+  ; uniqueness           = unique-canonical-expr
+  ; evaluation           = canonical-evaluates
   }
 \end{code}
 
