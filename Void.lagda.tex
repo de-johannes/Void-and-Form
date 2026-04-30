@@ -5315,6 +5315,12 @@ _*_ : ℕ → ℕ → ℕ
 zero  * n = zero
 suc m * n = n + (m * n)
 
+-- § Natural exponentiation.
+infixr 8 _^_
+_^_ : ℕ → ℕ → ℕ
+x ^ zero = suc zero
+x ^ suc n = x * (x ^ n)
+
 -- § Built-in monus (truncated subtraction) on ℕ.
 infixl 6 _∸_
 _∸_ : ℕ → ℕ → ℕ
@@ -9382,6 +9388,39 @@ lemmas of \S\ref{sec:invariant-kinds:disjointness} are then not the
 rigidity of an external classification, but the rigidity of the
 record's own slot structure.
 
+The absorption of $F$ into $\chi$ on $K_4$ is not a refinement step
+but the conjunction of two computations already performed in
+\hyperref[ch:simplex-invariants-natural-multiplication]{Chapter~\ref*{ch:simplex-invariants-natural-multiplication}}:
+$F = V$ by self-duality of the tetrahedron
+(\texttt{simplex-faces $\equiv$ simplex-vertices} as
+\texttt{law14C-2a-faces}), and $\chi = V - E + F = 2$ by the
+alternating sum (\texttt{law14C-3-chi}). The face count carries no
+degree of freedom on $K_4$ beyond what $V$ and $\chi$ already
+record.
+
+\textbf{Constraint:} the closure reading must not introduce any
+datum on $K_4$ beyond what the simplex constants already fix.
+
+\textbf{Construction:} the record below collects the two relevant
+refl-equalities. Its inhabitant is built from the existing laws.
+
+\textbf{Consequence:} on $K_4$, the absorption of $F$ into $\chi$ is
+mechanical: self-duality and the Euler reduction together leave no
+residue.
+
+\begin{code}
+record SelfDualClosureWitness : Set where
+  field
+    F-equals-V    : simplex-faces ≡ simplex-vertices
+    chi-evaluates : simplex-chi ≡ 2
+
+self-dual-closure-witness : SelfDualClosureWitness
+self-dual-closure-witness = record
+  { F-equals-V    = law14C-2a-faces
+  ; chi-evaluates = law14C-3-chi
+  }
+\end{code}
+
 \section{The Extract Concept: From Binary Distinction to Cardinality}
 \label{sec:invariant-kinds:extract}
 
@@ -9565,6 +9604,123 @@ value of one definition among many; it is the value of the only
 structurally admissible combination of the four refinement-stable
 invariants of the closed record.
 
+The structural argument above closes a uniqueness theorem inside the
+type theory. The bulk--boundary shape and the audit-fixed internal
+shape leave four atomic positions, each to be filled by an element of
+$\{V, E, d, \chi\}$. The four kind obligations are singletons --- only
+$V$ has kind \texttt{configurational}, only $d$ has kind
+\texttt{directional}, only $\chi$ has kind \texttt{topological}, only
+$E$ has kind \texttt{relational} --- and they constrain each position
+to one element. Uniqueness of the canonical form therefore reduces to
+\texttt{refl} after four rewrites.
+
+\textbf{Constraint:} the four atomic positions of the canonical
+shape must each be constrained to a single element of
+$\{V, E, d, \chi\}$ by the kind obligations.
+
+\textbf{Elimination:} the singleton lemmas below kill, for each kind,
+every atom but one. Four such killings collapse the four-position
+enumeration to a single inhabitant.
+
+\textbf{Consequence:} the canonical form
+$\mathit{base}^{\mathit{exp}} \cdot \mathit{mult} + \mathit{bdy}^2$
+with $(\mathit{base}, \mathit{exp}, \mathit{mult}, \mathit{bdy})
+= (V, d, \chi, d)$ is the unique inhabitant of the bulk--boundary
+shape that satisfies the four kind obligations. The proof terminates
+in \texttt{refl} after the four rewrites; no enumeration is performed.
+
+\begin{code}
+data Atom : Set where
+  AV AE Ad Aχ : Atom
+
+atomKind : Atom → InvariantKind
+atomKind AV = configurational
+atomKind AE = relational
+atomKind Ad = directional
+atomKind Aχ = topological
+
+atomValue : Atom → ℕ
+atomValue AV = simplex-vertices
+atomValue AE = simplex-edges
+atomValue Ad = simplex-degree
+atomValue Aχ = simplex-chi
+
+record CanonicalForm : Set where
+  constructor mkForm
+  field
+    bulk-base : Atom
+    bulk-exp  : Atom
+    bulk-mult : Atom
+    bdy-base  : Atom
+
+evalForm : CanonicalForm → ℕ
+evalForm (mkForm b e m db) =
+  (atomValue b ^ atomValue e) * atomValue m + (atomValue db * atomValue db)
+
+record FormObligations (f : CanonicalForm) : Set where
+  open CanonicalForm f
+  field
+    bulk-base-conf : atomKind bulk-base ≡ configurational
+    bulk-exp-dir   : atomKind bulk-exp  ≡ directional
+    bulk-mult-top  : atomKind bulk-mult ≡ topological
+    bdy-base-dir   : atomKind bdy-base  ≡ directional
+
+only-V-is-configurational : ∀ a → atomKind a ≡ configurational → a ≡ AV
+only-V-is-configurational AV refl = refl
+only-V-is-configurational AE ()
+only-V-is-configurational Ad ()
+only-V-is-configurational Aχ ()
+
+only-d-is-directional : ∀ a → atomKind a ≡ directional → a ≡ Ad
+only-d-is-directional AV ()
+only-d-is-directional AE ()
+only-d-is-directional Ad refl = refl
+only-d-is-directional Aχ ()
+
+only-χ-is-topological : ∀ a → atomKind a ≡ topological → a ≡ Aχ
+only-χ-is-topological AV ()
+only-χ-is-topological AE ()
+only-χ-is-topological Ad ()
+only-χ-is-topological Aχ refl = refl
+
+only-E-is-relational : ∀ a → atomKind a ≡ relational → a ≡ AE
+only-E-is-relational AV ()
+only-E-is-relational AE refl = refl
+only-E-is-relational Ad ()
+only-E-is-relational Aχ ()
+
+canonicalForm : CanonicalForm
+canonicalForm = mkForm AV Ad Aχ Ad
+
+unique-canonical-form :
+  ∀ (f : CanonicalForm) → FormObligations f → f ≡ canonicalForm
+unique-canonical-form (mkForm b e m db)
+  record { bulk-base-conf = pb
+         ; bulk-exp-dir   = pe
+         ; bulk-mult-top  = pm
+         ; bdy-base-dir   = pd
+         }
+  rewrite only-V-is-configurational b pb
+        | only-d-is-directional   e pe
+        | only-χ-is-topological   m pm
+        | only-d-is-directional   db pd
+        = refl
+
+record FormUniquenessWitness : Set where
+  field
+    canonical            : CanonicalForm
+    canonical-is-V-d-chi : canonical ≡ canonicalForm
+    uniqueness           :
+      ∀ (f : CanonicalForm) → FormObligations f → f ≡ canonical
+
+form-uniqueness-witness : FormUniquenessWitness
+form-uniqueness-witness = record
+  { canonical            = canonicalForm
+  ; canonical-is-V-d-chi = refl
+  ; uniqueness           = unique-canonical-form
+  }
+\end{code}
+
 \section{Audit of Eliminated Freedoms}
 \label{sec:invariant-kinds:audit}
 
@@ -9637,14 +9793,20 @@ of one candidate among many. It is the value of the only structurally
 admissible candidate.
 
 Each of the six structural witnesses listed above is mechanically
-discharged in
-\hyperref[ch:mechanical-closure]{Chapter~\ref*{ch:mechanical-closure}}
-by a record that consumes existing book lemmas: the orbit theorems
-of \hyperref[ch:forced-edge-matching-orbits]{Chapter~\ref*{ch:forced-edge-matching-orbits}}
-for the Aut-related items, the simplex constants of
-\hyperref[ch:simplex-invariants-natural-multiplication]{Chapter~\ref*{ch:simplex-invariants-natural-multiplication}}
-for the closure and boundary items, and the simplex evaluation of
-the next section for the value~$137$.
+discharged by a record built from existing book lemmas: the
+self-dual closure record of
+\hyperref[sec:invariant-kinds:source-indexing]{\S\ref*{sec:invariant-kinds:source-indexing}}
+and the form-uniqueness record at the close of
+\hyperref[sec:invariant-kinds:form-forced]{\S\ref*{sec:invariant-kinds:form-forced}}
+discharge the closure and uniqueness items; the boundary-arity
+record of
+\hyperref[sec:simplex-eval-exhaustion]{\S\ref*{sec:simplex-eval-exhaustion}}
+discharges the boundary item; the orbit theorems of
+\hyperref[ch:forced-edge-matching-orbits]{Chapter~\ref*{ch:forced-edge-matching-orbits}}
+discharge the Aut-related items in
+\hyperref[ch:mechanical-closure]{Chapter~\ref*{ch:mechanical-closure}};
+and the simplex evaluation of the next section produces the
+value~$137$.
 
 The arithmetic that carries out the evaluation is now ready. The
 following chapter introduces the rational numbers used by the wider
@@ -9728,11 +9890,6 @@ The point of this section is not merely to recompute it, but to show that it rem
 Using the previously established values of $V$, $d$, and $\chi$, the defining expression reduces by direct computation to $137$. The records that follow compare this canonical value with alternative pair-sum, power-formula, and three-term constructions.
 
 \begin{code}
--- § Natural exponentiation.
-_^_ : ℕ → ℕ → ℕ
-x ^ zero = suc zero
-x ^ suc n = x * (x ^ n)
-
 -- § Simplex evaluation from K₄ invariants.
 simplex-eval : ℕ
 simplex-eval = (simplex-vertices ^ simplex-degree) * simplex-chi + (simplex-degree * simplex-degree)
@@ -9869,6 +10026,45 @@ law15A-3-simplexEval137-exclusivity = record
   { no-pair-sums   = law15A-1-no-pair-sum-137
   ; power-formulas = law15A-2-all-power-formulas
   ; only-K4        = refl
+  }
+\end{code}
+
+\paragraph{The boundary term as a mechanical product.}
+Inside the simplex evaluation the boundary correction is the
+self-product \texttt{p-dd}. Mechanically: $d = 3$ by
+\texttt{law14C-1-degree}, $d^2 = 9$ by computation, and
+\texttt{simplex-eval} decomposes as $V^d \cdot \chi + d \cdot d$ by
+\texttt{refl}. The codimension reading of $d^2$ as the binary
+along--transverse arity of a codimension-$1$ surface (made
+structurally in
+\hyperref[sec:invariant-kinds:form-forced]{\S\ref*{sec:invariant-kinds:form-forced}})
+is therefore the value of \texttt{p-dd} inside \texttt{simplex-eval},
+fixed by computation.
+
+\textbf{Constraint:} the boundary term must be a directional
+self-product whose value coincides with the boundary contribution
+inside \texttt{simplex-eval}.
+
+\textbf{Construction:} the record below collects $d = 3$, $d^2 = 9$,
+and the position of $d^2$ inside \texttt{simplex-eval}. Each field
+reduces by \texttt{refl}.
+
+\textbf{Consequence:} the codimension reading of $d^2$ stops being a
+structural argument and becomes a refl-equality.
+
+\begin{code}
+record BoundaryArityWitness : Set where
+  field
+    d-equals-3        : simplex-degree ≡ 3
+    boundary-equals-9 : p-dd ≡ 9
+    boundary-in-eval  :
+      simplex-eval ≡ (simplex-vertices ^ simplex-degree) * simplex-chi + p-dd
+
+boundary-arity-witness : BoundaryArityWitness
+boundary-arity-witness = record
+  { d-equals-3        = law14C-1-degree
+  ; boundary-equals-9 = refl
+  ; boundary-in-eval  = refl
   }
 \end{code}
 
@@ -31473,17 +31669,26 @@ recognition of what the premise already contains.
 \chapter{Mechanical Closure of the Forced Formula}
 \label{ch:mechanical-closure}
 
-The kind classification of
-\hyperref[ch:invariant-kinds]{Chapter~\ref*{ch:invariant-kinds}}
-left four claims attached to the formula
-$\mathcal{C} = V^d \cdot \chi + d^2$. Each was argued structurally.
-With the orbit machinery, the simplex constants, and the simplex
-evaluation now in place, each of the four reduces to existing
-witnesses. This chapter discharges all four mechanically. After it,
-no link in the chain from the binary distinction to the integer
-$137$ stands on prose alone.
+Most of the structural identifications attached to $(V, E, d, \chi)$
+were discharged in place, at the section that made the claim. Three
+of them belong to the kind classification and the simplex evaluation
+themselves: the refinement-stable closure reading
+(\hyperref[sec:invariant-kinds:source-indexing]{\S\ref*{sec:invariant-kinds:source-indexing}}),
+the boundary term inside the simplex evaluation
+(\hyperref[sec:simplex-eval-exhaustion]{\S\ref*{sec:simplex-eval-exhaustion}}),
+and the uniqueness of the canonical bulk-plus-boundary form
+(\hyperref[sec:invariant-kinds:form-forced]{\S\ref*{sec:invariant-kinds:form-forced}}).
+Each of these three stands as an Agda record at the section that
+produced it.
 
-\section{Bridge One: The Aut-Orbit Witness for Extracts}
+Two identifications had to wait. The Extract Concept and the bulk
+exponent both consume the $\mathrm{Aut}(K_4)$-orbit theorem of
+\hyperref[ch:forced-edge-matching-orbits]{Chapter~\ref*{ch:forced-edge-matching-orbits}},
+which is proved later in the text. This chapter discharges those two
+and then assembles the five identifications into a single closing
+record.
+
+\section{The Aut-Orbit Witness for Extracts}
 \label{sec:mechanical-closure:aut-orbit}
 
 The Extract Concept of
@@ -31494,10 +31699,10 @@ cell stratum of the closed record. The orbit theorems of
 discharge this claim by direct construction: \texttt{k4Perm-send}
 witnesses vertex transitivity, \texttt{edge-transitive} witnesses
 edge transitivity, and \texttt{matching-transitive} witnesses
-matching (perfect-matching) transitivity. The unique top cell is
-constant by triviality. The four cell strata of the closed
-$3$-simplex are therefore all single $\mathrm{Aut}(K_4)$-orbits, and
-the cardinality reading defining \texttt{Extract} is the only
+matching transitivity. The unique top cell is constant by
+triviality. The four cell strata of the closed $3$-simplex are
+therefore all single $\mathrm{Aut}(K_4)$-orbits, and the cardinality
+reading defining \texttt{Extract} is the only
 $\mathrm{Aut}(K_4)$-invariant numerical reading possible.
 
 \textbf{Constraint:} the Extract Concept consumes a transitivity
@@ -31512,8 +31717,6 @@ constructed.
 claim. It is the type-level reading of \texttt{theorem-aut-k4-orbits}.
 
 \begin{code}
--- § Bridge 1: Extract rests on Aut-orbit transitivity, witnessed by
--- the orbit record proved in Chapter §forced-edge-matching.
 record ExtractAutWitness : Set where
   field
     orbit-record : AutK4OrbitCounts
@@ -31522,100 +31725,7 @@ extract-aut-witness : ExtractAutWitness
 extract-aut-witness = record { orbit-record = theorem-aut-k4-orbits }
 \end{code}
 
-\section{Bridge Two: The Self-Dual Closure Reading}
-\label{sec:mechanical-closure:self-dual}
-
-The refinement-stability paragraph of
-\hyperref[sec:invariant-kinds:source-indexing]{\S\ref*{sec:invariant-kinds:source-indexing}}
-spoke of $F$ being absorbed into $\chi$ under barycentric subdivision.
-On $K_4$ no such subdivision is taken: the closed $3$-simplex carries
-its faces directly. The mechanical content of the refinement-stability
-argument on $K_4$ is exactly two computations already performed:
-$F = V$ by self-duality of the tetrahedron
-(\texttt{simplex-faces $\equiv$ simplex-vertices} as
-\texttt{law14C-2a-faces}), and $\chi = V - E + F = 2$ by the
-alternating sum (\texttt{law14C-3-chi}). The face count $F$ enters
-the closed record only through these two refl-equalities; it carries
-no additional degree of freedom beyond what $V$ and $\chi$ already
-record.
-
-\textbf{Constraint:} the closure reading of
-\S\ref{sec:invariant-kinds:source-indexing} must not introduce any
-datum on $K_4$ beyond what the simplex constants already fix.
-
-\textbf{Construction:} the record \texttt{SelfDualClosureWitness}
-below collects the two relevant refl-equalities. Its inhabitant is
-constructed from the existing laws.
-
-\textbf{Consequence:} on $K_4$, the absorption of $F$ into $\chi$ is
-not a refinement step but the conjunction of self-duality and the
-Euler reduction, both of which hold by computation.
-
-\begin{code}
--- § Bridge 2: on K₄ the F-into-χ absorption is mechanical:
--- F = V (self-duality) and χ = V − E + F = 2 (Euler).
-record SelfDualClosureWitness : Set where
-  field
-    F-equals-V    : simplex-faces ≡ simplex-vertices
-    chi-evaluates : simplex-chi ≡ 2
-
-self-dual-closure-witness : SelfDualClosureWitness
-self-dual-closure-witness = record
-  { F-equals-V    = law14C-2a-faces
-  ; chi-evaluates = law14C-3-chi
-  }
-\end{code}
-
-\section{Bridge Three: The Boundary Term as a Mechanical Product}
-\label{sec:mechanical-closure:boundary}
-
-The codimension paragraph of
-\hyperref[sec:invariant-kinds:form-forced]{\S\ref*{sec:invariant-kinds:form-forced}}
-read the boundary term $d^2$ as the binary along--transverse arity
-of a codimension-$1$ surface of a $d$-extension. On $K_4$ that
-arity is mechanical: $d = 3$ by \texttt{law14C-1-degree}, and the
-boundary term is the product \texttt{p-dd}, equal to $9$ by
-computation. The structural role of $d^2$ as a boundary correction
-is recorded by the simplex evaluation itself, where
-\texttt{simplex-eval} is the sum
-$(V^d \cdot \chi) + (d \cdot d)$ and equals $137$ by
-\texttt{law15A-0-simplex-eval-137}. Replacing the boundary term by
-$d^1$ or by $d^k$ with $k \geq 3$ would alter \texttt{simplex-eval}
-away from $137$; the elimination records of
-\hyperref[sec:simplex-eval-exhaustion]{\S\ref*{sec:simplex-eval-exhaustion}}
-already contain the relevant absurd-pattern witnesses.
-
-\textbf{Constraint:} the boundary term of the simplex evaluation
-must be a directional self-product whose value coincides with the
-boundary contribution recorded in \texttt{simplex-eval}.
-
-\textbf{Construction:} the record \texttt{BoundaryArityWitness}
-below collects $d = 3$, $d^2 = 9$, and the contribution of $d^2$
-to \texttt{simplex-eval}. Each field reduces by \texttt{refl}.
-
-\textbf{Consequence:} the codimension reading of $d^2$ is no longer
-a structural argument. It is the value of \texttt{p-dd} inside
-\texttt{simplex-eval}, fixed by computation.
-
-\begin{code}
--- § Bridge 3: the boundary term d² appears in simplex-eval as p-dd,
--- equal to 9. d itself is V − 1 = 3.
-record BoundaryArityWitness : Set where
-  field
-    d-equals-3       : simplex-degree ≡ 3
-    boundary-equals-9 : p-dd ≡ 9
-    boundary-in-eval  :
-      simplex-eval ≡ (simplex-vertices ^ simplex-degree) * simplex-chi + p-dd
-
-boundary-arity-witness : BoundaryArityWitness
-boundary-arity-witness = record
-  { d-equals-3        = law14C-1-degree
-  ; boundary-equals-9 = refl
-  ; boundary-in-eval  = refl
-  }
-\end{code}
-
-\section{Bridge Four: The Bulk Exponent as a Mechanical Power}
+\section{The Bulk Exponent as a Mechanical Power}
 \label{sec:mechanical-closure:bulk}
 
 The isotropy paragraph of
@@ -31623,17 +31733,13 @@ The isotropy paragraph of
 fixed the bulk exponent at $d$ by the orbit transitivity that
 forbids any direction of drift from being singled out. The orbit
 machinery used in that argument is exactly \texttt{theorem-aut-k4-orbits}
-of \hyperref[ch:forced-edge-matching-orbits]{Chapter~\ref*{ch:forced-edge-matching-orbits}}.
+of
+\hyperref[ch:forced-edge-matching-orbits]{Chapter~\ref*{ch:forced-edge-matching-orbits}}.
 On the simplex side the bulk reading is mechanical: the bulk term
 is \texttt{simplex-vertices~\^{}~simplex-degree~*~simplex-chi},
-equal to $128$ by computation, and adding the boundary term yields
-$137$. The exhaustion records of
-\hyperref[sec:simplex-eval-exhaustion]{\S\ref*{sec:simplex-eval-exhaustion}}
-also contain absurd-pattern eliminations of competing bulk
-exponents, including \texttt{alt-Vχ-χ-dd} ($V^\chi$ in place of
-$V^d$) and \texttt{alt-dV-χ-dd} ($d^V$ in place of $V^d$). The
-exponent $d$ is therefore both the unique orbit-respecting choice
-and the unique choice consistent with the integer $137$.
+equal to $128$ by computation. Combined with the boundary term
+\texttt{p-dd}, recorded earlier as
+\texttt{boundary-arity-witness}, it yields the simplex evaluation.
 
 \textbf{Constraint:} the bulk exponent must be the
 $\mathrm{Aut}(K_4)$-invariant exponent, and the bulk term must
@@ -31641,118 +31747,69 @@ combine with the boundary term to yield \texttt{simplex-eval}.
 
 \textbf{Construction:} the record \texttt{BulkExponentWitness}
 below collects the orbit-record (the structural source of
-isotropy), the value of the bulk term, and the simplex evaluation.
-Its inhabitant is constructed from existing laws.
+isotropy) and the value of the bulk term. Its inhabitant is
+constructed from existing laws.
 
 \textbf{Consequence:} the bulk exponent $d$ is the unique exponent
-the orbit record permits and the simplex evaluation realises.
+the orbit record permits, and the bulk term it produces is the one
+the simplex evaluation realises.
 
 \begin{code}
--- § Bridge 4: the bulk exponent is d. Mechanically, the bulk term
--- equals simplex-vertices ^ simplex-degree * simplex-chi = 128, and
--- bulk + boundary = simplex-eval = 137.
 record BulkExponentWitness : Set where
   field
-    aut-source : AutK4OrbitCounts
-    bulk-equals-128 :
+    aut-source       : AutK4OrbitCounts
+    bulk-equals-128  :
       (simplex-vertices ^ simplex-degree) * simplex-chi ≡ 128
-    eval-equals-137 : simplex-eval ≡ 137
 
 bulk-exponent-witness : BulkExponentWitness
 bulk-exponent-witness = record
   { aut-source       = theorem-aut-k4-orbits
   ; bulk-equals-128  = refl
-  ; eval-equals-137  = law15A-0-simplex-eval-137
   }
 \end{code}
 
 \section{The Forced-Formula Witness}
 \label{sec:mechanical-closure:packaging}
 
-The four bridges discharge the four claims of
-\hyperref[ch:invariant-kinds]{Chapter~\ref*{ch:invariant-kinds}}.
-A single record gathers them. Its inhabitant is the type-level
-statement that the chain from the binary distinction to the integer
-$137$ rests on no structural argument that is not also a witness in
-the type theory.
+The five identifications --- closure reading, boundary arity,
+form uniqueness, extract source, bulk exponent --- are now all
+inhabited as Agda records. A single closing record collects them.
 
-\textbf{Constraint:} the forced-formula chain must, at the end,
-inhabit a single record collecting the four bridges.
+\textbf{Constraint:} the chain of structural identifications must,
+at the end, inhabit a single record collecting all five.
 
 \textbf{Construction:} \texttt{ForcedFormulaWitness} below assembles
-\texttt{ExtractAutWitness}, \texttt{SelfDualClosureWitness},
-\texttt{BoundaryArityWitness}, \texttt{BulkExponentWitness}, and
-the value of \texttt{simplex-eval}.
+\texttt{SelfDualClosureWitness} and \texttt{BoundaryArityWitness}
+(both built earlier with the simplex constants),
+\texttt{FormUniquenessWitness} (built with the kind classification),
+\texttt{ExtractAutWitness} and \texttt{BulkExponentWitness} (the
+two records of this chapter), and the simplex evaluation itself.
 
-\textbf{Consequence:} the formula $V^d \cdot \chi + d^2 = 137$ is
-witnessed mechanically at every step of its forcing. The structural
-arguments of \hyperref[ch:invariant-kinds]{Chapter~\ref*{ch:invariant-kinds}}
-become, by this packaging, type-level readings of theorems that
-hold by computation.
+\textbf{Consequence:} every structural attribute attached to
+$(V, E, d, \chi)$ in this volume is a field of one record. The
+canonical form $V^d \cdot \chi + d^2$ is its unique inhabitant, and
+its numerical value is the simplex evaluation.
 
 \begin{code}
--- § The forced-formula witness collects the four mechanical bridges
--- and the simplex evaluation into one record.
 record ForcedFormulaWitness : Set where
   field
-    extract-witness  : ExtractAutWitness
-    closure-witness  : SelfDualClosureWitness
-    boundary-witness : BoundaryArityWitness
-    bulk-witness     : BulkExponentWitness
-    eval-equals-137  : simplex-eval ≡ 137
+    closure-witness    : SelfDualClosureWitness
+    boundary-witness   : BoundaryArityWitness
+    uniqueness-witness : FormUniquenessWitness
+    extract-witness    : ExtractAutWitness
+    bulk-witness       : BulkExponentWitness
+    eval-equals-137    : simplex-eval ≡ 137
 
 forced-formula-witness : ForcedFormulaWitness
 forced-formula-witness = record
-  { extract-witness  = extract-aut-witness
-  ; closure-witness  = self-dual-closure-witness
-  ; boundary-witness = boundary-arity-witness
-  ; bulk-witness     = bulk-exponent-witness
-  ; eval-equals-137  = law15A-0-simplex-eval-137
+  { closure-witness    = self-dual-closure-witness
+  ; boundary-witness   = boundary-arity-witness
+  ; uniqueness-witness = form-uniqueness-witness
+  ; extract-witness    = extract-aut-witness
+  ; bulk-witness       = bulk-exponent-witness
+  ; eval-equals-137    = law15A-0-simplex-eval-137
   }
 \end{code}
-
-\section{The Identification Inside the System}
-\label{sec:mechanical-closure:identification}
-
-With the bridges in place, the acquisition of this chapter is not the
-restatement of a numerical identity. The numerical identity was
-already present in
-\hyperref[ch:simplex-invariants-natural-multiplication]{Chapter~\ref*{ch:simplex-invariants-natural-multiplication}}
-and evaluated in
-\hyperref[sec:rational-measurement:simplex-eval-137]{\S\ref*{sec:rational-measurement:simplex-eval-137}}.
-What the bridges add is a different kind of fact: the four basic
-invariants $(V, E, d, \chi)$ are now identified \emph{inside the
-system} that produced them. Each of them carries a kind, a source, a
-rule for combining with another invariant, a position relative to the
-bulk--boundary split, and a role inside the closed record. Every one
-of these five attributes is the type-level reading of a theorem that
-holds by computation.
-
-\textbf{Constraint:} for the closure of the discrete chain to be more
-than an arithmetical identity, the four basic invariants must be
-identifiable inside the system that forced them, and not only by
-their external value.
-
-\textbf{Construction:} the records of
-\hyperref[ch:invariant-kinds]{Chapter~\ref*{ch:invariant-kinds}},
-discharged by the bridges of this chapter, attach to each invariant
-its kind (\texttt{Tagged k}), its source (an
-$\mathrm{Aut}(K_4)$-orbit class), its arithmetic (\texttt{$\_\otimes\_$}
-or \texttt{$\_\oplus[\_]\_$} according to kind), its position
-(\texttt{BulkBoundaryIndependence}), and its role inside
-\texttt{simplex-eval} (boundary product or bulk power). Every
-attribute is the field of a record whose inhabitant is constructed
-from existing book lemmas.
-
-\textbf{Consequence:} any combination built from $(V, E, d, \chi)$ is
-from now on answerable to five structural obligations before its
-numerical value is even evaluated. Combinations that fail any
-obligation are eliminated by an Agda absurd pattern. Combinations that
-pass are \emph{forced} rather than \emph{fitted}. The closure of the
-discrete chain therefore extends, by the present chapter, from a
-theorem about the value of one expression to a theorem about the
-structural identity of the four invariants that any such expression
-must be built from.
 
 \chapter{Conclusion}
 \label{ch:conclusion}
@@ -31797,13 +31854,19 @@ topological), a source (an $\mathrm{Aut}(K_4)$-orbit class), a
 rule for combining with another invariant (product on shared kind,
 sum on disjoint kinds, both reducing by \texttt{refl} through the
 forgetful map), a position relative to the bulk--boundary split,
-and a role inside the closed record. The bridges of
-\hyperref[ch:mechanical-closure]{Chapter~\ref*{ch:mechanical-closure}}
-discharge each of these attributes by an Agda record whose
-inhabitant is constructed from existing lemmas. Any combination
-built from $(V, E, d, \chi)$ is therefore answerable to five
-structural obligations before its numerical value is even read.
-This is the structural acquisition that the book now carries
+and a role inside the closed record. Each of these attributes is
+discharged by an Agda record whose inhabitant is constructed from
+existing lemmas: the closure record at the close of
+\hyperref[sec:invariant-kinds:source-indexing]{\S\ref*{sec:invariant-kinds:source-indexing}},
+the form-uniqueness record at the close of
+\hyperref[sec:invariant-kinds:form-forced]{\S\ref*{sec:invariant-kinds:form-forced}},
+the boundary-arity record at the close of
+\hyperref[sec:simplex-eval-exhaustion]{\S\ref*{sec:simplex-eval-exhaustion}},
+and the two Aut-dependent records of
+\hyperref[ch:mechanical-closure]{Chapter~\ref*{ch:mechanical-closure}}.
+Any combination built from $(V, E, d, \chi)$ is therefore answerable
+to five structural obligations before its numerical value is even
+read. This is the structural acquisition that the book now carries
 beyond its target value.
 
 \section*{The Boundary}
