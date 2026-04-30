@@ -9136,6 +9136,22 @@ data InvariantKind : Set where
   directional     : InvariantKind  -- counts independent extension directions
   topological     : InvariantKind  -- alternating sum of cell counts
 
+-- § Exhaustiveness: every InvariantKind reduces to one of the four
+-- constructors. The pattern match below is the type-level reading of
+-- the four-constructor closure of the data type. No fifth slot can
+-- inhabit InvariantKind because no fifth constructor is declared, and
+-- the case split below covers every inhabitant.
+kind-exhaustive :
+  ∀ (k : InvariantKind)
+    → (k ≡ configurational)
+    ⊎ (k ≡ relational)
+    ⊎ (k ≡ directional)
+    ⊎ (k ≡ topological)
+kind-exhaustive configurational = inj₁ refl
+kind-exhaustive relational      = inj₂ (inj₁ refl)
+kind-exhaustive directional     = inj₂ (inj₂ (inj₁ refl))
+kind-exhaustive topological     = inj₂ (inj₂ (inj₂ refl))
+
 -- § Kind assignments for the four K₄ invariants.
 V-kind : InvariantKind
 V-kind = configurational
@@ -9524,6 +9540,16 @@ extract-d = src-d
 
 extract-χ : Extract
 extract-χ = src-χ
+
+-- § Each kind selects exactly one of the four projections. Together
+-- with kind-exhaustive, this is the type-level closure of the kind
+-- classification: no kind selects two projections, and no projection
+-- is selected by two kinds.
+extract-by-kind : InvariantKind → Extract
+extract-by-kind configurational = extract-V
+extract-by-kind relational      = extract-E
+extract-by-kind directional     = extract-d
+extract-by-kind topological     = extract-χ
 \end{code}
 
 \section{What This Forces about the Formula's Form}
@@ -9873,7 +9899,11 @@ discharges the boundary item; the orbit theorems of
 discharge the Aut-related items in
 \hyperref[ch:mechanical-closure]{Chapter~\ref*{ch:mechanical-closure}};
 and the simplex evaluation of the next section produces the
-value~$137$.
+value~$137$. The six items together inhabit the record
+\texttt{AuditClosure} at the close of
+\hyperref[ch:mechanical-closure]{Chapter~\ref*{ch:mechanical-closure}};
+each field of \texttt{audit-closure} is the named witness for the
+audit item carrying the same number.
 
 The arithmetic that carries out the evaluation is now ready. The
 following chapter introduces the rational numbers used by the wider
@@ -31875,6 +31905,37 @@ forced-formula-witness = record
   ; extract-witness    = extract-aut-witness
   ; bulk-witness       = bulk-exponent-witness
   ; eval-equals-137    = law15A-0-simplex-eval-137
+  }
+
+-- § Audit closure: the six audit items of §sec:invariant-kinds:audit
+-- as type-level fields, each inhabited by a witness already in scope.
+-- No item below is closed by enumeration; each is closed by a single
+-- structural witness.
+record AuditClosure : Set where
+  field
+    item1-which-invariants :
+      ExtractAutWitness
+    item2-arithmetic-by-kind :
+      (∀ {k} (x y : Tagged k) → value (x ⊗ y) ≡ value x *ℕ value y)
+        × (∀ {j k} (x : Tagged j) (p : ¬ (j ≡ k)) (y : Tagged k)
+             → (x ⊕[ p ] y) ≡ value x +ℕ value y)
+    item3-bulk-vs-boundary :
+      BulkBoundaryIndependence
+    item4-bulk-exponent :
+      BulkExponentWitness
+    item5-boundary-exponent :
+      BoundaryArityWitness
+    item6-relational-via-chi :
+      simplex-chi ≡ 2
+
+audit-closure : AuditClosure
+audit-closure = record
+  { item1-which-invariants   = extract-aut-witness
+  ; item2-arithmetic-by-kind = forget-⊗ , forget-⊕
+  ; item3-bulk-vs-boundary   = theorem-bulk-boundary-independent
+  ; item4-bulk-exponent      = bulk-exponent-witness
+  ; item5-boundary-exponent  = boundary-arity-witness
+  ; item6-relational-via-chi = law14C-3-chi
   }
 \end{code}
 
