@@ -31711,16 +31711,120 @@ forced-formula-witness = record
   }
 \end{code}
 
+\section{The Identification Inside the System}
+\label{sec:mechanical-closure:identification}
+
+With the bridges in place, the acquisition of this chapter is not the
+restatement of a numerical identity. The numerical identity was
+already present in
+\hyperref[ch:simplex-invariants-natural-multiplication]{Chapter~\ref*{ch:simplex-invariants-natural-multiplication}}
+and evaluated in
+\hyperref[sec:rational-measurement:simplex-eval-137]{\S\ref*{sec:rational-measurement:simplex-eval-137}}.
+What the bridges add is a different kind of fact: the four basic
+invariants $(V, E, d, \chi)$ are now identified \emph{inside the
+system} that produced them. Each of them carries a kind, a source, a
+rule for combining with another invariant, a position relative to the
+bulk--boundary split, and a role inside the closed record. Every one
+of these five attributes is the type-level reading of a theorem that
+holds by computation.
+
+\textbf{Constraint:} for the closure of the discrete chain to be more
+than an arithmetical identity, the four basic invariants must be
+identifiable inside the system that forced them, and not only by
+their external value.
+
+\textbf{Construction:} the records of
+\hyperref[ch:invariant-kinds]{Chapter~\ref*{ch:invariant-kinds}},
+discharged by the bridges of this chapter, attach to each invariant
+its kind (\texttt{Tagged k}), its source (an
+$\mathrm{Aut}(K_4)$-orbit class), its arithmetic (\texttt{$\_\otimes\_$}
+or \texttt{$\_\oplus[\_]\_$} according to kind), its position
+(\texttt{BulkBoundaryIndependence}), and its role inside
+\texttt{simplex-eval} (boundary product or bulk power). Every
+attribute is the field of a record whose inhabitant is constructed
+from existing book lemmas.
+
+\textbf{Consequence:} any combination built from $(V, E, d, \chi)$ is
+from now on answerable to five structural obligations before its
+numerical value is even evaluated. Combinations that fail any
+obligation are eliminated by an Agda absurd pattern. Combinations that
+pass are \emph{forced} rather than \emph{fitted}. The closure of the
+discrete chain therefore extends, by the present chapter, from a
+theorem about the value of one expression to a theorem about the
+structural identity of the four invariants that any such expression
+must be built from.
+
 \chapter{Conclusion}
 \label{ch:conclusion}
 
-The chain that opened with a single separation witness has returned to it. The two-point base entered as the unique normal form for binary distinction; the complete graph $K_4$ emerged as the unique closure of its four endomorphism cases; the invariant record attached to that closure was inhabited and propositionally unique; and the final theorem of Part~VI proved that any inhabitant of that record already carries the original separation witness. Distinction enters as the minimal grant, and distinction re-emerges as a consequence. The arrow does not extend; it closes.
+\section*{The Arc}
 
-What survives at the endpoint is therefore not a structure that was selected from a catalogue of possibilities. It is the only inhabitant that did not collapse under the eliminative pressure of the preceding chapters. The numerical data attached to the survivor—the vertex count, the Laplacian spectrum, the Euler characteristic, the simplex value $137$, the loop numerator $11$—are determined by reduction. None of them carries a free parameter, and none of them was chosen.
+A single separation witness was granted. Nothing else entered. From
+that grant the chain unfolded in a fixed order, and the order was
+not a sequence of choices but a sequence of survivals.
 
-The boundary of the proof is equally definite. No dynamics is derived here, no empirical constant is fixed by measurement, no continuum theory is supplied by the formal apparatus. The claim is narrower and therefore harder to attack: under the stated minimal grant, the discrete record attached to $K_4$ is the unique closed endpoint of the elimination chain, and the chain runs from distinction back to distinction without any external addition.
+The two-point base entered as the unique normal form for binary
+distinction. The endomorphism space of that base contained exactly
+four cases. Three vertices failed by absurd-pattern elimination;
+more than four vertices added structure unsupported by the four
+cases. The closure that survived was the complete graph on four
+vertices, $K_4$. Its representation record was inhabited,
+propositionally unique, and stable under the orbit tests of
+Part~VI. The final theorem of that part proved that any inhabitant
+of the record already carries the original separation witness.
+Distinction entered as the minimal grant; distinction re-emerged
+as a consequence. The arrow did not extend; it closed.
 
-For that reason the conclusion is not another construction. The internal loops have closed. The two-point base is forced as the normal form; the four cases are forced by coverage; their closure is forced to $K_4$; the invariant record is forced as a singleton; and the singleton presupposes the original distinction. The discrete argument has reached its boundary.
+\section*{The Survivor}
+
+What survives at the endpoint is not a structure that was selected
+from a catalogue of possibilities. It is the only inhabitant that
+did not collapse under the eliminative pressure of the preceding
+chapters. The numerical data attached to the survivor---the vertex
+count, the Laplacian spectrum, the Euler characteristic, the
+simplex value $137$, the loop numerator $11$---are determined by
+reduction. None of them carries a free parameter, and none of them
+was chosen.
+
+\section*{The Identification}
+
+The last chapters added a fact that the rest of the book had only
+implicitly relied on. The four basic invariants $(V, E, d, \chi)$
+are not merely numbers attached to the survivor. They are
+identifiable \emph{inside the system that forced them}. Each one
+carries a kind (configurational, relational, directional,
+topological), a source (an $\mathrm{Aut}(K_4)$-orbit class), a
+rule for combining with another invariant (product on shared kind,
+sum on disjoint kinds, both reducing by \texttt{refl} through the
+forgetful map), a position relative to the bulk--boundary split,
+and a role inside the closed record. The bridges of
+\hyperref[ch:mechanical-closure]{Chapter~\ref*{ch:mechanical-closure}}
+discharge each of these attributes by an Agda record whose
+inhabitant is constructed from existing lemmas. Any combination
+built from $(V, E, d, \chi)$ is therefore answerable to five
+structural obligations before its numerical value is even read.
+This is the structural acquisition that the book now carries
+beyond its target value.
+
+\section*{The Boundary}
+
+The boundary of the proof is equally definite. No dynamics is
+derived here, no empirical constant is fixed by measurement, no
+continuum theory is supplied by the formal apparatus. The claim is
+narrower and therefore harder to attack: under the stated minimal
+grant, the discrete record attached to $K_4$ is the unique closed
+endpoint of the elimination chain, the chain runs from distinction
+back to distinction without any external addition, and the four
+basic invariants of that record are identified inside the system
+by kind, source, arithmetic, position, and role.
+
+For that reason the conclusion is not another construction. The
+internal loops have closed. The two-point base is forced as the
+normal form; the four cases are forced by coverage; their closure
+is forced to $K_4$; the invariant record is forced as a singleton;
+the four basic invariants of that record are identified inside the
+system; and the singleton presupposes the original distinction.
+The discrete argument has reached its boundary.
 
 This completes the proof of the discrete kernel.
 
@@ -31729,11 +31833,48 @@ This completes the proof of the discrete kernel.
 \addcontentsline{toc}{chapter}{Outlook}
 %─────────────────────────────────────────────────────────────────────────────
 
-The discrete kernel is closed; the natural continuation does not repeat the elimination. It asks what can be carried by the kernel once it is accepted as fixed data. Any such continuation must respect the constraints that have been proved: the singleton record, the automorphism invariants, the unit scale, the measurement kernel, and the arithmetic closure of the correction ledger. These do not by themselves determine a theory of dynamics or an empirical interpretation. They determine the discrete ground on which such a theory would have to stand.
+\section*{What the closed kernel makes available}
 
-Two boundaries are worth naming explicitly, because they limit how far the universal claim of this book may legitimately be carried. First, the normal-form theorem quantifies internally over every type in the universe of the formal setting, not over the family of all formal theories; the latter is a meta-theoretic object whose universal closure is excluded by Tarski's undefinability of truth and by Gödel's incompleteness. Second, the present formalisation lives at a single universe level; a routine universe-polymorphic restatement is available but adds no new mathematical content. The reach of the proof is exactly Tier~1 of these three.
+The discrete kernel is closed; the natural continuation does not
+repeat the elimination. It asks what can be carried by the kernel
+once it is accepted as fixed data. Any such continuation must
+respect the constraints that have been proved: the singleton
+record, the automorphism invariants, the unit scale, the
+measurement kernel, and the arithmetic closure of the correction
+ledger. With the structural identification of the four basic
+invariants now in place, a continuation also inherits a stricter
+admission test for any formula it wishes to build from them. A
+candidate combination is admissible only if its kind, source,
+operation, position, and exponent agree with the obligations the
+closed record carries. These constraints do not by themselves
+determine a theory of dynamics or an empirical interpretation.
+They determine the discrete ground on which such a theory would
+have to stand, and the structural shape of the formulas that
+ground would permit.
 
-Within those boundaries, the present text ends where its own task ends: with the closed discrete record, the universal normal-form theorem at its entrance, and the proof that the record cannot be detached from distinction.
+\section*{Two boundaries of the universal claim}
+
+Two boundaries are worth naming explicitly, because they limit how
+far the universal claim of this book may legitimately be carried.
+First, the normal-form theorem quantifies internally over every
+type in the universe of the formal setting, not over the family of
+all formal theories; the latter is a meta-theoretic object whose
+universal closure is excluded by Tarski's undefinability of truth
+and by Gödel's incompleteness. Second, the present formalisation
+lives at a single universe level; a routine universe-polymorphic
+restatement is available but adds no new mathematical content. The
+universal reading therefore holds inside the formal setting and
+stops at its boundary.
+
+\section*{Where the text ends}
+
+Within those boundaries, the present text ends where its own task
+ends: with the closed discrete record, the universal normal-form
+theorem at its entrance, the proof that the record cannot be
+detached from distinction, and the structural identification of
+its four basic invariants inside the system that forced them. What
+lies past this boundary is the subject of a separate volume; it
+begins only after the present chain has closed.
 
 \end{document}
 
