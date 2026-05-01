@@ -429,8 +429,16 @@ every case is `refl`.
 
 Inside the $70$-monomial pool of degree $\leq 4$ in $(V,E,d,\chi)$
 fixed by the same forced values, the integer $137$ admits exactly one
-pair-sum decomposition. The enumeration is a property test on the
-output of `simplex-eval`, not a search for it.
+pair-sum decomposition — the canonical identity $d^2 + V^3\chi$.
+`theorem-pair-sum-degree-4-count` establishes that the hit count
+is exactly 2 (the ordered pair and its mirror), and
+`theorem-degree-bounded-exhaustion-deg4` packages the canonical hit,
+the identity $V^3\chi = V^d \cdot \chi$, and the unique count into a
+single closure record, all by `refl`
+([L10849–L10871](Void.lagda.tex#L10849-L10871)).
+The enumeration is a property test on the output of `simplex-eval`,
+not a search for it; the pool, the bound, and the integer are
+determined before any pair is examined.
 
 `loop-numerator` is defined as `E + d + χ` and is established by
 reducing eight admissible subset candidates to one via absurd-pattern
