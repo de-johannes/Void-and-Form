@@ -3671,6 +3671,96 @@ data _≤_ : ℕ → ℕ → Set where
 suc≤-impossible : (n : ℕ) → suc n ≤ n → ⊥
 suc≤-impossible zero ()
 suc≤-impossible (suc n) (s≤s p) = suc≤-impossible n p
+\end{code}
+
+\chapter{The Naturals as a W-Type over Two}
+\label{ch:naturals-w-type}
+
+The two-element type is the only generator the file has been granted.
+If the natural numbers were a parallel axiomatic structure, $\mathbb{N}$
+would stand beside \texttt{Two} as a second, independent assumption,
+and the forcing chain would split. The chain does not split. Every
+Peano natural is a finite well-founded tree whose branching shape is
+read off \texttt{Two}: \texttt{L} marks termination (no recursive
+child), \texttt{R} marks continuation (one recursive child). The
+naturals are not granted alongside the binary distinction; they are
+the well-founded closure of one-fold branching over it.
+
+\textbf{Constraint:} The minimal foundation admits exactly one
+generating type, \texttt{Two}. A second independent inductive type for
+the naturals would break that minimality and turn \texttt{ℕ} into a
+parallel axiom rather than a consequence. \textbf{Construction:} The
+W-type over \texttt{Two} with branching shape $\texttt{L} \mapsto \bot$,
+$\texttt{R} \mapsto \mathbf{1}$ is well-defined inside MLTT. Its
+zero/successor encoding produces a forward map
+$\texttt{ℕ} \to \mathtt{W\,Two\,\text{ℕ-shape}}$; the inverse is
+structural recursion on \texttt{W}; the round-trip on the Peano side
+holds by \texttt{refl} after a single \texttt{cong suc}; the
+round-trip on the W-side holds up to a structural equivalence that
+does not require function extensionality. \textbf{Consequence:} The
+naturals are recovered from \texttt{Two} by W-recursion alone, with
+no further inductive type added to the foundation. Every later use of
+\texttt{ℕ} in the file may be read as a use of $\mathtt{W\,Two\,\text{ℕ-shape}}$
+through this isomorphism.
+
+\begin{code}
+-- § Local unit type: ⊤ is defined later in the file; we name it 𝟙 here
+-- to avoid forward dependence and to mark the W-branching role explicitly.
+data 𝟙 : Set where
+  ⋆ : 𝟙
+
+-- § The W-type: well-founded trees of shape A with branching B.
+data W (A : Set) (B : A → Set) : Set where
+  sup : (a : A) → (B a → W A B) → W A B
+
+-- § Branching shape forced by Two: L has no children, R has one.
+ℕ-shape : Two → Set
+ℕ-shape L = ⊥
+ℕ-shape R = 𝟙
+
+-- § ℕ as a W-type over Two.
+ℕ′ : Set
+ℕ′ = W Two ℕ-shape
+
+-- § Zero at the W-level: an L-shaped sup with no children.
+zero′ : ℕ′
+zero′ = sup L (λ ())
+
+-- § Successor at the W-level: an R-shaped sup with one child.
+suc′ : ℕ′ → ℕ′
+suc′ n = sup R (λ _ → n)
+
+-- § Forward map: Peano ℕ to W-encoded ℕ′.
+ℕ→ℕ′ : ℕ → ℕ′
+ℕ→ℕ′ zero    = zero′
+ℕ→ℕ′ (suc n) = suc′ (ℕ→ℕ′ n)
+
+-- § Backward map: W-encoded ℕ′ to Peano ℕ.
+ℕ′→ℕ : ℕ′ → ℕ
+ℕ′→ℕ (sup L _) = zero
+ℕ′→ℕ (sup R k) = suc (ℕ′→ℕ (k ⋆))
+
+-- § Round-trip on the Peano side: identity by structural induction.
+ℕ→ℕ′→ℕ : (n : ℕ) → ℕ′→ℕ (ℕ→ℕ′ n) ≡ n
+ℕ→ℕ′→ℕ zero    = refl
+ℕ→ℕ′→ℕ (suc n) = cong suc (ℕ→ℕ′→ℕ n)
+
+-- § Structural equivalence on ℕ′: identifies W-trees by shape and
+-- by the unique child of each R-node, side-stepping the funext
+-- obligation on absurd L-children.
+data _≈ℕ′_ : ℕ′ → ℕ′ → Set where
+  z≈z : {k₁ k₂ : ℕ-shape L → ℕ′} → sup L k₁ ≈ℕ′ sup L k₂
+  s≈s : {k₁ k₂ : ℕ-shape R → ℕ′} → k₁ ⋆ ≈ℕ′ k₂ ⋆ → sup R k₁ ≈ℕ′ sup R k₂
+
+-- § Reflexivity of the structural equivalence.
+≈ℕ′-refl : (w : ℕ′) → w ≈ℕ′ w
+≈ℕ′-refl (sup L _) = z≈z
+≈ℕ′-refl (sup R k) = s≈s (≈ℕ′-refl (k ⋆))
+
+-- § Round-trip on the W-side: identity up to structural equivalence.
+ℕ′→ℕ→ℕ′ : (w : ℕ′) → ℕ→ℕ′ (ℕ′→ℕ w) ≈ℕ′ w
+ℕ′→ℕ→ℕ′ (sup L _) = z≈z
+ℕ′→ℕ→ℕ′ (sup R k) = s≈s (ℕ′→ℕ→ℕ′ (k ⋆))
 
 -- § Tick-indexed drift state.
 record DriftStateℕ : Setω where
