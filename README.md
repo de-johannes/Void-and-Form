@@ -1,10 +1,51 @@
 # Void and Form
 
-A constructive derivation, in Agda under `--safe --without-K`, with no
-postulates and no standard library, of a closed combinatorial structure
-from a single inhabited two-element type. The development is contained in
-[Void.lagda.tex](Void.lagda.tex); a separate interpretive layer is
-contained in [Form.lagda.tex](Form.lagda.tex).
+`Void.lagda.tex` studies a conditional problem: grant the data of a
+binary distinction and no further generator; what structure is forced
+inside Martin-Löf type theory?
+
+The answer has three steps. First, any type carrying two
+distinguishable, exhaustive points has canonical normal form `Two`.
+Second, the endomorphism space `Two → Two` has exactly four cases.
+Third, closing those cases under composition leaves $K_4$: smaller
+carriers identify distinct cases, while larger carriers add vertices
+not forced by the four cases. The resulting closure record is unique
+and entails the original distinction, so the chain closes rather than
+merely terminating.
+
+Arithmetic is then developed on that base: naturals as the W-type over
+`Two`, followed by integers, rationals, and Cauchy reals. The physical
+reading is not part of this theorem; it is isolated in
+[Form.lagda.tex](Form.lagda.tex) as an interpretive layer.
+
+This is not a claim that every formal theory reduces to a binary type.
+It is the internal normal-form and closure theorem for structures that
+already carry the stated distinction data.
+
+---
+
+## Core claims
+
+1. **`two-normal-form`** ([L1652](Void.lagda.tex#L1652)). Every record
+   `(S, ℓ, r, ℓ ≠ r, cover)` over `S : Set` is boundary-preservingly
+   isomorphic to the canonical inhabitant on `Two`. The statement
+   quantifies internally over every type in `Set` carrying two
+   distinguishable, exhaustive points; the level-polymorphic version
+   `two-normal-formℓ` extends the same theorem across the universe
+   hierarchy. This is the maximal internal universal claim that MLTT
+   admits below the Russell–Girard barrier — proved, not asserted.
+
+2. **`K4Record-is-canonical`** ([L27140](Void.lagda.tex#L27140)). The
+   composition closure of the four endomorphism cases of `Two → Two`
+   is the complete graph on four vertices; `K4Record` is inhabited and
+   propositionally unique. Three-vertex closures fail by absurd
+   patterns; carriers larger than four add structure not forced by the
+   four cases.
+
+3. **`record-presupposes-distinction`** ([L31748](Void.lagda.tex#L31748)).
+   Every inhabitant of `K4Record` entails an inhabitant of
+   `Distinction`. The chain
+   `Two ⇒ EndoCase ⇒ K₄ ⇒ K4Record ⇒ Two` closes.
 
 ---
 
@@ -14,148 +55,20 @@ I am not a mathematician. No degree, no institutional affiliation. Over
 the last eighteen months I formalized one question in Agda: what must
 necessarily follow from one binary distinction, if nothing else is
 assumed? The work was developed with the help of large language models;
-the Agda type checker under `--safe --without-K` is the only judge of
-what stands. This document is written for readers who want to verify the
-formal claims. Where my own terminology departs from standard usage, the
-corresponding Agda definition is cited by line number so that the formal
-content can be read directly.
-
----
-
-## Abstract
-
-A single inductive type with two constructors, together with a derived
-inequality witness between them, is sufficient to force a unique finite
-combinatorial structure — the complete graph on four vertices — and to
-obstruct every alternative carrier on which the same generating data
-would embed faithfully. The arithmetic of $\mathbb{N}$, $\mathbb{Z}$,
-$\mathbb{Q}$, and $\mathbb{R}$, together with sequential completeness of
-the resulting reals, is then constructed from no further data. The
-final theorem of the development closes the loop: every admissible
-invariant record on the surviving structure already entails the
-inequality witness with which the file began. The argument is fully
-mechanised; the text and its verifier are the same file.
-
-More precisely. Let `Two : Set` denote the inductive type with
-constructors `L` and `R`, together with a witness `Two-L≠R : L ≠ R`
-derived inside the same file. A `Distinction` is a record consisting
-of a carrier `S : Set`, two designated points `ℓ r : S`, a separation
-witness `ℓ ≠ r`, and a cover `(x : S) → (x ≡ ℓ) ⊎ (x ≡ r)`. Working in
-intensional Martin-Löf type theory with the flags `--safe --without-K`,
-no postulates, and no imports beyond what is defined in the file
-itself, the development establishes the following.
-
-1. **Uniqueness of binary distinction.** Let `Distinction : Set₁` be
-   the type of carriers `S` equipped with two designated points
-   `ℓ r : S`, a separation witness `ℓ ≠ r`, and a cover
-   `(x : S) → (x ≡ ℓ) ⊎ (x ≡ r)`. Every inhabitant of `Distinction`
-   is boundary-preservingly isomorphic to the canonical inhabitant
-   `Two-distinction` built on `Two`:
-   ```agda
-   two-normal-form :
-     (d : Distinction) → DistinctionIso d Two-distinction
-   ```
-   This is the formal statement that `Two` is not one possible binary
-   base among many but the unique normal form for any MLTT structure
-   carrying two distinguishable, exhaustive points. The further
-   classification of orientations shows that the only ambiguity in
-   the isomorphism is whether boundaries are preserved or swapped.
-   References:
-   [Void.lagda.tex L804](Void.lagda.tex#L804) (`Distinction`),
-   [L1570](Void.lagda.tex#L1570) (`DistinctionIso`),
-   [L1652](Void.lagda.tex#L1652) (`two-normal-form`).
-
-2. **Endomorphism classification.** The function space `Two → Two`
-   admits exactly four inhabitants up to pointwise equality. They are
-   enumerated by an inductive type `EndoCase` with constructors
-   `case-constL`, `case-constR`, `case-id`, `case-dual`, and the
-   classification is sound and unique:
-   ```agda
-   classify-sound  : (f : Two → Two) → Σ EndoCase (λ c → f ≗ interpret c)
-   classify-unique : (f : Two → Two) (c₁ c₂ : EndoCase)
-                  → f ≗ interpret c₁ → f ≗ interpret c₂ → c₁ ≡ c₂
-   ```
-   References:
-   [Void.lagda.tex L1145](Void.lagda.tex#L1145) (`EndoCase`),
-   [L1179](Void.lagda.tex#L1179) (classification module `K₄`),
-   [L1405–1421](Void.lagda.tex#L1405-L1421) (top-level wrappers `k4-classification-sound`/`-unique`).
-
-3. **Closure on four vertices.** The closure of the four-case structure
-   under composition is the complete graph $K_4$. Closures on three
-   vertices fail by absurd-pattern elimination; closures with more than
-   four vertices add structure that is not forced by the four cases.
-   The surviving carrier is captured by a record type `K4Record : Set`.
-   Reference:
-   [Void.lagda.tex L26681](Void.lagda.tex#L26681).
-
-4. **Uniqueness of the closure record.** `K4Record` is inhabited and
-   any two inhabitants are propositionally equal:
-   ```agda
-   k4Record-inhabited : K4Record
-   k4Record-unique    : (r₁ r₂ : K4Record) → r₁ ≡ r₂
-   ```
-   Reference:
-   [Void.lagda.tex L27040](Void.lagda.tex#L27040) (`K4Record-is-canonical`).
-
-5. **Loop closure.** The existence of an inhabitant of `K4Record`
-   entails an inhabitant of `Distinction`, recovering the binary
-   distinction with which the file began:
-   ```agda
-   record-presupposes-distinction : K4Record → Distinction
-   ```
-   Reference:
-   [Void.lagda.tex L31648](Void.lagda.tex#L31648).
-
-6. **Forced numerical invariants.** Once the closure record is fixed,
-   several integer-valued quantities of the surviving structure are
-   determined by reduction; the witness in every case is `refl`. The
-   list — Euler characteristic, simplex evaluation, loop numerator,
-   sign forcing — is given in §7 with line references; in the abstract
-   they are detail rather than headline.
-
-7. **Sequential completeness of the present construction of $\mathbb{R}$.**
-   $\mathbb{R}$ here is the Cauchy-sequence representation: a real is
-   a pair `(seq , isCauchy)` with `seq : ℕ → ℚ` and an explicit
-   modulus `isCauchy`, and equality is the setoid relation `_≃ℝ_` of
-   eventual $\varepsilon$-closeness. Within this representation,
-   every Cauchy sequence of reals (in the sense of `IsCauchyℝ`,
-   coordinatewise on rational tails) has a limit. The limit is built
-   as the diagonal sequence
-   $\mathtt{diagSeq}\,r\,n = \mathtt{seq}\,(r_n)\,K_n$, where $K_n$ is
-   the internal stabilisation index of $r_n$ at tolerance $1/(n+1)$:
-   ```agda
-   ℝ-cauchy-complete :
-     (r : ℕ → ℝ) → IsCauchyℝ r → Σ ℝ (λ x → r converges-to x)
-   ```
-   The proof uses two triangle inequalities and an $\varepsilon/4$
-   accounting; no quotient type, no choice, and no completion functor
-   is invoked. The result is not novel content about the real line; it
-   is the statement that this particular minimal, self-contained
-   constructive presentation of $\mathbb{R}$ closes up under its own
-   notion of Cauchy convergence.
-   References:
-   [Void.lagda.tex L23951–23863](Void.lagda.tex#L23951-L23959) (`IsCauchyℝ`,
-   `_converges-to_`),
-   [L23972–23883](Void.lagda.tex#L23972-L23979) (`diagSeq`, `diagSeq-stable`),
-   [L24007–24141](Void.lagda.tex#L24007-L24237) (`diagSeq-cauchy`),
-   [L24239–24273](Void.lagda.tex#L24239-L24369) (`diagℝ`, `diagℝ-converges`,
-   `ℝ-cauchy-complete`).
-
-All claims are proved in literate Agda and machine-checked under
-`--safe --without-K`, with no postulates and no standard-library
-imports.
+the Agda type checker is the only judge of what stands. This document is
+written for readers who want to verify the formal claims. Where my own
+terminology departs from standard usage, the corresponding Agda
+definition is cited by line number so that the formal content can be
+read directly.
 
 ---
 
 ## Scope of the file
 
-`Void.lagda.tex` is self-contained: every type, every operation, every
-lemma it uses is defined inside the file. Nothing is imported. The
-following layers are built from the base type `Two` and propositional
-equality alone. The chapters of the file are interleaved by use rather
-than ordered by topic; the references below point to the *defining
-anchor* of each layer (record, theorem, or chapter heading) and the
-chapter heading that opens it.
+Every type, operation, and lemma used in `Void.lagda.tex` is defined
+inside the file. The chapters are interleaved by use rather than ordered
+by topic; the references below point to the defining anchor of each
+layer and to the chapter heading that opens it.
 
 - **Foundations.** Propositional equality, universe lifting,
   $\Sigma$-types, disjoint unions, negation, pointwise equality `≗`.
@@ -179,55 +92,46 @@ chapter heading that opens it.
   `Non-Collapse of Drift`, `Cross-Stage Comparison`,
   `Drift Reachability`, `Drift Acyclicity` (last starts at
   [L3163](Void.lagda.tex#L3163)).
-- **Naturals $\mathbb{N}$.** Chapter `Arithmetic Infrastructure` at
-  [L5307](Void.lagda.tex#L5307); `Forced Additive Laws` at
-  [L6169](Void.lagda.tex#L6169); `Multiplicative Structure and Integer
-  Order` at [L6453](Void.lagda.tex#L6453).
+- **Naturals $\mathbb{N}$.** Chapter `The Naturals as a W-Type over
+  Two` at [L5309](Void.lagda.tex#L5309); `Arithmetic Infrastructure`
+  at [L5407](Void.lagda.tex#L5407); `Forced Additive Laws` at
+  [L6269](Void.lagda.tex#L6269); `Multiplicative Structure and Integer
+  Order` at [L6553](Void.lagda.tex#L6553).
 - **Integers $\mathbb{Z}$.** Chapter `Integer Multiplication Laws` at
-  [L7084](Void.lagda.tex#L7084); `Integer Order Laws` at
-  [L8135](Void.lagda.tex#L8135); `Absolute Value Laws` at
-  [L8538](Void.lagda.tex#L8538).
+  [L7184](Void.lagda.tex#L7184); `Integer Order Laws` at
+  [L8235](Void.lagda.tex#L8235); `Absolute Value Laws` at
+  [L8638](Void.lagda.tex#L8638).
 - **Rationals $\mathbb{Q}$.** Chapter `Rational Numbers and Measurement`
-  at [L10293](Void.lagda.tex#L10293); `Rational Setoid and Order Laws`
-  at [L11141](Void.lagda.tex#L11141); `Rational Addition and
-  Multiplication Laws` at [L12783](Void.lagda.tex#L12783);
-  `Rational Distance Laws` at [L17082](Void.lagda.tex#L17082).
+  at [L10393](Void.lagda.tex#L10393); `Rational Setoid and Order Laws`
+  at [L11241](Void.lagda.tex#L11241); `Rational Addition and
+  Multiplication Laws` at [L12883](Void.lagda.tex#L12883);
+  `Rational Distance Laws` at [L17182](Void.lagda.tex#L17182).
 - **Reals $\mathbb{R}$.** Chapter
   `Reals as Forced Cauchy Closure over Q` at
-  [L21230](Void.lagda.tex#L21230); `record ℝ` at
-  [L21272](Void.lagda.tex#L21272); chapter
+  [L21330](Void.lagda.tex#L21330); `record ℝ` at
+  [L21372](Void.lagda.tex#L21372); chapter
   `Cauchy Completeness of R` at
-  [L23758](Void.lagda.tex#L23758);
+  [L23858](Void.lagda.tex#L23858);
   `IsCauchyℝ` / `_converges-to_` at
-  [L23951–23863](Void.lagda.tex#L23951-L23959);
-  `ℝ-cauchy-complete` at [L24367](Void.lagda.tex#L24367).
+  [L24051–L24059](Void.lagda.tex#L24051-L24059);
+  `ℝ-cauchy-complete` at [L24467](Void.lagda.tex#L24467).
 - **Spectral graph theory on $K_4$, $K_8$, $K_{12}$.** Chapter
   `K₄ Neighborhood and Laplacian` at
-  [L6651](Void.lagda.tex#L6651); `Laplacian as Finite-Index Operator`
-  at [L11377](Void.lagda.tex#L11377); `Coupled K₄ Laplacian` at
-  [L13242](Void.lagda.tex#L13242); `Triple K₄ Laplacian` at
-  [L14461](Void.lagda.tex#L14461).
+  [L6751](Void.lagda.tex#L6751); `Laplacian as Finite-Index Operator`
+  at [L11477](Void.lagda.tex#L11477); `Coupled K₄ Laplacian` at
+  [L13342](Void.lagda.tex#L13342); `Triple K₄ Laplacian` at
+  [L14561](Void.lagda.tex#L14561).
 - **The kind classification of invariants.** Chapter at
-  [L9191](Void.lagda.tex#L9191); the four-case data type
-  `InvariantKind` at [L9274](Void.lagda.tex#L9274) and the closure
-  theorem `kind-exhaustive` at [L9285](Void.lagda.tex#L9285).
+  [L9291](Void.lagda.tex#L9291); the four-case data type
+  `InvariantKind` at [L9374](Void.lagda.tex#L9374) and the closure
+  theorem `kind-exhaustive` at [L9385](Void.lagda.tex#L9385).
 - **Forced $K_4$ representation record and singleton.** Chapter
   `The K₄ Invariant Record` at [L5005](Void.lagda.tex#L5005);
-  `K4Record` at [L26681](Void.lagda.tex#L26681);
+  `K4Record` at [L26781](Void.lagda.tex#L26781);
   singleton lemma `K4Record-is-canonical` at
-  [L27040](Void.lagda.tex#L27040).
+  [L27140](Void.lagda.tex#L27140).
 - **Loop closure.** `record-presupposes-distinction` at
-  [L31648](Void.lagda.tex#L31648).
-
-The file builds under the same flags throughout. The arithmetic is not
-assumed — it is built. A reader who would like to verify this can
-confirm with
-
-```sh
-grep -nE '^(import|open import)' Void.lagda.tex
-```
-
-which returns no occurrences inside `module Void`.
+  [L31748](Void.lagda.tex#L31748).
 
 ---
 
@@ -250,10 +154,7 @@ Three properties of the foundation are essential here:
 
 The formal stage is therefore not empty: it supplies dependent function
 types, dependent pair types, inductive families, and propositional
-equality with its standard eliminator. Nothing else is granted from
-outside the file. The flags `--safe --without-K` exclude unsafe
-primitives and the uniqueness of identity proofs, respectively. The
-file declares no `postulate` and imports nothing.
+equality with its standard eliminator.
 
 ```agda
 {-# OPTIONS --safe --without-K #-}
@@ -390,7 +291,7 @@ record K4Record : Set where
     ...
 ```
 
-Reference: [Void.lagda.tex L26681](Void.lagda.tex#L26681) (`K4Record`).
+Reference: [Void.lagda.tex L26781](Void.lagda.tex#L26781) (`K4Record`).
 
 ---
 
@@ -409,8 +310,8 @@ the chain
 `Two-distinction ⇒ EndoCase ⇒ K₄ ⇒ K4Record ⇒ Two-distinction`.
 
 References:
-[Void.lagda.tex L27040](Void.lagda.tex#L27040) (`K4Record-is-canonical`),
-[L31648](Void.lagda.tex#L31648) (`record-presupposes-distinction`).
+[Void.lagda.tex L27140](Void.lagda.tex#L27140) (`K4Record-is-canonical`),
+[L31748](Void.lagda.tex#L31748) (`record-presupposes-distinction`).
 
 ---
 
@@ -422,10 +323,10 @@ every case is `refl`.
 
 | Identity | Reference |
 |---|---|
-| `eulerChar-computed ≡ 2` (`law16B-3-euler`) | [L26111](Void.lagda.tex#L26111) |
-| `simplex-eval ≡ 137` (`law15A-0-simplex-eval-137`) | [L10376](Void.lagda.tex#L10376) |
-| `loop-numerator ≡ 11` (`law-loop-num-11`) | [L30333](Void.lagda.tex#L30333) |
-| `theorem-sign-forcing` | [L31588](Void.lagda.tex#L31588) |
+| `eulerChar-computed ≡ 2` (`law16B-3-euler`) | [L26211](Void.lagda.tex#L26211) |
+| `simplex-eval ≡ 137` (`law15A-0-simplex-eval-137`) | [L10476](Void.lagda.tex#L10476) |
+| `loop-numerator ≡ 11` (`law-loop-num-11`) | [L30433](Void.lagda.tex#L30433) |
+| `theorem-sign-forcing` | [L31688](Void.lagda.tex#L31688) |
 
 Inside the $70$-monomial pool of degree $\leq 4$ in $(V,E,d,\chi)$
 fixed by the same forced values, the integer $137$ admits exactly one
@@ -435,7 +336,7 @@ is exactly 2 (the ordered pair and its mirror), and
 `theorem-degree-bounded-exhaustion-deg4` packages the canonical hit,
 the identity $V^3\chi = V^d \cdot \chi$, and the unique count into a
 single closure record, all by `refl`
-([L10849–L10871](Void.lagda.tex#L10849-L10871)).
+([L10949–L10971](Void.lagda.tex#L10949-L10971)).
 The enumeration is a property test on the output of `simplex-eval`,
 not a search for it; the pool, the bound, and the integer are
 determined before any pair is examined.
@@ -456,8 +357,7 @@ agda --safe --without-K Void.lagda.tex
 ```
 
 If the command exits with code 0, every identity, classification, and
-uniqueness statement above has been checked. The file declares no
-`postulate` and imports no library.
+uniqueness statement above has been checked.
 
 ---
 
@@ -490,8 +390,7 @@ References:
 
 Claimed and machine-verified inside `Void.lagda.tex`:
 
-- Sections 3–7 above, in full, under `--safe --without-K` with no
-  postulates and no library imports. In particular: `Two` is the
+- Sections 3–7 above, in full. In particular: `Two` is the
   unique normal form of binary distinction inside MLTT (§3); the
   endomorphism space of `Two` has exactly four inhabitants up to
   pointwise equality (§4); their composition closure is uniquely
@@ -631,8 +530,8 @@ The reverse compositions have no inhabitants.
 The reader should therefore take this section as a guide to how the
 two volumes fit together, not as a proof that this is the only
 possible architecture for any conceivable formal discipline. The proof
-reaches only as far as Tier 1 reaches; the architectural reading
-explains *why the proofs at Tier 1 are worth carrying out at all*.
+reaches only as far as Tier 2 reaches; the architectural reading
+explains *why those proofs are worth carrying out at all*.
 
 ---
 
