@@ -28,7 +28,26 @@ already carry the stated distinction data.
 
 ---
 
-## Core claims
+## Short entry point
+
+For a small standalone version of the core spine, see
+[VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) and its generated
+[PDF](latex/VoidCompanion.pdf). The companion note uses standard-library
+imports for equality, sums, products, the empty type, and negation,
+and carries the chain in one short file: binary distinction has normal
+form `Two` (`two-normal-form`), the endomorphism space `Two → Two` has
+exactly four cases (`EndoCase`, `classify-sound`, `case-unique`), the
+minimal faithful compositional closure of those cases is $K_4$
+(`FaithfulClosure`, `MinimalClosure`, `canonicalK4`, `realize-reflect`),
+and any such closure points back to the original distinction
+(`k4-presupposes-distinction`). It stops there. The self-contained
+development in `Void.lagda.tex` rebuilds the infrastructure internally
+and continues with arithmetic, spectral structure, and the forced
+numerical invariants.
+
+---
+
+## Core claims of Void and Form
 
 1. **`two-normal-form`** ([L1652](Void.lagda.tex#L1652)). Every record
    `(S, ℓ, r, ℓ ≠ r, cover)` over `S : Set` is boundary-preservingly

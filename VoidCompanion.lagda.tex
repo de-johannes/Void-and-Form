@@ -1,0 +1,439 @@
+\documentclass[11pt]{article}
+\usepackage{agda}
+\usepackage{fontspec}
+\setsansfont{Arial Unicode MS}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+
+% Match the main Void and Form code layout: compact Agda blocks,
+% no extra math indentation, and narrower indentation steps.
+\renewcommand{\AgdaCodeStyle}{\fontsize{8}{9}\selectfont}
+\setlength{\mathindent}{0pt}
+\renewcommand{\AgdaIndentSpace}{\hspace*{0.30em}}
+
+\title{Void Companion: Binary Distinction, Normal Form, and the \texorpdfstring{$K_4$}{K4} Closure}
+\author{Johannes Michael Wielsch\\
+\small Companion note to \emph{Void and Form}\\
+\small DOI: \href{https://doi.org/10.5281/zenodo.19491035}{10.5281/zenodo.19491035}}
+\date{May 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note isolates one formal claim from the larger development
+\emph{Void and Form}.  In Martin-Löf type theory, a structure carrying
+two distinguishable, exhaustive points has canonical normal form
+\AgdaDatatype{Two}.  The endomorphisms of that normal form have exactly
+four cases.  Requiring closure under composition without identification
+and without adding unused cases forces the carrier to be the four-vertex
+complete graph $K_4$.  The point is conditional: the theorem concerns
+structures that already carry the data of binary distinction.  It is not
+a claim about arbitrary formal theories.  The result is an elimination
+statement: under the stated constraints, no other carrier realizes the
+data without identifying distinct cases or adding non-forced structure.
+\end{abstract}
+
+\section*{How to read this note}
+
+This is a companion note, not a replacement for the full formalization.
+It extracts the first argument of \emph{Void and Form} into a short
+file that can be read and checked independently.  For readability, this
+note uses standard-library imports for equality, sums, products, the
+empty type, and negation.  The full file \texttt{Void.lagda.tex}
+rebuilds its infrastructure internally and then continues with the
+larger development.  The present note stops at the core result:
+binary distinction has normal form \AgdaDatatype{Two}, and the minimal
+faithful closure of its four endomorphism cases is $K_4$.
+
+In the terminology of the larger project, this is the formal entry
+point for what \emph{Void and Form} calls a logical ontology.  In this
+note the phrase has a restricted meaning: it names a dependency result
+inside type theory, not a metaphysical conclusion.  The tetrahedron is
+the geometric reading of the complete graph $K_4$; it is not an
+additional assumption used in the proof.
+
+\section{Setting}
+
+The setting is ordinary intensional Martin-Löf type theory as
+implemented in Agda.  The code snippets below use the standard library
+for equality, sums, products, the empty type, and negation.  No attempt
+is made here to reproduce the full formal development; the goal is to
+record the minimal spine of the argument.
+
+\begin{code}
+{-# OPTIONS --safe --without-K #-}
+
+module VoidCompanion where
+
+open import Relation.Binary.PropositionalEquality using (_≡_; refl; sym; trans; cong)
+open import Data.Empty using (⊥; ⊥-elim)
+open import Data.Sum using (_⊎_; inj₁; inj₂)
+open import Data.Product using (Σ; _,_)
+open import Relation.Nullary using (¬_)
+\end{code}
+
+The two-point normal form is the following type.
+
+\begin{code}
+data Two : Set where
+  L R : Two
+
+L≠R : ¬ (L ≡ R)
+L≠R ()
+
+R≠L : ¬ (R ≡ L)
+R≠L p = L≠R (sym p)
+\end{code}
+
+\section{Distinction}
+
+A binary distinction is not just a type with two named points.  The
+points must be separated, and every element of the carrier must be one
+of them.  This is the exact hypothesis that makes the normal-form
+theorem true.
+
+\begin{code}
+record Distinction : Set₁ where
+  field
+    S         : Set
+    left      : S
+    right     : S
+    separated : ¬ (left ≡ right)
+    cover     : (x : S) → (x ≡ left) ⊎ (x ≡ right)
+\end{code}
+
+The canonical inhabitant is obtained from \AgdaDatatype{Two} itself.
+
+\begin{code}
+Two-cover : (x : Two) → (x ≡ L) ⊎ (x ≡ R)
+Two-cover L = inj₁ refl
+Two-cover R = inj₂ refl
+
+Two-distinction : Distinction
+Two-distinction = record
+  { S         = Two
+  ; left      = L
+  ; right     = R
+  ; separated = L≠R
+  ; cover     = Two-cover
+  }
+\end{code}
+
+\section{Normal Form}
+
+An isomorphism of distinctions preserves the two boundary roles and has
+inverse maps on carriers.  The normal-form theorem says that every
+distinction is isomorphic, in this sense, to the canonical distinction
+on \AgdaDatatype{Two}.
+
+\begin{code}
+record DistinctionIso (d e : Distinction) : Set₁ where
+  private
+    module D = Distinction d
+    module E = Distinction e
+  field
+    to         : D.S → E.S
+    from       : E.S → D.S
+    to-left    : to D.left ≡ E.left
+    to-right   : to D.right ≡ E.right
+    from-left  : from E.left ≡ D.left
+    from-right : from E.right ≡ D.right
+    to-from    : (y : E.S) → to (from y) ≡ y
+    from-to    : (x : D.S) → from (to x) ≡ x
+\end{code}
+
+The map to \AgdaDatatype{Two} is forced by the cover: an element is sent
+to \AgdaInductiveConstructor{L} if it is the left boundary and to
+\AgdaInductiveConstructor{R} if it is the right boundary.
+
+\begin{code}
+toTwo : (d : Distinction) → Distinction.S d → Two
+toTwo d x with Distinction.cover d x
+... | inj₁ _ = L
+... | inj₂ _ = R
+
+fromTwo : (d : Distinction) → Two → Distinction.S d
+fromTwo d L = Distinction.left d
+fromTwo d R = Distinction.right d
+
+toTwo-left : (d : Distinction) → toTwo d (Distinction.left d) ≡ L
+toTwo-left d with Distinction.cover d (Distinction.left d)
+... | inj₁ _ = refl
+... | inj₂ p = ⊥-elim (Distinction.separated d p)
+
+toTwo-right : (d : Distinction) → toTwo d (Distinction.right d) ≡ R
+toTwo-right d with Distinction.cover d (Distinction.right d)
+... | inj₁ p = ⊥-elim (Distinction.separated d (sym p))
+... | inj₂ _ = refl
+
+toTwo-fromTwo : (d : Distinction) → (y : Two) → toTwo d (fromTwo d y) ≡ y
+toTwo-fromTwo d L = toTwo-left d
+toTwo-fromTwo d R = toTwo-right d
+
+fromTwo-toTwo : (d : Distinction) → (x : Distinction.S d) → fromTwo d (toTwo d x) ≡ x
+fromTwo-toTwo d x with Distinction.cover d x
+... | inj₁ p = sym p
+... | inj₂ p = sym p
+
+two-normal-form : (d : Distinction) → DistinctionIso d Two-distinction
+two-normal-form d = record
+  { to         = toTwo d
+  ; from       = fromTwo d
+  ; to-left    = toTwo-left d
+  ; to-right   = toTwo-right d
+  ; from-left  = refl
+  ; from-right = refl
+  ; to-from    = toTwo-fromTwo d
+  ; from-to    = fromTwo-toTwo d
+  }
+\end{code}
+
+This is the whole normal-form argument.  No choice is made in the map:
+the cover field gives only two possible cases, and the separation field
+rules out the contradictory boundary cases.
+
+\section{Endomorphisms of Two}
+
+An endomorphism of \AgdaDatatype{Two} is fixed by its two values.  There
+are therefore four cases: constant left, constant right, identity, and
+swap.
+
+\begin{code}
+data EndoCase : Set where
+  constL : EndoCase
+  constR : EndoCase
+  ident  : EndoCase
+  swap   : EndoCase
+
+interpret : EndoCase → Two → Two
+interpret constL _ = L
+interpret constR _ = R
+interpret ident  x = x
+interpret swap   L = R
+interpret swap   R = L
+
+Pointwise : (Two → Two) → (Two → Two) → Set
+Pointwise f g = (x : Two) → f x ≡ g x
+\end{code}
+
+The classifier simply inspects the two values of a function.
+
+\begin{code}
+classify : (Two → Two) → EndoCase
+classify f with f L | f R
+... | L | L = constL
+... | R | R = constR
+... | L | R = ident
+... | R | L = swap
+
+classify-sound : (f : Two → Two) → Pointwise f (interpret (classify f))
+classify-sound f L with f L | f R
+... | L | L = refl
+... | R | R = refl
+... | L | R = refl
+... | R | L = refl
+classify-sound f R with f L | f R
+... | L | L = refl
+... | R | R = refl
+... | L | R = refl
+... | R | L = refl
+\end{code}
+
+Uniqueness follows by evaluating at \AgdaInductiveConstructor{L} and
+\AgdaInductiveConstructor{R}.  Any attempted identification of two
+different cases forces either \AgdaInductiveConstructor{L} to equal
+\AgdaInductiveConstructor{R}, or conversely.
+
+\begin{code}
+case-unique : (c d : EndoCase) → Pointwise (interpret c) (interpret d) → c ≡ d
+case-unique constL constL _ = refl
+case-unique constL constR p = ⊥-elim (L≠R (p L))
+case-unique constL ident  p = ⊥-elim (L≠R (p R))
+case-unique constL swap   p = ⊥-elim (L≠R (p L))
+case-unique constR constL p = ⊥-elim (R≠L (p L))
+case-unique constR constR _ = refl
+case-unique constR ident  p = ⊥-elim (R≠L (p L))
+case-unique constR swap   p = ⊥-elim (R≠L (p R))
+case-unique ident  constL p = ⊥-elim (R≠L (p R))
+case-unique ident  constR p = ⊥-elim (L≠R (p L))
+case-unique ident  ident  _ = refl
+case-unique ident  swap   p = ⊥-elim (L≠R (p L))
+case-unique swap   constL p = ⊥-elim (R≠L (p L))
+case-unique swap   constR p = ⊥-elim (L≠R (p R))
+case-unique swap   ident  p = ⊥-elim (R≠L (p L))
+case-unique swap   swap   _ = refl
+
+classify-unique :
+  (f : Two → Two) → (c : EndoCase) → Pointwise f (interpret c) → classify f ≡ c
+classify-unique f c p =
+  case-unique (classify f) c
+    (λ x → trans (sym (classify-sound f x)) (p x))
+\end{code}
+
+\section{Why the Closure is \texorpdfstring{$K_4$}{K4}}
+
+Composition of endomorphisms is total: for any two endomorphism cases,
+their composite is again an endomorphism of \AgdaDatatype{Two}, hence
+is one of the four cases just classified.
+
+\begin{code}
+_∘₂_ : (Two → Two) → (Two → Two) → Two → Two
+(f ∘₂ g) x = f (g x)
+
+composeCase : EndoCase → EndoCase → EndoCase
+composeCase c d = classify (interpret c ∘₂ interpret d)
+
+endomorphisms-closed :
+  (c d : EndoCase) → Σ EndoCase (λ e → Pointwise (interpret e) (interpret c ∘₂ interpret d))
+endomorphisms-closed c d =
+  composeCase c d , λ x → sym (classify-sound (interpret c ∘₂ interpret d) x)
+\end{code}
+
+The closure argument is then finite and rigid.
+
+First, a faithful carrier for the closure must represent all four
+endomorphism cases without identifying them.  If two cases are
+identified, \AgdaFunction{case-unique} shows that the corresponding
+functions agree pointwise; but the only way different rows of the four
+case table agree is by forcing \AgdaInductiveConstructor{L} and
+\AgdaInductiveConstructor{R} to coincide, contradicting
+\AgdaFunction{L≠R}.  Thus a faithful carrier has at least four
+vertices.
+
+Second, adding a fifth vertex cannot be forced by the endomorphism
+data.  The composite of any two represented cases is already one of
+the four classified cases, by \AgdaFunction{endomorphisms-closed}.  A
+new vertex would not be the value of any forced composition; it would be
+extra structure.
+
+Third, the graph relation induced by composability is complete on the
+four vertices.  Any ordered pair of endomorphisms has a composite, so
+there is no missing composability relation between distinct vertices.
+For the underlying simple graph, this is exactly $K_4$.
+
+The following small records spell out the faithful/minimal carrier
+condition used in the preceding paragraph.  A faithful closure realizes
+the four cases injectively; a minimal one has no vertex except a
+realized case.
+
+\begin{code}
+record FaithfulClosure : Set₁ where
+  field
+    V               : Set
+    realize         : EndoCase → V
+    reflect         : V → EndoCase
+    reflect-realize : (c : EndoCase) → reflect (realize c) ≡ c
+
+record MinimalClosure : Set₁ where
+  field
+    closure  : FaithfulClosure
+    no-extra : (v : FaithfulClosure.V closure) →
+               Σ EndoCase (λ c → FaithfulClosure.realize closure c ≡ v)
+
+K4Vertex : Set
+K4Vertex = EndoCase
+
+K4Edge : K4Vertex → K4Vertex → Set
+K4Edge c d = ¬ (c ≡ d)
+
+canonicalK4 : MinimalClosure
+canonicalK4 = record
+  { closure = record
+      { V               = EndoCase
+      ; realize         = λ c → c
+      ; reflect         = λ c → c
+      ; reflect-realize = λ c → refl
+      }
+  ; no-extra = λ v → v , refl
+  }
+
+realize-reflect :
+  (m : MinimalClosure) →
+  (v : FaithfulClosure.V (MinimalClosure.closure m)) →
+  FaithfulClosure.realize (MinimalClosure.closure m)
+    (FaithfulClosure.reflect (MinimalClosure.closure m) v)
+  ≡ v
+realize-reflect m v with MinimalClosure.no-extra m v
+... | c , p = trans (sym (cong realize q)) p
+  where
+    fc = MinimalClosure.closure m
+    realize = FaithfulClosure.realize fc
+    reflect = FaithfulClosure.reflect fc
+    reflect-realize = FaithfulClosure.reflect-realize fc
+
+    q : c ≡ reflect v
+    q = trans (sym (reflect-realize c)) (cong reflect p)
+\end{code}
+
+This is the sense in which the closure yields $K_4$: the forced vertex
+set is the four-case set, and the induced simple graph connects every
+distinct pair.  The equations \AgdaField{reflect-realize} and
+\AgdaFunction{realize-reflect} show that any faithful and minimal
+closure is equivalent to the four-case carrier.  Thus $K_4$ is not a
+choice among several closures; it is the unique closure satisfying the
+stated constraints.
+
+\section{Loop Closure}
+
+The $K_4$ closure does not replace the original distinction.  It
+presupposes it.  The four vertices are the four endomorphism cases of
+\AgdaDatatype{Two}, and \AgdaDatatype{Two} is the normal form of a
+binary distinction.  Thus the closure points back to the same data from
+which it was obtained.
+
+At this scale the loop is direct: any minimal closure over the four
+endomorphism cases determines the canonical distinction used to define
+those cases.
+
+\begin{code}
+k4-presupposes-distinction : MinimalClosure → Distinction
+k4-presupposes-distinction _ = Two-distinction
+\end{code}
+
+The full formalization uses a richer \AgdaRecord{K4Record}, but the
+dependency is the same: the closure carrier is not an independent
+foundation.  It is the closure of the binary normal form.
+
+\section{Scope Clarification}
+
+The result is conditional.  It says: given a structure with two
+distinguishable, exhaustive points, the normal form is
+\AgdaDatatype{Two}; given the endomorphisms of that normal form, their
+minimal faithful compositional closure has four vertices and complete
+simple adjacency.  The result does not say that every theory begins
+with such a distinction, nor that every mathematical object reduces to
+\AgdaDatatype{Two}.
+
+No further constructions are treated here.  They are outside the
+present claim.
+
+\section{Outlook}
+
+The core result stops at the forced closure of binary distinction.  Its
+role in the larger development is not to prove everything at once, but
+to fix the first carrier on which later constructions may be tested.
+Once the four-case closure is fixed, further claims can be separated
+cleanly: some are formal consequences of the core, some are additional
+constructions over it, and some belong only to the interpretive layer.
+
+The next formal step in \emph{Void and Form} is therefore not a jump to
+a global conclusion.  It is the controlled question of what can be built
+on the surviving carrier without adding new generators.  This note only
+isolates the starting point.
+
+\section{Full Formalization}
+
+The corresponding self-contained development is in the repository
+\href{https://github.com/de-johannes/Void-and-Form}{de-johannes/Void-and-Form}.
+The main file is \texttt{Void.lagda.tex}.  The relevant anchors are:
+
+\begin{itemize}
+\item \texttt{Distinction}: lines 804ff.
+\item \texttt{two-normal-form}: line 1652.
+\item Endomorphism classification of \texttt{Two -> Two}: lines 1145ff.
+\item \texttt{K4Record-is-canonical}: line 27140.
+\item \texttt{record-presupposes-distinction}: line 31748.
+\end{itemize}
+
+\end{document}
