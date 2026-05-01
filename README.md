@@ -1,5 +1,9 @@
 # Void and Form
 
+Any MLTT structure with two distinguishable, exhaustive points is uniquely isomorphic to Two, and the compositional closure of its endomorphisms forces K₄.
+
+---
+
 `Void.lagda.tex` studies a conditional problem: grant the data of a
 binary distinction and no further generator; what structure is forced
 inside Martin-Löf type theory?
