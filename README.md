@@ -86,7 +86,7 @@ itself, the development establishes the following.
    four vertices add structure that is not forced by the four cases.
    The surviving carrier is captured by a record type `K4Record : Set`.
    Reference:
-   [Void.lagda.tex L26585](Void.lagda.tex#L26585).
+   [Void.lagda.tex L26681](Void.lagda.tex#L26681).
 
 4. **Uniqueness of the closure record.** `K4Record` is inhabited and
    any two inhabitants are propositionally equal:
@@ -95,7 +95,7 @@ itself, the development establishes the following.
    k4Record-unique    : (r₁ r₂ : K4Record) → r₁ ≡ r₂
    ```
    Reference:
-   [Void.lagda.tex L26944](Void.lagda.tex#L26944) (`K4Record-is-canonical`).
+   [Void.lagda.tex L27040](Void.lagda.tex#L27040) (`K4Record-is-canonical`).
 
 5. **Loop closure.** The existence of an inhabitant of `K4Record`
    entails an inhabitant of `Distinction`, recovering the binary
@@ -104,7 +104,7 @@ itself, the development establishes the following.
    record-presupposes-distinction : K4Record → Distinction
    ```
    Reference:
-   [Void.lagda.tex L31552](Void.lagda.tex#L31552).
+   [Void.lagda.tex L31648](Void.lagda.tex#L31648).
 
 6. **Forced numerical invariants.** Once the closure record is fixed,
    several integer-valued quantities of the surviving structure are
@@ -134,11 +134,11 @@ itself, the development establishes the following.
    constructive presentation of $\mathbb{R}$ closes up under its own
    notion of Cauchy convergence.
    References:
-   [Void.lagda.tex L23855–23863](Void.lagda.tex#L23855-L23863) (`IsCauchyℝ`,
+   [Void.lagda.tex L23951–23863](Void.lagda.tex#L23951-L23959) (`IsCauchyℝ`,
    `_converges-to_`),
-   [L23876–23883](Void.lagda.tex#L23876-L23883) (`diagSeq`, `diagSeq-stable`),
-   [L23911–24141](Void.lagda.tex#L23911-L24141) (`diagSeq-cauchy`),
-   [L24143–24273](Void.lagda.tex#L24143-L24273) (`diagℝ`, `diagℝ-converges`,
+   [L23972–23883](Void.lagda.tex#L23972-L23979) (`diagSeq`, `diagSeq-stable`),
+   [L24007–24141](Void.lagda.tex#L24007-L24237) (`diagSeq-cauchy`),
+   [L24239–24273](Void.lagda.tex#L24239-L24369) (`diagℝ`, `diagℝ-converges`,
    `ℝ-cauchy-complete`).
 
 All claims are proved in literate Agda and machine-checked under
@@ -178,46 +178,46 @@ chapter heading that opens it.
   [L2503](Void.lagda.tex#L2503), through chapters
   `Non-Collapse of Drift`, `Cross-Stage Comparison`,
   `Drift Reachability`, `Drift Acyclicity` (last starts at
-  [L3067](Void.lagda.tex#L3067)).
+  [L3163](Void.lagda.tex#L3163)).
 - **Naturals $\mathbb{N}$.** Chapter `Arithmetic Infrastructure` at
-  [L5211](Void.lagda.tex#L5211); `Forced Additive Laws` at
-  [L6073](Void.lagda.tex#L6073); `Multiplicative Structure and Integer
-  Order` at [L6357](Void.lagda.tex#L6357).
+  [L5307](Void.lagda.tex#L5307); `Forced Additive Laws` at
+  [L6169](Void.lagda.tex#L6169); `Multiplicative Structure and Integer
+  Order` at [L6453](Void.lagda.tex#L6453).
 - **Integers $\mathbb{Z}$.** Chapter `Integer Multiplication Laws` at
-  [L6988](Void.lagda.tex#L6988); `Integer Order Laws` at
-  [L8039](Void.lagda.tex#L8039); `Absolute Value Laws` at
-  [L8442](Void.lagda.tex#L8442).
+  [L7084](Void.lagda.tex#L7084); `Integer Order Laws` at
+  [L8135](Void.lagda.tex#L8135); `Absolute Value Laws` at
+  [L8538](Void.lagda.tex#L8538).
 - **Rationals $\mathbb{Q}$.** Chapter `Rational Numbers and Measurement`
-  at [L10197](Void.lagda.tex#L10197); `Rational Setoid and Order Laws`
-  at [L11045](Void.lagda.tex#L11045); `Rational Addition and
-  Multiplication Laws` at [L12687](Void.lagda.tex#L12687);
-  `Rational Distance Laws` at [L16986](Void.lagda.tex#L16986).
+  at [L10293](Void.lagda.tex#L10293); `Rational Setoid and Order Laws`
+  at [L11141](Void.lagda.tex#L11141); `Rational Addition and
+  Multiplication Laws` at [L12783](Void.lagda.tex#L12783);
+  `Rational Distance Laws` at [L17082](Void.lagda.tex#L17082).
 - **Reals $\mathbb{R}$.** Chapter
   `Reals as Forced Cauchy Closure over Q` at
-  [L21134](Void.lagda.tex#L21134); `record ℝ` at
-  [L21176](Void.lagda.tex#L21176); chapter
+  [L21230](Void.lagda.tex#L21230); `record ℝ` at
+  [L21272](Void.lagda.tex#L21272); chapter
   `Cauchy Completeness of R` at
-  [L23662](Void.lagda.tex#L23662);
+  [L23758](Void.lagda.tex#L23758);
   `IsCauchyℝ` / `_converges-to_` at
-  [L23855–23863](Void.lagda.tex#L23855-L23863);
-  `ℝ-cauchy-complete` at [L24271](Void.lagda.tex#L24271).
+  [L23951–23863](Void.lagda.tex#L23951-L23959);
+  `ℝ-cauchy-complete` at [L24367](Void.lagda.tex#L24367).
 - **Spectral graph theory on $K_4$, $K_8$, $K_{12}$.** Chapter
   `K₄ Neighborhood and Laplacian` at
-  [L6555](Void.lagda.tex#L6555); `Laplacian as Finite-Index Operator`
-  at [L11281](Void.lagda.tex#L11281); `Coupled K₄ Laplacian` at
-  [L13146](Void.lagda.tex#L13146); `Triple K₄ Laplacian` at
-  [L14365](Void.lagda.tex#L14365).
+  [L6651](Void.lagda.tex#L6651); `Laplacian as Finite-Index Operator`
+  at [L11377](Void.lagda.tex#L11377); `Coupled K₄ Laplacian` at
+  [L13242](Void.lagda.tex#L13242); `Triple K₄ Laplacian` at
+  [L14461](Void.lagda.tex#L14461).
 - **The kind classification of invariants.** Chapter at
-  [L9095](Void.lagda.tex#L9095); the four-case data type
-  `InvariantKind` at [L9178](Void.lagda.tex#L9178) and the closure
-  theorem `kind-exhaustive` at [L9189](Void.lagda.tex#L9189).
+  [L9191](Void.lagda.tex#L9191); the four-case data type
+  `InvariantKind` at [L9274](Void.lagda.tex#L9274) and the closure
+  theorem `kind-exhaustive` at [L9285](Void.lagda.tex#L9285).
 - **Forced $K_4$ representation record and singleton.** Chapter
-  `The K₄ Invariant Record` at [L4909](Void.lagda.tex#L4909);
-  `K4Record` at [L26585](Void.lagda.tex#L26585);
+  `The K₄ Invariant Record` at [L5005](Void.lagda.tex#L5005);
+  `K4Record` at [L26681](Void.lagda.tex#L26681);
   singleton lemma `K4Record-is-canonical` at
-  [L26944](Void.lagda.tex#L26944).
+  [L27040](Void.lagda.tex#L27040).
 - **Loop closure.** `record-presupposes-distinction` at
-  [L31552](Void.lagda.tex#L31552).
+  [L31648](Void.lagda.tex#L31648).
 
 The file builds under the same flags throughout. The arithmetic is not
 assumed — it is built. A reader who would like to verify this can
@@ -390,7 +390,7 @@ record K4Record : Set where
     ...
 ```
 
-Reference: [Void.lagda.tex L26585](Void.lagda.tex#L26585) (`K4Record`).
+Reference: [Void.lagda.tex L26681](Void.lagda.tex#L26681) (`K4Record`).
 
 ---
 
@@ -409,8 +409,8 @@ the chain
 `Two-distinction ⇒ EndoCase ⇒ K₄ ⇒ K4Record ⇒ Two-distinction`.
 
 References:
-[Void.lagda.tex L26944](Void.lagda.tex#L26944) (`K4Record-is-canonical`),
-[L31552](Void.lagda.tex#L31552) (`record-presupposes-distinction`).
+[Void.lagda.tex L27040](Void.lagda.tex#L27040) (`K4Record-is-canonical`),
+[L31648](Void.lagda.tex#L31648) (`record-presupposes-distinction`).
 
 ---
 
@@ -422,10 +422,10 @@ every case is `refl`.
 
 | Identity | Reference |
 |---|---|
-| `eulerChar-computed ≡ 2` (`law16B-3-euler`) | [L26015](Void.lagda.tex#L26015) |
-| `simplex-eval ≡ 137` (`law15A-0-simplex-eval-137`) | [L10280](Void.lagda.tex#L10280) |
-| `loop-numerator ≡ 11` (`law-loop-num-11`) | [L30237](Void.lagda.tex#L30237) |
-| `theorem-sign-forcing` | [L31492](Void.lagda.tex#L31492) |
+| `eulerChar-computed ≡ 2` (`law16B-3-euler`) | [L26111](Void.lagda.tex#L26111) |
+| `simplex-eval ≡ 137` (`law15A-0-simplex-eval-137`) | [L10376](Void.lagda.tex#L10376) |
+| `loop-numerator ≡ 11` (`law-loop-num-11`) | [L30333](Void.lagda.tex#L30333) |
+| `theorem-sign-forcing` | [L31588](Void.lagda.tex#L31588) |
 
 Inside the $70$-monomial pool of degree $\leq 4$ in $(V,E,d,\chi)$
 fixed by the same forced values, the integer $137$ admits exactly one
