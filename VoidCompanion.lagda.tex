@@ -1,57 +1,337 @@
 \documentclass[11pt]{article}
 \usepackage{agda}
 \usepackage{fontspec}
+\usepackage{newunicodechar}
+\usepackage{etoolbox}
 \setsansfont{Arial Unicode MS}
 \usepackage[margin=1in]{geometry}
 \usepackage[hidelinks]{hyperref}
+\newunicodechar{φ}{\ensuremath{\phi}}
 
 % Match the main Void and Form code layout: compact Agda blocks,
 % no extra math indentation, and narrower indentation steps.
 \renewcommand{\AgdaCodeStyle}{\fontsize{8}{9}\selectfont}
 \setlength{\mathindent}{0pt}
 \renewcommand{\AgdaIndentSpace}{\hspace*{0.30em}}
+\AtBeginEnvironment{code}{\hfuzz=2pt}
 
-\title{Void Companion: Binary Distinction, Normal Form, and the \texorpdfstring{$K_4$}{K4} Closure}
+\title{Void Companion: Binary Distinction and the Four-Vertex Closure}
 \author{Johannes Michael Wielsch\\
 \small Companion note to \emph{Void and Form}\\
-\small DOI: \href{https://doi.org/10.5281/zenodo.19491035}{10.5281/zenodo.19491035}}
+\small Project DOI: \href{https://doi.org/10.5281/zenodo.19491035}{10.5281/zenodo.19491035}}
 \date{May 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-This note isolates one formal claim from the larger development
-\emph{Void and Form}.  In Martin-Löf type theory, a structure carrying
-two distinguishable, exhaustive points has canonical normal form
-\AgdaDatatype{Two}.  The endomorphisms of that normal form have exactly
-four cases.  Requiring closure under composition without identification
-and without adding unused cases forces the carrier to be the four-vertex
-complete graph $K_4$.  The point is conditional: the theorem concerns
-structures that already carry the data of binary distinction.  It is not
-a claim about arbitrary formal theories.  The result is an elimination
-statement: under the stated constraints, no other carrier realizes the
-data without identifying distinct cases or adding non-forced structure.
+This note is the compact map and self-contained formal kernel of
+\emph{Void and Form}.  It does not ask what emerges from a presupposed
+``nothing''.  It asks under which conditions formal description is
+possible at all.  The pre-formal answer is the availability of
+distinguishable positions: without them no relation, judgement,
+equation, map, representation, truth-value, or falsehood can be
+formulated.  \emph{Void} names this boundary.  It is not the empty set,
+not the empty type, and not a physical nothing; it is the absence of the
+domain in which those notions could already occur.
+
+The checked kernel begins once distinguishability is granted as data.
+In intensional Martin-L\"of type theory, a binary distinction is
+represented by two non-collapsing points that exhaust their carrier.
+This carrier has canonical normal form \AgdaDatatype{Two}; its
+endomorphisms exhaust to four cases; representing those cases with
+separation, complete realisation, and no surplus yields a four-vertex
+carrier with complete simple adjacency; and every such closure points
+back to the data from which it was built.  In addition, the cardinality
+of the entry datum is itself made formal: a singleton carrier admits no
+\AgdaRecord{Distinction}; the original record is exactly the $n=2$ case
+of an n-ary template; and at $n=3$ the n-ary record is definitionally
+equivalent to a binary package of three pairwise separations and a
+nested binary cover.
+
+The note does not claim that such a distinction takes place.  It
+records what follows when the formal threshold is crossed.  The thesis
+that distinction is foundational is at least as old as Spencer-Brown's
+\emph{Laws of Form} and is not asserted here as new.  The contribution
+is the precise, machine-checked statement that, under the explicitly
+fixed conditions of representation, the closure of binary distinction
+is $K_4$, unique up to isomorphism, and dependent back on the data from
+which it was built.
 \end{abstract}
 
 \section*{How to read this note}
 
-This is a companion note, not a replacement for the full formalization.
-It extracts the first argument of \emph{Void and Form} into a short
-file that can be read and checked independently.  For readability, this
-note uses standard-library imports for equality, sums, products, the
-empty type, and negation.  The full file \texttt{Void.lagda.tex}
-rebuilds its infrastructure internally and then continues with the
-larger development.  The present note stops at the core result:
-binary distinction has normal form \AgdaDatatype{Two}, and the minimal
-faithful closure of its four endomorphism cases is $K_4$.
+This is the self-contained formal kernel of \emph{Void and Form}, not
+the full development.  It can be read before the larger source.  For
+readability, it uses standard-library imports for equality, sums,
+products, the empty type, and negation.  The full file
+\texttt{Void.lagda.tex} rebuilds that infrastructure internally and
+continues with constructions that are out of scope for this note.
 
-In the terminology of the larger project, this is the formal entry
-point for what \emph{Void and Form} calls a logical ontology.  In this
-note the phrase has a restricted meaning: it names a dependency result
-inside type theory, not a metaphysical conclusion.  The tetrahedron is
-the geometric reading of the complete graph $K_4$; it is not an
-additional assumption used in the proof.
+The note has two layers.  First, it names the pre-formal boundary at
+which formalisation becomes possible at all: relations, morphisms,
+judgements, and equations already presuppose a field in which one place
+can be separated from another.  This is the conceptual reason for
+taking binary distinction as the starting datum; it is not an Agda
+theorem.  Second, it records the checked statements: normal form,
+exhaustion, four-vertex closure, and dependency back to the starting
+data.
+
+The code is narrower.  It starts only after the data are granted.  From
+that point on, every formal claim below is a term checked by Agda.  The
+tetrahedron is only the geometric reading of the complete graph on the
+four endomorphism cases; it is not an additional assumption used in the
+proof.
+
+\section*{Map of the project}
+
+This note is also the table of contents for the project in compressed
+form.  The map below is not a second proof.  It fixes the status of the
+layers so that the reader can see where \emph{Void} ends, where the
+formal threshold begins, and where \emph{Form} later becomes
+interpretation.
+
+\subsection*{Void: conditions of formulability}
+
+\begin{description}
+\item[Level 0: Void.] No type, no term, no carrier.  The schematic
+marker is $\mathcal{V} \notin \mathit{Set}_\omega$.  Void is not a
+stable endpoint in the sense of a foundation, because every act of
+positing already presupposes structure.  It is therefore conceptually
+non-closable.  This level is marked, not proved.
+
+\item[Level 1: Information.] Information is understood in Bateson's
+minimal sense: a difference that makes a difference.  Without
+distinction, an occurrence carries no information.  Information
+therefore presupposes distinction, and an inhabited distinction
+requires at least two distinguishable occurrences.  This binary shape
+is minimal because every further difference already relies on it.
+
+\item[Level 2: Two.] The first stable formal carrier is
+\AgdaDatatype{Two}.  It contains two separated points and no third
+generator.  It is not a truth-value object; it is the normal form of
+distinction.  From this level onward the formal threshold is crossed:
+MLTT and Agda can execute the consequences of the datum they have
+received.
+
+\item[Level 3: Logic.] Formal systems operate on structures in which
+distinguishable positions are already available.  Relation, morphism,
+judgement, and equation do not construct that availability; they use
+it.  MLTT is the clean carrier used here, not the origin of the cut.
+
+\item[Level 4: Mathematics.] The machine-checked chain is the
+mathematical core: every \AgdaRecord{Distinction} is isomorphic to
+\AgdaDatatype{Two}; the endomorphisms of \AgdaDatatype{Two} have exactly
+four cases; representing those cases under separation, complete
+realisation, and no surplus forces the four-element closure, unique up
+to isomorphism; and the closure returns the originating distinction.
+No further generator is introduced.
+\end{description}
+
+\subsection*{Form: structural reading and interpretation}
+
+\begin{description}
+\item[Level 5: Structural separation.] Two distinguishable occurrences
+collapse if neither origin nor position can distinguish them.
+Non-identity of origin gives the germ of temporal order;
+non-coincidence gives the germ of spatial separation.  Space and time
+are not asserted as primitive entities here.  They name conditions
+under which distinction does not collapse.
+
+\item[Level 6: Physics.] Physics enters as interpretation of the
+preceding structural conditions by an observer who already operates
+inside them.  Form is not physics; it is the structure from which
+physical description can be read.
+
+\item[Level 7: Contingency.] Necessity stops before complete worldly
+specification.  The preceding levels fix conditions, not the full
+concrete world that satisfies them.
+
+\item[Level 8: Induction.] No new external generator is postulated.
+More complex structures are read as repeated applications and
+stabilisations of the original distinction.  Induction is the law of
+that repetition.  This is a structural reading, not a reductionist
+claim about all mathematics.
+\end{description}
+
+Levels 0 and 1 are not formal statements inside a type system.  They
+state the conditions under which formal statements can appear.  From
+Level 2 onward the formal theory begins, and the claims are expressible
+and checkable inside it.
+
+\part*{Part I.\quad The pre-formal threshold}
+
+\section*{The pre-formal boundary}
+
+The project begins before the point at which a formal theory can already
+speak in its own voice.  A relation has two positions.  A morphism has a
+source and a target.  A judgement has a term and a type.  An equation has
+two sides, even when it proves them equal.  Every such form is already a
+use of separation.  A theory may analyse that separation once it has been
+given; it cannot produce the very field of separability from within a
+field that it already presupposes.
+
+The following display is therefore not Agda code and not a theorem of
+MLTT.  It is a schematic boundary marker: it says where ontology hands
+the first stable datum to formalisation.  The names in the display are
+not internal definitions, and the arrows are not checked implications;
+they are meta-level dependency markers for the passage into the formal
+part.
+
+\[
+\begin{array}{ll}
+\mathrm{Level\;0:} &
+  \mathcal{V} \notin \mathit{Set}_\omega,
+  \qquad \neg\exists x\,(x : \mathcal{V}).
+\\[0.6em]
+\mathrm{Level\;1:} &
+  \mathrm{Sing}(S) :=
+  \exists p:S\,\forall x:S\,(x = p).
+\\[0.6em]
+\mathrm{Collapse:} &
+  \mathrm{Sing}(S)
+  \Longrightarrow
+  \neg\exists a,b:S\,(a \neq b).
+\\[0.6em]
+\mathrm{Level\;2:} &
+  \mathrm{Dist}(S) :=
+  \exists a,b:S\,
+  \bigl(a \neq b\ \wedge\ \forall x:S\,(x=a \vee x=b)\bigr).
+\\[0.6em]
+\mathrm{Separation:} &
+  a \neq b
+  \Longrightarrow
+  \neg\mathrm{SameOrigin}(a,b)\ \wedge\
+  \neg\mathrm{Contact}(a,b).
+\\[0.6em]
+\mathrm{Formal\;threshold:} &
+  \mathrm{Dist}(S)
+  \Longrightarrow
+  \begin{array}[t]{l}
+  S \simeq \mathbf{2},\\
+  \mathrm{End}(\mathbf{2}) =
+    \{c_L,c_R,\mathrm{id},\sigma\},\\
+  \mathrm{representation\ closure} = K_4,\\
+  K_4 \Longrightarrow \mathrm{Dist}(S).
+  \end{array}
+\end{array}
+\]
+
+Level 0 is not a hidden type.  The symbol \(\mathcal{V}\) marks the
+absence of a domain in which a term could already be typed.  Level 1
+shows why mere inhabitance is still collapse: if all occurrences are
+the same occurrence, no difference can be carried internally.  Level 2
+is the first non-collapsing datum: two separated occurrences and no
+third generator.  Here, \(\mathrm{SameOrigin}(a,b)\) names the collapse
+in which the two occurrences have no distinguishable order of arising;
+\(\mathrm{Contact}(a,b)\) names the collapse in which no gap separates
+their positions.  The two negations in the separation line mark the
+ontological content that the later volume \emph{Form} reads as the
+germ of temporal and spatial structure: without an interval of origin
+or a gap of contact, the two occurrences collapse back into one.
+
+This boundary is not a theorem of the development; it is the condition
+under which the development can be read as a theorem at all.
+Only the last line enters Agda.  From \(\mathrm{Dist}(S)\) onward, the
+schematic notation is replaced by checked terms.  The rest of this note
+records that checked consequence.
+
+\section*{Why two cannot occur without separation}
+
+Before any cardinality is even chosen, a sharper question arises.  Why
+can two occurrences not already be present at the threshold without
+any separating relation between them?  In the absence of time, space,
+or any other field of differentiation, why does the supposed pair not
+simply coexist as two?
+
+The answer is not specific to type theory and not specific to any
+single foundation.  It is the principle that what cannot be told apart
+is not two.  Leibniz stated it in 1686 as the
+\emph{principium identitatis indiscernibilium}: indiscernibles are
+identical.  The same content reappears, in the technical idiom of each
+framework, wherever ``two'' is given a precise sense:
+
+\begin{itemize}
+\item In classical first-order logic with equality, substitutivity of
+  identity makes any two elements that satisfy the same predicates
+  equal.
+\item In set theory, the axiom of extensionality says that two sets
+  with the same elements are the same set.
+\item In category theory, the Yoneda principle expresses that an
+  object is determined by its relations to others; an object with no
+  distinguishing relation is not a second object.
+\item In quantum mechanics, particles in the same state are not two
+  entities that happen to coincide; the statistical structure of the
+  theory (Bose, Fermi) is forced precisely because indistinguishables
+  cannot be counted as two.
+\end{itemize}
+
+Each of these frameworks pays the same price: as soon as ``two
+distinct $X$'' is even said, separation has already been used.  No
+foundation has exhibited a coherent counterexample, because exhibition
+itself requires a distinguishing predicate.
+
+The consequence is immediate.  Whatever has no separating predicate
+is, by the principle that defines what equality of occurrences means,
+one occurrence and not two.  The first non-collapsing pair and the
+first separating predicate arrive together; there is no temporal,
+spatial, or relational gap in which two might quietly coexist before
+separation.  The absence of any separating predicate forces collapse
+to one.
+
+The companion does not assume separation as a primitive act in the
+manner of \emph{Laws of Form}; it relies on a principle that any
+framework supporting the very statement ``two distinct $X$'' already
+concedes.  How this principle becomes a checkable term once a specific
+carrier is chosen is shown later, in the section on the executed
+Leibniz collapse, after the formal infrastructure of this note is in
+place.
+
+\section*{Why binary, not unary or ternary}
+
+The choice of binary distinction as the entry datum is not stipulation
+and not preference.  At the pre-formal threshold, only one cardinality
+survives the joint demand of non-collapse and self-sufficiency.  This
+argument is conceptual, not an Agda theorem; the formal results below
+do not depend on it.  It is recorded here so that the antecedent of
+the machine-checked conditional is not itself opaque.
+
+\emph{Unary collapses.}  A single occurrence carries no separation.
+The schematic predicate $\mathrm{Sing}(S)$ records exactly this: every
+element equals the chosen point, and no pair $(a,b)$ with $a\neq b$
+can be exhibited.  Whatever appears within $S$ is the same appearance.
+Formalisation cannot start here, because relations, morphisms,
+judgements, and equations all require two positions before they can be
+written down.
+
+\emph{Ternary carries derived binary plus surplus.}  Three positions
+$a,b,c$ require three pairwise separations $a\neq b$, $b\neq c$,
+$a\neq c$.  Each pairwise separation is itself a binary distinction.
+A primitive ternary datum would have to supply, on top of these three
+binary facts, an additional structure (an order, an incidence, a
+selection of one position against the other two) that the act of
+distinguishing alone does not yield.  Any device that inspects three
+positions simultaneously is itself a fourth position relative to the
+three, and its application to them again splits as ``this one against
+the other two''.  The ternary case therefore decomposes into binary
+distinctions plus surplus structure that requires its own justification.
+
+\emph{Binary survives.}  A binary distinction supplies exactly one
+separation $a\neq b$ together with the exhaustion clause that nothing
+further is present.  No additional structure (order, incidence,
+selection) is assumed; any such structure that arises later is forced
+by the four endomorphism cases of the normal form, not added to the
+datum.  This is why the formal development below begins with
+\AgdaRecord{Distinction} and not with a richer or poorer record.
+
+These three observations are made formal in Part~II, in the section
+on the cardinality of distinction: a singleton carrier admits no
+inhabitant of \AgdaRecord{Distinction}, the n-ary version of the
+record is at $n=2$ mutually convertible with \AgdaRecord{Distinction},
+and higher arities carry only pairwise binary separation witnesses
+together with a nested binary disjunction.
+
+\part*{Part II.\quad The formal threshold}
 
 \section{Setting}
 
@@ -59,7 +339,14 @@ The setting is ordinary intensional Martin-Löf type theory as
 implemented in Agda.  The code snippets below use the standard library
 for equality, sums, products, the empty type, and negation.  No attempt
 is made here to reproduce the full formal development; the goal is to
-record the minimal spine of the argument.
+record the minimal spine of the argument.  The carrier of the binary
+distinction is introduced as a fresh type \AgdaDatatype{Two} with
+constructors \AgdaInductiveConstructor{L} and
+\AgdaInductiveConstructor{R}, rather than reusing \AgdaDatatype{Bool}.
+The two types have the same shape, but \AgdaDatatype{Bool} carries an
+established reading as truth-values.  The result below depends on
+separation alone, not on any prior reading of the two points as
+truth or falsity, and the renaming makes this independence explicit.
 
 \begin{code}
 {-# OPTIONS --safe --without-K #-}
@@ -119,6 +406,260 @@ Two-distinction = record
   ; cover     = Two-cover
   }
 \end{code}
+
+\section{Cardinality of distinction}
+
+The earlier prose in Part~I argued that one occurrence collapses,
+three occurrences decompose, and two survives.  The argument was
+explicitly marked as conceptual.  At this point, after the
+\AgdaRecord{Distinction} record is in place, the same content can be
+stated and proved formally.  Two facts together turn the binary
+choice from preference into a theorem of the present setting: a
+singleton carrier admits no inhabitant of \AgdaRecord{Distinction} at
+all, and the n-ary generalisation of the record is, at $n=2$, mutually
+convertible with the binary case.  Higher arities carry only the
+pairwise binary separation witnesses one already has, plus an
+exhaustive cover that is structurally a nested binary disjunction.
+No primitive ternary or higher-arity operator is required.
+
+\begin{code}
+open import Data.Nat using (ℕ; zero; suc)
+open import Data.Fin using (Fin) renaming (zero to fz; suc to fs)
+
+record Distinction-n (n : ℕ) : Set₁ where
+  field
+    S        : Set
+    point    : Fin n → S
+    distinct : (i j : Fin n) → ¬ (i ≡ j) → ¬ (point i ≡ point j)
+    cover    : (x : S) → Σ (Fin n) (λ i → x ≡ point i)
+\end{code}
+
+\emph{Unary collapses formally.}  No singleton carrier hosts a
+\AgdaRecord{Distinction}: if every two elements of the carrier are
+equal, the boundary points are equal and \AgdaField{separated} is
+falsified.
+
+\begin{code}
+singleton-no-distinction :
+  (d : Distinction) →
+  ((x y : Distinction.S d) → x ≡ y) →
+  ⊥
+singleton-no-distinction d hyp =
+  Distinction.separated d (hyp (Distinction.left d) (Distinction.right d))
+\end{code}
+
+The same content holds for \AgdaRecord{Distinction-n} at $n=1$: any two
+elements of its carrier are forced equal, so no separation between
+distinct positions can be inhabited.
+
+\begin{code}
+distinction-n-1-collapses :
+  (d : Distinction-n 1) →
+  (x y : Distinction-n.S d) → x ≡ y
+distinction-n-1-collapses d x y
+  with Distinction-n.cover d x | Distinction-n.cover d y
+... | fz , px | fz , py = trans px (sym py)
+... | fz , _  | fs () , _
+... | fs () , _ | _
+\end{code}
+
+The collapse on \AgdaRecord{Distinction-n} \AgdaNumber{1} is one half of
+the ``unary kills distinction'' content; on its own, it forces every
+two elements of the carrier to coincide.  The bridge to the original
+record is the next step: any \AgdaRecord{Distinction} that injects
+into such a carrier is immediately impossible, because the two
+separated boundary points are forced equal under the injection and
+\AgdaField{separated} is contradicted.  This makes the joint
+statement, that no \AgdaRecord{Distinction} survives on a unary
+carrier, a single checked term and not a verbal combination of two
+lemmas.
+
+\begin{code}
+no-distinction-on-Dn1 :
+  (d1 : Distinction-n 1) →
+  (d  : Distinction) →
+  (φ  : Distinction.S d → Distinction-n.S d1) →
+  ((x y : Distinction.S d) → φ x ≡ φ y → x ≡ y) →
+  ⊥
+no-distinction-on-Dn1 d1 d φ φ-inj =
+  Distinction.separated d
+    (φ-inj (Distinction.left d) (Distinction.right d)
+      (distinction-n-1-collapses d1
+        (φ (Distinction.left d))
+        (φ (Distinction.right d))))
+\end{code}
+
+\emph{Binary equals the existing record.}  At $n=2$ the n-ary record
+is mutually convertible with the original \AgdaRecord{Distinction}.
+The two constructions are mechanical and demonstrate that no
+information is lost in either direction.
+
+\begin{code}
+distinction-to-Dn2 : Distinction → Distinction-n 2
+distinction-to-Dn2 d = record
+  { S        = Distinction.S d
+  ; point    = pt
+  ; distinct = dist
+  ; cover    = cov
+  }
+  where
+    open Distinction d
+    pt : Fin 2 → S
+    pt fz      = left
+    pt (fs fz) = right
+
+    dist : (i j : Fin 2) → ¬ (i ≡ j) → ¬ (pt i ≡ pt j)
+    dist fz      fz      h _ = h refl
+    dist fz      (fs fz) _ p = separated p
+    dist (fs fz) fz      _ p = separated (sym p)
+    dist (fs fz) (fs fz) h _ = h refl
+
+    cov : (x : S) → Σ (Fin 2) (λ i → x ≡ pt i)
+    cov x with cover x
+    ... | inj₁ p = fz , p
+    ... | inj₂ p = fs fz , p
+
+Dn2-to-distinction : Distinction-n 2 → Distinction
+Dn2-to-distinction d = record
+  { S         = Distinction-n.S d
+  ; left      = Distinction-n.point d fz
+  ; right     = Distinction-n.point d (fs fz)
+  ; separated = Distinction-n.distinct d fz (fs fz) λ ()
+  ; cover     = cov
+  }
+  where
+    open Distinction-n d
+    cov : (x : S) → (x ≡ point fz) ⊎ (x ≡ point (fs fz))
+    cov x with cover x
+    ... | fz , p    = inj₁ p
+    ... | fs fz , p = inj₂ p
+\end{code}
+
+\emph{Higher arity carries only pairwise binary plus a nested
+disjunction.}  At any $n$, the n-ary distinction record carries a
+binary separation witness for every ordered pair of distinct
+positions.  This witness is the \AgdaField{distinct} field itself; no
+further structure is needed to extract it.
+
+\begin{code}
+pairwise-binary :
+  {n : ℕ} (d : Distinction-n n) →
+  (i j : Fin n) → ¬ (i ≡ j) →
+  ¬ (Distinction-n.point d i ≡ Distinction-n.point d j)
+pairwise-binary = Distinction-n.distinct
+\end{code}
+
+At $n=3$, the exhaustive cover of three positions is structurally the
+nested binary disjunction $A_0 \uplus (A_1 \uplus A_2)$, where $A_i$
+records that an element equals position $i$.  No primitive ternary
+disjunction is invoked; the three-case split is two binary splits.
+
+\begin{code}
+cover-3-nested :
+  (d : Distinction-n 3) (x : Distinction-n.S d) →
+  (x ≡ Distinction-n.point d fz)
+    ⊎ ((x ≡ Distinction-n.point d (fs fz))
+       ⊎ (x ≡ Distinction-n.point d (fs (fs fz))))
+cover-3-nested d x with Distinction-n.cover d x
+... | fz , p          = inj₁ p
+... | fs fz , p       = inj₂ (inj₁ p)
+... | fs (fs fz) , p  = inj₂ (inj₂ p)
+\end{code}
+
+The two preceding lemmas show only that a ternary record \emph{carries}
+binary content.  The stronger claim, that the ternary record is
+\emph{nothing more} than this binary content, requires the converse
+direction: any package of three pairwise separations together with a
+binary-nested cover must reconstruct a \AgdaRecord{Distinction-n}
+\AgdaNumber{3}.  The following record names exactly the binary data
+extractable from a ternary distinction, and the two conversions below
+show the reduction in both directions.
+
+\begin{code}
+record Dn3-binary-data : Set₁ where
+  field
+    S     : Set
+    p0    : S
+    p1    : S
+    p2    : S
+    sep01 : ¬ (p0 ≡ p1)
+    sep02 : ¬ (p0 ≡ p2)
+    sep12 : ¬ (p1 ≡ p2)
+    cover : (x : S) → (x ≡ p0) ⊎ ((x ≡ p1) ⊎ (x ≡ p2))
+
+Dn3-to-binary : Distinction-n 3 → Dn3-binary-data
+Dn3-to-binary d = record
+  { S     = Distinction-n.S d
+  ; p0    = Distinction-n.point d fz
+  ; p1    = Distinction-n.point d (fs fz)
+  ; p2    = Distinction-n.point d (fs (fs fz))
+  ; sep01 = Distinction-n.distinct d fz (fs fz) λ ()
+  ; sep02 = Distinction-n.distinct d fz (fs (fs fz)) λ ()
+  ; sep12 = Distinction-n.distinct d (fs fz) (fs (fs fz)) λ ()
+  ; cover = cover-3-nested d
+  }
+
+binary-to-Dn3 : Dn3-binary-data → Distinction-n 3
+binary-to-Dn3 b = record
+  { S        = S
+  ; point    = pt
+  ; distinct = dist
+  ; cover    = cov
+  }
+  where
+    open Dn3-binary-data b
+    pt : Fin 3 → S
+    pt fz             = p0
+    pt (fs fz)        = p1
+    pt (fs (fs fz))   = p2
+
+    dist : (i j : Fin 3) → ¬ (i ≡ j) → ¬ (pt i ≡ pt j)
+    dist fz             fz             h _ = h refl
+    dist fz             (fs fz)        _ p = sep01 p
+    dist fz             (fs (fs fz))   _ p = sep02 p
+    dist (fs fz)        fz             _ p = sep01 (sym p)
+    dist (fs fz)        (fs fz)        h _ = h refl
+    dist (fs fz)        (fs (fs fz))   _ p = sep12 p
+    dist (fs (fs fz))   fz             _ p = sep02 (sym p)
+    dist (fs (fs fz))   (fs fz)        _ p = sep12 (sym p)
+    dist (fs (fs fz))   (fs (fs fz))   h _ = h refl
+
+    cov : (x : S) → Σ (Fin 3) (λ i → x ≡ pt i)
+    cov x with cover x
+    ... | inj₁ p          = fz , p
+    ... | inj₂ (inj₁ p)   = fs fz , p
+    ... | inj₂ (inj₂ p)   = fs (fs fz) , p
+\end{code}
+
+What these proofs together establish is the formal counterpart of
+\emph{Why binary, not unary or ternary} from Part~I, in the precise
+sense available to the present framework.  Singleton carriers cannot
+host a distinction at all: the lemma
+\AgdaFunction{distinction-n-1-collapses} forces every two elements of
+a unary carrier to coincide, and \AgdaFunction{no-distinction-on-Dn1}
+closes the bridge by showing that no \AgdaRecord{Distinction} can
+inject into such a carrier without contradicting
+\AgdaField{separated}.  The original record is exactly the $n=2$
+case of an n-ary template (\AgdaFunction{distinction-to-Dn2},
+\AgdaFunction{Dn2-to-distinction}).  At $n=3$, the conversions
+\AgdaFunction{Dn3-to-binary} and \AgdaFunction{binary-to-Dn3} prove
+more than that ternary data carries binary content: they prove that
+ternary data is recoverable from binary content, since the binary
+package of three pairwise separations and a nested binary cover
+reconstructs a \AgdaRecord{Distinction-n} \AgdaNumber{3}.
+
+The scope of this last claim is precisely the scope of the framework.
+The theorem says that, inside this development, every inhabitant of
+\AgdaRecord{Distinction-n} \AgdaNumber{3} is definitionally equivalent
+to a binary package; it does not assert that no other foundation could
+treat ``three positions'' as a primitive entity.  An ontology that
+posits an irreducible ternary primitive is not refuted here.  What is
+shown is that within the present record-based, --safe --without-K
+fragment of MLTT, the n-ary record at $n=3$ adds no information beyond
+binary data plus a labelling.  Binary is therefore the minimal
+cardinality at which the \AgdaRecord{Distinction} record is
+inhabitable in this framework, and higher arities reduce, in this
+framework, to binary structure plus a labelling map.
 
 \section{Normal Form}
 
@@ -290,32 +831,57 @@ endomorphisms-closed c d =
   composeCase c d , λ x → sym (classify-sound (interpret c ∘₂ interpret d) x)
 \end{code}
 
-The closure argument is then finite and rigid.
+The closure argument is then finite and rigid.  To represent the four
+endomorphism cases as distinct and usable data, no additional structure
+is assumed beyond what representation itself requires.  Unpacking this
+requirement yields exactly the following three conditions.
 
-First, a faithful carrier for the closure must represent all four
-endomorphism cases without identifying them.  If two cases are
-identified, \AgdaFunction{case-unique} shows that the corresponding
-functions agree pointwise; but the only way different rows of the four
-case table agree is by forcing \AgdaInductiveConstructor{L} and
+\begin{enumerate}
+\item \emph{Separation.} Distinct endomorphism cases must remain
+  distinct on the carrier.  No identification of cases is allowed.
+\item \emph{Realisation.} Every endomorphism case must be represented
+  by a vertex of the carrier.
+\item \emph{No surplus.} Every vertex of the carrier must arise from
+  one of these cases.
+\end{enumerate}
+
+These conditions are not additional structural assumptions.  They are
+exactly what is required if ``representation'' is taken to mean that
+each endomorphism case is carried as a distinct and retrievable element
+of the carrier, and that every element of the carrier corresponds to
+such a case.  Without separation, cases collapse; without realisation,
+cases are missing; without the no-surplus condition, additional
+structure is introduced.
+
+Under these three conditions, fewer than four vertices cannot represent
+the four cases without identification.  If two cases are identified,
+\AgdaFunction{case-unique} shows that the corresponding functions agree
+pointwise; but the only way different rows of the four case table agree
+is by forcing \AgdaInductiveConstructor{L} and
 \AgdaInductiveConstructor{R} to coincide, contradicting
-\AgdaFunction{L≠R}.  Thus a faithful carrier has at least four
-vertices.
+\AgdaFunction{L≠R}.  Thus separation and realisation together force at
+least four vertices.
 
-Second, adding a fifth vertex cannot be forced by the endomorphism
-data.  The composite of any two represented cases is already one of
-the four classified cases, by \AgdaFunction{endomorphisms-closed}.  A
-new vertex would not be the value of any forced composition; it would be
-extra structure.
+An additional vertex is not forced by the endomorphism data.  The
+composite of any two represented cases is already one of the four
+classified cases, by \AgdaFunction{endomorphisms-closed}.  A new vertex
+would not be the value of any forced composition; it would violate no
+surplus.
 
-Third, the graph relation induced by composability is complete on the
-four vertices.  Any ordered pair of endomorphisms has a composite, so
-there is no missing composability relation between distinct vertices.
-For the underlying simple graph, this is exactly $K_4$.
+Finally, total composability is not another assumption.  Any ordered
+pair of endomorphisms has a composite, so there is no missing
+composability relation between distinct represented cases.  For the
+underlying simple graph, this is exactly $K_4$.
 
-The following small records spell out the faithful/minimal carrier
-condition used in the preceding paragraph.  A faithful closure realizes
-the four cases injectively; a minimal one has no vertex except a
-realized case.
+The following small records package the three conditions.  The record
+\AgdaRecord{FaithfulClosure} contains realisation and separation:
+\AgdaField{realize} supplies a vertex for each case, and
+\AgdaField{reflect-realize} prevents two cases from being identified.
+The record \AgdaRecord{MinimalClosure} adds no surplus through
+\AgdaField{no-extra}.
+
+These conditions are therefore not independent choices,
+but unpack the content of this notion of representation.
 
 \begin{code}
 record FaithfulClosure : Set₁ where
@@ -366,47 +932,275 @@ realize-reflect m v with MinimalClosure.no-extra m v
     q = trans (sym (reflect-realize c)) (cong reflect p)
 \end{code}
 
+The three record fields are not three independent stipulations.  Each
+one is exactly the load-bearing piece of one of the three
+representation conditions, and the following lemmas name that load.
+The proofs are short because the conditions are exactly the bijection
+data; that is the point.
+
+\emph{Separation is load-bearing.}  The field
+\AgdaField{reflect-realize} forces \AgdaField{realize} to be injective.
+If two cases were identified on the carrier, applying
+\AgdaField{reflect} to the identification would identify the cases
+themselves, contradicting the four-case enumeration of
+\AgdaDatatype{EndoCase}.
+
+\begin{code}
+realize-injective :
+  (m : MinimalClosure) →
+  (c d : EndoCase) →
+  FaithfulClosure.realize (MinimalClosure.closure m) c
+    ≡ FaithfulClosure.realize (MinimalClosure.closure m) d →
+  c ≡ d
+realize-injective m c d p =
+  trans (sym (FaithfulClosure.reflect-realize (MinimalClosure.closure m) c))
+    (trans (cong (FaithfulClosure.reflect (MinimalClosure.closure m)) p)
+      (FaithfulClosure.reflect-realize (MinimalClosure.closure m) d))
+\end{code}
+
+\emph{Realisation is load-bearing.}  The totality of
+\AgdaField{realize} on \AgdaDatatype{EndoCase} is exactly the demand
+that every endomorphism case is hosted by some vertex.  Without it,
+some case has no representative and the carrier fails to support the
+composition table at all.
+
+\begin{code}
+case-has-vertex :
+  (m : MinimalClosure) →
+  (c : EndoCase) →
+  Σ (FaithfulClosure.V (MinimalClosure.closure m))
+    (λ v → FaithfulClosure.realize (MinimalClosure.closure m) c ≡ v)
+case-has-vertex m c =
+  FaithfulClosure.realize (MinimalClosure.closure m) c , refl
+\end{code}
+
+\emph{No surplus is load-bearing.}  The field \AgdaField{no-extra}
+forbids vertices that do not arise from any endomorphism case.  Without
+it, the carrier may host data that is not forced by the endomorphism
+set, breaking the claim that the closure adds nothing to its datum.
+
+\begin{code}
+vertex-from-case :
+  (m : MinimalClosure) →
+  (v : FaithfulClosure.V (MinimalClosure.closure m)) →
+  Σ EndoCase
+    (λ c → FaithfulClosure.realize (MinimalClosure.closure m) c ≡ v)
+vertex-from-case m v = MinimalClosure.no-extra m v
+\end{code}
+
+Dropping \AgdaField{reflect-realize} re-admits identification of
+cases.  Dropping the totality of \AgdaField{realize} re-admits cases
+without vertices.  Dropping \AgdaField{no-extra} re-admits vertices
+without cases.  In each case, what survives is no longer a
+representation of the four-case set in the intended sense.  The three
+fields are therefore not chosen because they yield $K_4$; they are
+fixed because dropping any one breaks representation, and $K_4$
+follows.
+
+The companion proves these three load-bearing lemmas against its own
+slim records \AgdaRecord{FaithfulClosure} and \AgdaRecord{MinimalClosure}
+so that the file remains self-contained and type-checks without the
+larger source.  The full development \texttt{Void.lagda.tex} carries
+the analogous statements against the richer \AgdaRecord{K4Record} used
+there; the present file does not import them, it reproduces them at
+the level of detail that this note needs.
+
 This is the sense in which the closure yields $K_4$: the forced vertex
 set is the four-case set, and the induced simple graph connects every
 distinct pair.  The equations \AgdaField{reflect-realize} and
-\AgdaFunction{realize-reflect} show that any faithful and minimal
-closure is equivalent to the four-case carrier.  Thus $K_4$ is not a
-choice among several closures; it is the unique closure satisfying the
-stated constraints.
+\AgdaFunction{realize-reflect} show that any carrier satisfying the
+three conditions is equivalent to the four-case carrier.
 
-\section{Loop Closure}
+Equivalently, for any \AgdaBound{m} : \AgdaRecord{MinimalClosure}, the
+carrier
+\[
+\AgdaField{FaithfulClosure.V}\,(\AgdaField{MinimalClosure.closure}\,m)
+\]
+is in bijection with \AgdaDatatype{EndoCase} via \AgdaField{realize}
+and \AgdaField{reflect}.  The field \AgdaField{reflect-realize}
+proves one composite to be the identity on \AgdaDatatype{EndoCase};
+\AgdaFunction{realize-reflect} proves the other composite to be the
+identity on the carrier.  If composition on the carrier is read through
+this bijection,
+\[
+v \star_m w =
+\AgdaField{realize}_m
+  (\AgdaFunction{composeCase}\,(\AgdaField{reflect}_m\,v)
+                              (\AgdaField{reflect}_m\,w)),
+\]
+then reflecting the composite recovers the four-case composition table
+of \AgdaDatatype{EndoCase}.  In this precise sense every minimal
+closure satisfying separation, realisation, and no surplus is
+isomorphic to the canonical four-case carrier.  Thus $K_4$ is not only
+minimal; it is unique up to isomorphism under the stated constraints.
 
-The $K_4$ closure does not replace the original distinction.  It
-presupposes it.  The four vertices are the four endomorphism cases of
-\AgdaDatatype{Two}, and \AgdaDatatype{Two} is the normal form of a
-binary distinction.  Thus the closure points back to the same data from
-which it was obtained.
+\section{Leibniz collapse, executed}
 
-At this scale the loop is direct: any minimal closure over the four
-endomorphism cases determines the canonical distinction used to define
-those cases.
+The earlier section on why two cannot occur without separation argued
+that the principle is universal: it appears in classical logic as
+substitutivity, in set theory as extensionality, in category theory as
+Yoneda, in quantum mechanics as the indistinguishability that forces
+the statistical structure.  Once a concrete carrier is chosen, the
+same principle becomes a checkable term.  Martin-L\"of type theory
+realises it in two lines: the induction principle for propositional
+equality yields, by direct application, the Leibniz collapse.  If two
+elements satisfy exactly the same predicates, they are propositionally
+equal.
+
+\begin{code}
+leibniz-collapse :
+  {S : Set} (a b : S) →
+  ((P : S → Set) → P a → P b) →
+  a ≡ b
+leibniz-collapse a b ind = ind (λ x → a ≡ x) refl
+\end{code}
+
+The Agda term is one realisation of the principle, not its source.
+The principle is older than the type checker and would survive any
+particular choice of carrier; the type checker only confirms that the
+realisation in this carrier introduces no hidden step.  Inside the
+present setting, this means that no element of any
+\AgdaRecord{Distinction} is silently a third position pretending to be
+a fourth: the \AgdaField{separated} field already certifies that the
+two boundary points cannot be Leibniz-collapsed onto each other, and
+the \AgdaField{cover} field certifies that no further occurrence
+escapes the two.
+
+\section{Re-projection to the datum}
+
+The $K_4$ closure does not replace the original distinction; it
+presupposes it.  This section makes the dependency explicit at two
+levels of strength so that no reader can mistake the closure for an
+independent foundation, and so that the trivial direction is not
+advertised as more than it is.
+
+\emph{The structural content as a checked term.}  The bijection
+between the carrier of any minimal closure and the four endomorphism
+cases is not left to commentary.  It is bundled as a record and
+constructed from the lemmas already proved: \AgdaField{reflect-realize}
+is one round-trip, \AgdaFunction{realize-reflect} is the other.  This
+is the load-bearing structural map.
+
+\begin{code}
+record Bijection (A B : Set) : Set where
+  field
+    to      : A → B
+    from    : B → A
+    to-from : (b : B) → to (from b) ≡ b
+    from-to : (a : A) → from (to a) ≡ a
+
+closure-bijection-EndoCase :
+  (m : MinimalClosure) →
+  Bijection (FaithfulClosure.V (MinimalClosure.closure m)) EndoCase
+closure-bijection-EndoCase m = record
+  { to      = FaithfulClosure.reflect         (MinimalClosure.closure m)
+  ; from    = FaithfulClosure.realize         (MinimalClosure.closure m)
+  ; to-from = FaithfulClosure.reflect-realize (MinimalClosure.closure m)
+  ; from-to = realize-reflect m
+  }
+\end{code}
+
+This term is the actual dependency.  Every minimal closure has a
+carrier in checked bijection with \AgdaDatatype{EndoCase}; by
+\AgdaFunction{two-normal-form}, \AgdaDatatype{EndoCase} is built from
+\AgdaDatatype{Two}, the canonical carrier of any binary distinction.
+The four-vertex structure is therefore not an independent foundation;
+it is, up to the bijection just constructed, the endomorphism set of
+the normal form of any binary distinction.
+
+\emph{The constant.}  At the bare level of returning a value of type
+\AgdaRecord{Distinction}, every minimal closure determines a
+distinction, namely the canonical one.  The corresponding Agda term is
+a constant function.  The reason it is a constant and not a richer
+structural map is honest: a \AgdaRecord{Distinction} has a two-element
+carrier, while the closure carrier has four; no map of records
+\AgdaBound{m} : \AgdaRecord{MinimalClosure} \AgdaSymbol{→}
+\AgdaRecord{Distinction} can be a bijection on carriers.  The actual
+bijective content lives one level below, in
+\AgdaFunction{closure-bijection-EndoCase} above.  The constant below
+is the bookkeeping shadow of that bijective content, recorded as such.
 
 \begin{code}
 k4-presupposes-distinction : MinimalClosure → Distinction
 k4-presupposes-distinction _ = Two-distinction
 \end{code}
 
-The full formalization uses a richer \AgdaRecord{K4Record}, but the
-dependency is the same: the closure carrier is not an independent
-foundation.  It is the closure of the binary normal form.
+The full formalisation uses a richer \AgdaRecord{K4Record}.  The
+structural dependency carries over without change: the closure carrier
+is not an independent foundation, it is, by
+\AgdaFunction{closure-bijection-EndoCase}, in checked bijection with
+the endomorphism set of the binary normal form.
+
+\part*{Part III.\quad Frame}
 
 \section{Scope Clarification}
 
-The result is conditional.  It says: given a structure with two
-distinguishable, exhaustive points, the normal form is
-\AgdaDatatype{Two}; given the endomorphisms of that normal form, their
-minimal faithful compositional closure has four vertices and complete
-simple adjacency.  The result does not say that every theory begins
-with such a distinction, nor that every mathematical object reduces to
-\AgdaDatatype{Two}.
+The scope of this note is narrow by design.
 
-No further constructions are treated here.  They are outside the
+\emph{What is not claimed.} Nothing in the preceding sections asserts
+that a binary distinction takes place. The development never builds
+an inhabitant of \AgdaRecord{Distinction} without supplied data; every
+Distinction-valued construction below the abstract takes a Distinction
+as input. The proofs are silent on the question of whether such an
+input exists in any external sense.
+
+\emph{What is conceptually argued, not formally proved.} The
+introductory paragraphs argue that any formalisation at all already
+presupposes a field of separability: relations, morphisms, judgements,
+and equations all require distinguishable positions before they can be
+used.  This is a remark on the conditions under which formalisation is
+possible, not a theorem.  Nothing in the Agda code attempts to prove it,
+and the formal results below do not depend on it: they begin once the
+data is granted.
+
+\emph{What is machine-proved.} The conditional consequence is what
+the Agda code establishes. Given a structure with two
+distinguishable, exhaustive points, the normal form is
+\AgdaDatatype{Two}; given the endomorphisms of that normal form,
+representing the four cases with separation, realisation, and no
+surplus yields the four-case carrier with complete simple adjacency;
+and the closure entails the data from which it was built. The result
+therefore does not say that every theory begins with such a distinction,
+nor that every mathematical object reduces to \AgdaDatatype{Two}. It
+says only what follows when the stated data is granted.
+
+No further constructions are treated here. They are outside the
 present claim.
+
+\section{Placement}
+
+The note is brief enough to mistake for naivety; this section locates
+it in three lineages so that the contribution is read for what it is.
+
+\emph{Spencer-Brown.}  The thesis that distinction is the foundational
+act is at least as old as \emph{Laws of Form} (1969).  The present
+note neither defends nor extends that thesis.  It records what holds
+once a distinction is granted, in a form a type checker can verify.
+The contribution is the precision of the conditional, not the
+originality of the antecedent.
+
+\emph{Lawvere.}  ``Adjointness in Foundations'' (1969) treats truth
+and falsity as adjoint to the act of distinguishing.  The present note
+operates one level below: before truth-values are assigned, before
+propositions are evaluated.  \AgdaDatatype{Two} is a fresh carrier,
+deliberately unread as $\{\bot,\top\}$, so that the closure result
+depends on separation alone and not on a prior reading of the two
+points as truth-values.
+
+\emph{Univalent foundations.}  \AgdaDatatype{Two} is an h-set, and the
+development uses \texttt{--without-K}.  No higher-dimensional
+structure is assumed or invoked.  The note is therefore compatible
+with both intensional Martin-Löf type theory and a univalent reading;
+nothing in the closure result depends on the choice of identity
+discipline.
+
+What is offered here is not a competing foundation, and not an
+argument that distinction-based foundations are superior to others.
+It is one machine-checked statement at a place where earlier work has
+been mostly informal: that the closure of binary distinction is $K_4$,
+unique up to isomorphism, under three precisely fixed conditions of
+representation, and that this closure points back to the data from
+which it was built.
 
 \section{Outlook}
 
@@ -422,18 +1216,32 @@ a global conclusion.  It is the controlled question of what can be built
 on the surviving carrier without adding new generators.  This note only
 isolates the starting point.
 
-\section{Full Formalization}
+\section{Navigation into the book}
 
 The corresponding self-contained development is in the repository
 \href{https://github.com/de-johannes/Void-and-Form}{de-johannes/Void-and-Form}.
-The main file is \texttt{Void.lagda.tex}.  The relevant anchors are:
+The main file is \texttt{Void.lagda.tex}.  The route through the larger
+book is:
 
 \begin{itemize}
-\item \texttt{Distinction}: lines 804ff.
-\item \texttt{two-normal-form}: line 1652.
-\item Endomorphism classification of \texttt{Two -> Two}: lines 1145ff.
-\item \texttt{K4Record-is-canonical}: line 27140.
-\item \texttt{record-presupposes-distinction}: line 31748.
+\item \emph{Void as boundary}: \emph{What Void Does Not Name},
+  \emph{Why Formal Systems Cannot Begin Themselves}, and
+  \emph{Representation Requires A Cut}.
+\item \emph{The binary threshold}: \emph{Why The First Cut Is Binary},
+  \emph{The Formal Threshold}, and the record \texttt{Distinction}.
+\item \emph{Normal form and classification}: \emph{Elimination and
+  Classification}, \emph{Two Normal Form}, and the endomorphism
+  classification of \texttt{Two -> Two}.
+\item \emph{Four-vertex closure}: \emph{Graph Presentation},
+  \emph{The K4 Invariant Record}, \emph{K4 Representation Theory},
+  and \texttt{K4Record-is-canonical}.
+\item \emph{Return to the datum}: \texttt{record-presupposes-distinction},
+  the formal witness that the surviving closure entails the originating
+  distinction.
+\item \emph{Interpretive continuation}: the later volume \emph{Form},
+  where origin, contact, spatial separation, temporal order, physical
+  reading, contingency, and induction are treated as structural
+  interpretations rather than new generators.
 \end{itemize}
 
 \end{document}
