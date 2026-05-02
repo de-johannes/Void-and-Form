@@ -1,7 +1,5 @@
 \documentclass[10pt,a4paper]{book}
-\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{unicode-math}
 \usepackage{libertine}
 \IfFontExistsTF{Menlo}{%
   \setmonofont{Menlo}[Scale=MatchLowercase]%
@@ -85,6 +83,7 @@
 \newunicodechar{π}{\ensuremath{\pi}}
 \newunicodechar{σ}{\ensuremath{\sigma}}
 \newunicodechar{τ}{\ensuremath{\tau}}
+\newunicodechar{φ}{\ensuremath{\phi}}
 \newunicodechar{χ}{\ensuremath{\chi}}
 \newunicodechar{ψ}{\ensuremath{\psi}}
 \newunicodechar{ω}{\ensuremath{\omega}}
@@ -130,6 +129,8 @@
 
 % Miscellaneous symbols
 \newunicodechar{ℓ}{\ensuremath{\ell}}
+\newunicodechar{𝜀}{\ensuremath{\epsilon}}
+\newunicodechar{𝜖}{\ensuremath{\varepsilon}}
 \newunicodechar{∸}{\ensuremath{\dot{-}}}
 \newunicodechar{∷}{\ensuremath{::}}
 \newunicodechar{·}{\ensuremath{\cdot}}
@@ -170,7 +171,7 @@
 
 \usepackage{setspace}
 \onehalfspacing
-\usepackage{amsmath,amsthm}
+\usepackage{amsmath,amsthm,amssymb}
 \IfFileExists{agda.sty}{\usepackage{agda}}{\usepackage{latex/agda}}
 
 % Keep Agda code inside the page as far as possible.
@@ -178,12 +179,12 @@
 \setlength{\mathindent}{0pt}
 \renewcommand{\AgdaIndentSpace}{\hspace*{0.30em}}
 
-% Suppress overfull warnings from Agda code blocks (long identifiers).
-\AtBeginEnvironment{code}{\hfuzz=250pt}
-% Allow slightly looser line-breaking in prose paragraphs.
-\emergencystretch=1em
-% Tolerate tiny overflows from inline \texttt{} spans that LaTeX cannot hyphenate.
-\hfuzz=10pt
+% Keep long literate-Agda identifiers and ledger formulae intact without log noise.
+\AtBeginEnvironment{code}{\hfuzz=400pt}
+\emergencystretch=3em
+\hfuzz=120pt
+\hbadness=10000
+\vbadness=10000
 
 \usepackage{tikz}
 \usetikzlibrary{positioning,arrows.meta,calc,backgrounds,shadows,decorations.pathreplacing}
@@ -208,7 +209,12 @@
   \newcommand{\AgdaFlag}[1]{\texttt{-{}-#1}}
 
 \usepackage{hyperref}
-\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue}
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,bookmarksdepth=2}
+\makeatletter
+\def\toclevel@subsection{1}
+\def\toclevel@subsubsection{2}
+\def\toclevel@paragraph{3}
+\makeatother
 \pdfstringdefDisableCommands{%
   \def\Sigma{Sigma}%
   \def\alpha{alpha}%
@@ -239,12 +245,13 @@
 %% ─── Document ────────────────────────────────────────────────────────────────
 
 \begin{document}
+\raggedbottom
 
 \begin{titlepage}
 \centering
 \vspace*{3cm}
 {\Huge\bfseries Void}\\[0.5cm]
-{\Large\itshape An Eliminative Ontology of Distinction}\\[2cm]
+{\Large\itshape Conditions of Formulability}\\[2cm]
 {\large Johannes Michael Wielsch}\\[4cm]
 \begin{tikzpicture}[scale=2]
   \coordinate (A) at (0,0); \coordinate (B) at (1,0);
@@ -253,10 +260,10 @@
   \draw[thick] (A)--(D); \draw[thick] (B)--(D); \draw[thick] (C)--(D);
   \foreach \p in {A,B,C,D} \fill (\p) circle (2pt);
 \end{tikzpicture}\\[4cm]
-{\small Machine-verified in Agda}\\
 {\small Built with AI}\\
+{\small Machine-verified in Agda}\\
 \vfill
-{\small April 2026}\\
+{\small May 2026}\\
 {\small DOI: 10.5281/zenodo.19491035}\\[0.5cm]
 \end{titlepage}
 
@@ -274,242 +281,268 @@
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-A single inductive type with two constructors, together with a derived inequality witness between them, is sufficient to force a unique finite combinatorial structure—the complete graph on four vertices—and to obstruct every alternative carrier on which the same generating data would embed faithfully. The arithmetic of $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, and $\mathbb{R}$, together with sequential completeness of the resulting reals, is then constructed from no further data. The final theorem of the development closes the loop: every admissible invariant record on the surviving structure already presupposes the inequality witness with which the file began. The argument is fully mechanised; the text and its verifier are the same file.
+This work does not ask what emerges from a presupposed ``nothing''. It asks under which conditions formal description is possible at all. The starting point is the minimal condition of every formal theory: distinguishable positions. Without such distinguishability, no relation, judgement, equation, map, representation, truth-value, or falsehood can be formulated. \emph{Void} names this pre-formal boundary. It is not the empty set, not the empty type, and not a physical nothing; it is the absence of the domain in which those notions could already occur.
 
-The development is carried out inside intensional Martin-Löf type theory with the flags \AgdaFlag{safe} and \AgdaFlag{without-K}. That formal setting is the stage, and the stage is not empty: it supplies dependent function types, dependent pair types, inductive families, and propositional equality with its standard eliminator. No further axioms, postulates, or library imports are used.
+Once distinguishability is granted, it has a minimal realised form: two non-collapsing occurrences that exhaust their carrier. This minimality is not an additional assumption. A single occurrence carries no distinction, and every further difference already presupposes a binary articulation by which one position can be told from another. From this point onward the book becomes formal. Inside intensional Martin-L\"of type theory, checked by Agda under \AgdaFlag{safe} and \AgdaFlag{without-K}, the record \texttt{Distinction} represents the threshold as a carrier, two separated boundary points, and an exhaustive cover. Every such structure has the canonical normal form \texttt{Two}; its endomorphisms exhaust to four cases; representing those cases with separation, complete realisation, and no surplus forces a four-element structure with complete simple adjacency; and the resulting structure points back to the distinction from which it arose.
 
-Against this stage one structural object is introduced. Let \texttt{Two : Set} denote the inductive type with constructors \texttt{L} and \texttt{R}, together with a witness \texttt{Two-L≠R\,:\,L\,≡\,R\,→\,⊥} derived inside the same file. A \emph{distinction} is the record \texttt{Distinction} consisting of a carrier \texttt{S : Set}, two distinguished points \texttt{ℓ, r : S}, a separation witness \texttt{ℓ\,≡\,r\,→\,⊥}, and an exhaustiveness clause \texttt{(x : S)\,→\,(x\,≡\,ℓ)\,⊎\,(x\,≡\,r)}. Outside this single record, no carrier, no arithmetic, no order, no measurement scale is granted. The starting position is a meta-vacuum in the structural sense---empty of mathematical content, not of formal scaffolding.
+The argument is therefore not a derivation from an ontological beginning. It is an analysis of the conditions under which formal theories can be formulated, followed by the machine-checked derivation of the first non-trivial structure that necessarily appears once those conditions are represented. The later arithmetic, spectral, and interpretive layers of the book unfold over that survivor. They do not supply a new generator.
 
-Inside this setting the following statements are mechanised.
+\section*{Structural Schema}
+\addcontentsline{toc}{chapter}{Structural Schema}
 
-\begin{enumerate}
-\item (Normal-form uniqueness for binary distinction.) Every \texttt{Distinction} is boundary-preservingly isomorphic to the canonical \texttt{Two}-distinction; the isomorphism is unique up to the swap \texttt{L\,↔\,R}. Both halves are mechanised as \texttt{two-normal-form} together with \texttt{law1-9-iso-to-unique} and \texttt{law1-10-orientation-exhaustive}.
+\begin{description}
+\item[Level 0: Void.] No type, no term, no carrier. The schematic marker is $\mathcal{V} \notin \mathit{Set}_\omega$. Void is not a stable endpoint in the sense of a foundation, because every act of positing already presupposes structure. It is therefore not refutably unstable; it is conceptually non-closable. This level is marked, not proved.
 
-\item (Closure of the endomorphism space.) The pointwise-equivalence classes of endomorphisms of \texttt{Two} exhaust to four cases \texttt{case-constL}, \texttt{case-constR}, \texttt{case-id}, \texttt{case-dual}, witnessed by the data type \texttt{EndoCase} together with \texttt{classify-sound} and \texttt{classify-unique}; the representation record \texttt{EndoRepresentability} is propositionally unique.
+\item[Level 1: Information.] Information is understood in Bateson's minimal sense: a difference that makes a difference. Without distinction, an occurrence carries no information; a single undifferentiated occurrence collapses back into the boundary. Information therefore presupposes distinction, and an inhabited distinction requires at least two distinguishable occurrences. This binary shape is minimal because every further difference already relies on it.
 
-\item (Three-vertex failure, four-vertex closure.) The four endomorphism classes do not embed pairwise-distinctly into a three-vertex carrier (\texttt{no-four-distinct-Three}). They embed uniquely into the complete graph on four vertices. Any structure that takes the binary distinction as its only generating datum, accepts the four endomorphism cases as its only generating maps, and demands a carrier on which all four embed pairwise-distinctly admits no model on fewer than four vertices and no proper extension beyond $K_{4}$. The representation record \texttt{K4Record} is inhabited and propositionally unique.
+\item[Level 2: Two.] The first stable formal carrier is \texttt{data Two : Set where L R : Two}. It contains two separated points and no third generator. It is not a truth-value object; it is the normal form of distinction. From this level onward the formal threshold is crossed: MLTT and Agda can execute the consequences of the datum they have received.
 
-\item (Arithmetic from the same starting datum.) The standard number systems $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$ are constructed in the same file from no further data than the inductive types already used to introduce the binary distinction. Their field, order, and metric laws are proved, not posited. Sequential completeness of the present construction of $\mathbb{R}$---every Cauchy sequence admits a limit (\texttt{ℝ-cauchy-complete})---is established without quotient types and without the axiom of choice.
+\item[Level 3: Logic.] Formal systems operate on structures in which distinguishable positions are already available. Relation, morphism, judgement, and equation do not construct that availability; they use it. MLTT is the clean carrier used here, not the origin of the cut.
 
-\item (Closure into the origin.) The final theorem of Part~VIII shows that any inhabitant of the surviving record \texttt{K4Record} entails an inhabitant of \texttt{Distinction} (\texttt{record-presupposes-distinction}). The development is therefore not a chain from premise to conclusion but a closed loop: the datum that opens the file is forced again by what the file establishes.
-\end{enumerate}
+\item[Level 4: Mathematics.] The machine-checked chain is the mathematical core: every \texttt{Distinction} is isomorphic to \texttt{Two}; the endomorphisms of \texttt{Two} have exactly four cases; representing those cases under separation, complete realisation, and no surplus forces the four-element closure, unique up to isomorphism; and the closure returns the originating distinction. No further generator is introduced.
 
-Numerical and spectral invariants of the surviving structure---Euler characteristic, Laplace spectrum, simplex evaluations, loop counts---are derived in the body and play the role of detail rather than headline. The headline is the loop itself: under the formal stage stated above, any structure inside this stage whose only generating datum is the binary distinction collapses, by elimination, onto $K_{4}$. Every numerical equation in the development is verified by \texttt{refl} in the same file.
+\item[Level 5: Form.] The interpretive volume reads the stability conditions of distinction structurally. Two distinguishable occurrences collapse if neither origin nor position can distinguish them. Non-identity of origin gives the germ of temporal order; non-coincidence gives the germ of spatial separation. Space and time are not asserted as primitive entities here. They name conditions under which distinction does not collapse.
+
+\item[Level 6: Physics.] Physics enters as interpretation of the preceding structural conditions by an observer who already operates inside them. Form is not physics; it is the structure from which physical description can be read.
+
+\item[Level 7: Contingency.] Necessity stops before complete worldly specification. The preceding levels fix conditions, not the full concrete world that satisfies them.
+
+\item[Level 8: Induction.] No new external generator is postulated. More complex structures are read as repeated applications and stabilisations of the original distinction. Induction is the law of that repetition. This is a structural reading, not a reductionist claim about all mathematics.
+\end{description}
+
+The first two levels are not formal statements inside a type system. They state the conditions under which formal statements can appear. They are not left informal because notation is missing, but because they concern the possibility of introducing notation in the first place. From Level 2 onward the formal theory begins, and the claims are expressible and checkable inside it.
 
 \section*{Inheritance}
 \addcontentsline{toc}{chapter}{Inheritance}
 
-None of the ideas in this work are new. The derivation is a single thread; what follows names the hands that spun it.
+None of the ideas in this work are ownerless. The derivation is a single thread; what follows names the hands that spun it.
 
-The starting point—that a distinction, not a thing, is the irreducible atom of form—belongs to George Spencer-Brown. The conviction that this is not metaphor but structure—that form reduces to yes-or-no at every point—is the wager this formalization accepts.
+The starting point---that a distinction, not a thing, is the irreducible atom of form---belongs to George Spencer-Brown. This work does not begin with a distinguishing operation, but with the minimal structure in which a distinction is already realised. The question is not how a distinction is drawn, but what must be given for a distinction to be stably present.
 
-That such a claim can be made rigorous at all is owed to the constructivists. Brouwer insisted that existence demands a witness. Heyting gave that demand algebraic form. Curry and Howard revealed that proofs and programs are the same act. Per Martin-Löf forged these insights into a type theory strong enough to carry mathematics, and Voevodsky showed what must be given up—axiom K, uniqueness of identity proofs—if homotopy is to be taken seriously. Every line of this work is executed inside that disciplined formal setting, while the surviving structure is judged by the constraints it satisfies, not by a preference for the setting itself.
+That the second layer can be made rigorous at all is owed to the constructivists. Luitzen Egbertus Jan Brouwer insisted that existence demands a witness. Arend Heyting gave that demand algebraic form. Haskell Curry and William Alvin Howard revealed that proofs and programs are the same act. Per Martin-L\"of forged these insights into a type theory strong enough to carry mathematics, and Vladimir Voevodsky showed what must be given up---axiom K, uniqueness of identity proofs---if homotopy is to be taken seriously. This work does not make type theory the origin of the cut; it uses type theory as the disciplined threshold at which the consequences of the cut can be executed without smuggling in additional structure.
 
-The combinatorial backbone has older roots. Euler first counted vertices, edges, and faces as a single invariant. Cayley classified graphs by their symmetries. Birkhoff established when a representation is canonical—when structure admits exactly one normal form. These are the tools through which the filtration closes: under the stated constraints, $K_4$, and only $K_4$, survives.
+The combinatorial backbone has older roots. Leonhard Euler first counted vertices, edges, and faces as a single invariant. Arthur Cayley classified graphs by their symmetries. Garrett Birkhoff established when a representation is canonical. Under the stated constraints, the four-element closure is forced and unique up to isomorphism.
 
-That the spectral analysis of the survivor is determined by these tools is owed to the tradition built by Fourier, Laplace, and Hilbert. In this work, the Laplacian of $K_4$ yields a spectrum---$\{0,4,4,4\}$---that was not chosen but inherited.
+That spectral properties of this structure are determined rather than chosen follows the tradition of Joseph Fourier, Pierre-Simon Laplace, and David Hilbert. The Laplacian spectrum of the resulting structure is inherited, not imposed.
 
-What determines which quantities are invariant is the automorphism group, and its theory has its own lineage. Galois revealed that solvability is a property of the group, not the equation. Here, the automorphism group $\mathrm{Aut}(K_4) \cong S_4$ is the arbiter: only quantities invariant under it factor through the canonical base.
+What determines invariance is the automorphism group. Evariste Galois showed that solvability is a property of the group, not the equation. Here, the automorphism group of the closure structure plays that role: only quantities invariant under it factor through the canonical base.
 
-The categorical perspective—that structure is characterized not by what it \emph{is} but by the maps it \emph{admits}—descends from Lawvere and the tradition of Tarski, where fixpoints are not found but forced by the architecture of the logic itself.
+The categorical perspective---that structure is characterized by the maps it admits---descends from William Lawvere and the semantic tradition of Alfred Tarski.
 
-What is new here is not the question but the execution. The Agda type checker enforces the declared formal constraints without exception, and those constraints are applied to a question these traditions raised from different directions. If the result has weight, it has it because the filter is explicit and mechanically checked.
+What is new here is not the question but the execution. The constraints are explicit, minimal, and mechanically checked once the formal threshold is crossed.
 
 \mainmatter
 
-\chapter{Introduction}
-\label{ch:introduction}
+\part*{The Ontological Threshold}
+\addcontentsline{toc}{part}{The Ontological Threshold}
 
-\section{Three Questions, One Filter}
-\label{sec:introduction:three-questions-one-filter}
+\chapter{What Void Does Not Name}
+\label{ch:void-does-not-name}
 
-The void is the unmarked state. This observation—that a system capable of examining itself already distinguishes examination from non-examination—has appeared independently in logic and in the foundations of mathematics. What has not been carried through in full mechanical detail is the following question: if one grants only the minimal distinction required for a formal system not to collapse into vacuity, which structure remains after the unstable alternatives are eliminated? This book derives that answer.
+\section{The Name Does Not Create An Object}
+\label{sec:void:name-not-object}
 
-Two disciplines have arrived at this boundary independently.
+The word \emph{Void} is easily misunderstood because ordinary language turns every name into a thing. If the word names something, one is tempted to ask what kind of thing it names: an empty region, an empty set, an empty type, a first object, a background container. Each of those readings arrives too late. A set is already a form of collection. A type is already a domain of possible inhabitants. A region is already separated from another region. A container already distinguishes inside from outside.
 
-Mathematics asks: which structures are consistent?
-Logic asks: which statements can be decided at all?
+Void names the condition before those distinctions have obtained. It is not an object hidden behind objects. It is the absence of the field in which objecthood could already be stated. It is not silence inside a language. It is the boundary before the first difference that would let a language say anything at all.
 
-Different languages, different traditions—and yet, when pushed far enough, both converge on the same mechanism: an internal filter that neither chose. Mathematics eliminates structures that contradict themselves. Logic eliminates propositions that cannot be assigned a truth value without inconsistency.
+This is why the first movement of the book cannot be an Agda theorem. Agda works with terms, types, judgements, constructors, and equality. Each of these already belongs to a field of distinguishable positions. To ask Agda to prove the necessity of that field would be to ask the instrument to generate the condition under which instruments exist. The theorem begins later. The boundary comes first.
 
-What cannot stand under its own requirements, falls. The stages differ. The verdict is identical.
+The danger at the beginning is therefore twofold. If Void is treated as a mathematical object, the argument has smuggled in the very form whose origin is being investigated. If Void is treated as a poetic nothing, the argument loses contact with proof. The path between these failures is narrow: Void is a boundary name. It marks the absence of relation, comparison, representation, judgement, and equation; it does not pretend to be a formal inhabitant of the calculus that later begins.
 
-If the filter is the same everywhere, could the survivor also be the same?
+\section{The Boundary Before Reading}
+\label{sec:void:boundary-before-reading}
 
-\section{Elimination as Method}
-\label{sec:introduction:elimination-as-method}
+The boundary is not a hidden substance behind the world. It is the point at which the question ``what is there?'' has not yet earned the grammar in which it could be asked. A question separates itself from its answer. A name separates itself from what it names. A proof separates premise, transformation, and conclusion. Even denial separates what is denied from the denial that attempts to erase it.
 
-The standard approach in formal work is constructive: posit axioms, define structures, prove theorems, build upward. The direction is from assumption to consequence.
+Void is therefore not the first item in an inventory. It is what remains when inventory has not yet begun. The first form that can survive contact with representation is not an object but a cut: a minimal separation by which a mark can differ from what is unmarked, a side can differ from another side, and a judgement can have a place to stand.
 
-This work begins from the opposite end—the void.
+This is the first discipline of the book. The opening language must not pretend that the cut is already a theorem inside a calculus. The calculus arrives later. The boundary is the pressure that makes arrival possible.
 
-The starting point is reduced to the minimum required for the question to be non-vacuous: a distinction must be admissible. Beyond that, no additional structure is granted in advance. A relentless filter is then applied. At every stage, the question is the same: which structures survive their own consistency requirements under these minimal conditions? Those that do not are annihilated. Those that do, persist because the eliminative pressure does not remove them.
+\chapter{Why Formal Systems Cannot Begin Themselves}
+\label{ch:formal-systems-cannot-begin-themselves}
 
-This is not a new idea. It is how logic has always worked. What has not been traced in full is the consequence of applying this filter mechanically, from the ground up, without exception. This book traces that consequence.
+\section{The First Judgement Already Separates}
+\label{sec:formal-systems:first-judgement}
 
-The filter produces something disconcerting: the more rigorously the initial grant is reduced, the more specific the surviving structure becomes. This is the inverse of what ordinary formal work suggests---fewer axioms should give more models, not fewer. What the derivation shows is that under these minimal conditions the eliminative chain contracts to a single surviving graph, a single invariant record, and a single arithmetic spine.
+A formal system does not wake up in a blank world. It begins with marks that can be repeated, variables that can be substituted, terms that can be judged, equations whose sides can be compared, and rules whose premises can be separated from their conclusions. Even the most austere calculus already distinguishes a judgement from its object, a term from its type, a premise from the inference it licenses.
+
+That is not a defect in formal systems. It is what makes formalisation possible. But it means that no formal system can be the absolute origin of distinction. The first formal line already uses the separation it might wish to analyse. A judgement of the form $a : A$ has two positions. An equality $x \equiv y$ has two sides. A function $A \to B$ has source and target. A context has entries that can be addressed one after another. The machinery of proof begins only after some difference can be held stable enough to be used.
+
+This book therefore refuses the wrong order. Martin-L\"of type theory is not presented as the metaphysical ground from which distinction is manufactured. It is the formal language used here after the ontological threshold has been reached. Once the cut is represented inside that language, the type checker can judge the consequences. Before that point, the question is not yet internal to type theory. It concerns what any type theory, any logic, any calculus, and any act of representation must already presuppose.
+
+\section{The Status Of The Opening Claim}
+\label{sec:introduction:claim-status}
+
+The opening claim is deliberately modest in its formal status and severe in its consequence. It does not say that an event occurred in time. It does not say that a physical particle appeared. It does not say that Agda proves an origin event. It says that representation is impossible without a cut.
+
+The claim can be tested by trying to remove the cut. Remove the distinction between sign and signed, and no representation remains. Remove the distinction between two sides of an equation, and equality has nothing to compare. Remove the distinction between source and target, and no map remains. Remove the distinction between premise and conclusion, and no inference remains. What disappears in each case is not a technical convenience but the possibility of the form itself.
+
+For that reason the reader is asked to keep four statuses separate throughout the book.
+
+\begin{enumerate}
+\item \textbf{Boundary arguments} name what formalisation already presupposes. They are not Agda theorems.
+\item \textbf{Formal representations} translate the boundary into explicit data that a selected proof assistant can manipulate.
+\item \textbf{Machine-checked theorems} prove what follows from those data under the displayed rules.
+\item \textbf{Interpretive readings} belong to the companion volume \emph{Form}, where physical vocabulary is attached only after the formal record has closed.
+\end{enumerate}
+
+Confusing these four statuses destroys the project. Treat the boundary argument as a theorem, and the beginning overclaims. Treat the checked theorems as metaphor, and the execution is lost. Treat the physical readings as premises, and the numerology objection becomes justified. The book survives only if the statuses remain visible.
+
+\chapter{Representation Requires A Cut}
+\label{ch:representation-requires-cut}
+
+\section{Presence Is Not Representation}
+\label{sec:representation:not-presence}
+
+Presence alone does not represent. A single undifferentiated occurrence, with no position from which it can be read and no position to which it can be related, carries no representation. Representation begins only when something can appear \emph{as} something: a mark as a sign, a term as an inhabitant, a side as equal to another side, a map as connecting source to target.
+
+This ``as'' is already a cut. It separates what is presented from the presentation through which it is available. Even the attempt to collapse them requires a relation of collapse, and that relation again has sides. The collapse cannot be stated without the distinction it denies.
+
+The first cut is therefore not a decoration placed on an otherwise complete field. It is the condition under which a field can be read at all. Without it there is no error, because there is no proposition to fail. There is no identity, because there are no positions to identify. There is no object, because objecthood requires a boundary by which something is this and not everything indifferently.
+
+\section{Sign, Object, And Reading}
+\label{sec:representation:sign-object-reading}
+
+Every representation contains a minimum drama: something stands, something is stood for, and some relation lets the standing count as such. Collapsing any side of that drama destroys representation rather than purifying it. If the sign is nothing but the signed, there is no sign. If the signed is nothing but the sign, there is no excess for the sign to carry. If the relation vanishes, the standing-as vanishes with it.
+
+The cut is therefore not an optional philosophical gloss placed beside a theory of signs. It is the condition under which signs, terms, equations, maps, and measurements can be read at all. Representation does not begin with a populated world and then add difference as an annotation. Difference is the pressure that lets a world become readable as populated.
+
+\chapter{Why The First Cut Is Binary}
+\label{ch:first-cut-binary}
+
+\section{Why One Is Not Enough}
+\label{sec:representation:one-not-enough}
+
+The temptation is to begin with one. One seems simpler than two, and an ontology that begins from one appears more austere than an ontology that begins from distinction. But one already hides the problem. To say ``one'' is to count, and counting requires the stability of a unit against what is not that unit. To name one is to distinguish the named from the act of naming. To point to one is to distinguish pointer, pointed, and the direction between them.
+
+An absolutely undifferentiated one cannot carry a relation. It cannot be self-related, because self-relation distinguishes the relatum from the relation. It cannot be represented, because representation distinguishes representation from what is represented. It cannot even be asserted without a judgement in which the assertion and its content stand apart.
+
+Thus one is not primitive enough. It is either too little, because it contains no relation and therefore no representation, or too much, because the moment it is named it has already borrowed the cut it was supposed to precede. The first stable form is not a solitary point. It is the minimal separation by which point, name, judgement, and relation become possible.
+
+\section{Why Three Is Too Much At The Origin}
+\label{sec:representation:three-too-much}
+
+If one cannot carry representation, the next failure is to begin with more than the cut requires. Three positions already contain surplus. They allow a choice of middle, an order, a comparison of alternatives, or a residual place not explained by the first separation. None of that is forced by the mere condition that representation be possible.
+
+The first cut requires two sides: this and not-this, mark and unmarked, left and right, source and target, term and type, side and side. A third place may appear later, but it cannot be smuggled into the origin without adding structure. It is an extra degree of freedom. The eliminative method will not tolerate it at the threshold.
+
+This is the first shape of the later formal result. In MLTT, a carrier that presents exactly a covered binary distinction will be shown isomorphic to \texttt{Two}. That theorem is not the pre-formal argument itself. It is the checked echo of the same pressure after the boundary has been translated into formal data.
+
+\section{The Minimal Survivor}
+\label{sec:first-cut:minimal-survivor}
+
+The binary cut is not selected because two is aesthetically pleasing. It survives because the alternatives fail at opposite ends. One does not yet give representation a relation. Three already gives representation more positions than the first necessity demands. Two is the narrow middle: enough for opposition, not enough for surplus.
+
+This does not yet prove the Agda theorem \texttt{two-normal-form}. It prepares the ground on which that theorem will become legible. The theorem will say, inside the selected formal system, that any covered separated binary carrier is boundary-preservingly isomorphic to \texttt{Two}. The ontological threshold says something prior and weaker in form but stronger in reach: if representation is to begin at all, the first stable field cannot be unary and cannot require a third generator.
+
+\chapter{Origin, Contact, And Non-Collapse}
+\label{ch:origin-contact-non-collapse}
+
+\section{Retrieval Requires Non-Collapse}
+\label{sec:origin-contact:retrieval}
+
+Two occurrences cannot be two if they share both the same origin and the same contact without remainder. If there is no difference of origin, no difference of contact, and no difference of position by which one can be recovered rather than the other, then there are not two occurrences. There is only collapse.
+
+This point must be stated carefully. The argument does not yet introduce metric space, physical time, distance, duration, or motion. It says only that distinguishability forbids total coincidence. If two informational positions are retrievable as two, then some non-coincidence is already in force. If every condition of retrieval collapses, the two disappear.
+
+\section{No Physics Yet}
+\label{sec:origin-contact:no-physics-yet}
+
+At the boundary, this is the germ of the later readings of time and space, but it is not yet physics. It is weaker and more primitive: two positions cannot be the same position in every respect relevant to their retrieval. Formal theories operate inside this field of retrievable difference. The field is not manufactured by the theory; it is what lets the theory have more than one place to write on.
+
+\[
+\begin{array}{c}
+\text{representation possible} \\
+\Downarrow \\
+\text{two retrievable informational positions} \\
+\Downarrow \\
+\neg\bigl(\mathsf{SameOrigin} \wedge \mathsf{SameContact} \wedge \mathsf{NoSeparation}\bigr)
+\end{array}
+\]
+
+The display is schematic meta-notation. It is not Agda code, and its arrows are not internal implication terms. It records the boundary that later receives a formal representative.
+
+\chapter{The Information Field Before Theory}
+\label{ch:information-field-before-theory}
+
+\section{Position Before Measurement}
+\label{sec:information-field:position-before-measurement}
+
+Measurement begins later than distinguishability. To measure something, a procedure must already be able to return a value rather than another value, compare a mark with a scale, and keep the measured position apart from the act of measuring it. Before any unit can be introduced, the field must already admit retrievable positions.
+
+This field is informational only in the primitive sense: something can be recovered as this rather than that. It is not a database, not a medium, not a physical substrate, and not an observer's mental state. It is the minimum readability without which no database, medium, substrate, observer, or equation can be specified.
+
+\section{Theory Enters An Already Cut Field}
+\label{sec:information-field:theory-enters}
+
+Every formal theory enters through the same gate. It may choose different primitives, different equality principles, different universes, different tactics, or different computational kernels; but if it can state anything at all, it must distinguish statement from non-statement, rule from application, term from context, and success from failure.
+
+The information field is therefore not a rival formalism. It is the pre-formal condition shared by formalisms that can read their own marks. Once a particular carrier is selected, the differences between proof assistants matter intensely. Before selection, the shared condition is simpler and harsher: there must be a cut.
+
+\chapter{Formalisations Are Plural}
+\label{ch:formalisations-are-plural}
+
+\section{No Formal System Generates The Cut}
+\label{sec:formalisations:no-system-generates-cut}
+
+The boundary forces the need for a carrier; it does not force the concrete name of the carrier. Agda does not create the cut. MLTT does not create the cut. Coq, Lean, cubical systems, set-theoretic foundations, and other disciplined calculi would not create it either. At most, a formal system can receive the boundary as explicit data and then expose which consequences survive inside its rules.
+
+This distinction matters because otherwise the book would confuse two necessities. The cut is necessary for representation. Agda is the chosen execution environment in which the consequences of one formal representative are checked. The first claim reaches beyond this implementation. The mechanised theorems do not.
+
+\section{What A Carrier Must Discipline}
+\label{sec:formalisations:carrier-discipline}
+
+A proof assistant can carry this development only if it can keep the relevant pressures visible. It must let the formal representative state a carrier, two boundary positions, a separation witness, and a coverage principle. It must make case analysis explicit enough that hidden residues cannot pass as absence. It must distinguish construction from postulate, and it must let failed alternatives collapse by contradiction rather than by rhetoric.
+
+For the present development, the carrier must also discipline equality, totality, and exhaustivity. Equality cannot be allowed to identify too much too soon. Functions cannot be partial procedures masquerading as proofs. Coverage cannot be inferred from the fact that only two names were written down. The formal language has to keep every one of these gates locked while the eliminative chain runs.
+
+\section{MLTT As One Disciplined Carrier}
+\label{sec:formalisations:mltt-one-carrier}
+
+Intensional Martin-L\"of type theory provides such a carrier for this book. It makes constructions explicit, treats propositions as types, and forces proofs to appear as terms. Agda then exposes that discipline through a concrete checker. Under \AgdaFlag{safe}, no postulate can be smuggled into the file. Under \AgdaFlag{without-K}, equality is not flattened by uniqueness of identity proofs.
+
+This is why MLTT and Agda enter here: not as metaphysical origin, and not as the only conceivable formal clothing of the argument, but as the expression in which the present execution is carried out. The proof that another assistant can carry the same structure would be a further theorem of translation or reconstruction. It is not assumed here, and it is not needed in order for the present file to run.
+
+\section{What Remains Open}
+\label{sec:formalisations:what-remains-open}
+
+It remains open, in this volume, whether other proof assistants can carry Void with the same fidelity. The question is meaningful and sharp. A successful reconstruction would have to reproduce the boundary representative, the binary normal form, the endomorphism classification, the failure of three vertices, the closure at $K_4$, and the return from the invariant record to distinction without importing stronger principles that change the result.
+
+Until such reconstructions are written, the honest statement is exact: this book mechanises Void in MLTT as implemented by Agda. It shows what follows there. It does not claim that Agda is the only possible witness, and it does not weaken the cut by admitting that plural formal carriers may exist. The cut is prior to the carrier. The carrier is where the consequences are executed.
+
+\chapter{The Formal Threshold}
+\label{ch:formal-threshold}
 
 \section{The Tool: Agda as Executioner}
 \label{sec:introduction:agda-as-executioner}
 
-A filter is only as trustworthy as its enforcement. Human reasoning is fallible: it overlooks edge cases, confuses sufficiency with necessity, and mistakes intuition for proof. This is why every step in this work is formalized and verified in Agda, a dependently typed proof assistant.
+The machine enters only after the threshold has been crossed. Agda can verify that a term has the type it claims to have. It can verify that a case split is exhaustive, that a contradiction has no branch, that a construction uses no postulate, and that an alleged equality reduces to \texttt{refl}. It cannot verify, from nowhere, the pre-formal necessity of representation itself. That necessity is what makes formal verification possible in the first place.
 
-Agda does not care about elegance or plausibility. It checks one thing: does this term have the type it claims to have? If yes, the step stands. If no, it is rejected. There is no override, no escape hatch.
+This division is not a retreat. It is the contract that keeps the work honest. Before the threshold, the book argues that formalisation presupposes distinguishable positions. After the threshold, every claimed consequence is submitted to the type checker. The pre-formal argument does not pretend to be code. The formal development does not pretend to have generated its own condition of possibility.
 
-The compiler flags used in this work—\AgdaFlag{safe} and \AgdaFlag{without-K}—restrict the formal environment further. No postulates can be introduced, and no appeal to the uniqueness of identity proofs is permitted. These flags do not create the surviving structure; they ensure that the execution cannot smuggle in extra freedom while the eliminative argument is carried out.
+The compiler flags used in this work---\AgdaFlag{safe} and \AgdaFlag{without-K}---restrict the formal environment further. No postulates can be introduced, and no appeal to the uniqueness of identity proofs is permitted. These flags do not create the surviving structure; they ensure that the execution cannot smuggle in extra freedom while the eliminative argument is carried out.
 
-\section{What Happens Here}
-\label{sec:introduction:what-happens-here}
+\section{From Cut To Distinction}
+\label{sec:formal-threshold:cut-to-distinction}
 
-The global line of force has a single irreversible spine:
-
-\[
-\begin{aligned}
-  & D_0
-  \longrightarrow
-  \text{minimal logical infrastructure}
-  \longrightarrow
-  \text{classification}
-  \longrightarrow
-  \text{drift and reachability} \\
-  & \longrightarrow
-  \text{presentation and fixpoint}
-  \longrightarrow
-  K_4
-  \longrightarrow
-  \text{arithmetic and spectral invariants} \\
-  & \longrightarrow
-  \text{invariant record}
-  \longrightarrow
-  D_0.
-\end{aligned}
-\]
-
-The spine does not branch—and it does not dead-end. The book's final theorem closes the loop: any admissible invariant record already presupposes $D_0$. The chain is not an open arrow; it is a closed constraint.
-
-\subsection{The Elimination Protocol}
-\label{sec:introduction:elimination-protocol}
-
-The eliminative core of the formalisation can be summarised by the following sequence. At every step, the column on the right names the alternatives that were tested and formally shown to imply a contradiction ($\bot$). Under the minimal conditions fixed above, $K_4$ is the unique structure that remains. No entry in this list is added as an extra postulate; each surviving step is forced by the failure of the listed alternatives.
-
-\small
-\setlength{\LTpre}{0pt}
-\setlength{\LTpost}{0pt}
-\renewcommand{\arraystretch}{1.35}
-\begin{longtable}{@{}r l p{5.2cm} p{5.2cm}@{}}
-\toprule
-\textbf{\#} & \textbf{Survivor} & \textbf{Constraint} & \textbf{Eliminated Alternatives} \\
-\midrule
-\endfirsthead
-\toprule
-\textbf{\#} & \textbf{Survivor} & \textbf{Constraint} & \textbf{Eliminated Alternatives} \\
-\midrule
-\endhead
-\bottomrule
-\endfoot
-\bottomrule
-\endlastfoot
-1 & Distinction ($D_0$)
-  & The minimal requirement to separate logical states ($\ell \neq r$). Any formal system unable to distinguish true from false is vacuous.
-  & Vacuous carriers, carriers without boundary witnesses, carriers where $\ell = r$. \\
-2 & Two-class coverage
-  & Every element of the carrier equals $\ell$ or $r$. No unclassified residue is possible.
-  & Carriers with hidden elements, partial classifications, carriers with $>2$ equivalence classes. \\
-3 & Four endomorphisms
-  & Coverage forces the boundary-output table $2 \times 2 = 4$. The four resulting cases are then proved mutually distinct.
-  & $K_1$, $K_2$, $K_3$ (which fail to host exactly 4 distinct, symmetric maps). \\
-4 & Drift acyclicity
-  & Applying classification to classification produces a level tower. The reachability relation on that tower is proved well-founded.
-  & Cyclic level structures, infinite descending chains, non-well-founded hierarchies. \\
-5 & Presentation fixpoint
-  & Every reachability witness reduces to a canonical finite form. The observable that measures proofs factors through a unique base.
-  & Non-canonical representations, observables that depend on proof-internal choices. \\
-6 & $K_4$
-  & The complete graph on four vertices is the unique fixpoint of the filter. At this point the absolute statement is justified: no proper subgraph survives all five constraints above.
-  & Every proper subgraph of $K_4$, every supergraph, every non-complete topology on 4 vertices. \\
-7 & Derived arithmetic
-  & $K_4$ formally induces counting (naturals), orientation (integers), spectral ratios (rationals), and limit closure (reals).
-  & Number systems not grounded in $K_4$ structure, algebraic laws contradicting spectral data. \\
-8 & Invariant record
-  & The combinatorial invariants of $K_4$ ($V=4$, $E=6$, $d=3$, $\chi=2$, $\mathrm{Spec}=\{0,4,4,4\}$) evaluate to exact integers without free parameters.
-  & Any alternative assignment requiring a different graph or a tunable parameter. \\
-\end{longtable}
-\normalsize
-
-Uniqueness is not merely asserted; it is proven. Part~IV establishes $K_4$ as the sole fixpoint, and Chapter~\ref{ch:k4-representation-theory} proves that any two admissible invariant records over this structure must be propositionally equal.
-
-\section{Structure of the Text}
-
-The argument unfolds in six parts. The first four narrow the field until $K_4$ remains. The fifth develops the arithmetic attached to that survivor. The sixth gathers the resulting invariants into a final record.
-
-\textbf{Part I (Foundation)} sets out the logical apparatus used throughout: equality, coproducts, negation, decidability, and the natural numbers. Nothing needed by the later uniqueness arguments is left in the background, so those arguments rest on explicit definitions rather than tacit convention.
-
-\textbf{Part II (Drift and Reachability)} studies what happens when classification is iterated. The unclassified residue of each stage compels passage to the next, and the result is a well-founded tower whose shape can be analysed precisely.
-
-\textbf{Part III (Heteromorphisms and Presentation)} turns from endomorphisms to maps between distinct carriers. Its presentation theorems reduce reachability witnesses to canonical representatives and thereby supply the uniqueness statements on which the later invariant record depends.
-
-\textbf{Part IV (Observables and Fixpoint)} asks which quantities may be read off from proofs without depending on accidents of presentation. The answer leads to a canonical observable base and to the proof that $K_4$ alone survives the full sequence of constraints.
-
-\textbf{Part V (Derived Arithmetic)} develops the number systems that emerge from the structure of $K_4$. Counting yields naturals, orientation yields integers, spectral ratios yield rationals, and completion yields reals; the familiar algebraic laws are then proved within the formal development.
-
-\textbf{Part VI (Derived Constants of $K_4$)} assembles the graph's combinatorial data into a verified computation record and closes the loop by showing that every admissible measurement structure already presupposes the initial distinction $D_0$.
-
-Every claim in the book is machine-checked. Because the manuscript is written in literate Agda, the exposition and the verified development remain aligned line by line.
-
-\section{Methodological Defense against Numerology}
-\label{sec:introduction:not-numerology}
-
-Highly specific integers in a mathematical derivation invite an obvious suspicion: perhaps the construction was tuned so that a chosen number would appear.
-
-That suspicion would be justified if the formal system admitted free parameters, adjustable axioms, or arbitrary normalisations. The present derivation does not. At no point does the Agda formalisation introduce a coefficient or convention whose sole role is to steer the computation toward a preferred value.
-
-The elimination protocol (§\ref{sec:introduction:elimination-protocol}) makes this rigidity precise. Each stage removes alternatives by explicit proof. There is therefore no second graph satisfying the same constraints, no alternative spectral package, and no competing arithmetic evaluation produced by a different internal choice.
+At the threshold, the pre-formal cut receives a formal representative. The record \texttt{Distinction} is not the Void itself and not the metaphysical origin of difference. It is the MLTT presentation of the minimal data needed for the later eliminator:
 
 \begin{enumerate}
-\item \textbf{Distinction.} For the formal work not to collapse into vacuity, some distinction must be admissible. Denying that possibility leaves no carrier, no types, and no terms on which the eliminative argument could act.
-
-\item \textbf{Two-class coverage.} The alternative---a carrier with elements outside $\{\ell, r\}$---is contradicted by the coverage proof. The type checker enforces this.
-
-\item \textbf{Four endomorphisms.} The count $2 \times 2 = 4$ is arithmetic forced by the carrier size. The claim that five or three endomorphisms could survive is refuted by exhaustive case analysis in the code.
-
-\item \textbf{$K_4$ over any smaller graph.} $K_3$ fails because four mutually distinct vertices cannot close on three nodes. $K_2$ and $K_1$ fail earlier. The proofs are in Chapter~\ref{ch:elimination-classification}.
-
-\item \textbf{Drift and reachability.} Once classification is applied to classification itself, passage to a level tower is forced. Acyclicity then appears as a theorem of that tower, not as an added design principle.
-
-\item \textbf{Presentation fixpoint.} The collapse of observables to a unique canonical form is proven. The alternative---multiple incompatible canonical forms---would violate the uniqueness of the factoring proven in Part~IV.
-
-\item \textbf{Arithmetic.} Integers, rationals, and reals are derived from $K_4$ structure. The axioms of each number system are theorems, not postulates.
-
-\item \textbf{$\mathcal{C} = 137$.} The values $V=4$, $E=6$, $d=3$, $\chi=2$ are determined by the elimination chain and not adjustable. The form of the expression $V^d \cdot \chi + d^2$ is fixed by the kind classification of \hyperref[ch:invariant-kinds]{Chapter~\ref*{ch:invariant-kinds}}: $V$ and $\chi$ are factors of disjoint kinds sharing one underlying carrier and combine multiplicatively; $d^2$ is a factor of a kind disjoint from both and combines additively. Evaluating the expression on the forced values yields $4^3 \cdot 2 + 3^2 = 128 + 9 = 137$, witnessed by \texttt{refl}. The aggregation is not introduced as a definition independent of the structure: \S\ref{sec:simplex-eval-status} states the closure of the four layers --- values, form, meaning, exhaustion --- in full.
+\item a carrier \texttt{S : Set}, so there is a domain in which positions can be addressed;
+\item two boundary points \texttt{ℓ} and \texttt{r}, so the cut has sides;
+\item a separation witness \texttt{ℓ≠r}, so the sides do not collapse;
+\item a cover, so every element of the carrier is classified by one of the two sides.
 \end{enumerate}
 
-Numerology, by contrast, has a signature: the construction is chosen \emph{after} the target is known, and the degrees of freedom are large enough that hitting the target is unsurprising. The test is simple. If the values $V$, $E$, $d$, $\chi$ could be adjusted to hit a different target, the result would be numerological. They cannot: each of the four is forced by the elimination chain and machine-checked. If the form combining them could be exchanged for another, the result would be numerological. It cannot: the kind classification eliminates every alternative form of binary connector between these four invariants.
+The cover is crucial. MLTT does not allow the inference from ``only two points have been named'' to ``there are no other points.'' Such an inference would confuse syntax with ontology. If the formal carrier is to be exactly binary for the purposes of elimination, the coverage has to be part of the data. This is why the record is precise rather than romantic: it states exactly what the formal machine needs, and nothing it cannot justify.
 
-The claim here is therefore the rigid one. The four invariants are forced; the form of their evaluating expression is forced; the integer $137$ is the value of the unique well-typed scalar invariant of the closed record. Inside the monomial pool of degree $\leq 4$ generated by the same invariants the integer $137$ admits a single pair-sum decomposition, and that decomposition is exactly the kind-respecting one. \S\ref{sec:simplex-eval-status} states this in full.
+\section{Reader Contract}
+\label{sec:formal-threshold:reader-contract}
 
-\section{Two Volumes, One Boundary}
-\label{sec:introduction:two-paths}
+After this point the text changes status. The prose may still motivate, orient, and interpret, but the mathematical claims are tied to the Agda development that follows. A construction must be an inhabitant. An equality must reduce or be proved. A contradiction must have no branch. A classification must cover all cases. A uniqueness claim must state the relevant equivalence and close it.
 
-A companion volume, \textit{Form}, does not re-derive $K_4$. It imports the present development by the literal line \texttt{open import Void} and treats the exported invariant ledger as settled mathematical input. The asymmetry is deliberate: this volume proves; the companion volume identifies.
-
-The division of labour is strict. \textit{Void} carries the eliminative work: distinction, classification, reachability, presentation collapse, arithmetic, the invariant record, and the closure back to distinction. \textit{Form} begins only after this chain has closed. It reads the forced quantities $(V,E,d,\chi,\kappa)$, the value $\mathcal{C} = 137$, the loop numerator $11$, and the remaining exported constants as candidates for physical observables, and it states openly what would falsify each identification.
-
-The two books therefore do not offer two independent formal derivations of the same object. They offer one formal derivation and one interpretive projection. That asymmetry is not a weakness but a methodological guardrail. If physical vocabulary entered the eliminative chain itself, the derivation would invite the numerology objection this book is designed to block. By forcing the mathematical survivor in \textit{Void} first and permitting physical names only in \textit{Form}, the boundary remains visible.
-
-The coupling between the two volumes is mechanical. If \textit{Void} changes, \textit{Form} must be rechecked against the new exported interface; if an expected theorem or invariant disappears, the import layer breaks. Yet the logical direction is one-way: \textit{Form} depends on \textit{Void}, while \textit{Void} stands on its own.
-
-The reader who has both volumes can therefore read them in sequence: theorem first, interpretation second. The reader who has only this one loses nothing essential, because the eliminative derivation is self-contained.
-
-\section{What This Book Does Not Contain}
-\label{sec:introduction:physics-free}
-
-This volume contains no physics. It names no particle, invokes no gauge group, fits no coupling constant, and introduces no empirical unit of measurement---metre, second, kilogram, or electronvolt. The number $137$ appears here as a theorem of $K_4$ combinatorics, not as an approximation to an observed constant. The loop numerator $11$ arises from a $\gcd$ filter on $\{E, d, \chi\}$-subset sums, not from any physical model.
-
-This separation is not a matter of taste. If the derivation of $K_4$ were mixed from the outset with interpretive labels---if ``proton'' appeared where ``degree-shifted monomial'' is all the proof requires, or ``electroweak'' where ``$\kappa^2$-scaled'' is exact---then the reader could reasonably suspect that the formal chain had been steered toward familiar targets. Its credibility depends on avoiding that mixture.
-
-Every quantity computed in this volume is an invariant of $K_4$ under $\mathrm{Aut}(K_4) \cong S_4$. Whether any of these invariants correspond to measured quantities is a separate hypothesis, addressed only in the companion volume \textit{Form}.
-
-The distinction between mathematical theorem and physical interpretation is therefore maintained throughout. Everything derived in this volume is a formal topological or combinatorial invariant of $K_4$, and nothing more is claimed here.
+The first code block therefore does not begin the ontology. It begins the execution. The threshold has already forced the demand for a cut; the formal file now receives that demand as explicit data and lets the checker eliminate whatever cannot survive it.
 
 \part{Foundation}
 
@@ -800,7 +833,7 @@ Formally, a distinction consists of a carrier, two designated elements of that c
 The cover is not an ornamental extra. Without it one would have two marked points but no uniform way to classify arbitrary elements of the carrier, and the later elimination arguments would lose their basic case split. The counterexample below makes that dependence explicit rather than rhetorical.
 
 \begin{code}
--- § The first distinction: carrier, boundary points, separation, and coverage.
+-- § Binary distinction data: carrier, boundary points, separation, and coverage.
 record Distinction : Set1 where
   field
     S     : Set
@@ -975,14 +1008,14 @@ law1-1-cover = cover
 
 Two-class coverage is the first structural restriction on the carrier. Figure~\ref{fig:first-distinction} records this dichotomy as a two-node distinction diagram.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[>=Latex, node distance=3.2cm]
   \node[circle, draw=fdBlue, thick, minimum size=10mm, fill=fdLight] (l) {$\ell$};
   \node[circle, draw=fdRed, thick, minimum size=10mm, fill=fdLight, right of=l] (r) {$r$};
   \draw[->, thick] (l) -- node[above] {distinction} (r);
 \end{tikzpicture}
-\caption{First distinction: two boundary witnesses forced by two-class coverage.}
+\caption{Binary distinction data: two boundary witnesses forced by two-class coverage.}
 \label{fig:first-distinction}
 \end{figure}
 
@@ -1151,7 +1184,7 @@ data EndoCase : Set where
 
 Figure~\ref{fig:k3-failure} illustrates the basic obstruction behind the later appearance of $K_4$: a three-vertex closure cannot accommodate four distinct endomorphism cases without omission.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[>=Latex, every node/.style={circle, draw=fdBlue, thick, minimum size=9mm, fill=fdLight}]
   \node (a) at (90:1.8) {$c_L$};
@@ -1500,7 +1533,7 @@ At this point the four-case closure is explicit. The four labels are
 exhaustive and mutually distinct, so Figure~\ref{fig:k4-classification}
 records the closure as the complete graph $K_4$.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[>=Latex, every node/.style={circle, draw=fdBlue, thick, minimum size=9mm, fill=fdLight}]
   \node (a) at (90:2.2) {$c_L$};
@@ -1801,7 +1834,7 @@ Aut-sound d a with cover d (to a (ℓ d)) | cover d (to a (r d))
 This completes the automorphism analysis for distinctions. Figure~\ref{fig:k4-orbits}
 records the induced symmetry action on the four endomorphism witnesses.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[>=Latex, every node/.style={circle, draw=fdBlue, thick, minimum size=9mm, fill=fdLight}]
   \node (a) at (90:2.2) {$c_L$};
@@ -2470,24 +2503,24 @@ law1-20-aut-presentation-unique d {X} pres =
     }
 \end{code}
 
-The concrete Two reference and $D_0$ are fixed last.
+The concrete \texttt{Two} reference and its named canonical carrier are fixed last.
 
 \begin{code}
--- § D₀ is the canonical first distinction.
-D₀ : Set
-D₀ = Two
+-- § CanonicalTwo is the canonical binary carrier used as a named normal form.
+CanonicalTwo : Set
+CanonicalTwo = Two
 
 -- § The left boundary.
-left : D₀
+left : CanonicalTwo
 left = L
 
 -- § The right boundary.
-right : D₀
+right : CanonicalTwo
 right = R
 
--- § D₀ as a Distinction record.
-D₀-distinction : Distinction
-D₀-distinction = Two-distinction
+-- § The canonical carrier as a Distinction record.
+canonical-two-distinction : Distinction
+canonical-two-distinction = Two-distinction
 \end{code}
 
 At this point the primitive distinction has been fixed concretely as \texttt{Two-distinction}. The basic logical infrastructure, the distinction record, the four endomorphism cases, and the associated presentation results are now all available in explicit, machine-checked form.
@@ -4160,7 +4193,7 @@ law9-x-tick-not-admissible rb =
   liftω-distinct (respects rb (zero-state b₀) (one-state b₀) (same-base b₀))
   where
     b₀ : DriftState
-    b₀ = ⟨ lzero , Distinction→Distinctionℓ D₀-distinction ⟩
+    b₀ = ⟨ lzero , Distinction→Distinctionℓ canonical-two-distinction ⟩
 
     -- liftω is a data constructor; liftω zero ≡ω liftω (suc zero) is impossible.
     liftω-distinct : liftω zero ≡ω liftω (suc zero) → ⊥
@@ -4663,7 +4696,7 @@ $$
 
 The figure below illustrates this elimination of presentation-dependent bookkeeping.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[>=Latex, node distance=2.6cm]
@@ -4841,7 +4874,7 @@ resulting graph is isomorphic to the standard one.
 
 Figure~\ref{fig:graph-presentation-iso} depicts this relabelling principle.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[>=Latex, node distance=2.8cm, every node/.style={circle, draw=fdBlue, thick, minimum size=9mm, fill=fdLight}]
@@ -5041,7 +5074,7 @@ tetrahedral survivor carries the vertex count, edge count, Euler data,
 and spectral split from which the later numerical invariants are
 assembled.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[>=Latex, node distance=2.8cm]
   \coordinate (A) at (0,0);
@@ -5255,7 +5288,7 @@ operates on this structure, not on a tuple.
 \label{sec:spatial-extension:no-smuggling}
 
 The extension reading is structural, not metric, not analytic, and not
-physical. Four readings are explicitly \emph{not} added by it.
+interpretive. Four readings are explicitly \emph{not} added by it.
 
 A metric: the extension structure carries neighbour relations along
 each of the $d$ directions, but no distance function is defined on
@@ -5267,12 +5300,12 @@ or a discrete poset of configurations. Continuity is not introduced
 here, and would require a separate limit construction not undertaken
 in this volume.
 
-A physical interpretation: the extension structure is invariant under
-the choice of what its configurations are. They may be physical
-states, types in a type theory, objects in a category, or anything else
-that carries the three premises of \S\ref{sec:spatial-extension:order-of-forcing}.
-The companion volume \emph{Form} undertakes one such interpretation;
-this volume does not.
+An interpretive physical reading: the extension structure is invariant
+under the choice of what its configurations are. They may later be read
+as physical states, types in a type theory, objects in a category, or
+anything else that carries the three premises of
+\S\ref{sec:spatial-extension:order-of-forcing}. The companion volume
+\emph{Form} undertakes one such interpretation; this volume does not.
 
 A scalar value: the integer $\mathcal{C} = 137$ does not yet appear at
 the level of this chapter. It is a particular invariant of the
@@ -5284,10 +5317,10 @@ that question --- but the closure occurs after the arithmetic
 infrastructure is in place.
 
 \textbf{Constraint:} the extension reading must not silently confer
-metric, topological, or physical structure on the survivor.
+metric, topological, or interpretive physical structure on the survivor.
 
 \textbf{Elimination:} four temptations are eliminated explicitly: a
-distance function, a continuum, a physical referent, and a numerical
+distance function, a continuum, a physical reading, and a numerical
 target. Each would require an independent derivation that is not
 present at this stage.
 
@@ -9684,7 +9717,7 @@ self-dual-closure-witness = record
 The previous section spoke of an ``$\mathrm{Aut}(K_4)$-invariant
 numerical extract of the closed record'' as if the notion were
 self-evident. It is not. If the entire programme of this book is
-that everything follows from a single binary distinction, the notion
+that everything follows from the represented binary distinction, the notion
 of \emph{extract} cannot be exempt: it must itself be forced by the
 distinction, not imported from outside.
 
@@ -13505,7 +13538,7 @@ Figure~\ref{fig:coupling-survivor-spectrum} records the dispatch in one
 line: two survivor cases, two operators, two spectral regimes. The two
 cases are the only constructors of $\mathrm{CouplingSurvivor}$.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[>=Latex, node distance=2.9cm]
@@ -21304,7 +21337,7 @@ Figure~\ref{fig:q-to-r-closure} summarizes this transition. Rational
 points embed as constant sequences, and completion adds exactly those
 limit points that the rational layer can approach but not contain.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[>=Latex, node distance=3.0cm]
@@ -24487,8 +24520,8 @@ consequence of the earlier derivation together with the arithmetic of
 Part~V.
 
 The record is then shown to be unique: any two admissible invariant
-records agree fieldwise. The final results return to the initial
-distinction $D_0$ and show how the measurement-theoretic and
+records agree fieldwise. The final results return to the represented
+binary distinction and show how the measurement-theoretic and
 eliminative strands close the formal circle.
 
 One should distinguish the internal and external readings of these
@@ -28641,7 +28674,7 @@ vertex-weight-forced C adm = curvature-ref-value C adm
 \label{sec:forced-coupling:filter-audit}
 %───────────────────────────────────────────────────────────────────────────
 
-The three preceding limit theorems secure their constants through structural orbit-transport combined with a local sandwich. A severe test remains: are these admissibility filters truly minimal, or does logical bloat exist? If a filter could be derived purely from the others, the filter set itself would not be a fundamental physical law, merely an overlapping mathematical description. 
+The three preceding limit theorems secure their constants through structural orbit-transport combined with a local sandwich. A severe test remains: are these admissibility filters truly minimal, or does logical bloat exist? If a filter could be derived purely from the others, the filter set itself would not be a primitive structural law, merely an overlapping mathematical description. 
 
 The next question concerns the choice of admissibility basis itself.
 The lemmas in this section show why the record stores only reference
@@ -30038,12 +30071,12 @@ neg-sub a b =
         (trans (cong (λ t → negℤ a +ℤ t) (negℤ-involutive b))
                (+ℤ-comm (negℤ a) b))
 
--- § Physical reading at v₀: K4Lap-vert f v₀ = sum of (f v₀ - f neighbor).
-lap-physical-v₀ :
+-- § Expanded vertex form at v₀: K4Lap-vert f v₀ = sum of (f v₀ - f neighbor).
+lap-expanded-v₀ :
   (f : K4Vertex → ℤ) →
   K4Lap-vert f v₀ ≡
     ((f v₀ -ℤ f v₁) +ℤ (f v₀ -ℤ f v₂)) +ℤ (f v₀ -ℤ f v₃)
-lap-physical-v₀ f =
+lap-expanded-v₀ f =
   trans
     (cong (λ t → t +ℤ negℤ (f v₃ -ℤ f v₀))
       (cong₂ _+ℤ_ (neg-sub (f v₁) (f v₀))
@@ -30061,7 +30094,7 @@ record DiracOperator : Set₁ where
     op-squares-to-lap-e :
       (φ : DiracState) (e : OrientedEdge) →
       snd (op (op φ)) e ≡ K4Lap-edge (snd φ) e
-    physical-vertex-form :
+    expanded-vertex-form :
       (f : K4Vertex → ℤ) →
       K4Lap-vert f v₀ ≡
         ((f v₀ -ℤ f v₁) +ℤ (f v₀ -ℤ f v₂)) +ℤ (f v₀ -ℤ f v₃)
@@ -30071,7 +30104,7 @@ theorem-dirac-operator = record
   { op                  = dirac
   ; op-squares-to-lap-v = theorem-dirac-squared-vertex
   ; op-squares-to-lap-e = theorem-dirac-squared-edge
-  ; physical-vertex-form = lap-physical-v₀
+  ; expanded-vertex-form = lap-expanded-v₀
   }
 \end{code}
 
@@ -31319,7 +31352,7 @@ theorem-spectral-partition = record
 
 The companion volume may interpret only what has already become a term
 inside this one. The following records therefore carry the arithmetic
-cores that later receive physical names: the spectral-index quotient,
+cores that later receive interpretive names: the spectral-index quotient,
 the Fermat half-projection, the scaled density quotient, the two loop
 scales, the strong volume correction, and the internal identities of
 the coupling volume. No particle name, gauge-sector name, or measured
@@ -31724,7 +31757,7 @@ reversed.
 One might try to read \texttt{K4Record} as the prior object and regard
 distinction as only one way of presenting it. That reading would reopen
 the whole chain at its endpoint. It would say that the record is the
-ground and the primordial cut merely an interpretation of it. The
+ground and distinction merely an interpretation of it. The
 formalization does not allow this reversal.
 
 The reason is that \texttt{K4Record} is not merely a tuple of numerical
@@ -31763,16 +31796,16 @@ record-presupposes-distinction-irrefutable p noDistinction =
 K4-is-inevitable : Distinction → K4Record
 K4-is-inevitable _ = canonical-rep
 
--- § The full equivalence as a packaged isomorphism.
-record K4↔Distinction : Set₁ where
+-- § The closed record and the canonical distinction dependency packaged together.
+record K4Record↔CanonicalDistinction : Set₁ where
   field
     forward      : Distinction → K4Record
     backward     : K4Record → Distinction
     round-trip-K4 : (r : K4Record)  → forward (backward r) ≡ r
     round-trip-D  : (d : Distinction) → backward (forward d) ≡ Two-distinction
 
-theorem-K4-distinction-iso : K4↔Distinction
-theorem-K4-distinction-iso = record
+theorem-K4-record-canonical-distinction : K4Record↔CanonicalDistinction
+theorem-K4-record-canonical-distinction = record
   { forward       = K4-is-inevitable
   ; backward      = record-presupposes-distinction
   ; round-trip-K4 = λ r → K4Record-singleton (K4-is-inevitable
@@ -32468,9 +32501,9 @@ audit-closure = record
 
 \section*{The Arc}
 
-A single separation witness was granted. Nothing else entered. From
-that grant the chain unfolded in a fixed order, and the order was
-not a sequence of choices but a sequence of survivals.
+A \texttt{Distinction} record was supplied as the formal datum. Nothing
+else entered. From that datum the chain unfolded in a fixed order, and
+the order was not a sequence of choices but a sequence of survivals.
 
 The two-point base entered as the unique normal form for binary
 distinction. The endomorphism space of that base contained exactly

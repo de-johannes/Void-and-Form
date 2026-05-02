@@ -1,88 +1,166 @@
 # Void and Form
 
-Any MLTT structure with two distinguishable, exhaustive points is uniquely isomorphic to Two, and the compositional closure of its endomorphisms forces K₄.
+This repository is governed by one structural claim: formal description
+does not begin from a presupposed ``nothing''. It begins only after
+distinguishable positions are available. Without distinguishability, no
+relation, judgement, equation, map, representation, truth-value, or
+falsehood can be formulated.
+
+`Void` names the pre-formal boundary before such formulation is
+possible. It is not the empty set, not the empty type, and not a
+physical nothing. It is the absence of the domain in which those notions
+could already occur. `Form` names the later interpretive reading of the
+structure that survives once this boundary has been crossed.
+
+The project is therefore not a derivation from an ontological beginning.
+It is an analysis of the conditions under which formal theories can be
+formulated, followed by the machine-checked derivation of the first
+non-trivial structure that necessarily appears once those conditions are
+represented.
 
 ---
 
-`Void.lagda.tex` studies a conditional problem: grant the data of a
-binary distinction and no further generator; what structure is forced
-inside Martin-Löf type theory?
+## Structural schema
 
-The answer has three steps. First, any type carrying two
-distinguishable, exhaustive points has canonical normal form `Two`.
-Second, the endomorphism space `Two → Two` has exactly four cases.
-Third, closing those cases under composition leaves $K_4$: smaller
-carriers identify distinct cases, while larger carriers add vertices
-not forced by the four cases. The resulting closure record is unique
-and entails the original distinction, so the chain closes rather than
-merely terminating.
+This is the table of contents for the repository. It fixes the status of
+each layer before any technical theorem is inspected.
 
-Arithmetic is then developed on that base: naturals as the W-type over
-`Two`, followed by integers, rationals, and Cauchy reals. The physical
-reading is not part of this theorem; it is isolated in
-[Form.lagda.tex](Form.lagda.tex) as an interpretive layer.
+### Void: the necessary - conditions of formulability
 
-This is not a claim that every formal theory reduces to a binary type.
-It is the internal normal-form and closure theorem for structures that
-already carry the stated distinction data.
+- **Level 0: Void.** No type, no term, no carrier. The schematic marker
+  is $\mathcal{V} \notin \mathit{Set}_\omega$. Void is not a
+  mathematical object inside the formal system; it names the absence of
+  the domain in which objects can already be introduced.
+- **Level 1: Information.** Information is difference that makes a
+  difference. Without distinction, an occurrence carries no information.
+  Information therefore is not added to Void; it is the first condition
+  under which non-collapse can be spoken of at all.
+- **Level 2: Two.** The first stable formal carrier is
+  `data Two : Set where L R : Two`. It contains two separated points and
+  no third generator. It is not a truth-value object; it is the normal
+  form of distinction. From this level onward the formal threshold is
+  crossed: Martin-Lof type theory and Agda can execute consequences.
+- **Level 3: Logic.** Formal systems operate on structures in which
+  positions can be distinguished, related, mapped, and judged. Logic
+  does not create distinction; it presupposes it as the condition of its
+  own syntax and semantics.
+- **Level 4: Mathematics.** Once the binary carrier is represented, its
+  endomorphism space has exactly four cases. The faithful closure of
+  those cases is the complete graph on four vertices, $K_4$. Arithmetic,
+  spectral structure, and invariant ledgers unfold over that survivor;
+  they do not supply a new generator.
 
----
+### Form: structural reading and interpretation
 
-## Short entry point
+- **Level 5: Form.** The interpretive volume reads the stability
+  conditions of distinction structurally. Two distinguishable occurrences
+  collapse if neither origin nor position can distinguish them.
+  Non-identity of origin gives the germ of temporal order;
+  non-coincidence gives the germ of spatial separation. Space and time
+  are not asserted as primitive entities here. They name conditions under
+  which distinction does not collapse.
+- **Level 6: Physics.** Physics enters as interpretation of the preceding
+  structural conditions by an observer who already operates inside them.
+  Form is not physics; it is the structure from which physical
+  description can be read.
+- **Level 7: Contingency.** Concrete cosmology, empirical constants, and
+  measured values belong to the contingent layer. They can be compared
+  with the structural ledger, but they are not produced by stipulating a
+  physical universe at the start.
+- **Level 8: Induction.** No new external generator is postulated. Each
+  new level inherits the constraint of the previous level and asks what
+  still survives without contradiction.
 
-For a small standalone version of the core spine, see
-[VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) and its generated
-[PDF](latex/VoidCompanion.pdf). The companion note uses standard-library
-imports for equality, sums, products, the empty type, and negation,
-and carries the chain in one short file: binary distinction has normal
-form `Two` (`two-normal-form`), the endomorphism space `Two → Two` has
-exactly four cases (`EndoCase`, `classify-sound`, `case-unique`), the
-minimal faithful compositional closure of those cases is $K_4$
-(`FaithfulClosure`, `MinimalClosure`, `canonicalK4`, `realize-reflect`),
-and any such closure points back to the original distinction
-(`k4-presupposes-distinction`). It stops there. The self-contained
-development in `Void.lagda.tex` rebuilds the infrastructure internally
-and continues with arithmetic, spectral structure, and the forced
-numerical invariants.
+## Meta-theoretical status
 
----
+Levels 0 and 1 are not formal statements inside a type system. They
+state the conditions under which formal statements can appear. From
+Level 2 onward the formal theory begins, and the claims are expressible
+and checkable in Martin-Lof type theory as implemented by Agda.
 
-## Core claims of Void and Form
+This distinction is the core discipline of the project. Treat the
+pre-formal boundary as an Agda theorem, and the beginning overclaims.
+Treat the checked theorems as metaphor, and the execution is lost.
+Treat the physical readings as premises, and the interpretation becomes
+numerology. The chain survives only while these statuses remain
+separate.
 
-1. **`two-normal-form`** ([L1652](Void.lagda.tex#L1652)). Every record
-   `(S, ℓ, r, ℓ ≠ r, cover)` over `S : Set` is boundary-preservingly
-   isomorphic to the canonical inhabitant on `Two`. The statement
-   quantifies internally over every type in `Set` carrying two
-   distinguishable, exhaustive points; the level-polymorphic version
-   `two-normal-formℓ` extends the same theorem across the universe
-   hierarchy. This is the maximal internal universal claim that MLTT
-   admits below the Russell–Girard barrier — proved, not asserted.
+## Inheritance
 
-2. **`K4Record-is-canonical`** ([L27140](Void.lagda.tex#L27140)). The
-   composition closure of the four endomorphism cases of `Two → Two`
-   is the complete graph on four vertices; `K4Record` is inhabited and
-   propositionally unique. Three-vertex closures fail by absurd
-   patterns; carriers larger than four add structure not forced by the
-   four cases.
+The thesis that distinction precedes structured description is not new.
+It belongs to a long line that includes George Spencer-Brown's
+`Laws of Form`, Gregory Bateson's definition of information as a
+difference that makes a difference, Wheeler's `it from bit`, and the
+logical boundary work of Wittgenstein, Godel, and Tarski.
 
-3. **`record-presupposes-distinction`** ([L31748](Void.lagda.tex#L31748)).
-   Every inhabitant of `K4Record` entails an inhabitant of
-   `Distinction`. The chain
-   `Two ⇒ EndoCase ⇒ K₄ ⇒ K4Record ⇒ Two` closes.
+What is new here is not the question but the execution. The constraints
+are explicit, minimal, and mechanically checked once the formal
+threshold is crossed. The work does not design a system; it eliminates
+unstable alternatives until only the closed discrete kernel remains.
 
----
+## Reading order
+
+Start with [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) and its
+generated [PDF](latex/VoidCompanion.pdf). The companion is the compact
+map and self-contained formal kernel of the repository. It states the
+boundary, then proves the small spine a reviewer can inspect without
+first reading the full book.
+
+Then read [Void.lagda.tex](Void.lagda.tex). It is the long formal
+development: it rebuilds the infrastructure internally, derives the
+binary normal form, classifies the four endomorphism cases, closes them
+at $K_4$, and carries the arithmetic and invariant ledger that remain
+inside the formal layer.
+
+[Form.lagda.tex](Form.lagda.tex) is separate. It must be read as the
+interpretive volume. It may attach physical vocabulary to the invariant
+ledger, but those identifications are hypotheses about the world, not
+theorems of `Void`.
+
+## Formal hinge
+
+Once the data of a binary distinction are represented - two separated,
+exhaustive points, and no further generator - the Agda-checked spine is
+the following:
+
+- **Normal form** (`two-normal-form`, [L1652](Void.lagda.tex#L1652)).
+  Every record `(S, l, r, l != r, cover)` over `S : Set` is
+  boundary-preservingly isomorphic to the canonical inhabitant on
+  `Two`. The theorem quantifies internally over every type in `Set`
+  carrying two distinguishable, exhaustive points; the
+  level-polymorphic version `two-normal-formℓ` extends the same result
+  across the universe hierarchy.
+- **Exhaustion of endomorphisms** (`EndoCase`, `classify-sound`,
+  `classify-unique`, [L1145](Void.lagda.tex#L1145),
+  [L1405-1421](Void.lagda.tex#L1405-L1421)). The endomorphism space
+  `Two -> Two` has exactly four cases: identity, swap, and the two
+  constants. Nothing else survives.
+- **Carrier closure** (`K4Record-is-canonical`,
+  [L27140](Void.lagda.tex#L27140)). No carrier on fewer than four
+  vertices admits the four endomorphism cases pairwise-distinctly; the
+  four-vertex complete graph does. Carriers larger than four add
+  structure not forced by the four cases.
+- **Dependency, not emergence** (`record-presupposes-distinction`,
+  [L31748](Void.lagda.tex#L31748)). Every inhabitant of `K4Record`
+  entails an inhabitant of `Distinction`. The surviving record is not an
+  independent carrier; it presupposes and reprojects the originating
+  distinction.
+
+If this hinge fails, the larger development fails at its root. If it
+holds, the remaining formal work is continuation over the survivor, not
+the addition of a new generator.
 
 ## Note on the author
 
 I am not a mathematician. No degree, no institutional affiliation. Over
 the last eighteen months I formalized one question in Agda: what must
-necessarily follow from one binary distinction, if nothing else is
-assumed? The work was developed with the help of large language models;
-the Agda type checker is the only judge of what stands. This document is
-written for readers who want to verify the formal claims. Where my own
-terminology departs from standard usage, the corresponding Agda
-definition is cited by line number so that the formal content can be
-read directly.
+necessarily follow once the minimal data of binary distinction are
+represented, and nothing else is granted? The work was developed with
+the help of large language models; the Agda type checker is the only
+judge of what stands. This document is written for readers who want to
+verify the formal claims. Where my terminology departs from standard
+usage, the corresponding Agda definition is cited by line number so that
+the formal content can be read directly.
 
 ---
 
@@ -323,18 +401,18 @@ Reference: [Void.lagda.tex L26781](Void.lagda.tex#L26781) (`K4Record`).
 ```agda
 k4Record-inhabited             : K4Record
 k4Record-unique                : (r₁ r₂ : K4Record) → r₁ ≡ r₂
-record-presupposes-distinction : K4Record → Two-distinction
+record-presupposes-distinction : (p : K4Record) → Distinction
 ```
 
 The first two state that `K4Record` is a singleton up to propositional
-equality. The third states that the existence of an inhabitant of
-`K4Record` entails the original separation witness on `Two`, closing
-the chain
+equality. The third states that any inhabitant of `K4Record` entails a
+`Distinction`; for the canonical record this recovers `Two-distinction`,
+closing the chain
 `Two-distinction ⇒ EndoCase ⇒ K₄ ⇒ K4Record ⇒ Two-distinction`.
 
 References:
-[Void.lagda.tex L27140](Void.lagda.tex#L27140) (`K4Record-is-canonical`),
-[L31748](Void.lagda.tex#L31748) (`record-presupposes-distinction`).
+[Void.lagda.tex L27166](Void.lagda.tex#L27166) (`K4Record-is-canonical`),
+[L31774](Void.lagda.tex#L31774) (`record-presupposes-distinction`).
 
 ---
 
