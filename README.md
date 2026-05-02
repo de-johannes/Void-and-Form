@@ -1,7 +1,7 @@
 # Void and Form
 
 This repository is governed by one structural claim: formal description
-does not begin from a presupposed ``nothing''. It begins only after
+does not begin from a presupposed ``nothing``. It begins only after
 distinguishable positions are available. Without distinguishability, no
 relation, judgement, equation, map, representation, truth-value, or
 falsehood can be formulated.
