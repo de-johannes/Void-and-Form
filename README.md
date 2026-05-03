@@ -156,13 +156,16 @@ the following:
   [L1438-L1454](Void.lagda.tex#L1438-L1454)). The endomorphism space
   `Two -> Two` has exactly four cases: identity, swap, and the two
   constants. Nothing else survives.
-- **Carrier closure** (`K4Record-is-canonical`,
-  [L27173](Void.lagda.tex#L27173)). No carrier on fewer than four
-  vertices admits the four endomorphism cases pairwise-distinctly; the
-  four-vertex complete graph does. Carriers larger than four add
-  structure not forced by the four cases.
+- **Carrier closure** (`FaithfulClosure`, `MinimalClosure`,
+  `K4Record-is-canonical`, [L26746-L26755](Void.lagda.tex#L26746-L26755),
+  [L27351](Void.lagda.tex#L27351)). The representation contract is
+  explicit: separation keeps distinct cases apart, complete realisation
+  gives every case a vertex, and no surplus forbids vertices not
+  realized by a case. Under that contract, fewer than four vertices
+  identify cases, while more than four add structure not forced by the
+  four cases.
 - **Dependency, not emergence** (`record-presupposes-distinction`,
-  [L31781](Void.lagda.tex#L31781)). Every inhabitant of `K4Record`
+  [L31959](Void.lagda.tex#L31959)). Every inhabitant of `K4Record`
   entails an inhabitant of `Distinction`. The surviving record is not an
   independent carrier; it presupposes and reprojects the originating
   distinction.
@@ -247,13 +250,14 @@ layer and to the chapter heading that opens it.
   [L9324](Void.lagda.tex#L9324); the four-case data type
   `InvariantKind` at [L9407](Void.lagda.tex#L9407) and the closure
   theorem `kind-exhaustive` at [L9418](Void.lagda.tex#L9418).
-- **Forced $K_4$ representation record and singleton.** Chapter
-  `The K₄ Invariant Record` at [L5038](Void.lagda.tex#L5038);
-  `K4Record` at [L26814](Void.lagda.tex#L26814);
+- **Minimal $K_4$ representation contract and invariant record.**
+  `FaithfulClosure` / `MinimalClosure` at
+  [L26746-L26755](Void.lagda.tex#L26746-L26755);
+  `K4Record` at [L26992](Void.lagda.tex#L26992);
   singleton lemma `K4Record-is-canonical` at
-  [L27173](Void.lagda.tex#L27173).
+  [L27351](Void.lagda.tex#L27351).
 - **Loop closure.** `record-presupposes-distinction` at
-  [L31781](Void.lagda.tex#L31781).
+  [L31959](Void.lagda.tex#L31959).
 
 ---
 
@@ -413,7 +417,7 @@ record K4Record : Set where
     ...
 ```
 
-Reference: [Void.lagda.tex L26814](Void.lagda.tex#L26814) (`K4Record`).
+Reference: [Void.lagda.tex L26992](Void.lagda.tex#L26992) (`K4Record`).
 
 ---
 
@@ -432,8 +436,8 @@ closing the chain
 `Two-distinction ⇒ EndoCase ⇒ K₄ ⇒ K4Record ⇒ Two-distinction`.
 
 References:
-[Void.lagda.tex L27173](Void.lagda.tex#L27173) (`K4Record-is-canonical`),
-[L31781](Void.lagda.tex#L31781) (`record-presupposes-distinction`).
+[Void.lagda.tex L27351](Void.lagda.tex#L27351) (`K4Record-is-canonical`),
+[L31959](Void.lagda.tex#L31959) (`record-presupposes-distinction`).
 
 ---
 
@@ -447,8 +451,8 @@ every case is `refl`.
 |---|---|
 | `eulerChar-computed ≡ 2` (`law16B-3-euler`) | [L26244](Void.lagda.tex#L26244) |
 | `simplex-eval ≡ 137` (`law15A-0-simplex-eval-137`) | [L10509](Void.lagda.tex#L10509) |
-| `loop-numerator ≡ 11` (`law-loop-num-11`) | [L30466](Void.lagda.tex#L30466) |
-| `theorem-sign-forcing` | [L31721](Void.lagda.tex#L31721) |
+| `loop-numerator ≡ 11` (`law-loop-num-11`) | [L30644](Void.lagda.tex#L30644) |
+| `theorem-sign-forcing` | [L31899](Void.lagda.tex#L31899) |
 
 Inside the $70$-monomial pool of degree $\leq 4$ in $(V,E,d,\chi)$
 fixed by the same forced values, the integer $137$ admits exactly one

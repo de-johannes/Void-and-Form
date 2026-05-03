@@ -26678,6 +26678,184 @@ and the remaining fields are linked to it by explicit equations. The
 result is a rigidity statement: every admissible record collapses to
 the same data.
 
+Before the richer invariant record is introduced, the representation
+contract itself has to be made explicit. The four endomorphism cases
+have already been classified; what remains is to say what it means to
+represent those cases as a carrier without weakening or inflating the
+classification. Three conditions are load-bearing.
+
+\begin{enumerate}
+
+\item \emph{Separation.} Distinct endomorphism cases must remain
+distinct on the representing carrier. No identification of cases is
+allowed.
+
+\item \emph{Complete realisation.} Every endomorphism case must be
+represented by a carrier element. No case is left without a vertex.
+
+\item \emph{No surplus.} Every carrier element must arise from one of
+the endomorphism cases. No extra vertex is introduced beyond the
+classification.
+
+\end{enumerate}
+
+These clauses do not say that $K_4$ has been chosen. They state what a
+faithful minimal representation of the four-case classifier must do.
+Without separation, the classifier is collapsed. Without complete
+realisation, a case is missing. Without no surplus, the carrier contains
+structure not forced by the endomorphism data. Under this contract, the
+vertex set is in bijection with the four-case set, and the simple graph
+on distinct represented cases is complete. This is the small closure
+that the later invariant record enriches numerically.
+
+The composition table does not add a fifth case. For any fixed
+distinction, composing two interpreted cases yields another endomorphism
+of the same carrier, and the classifier sends that composite back to one
+of the four cases. Thus total composability is inherited from function
+composition; it is not a separate generator.
+
+\begin{code}
+-- § Composition of endomorphisms stays inside the classified four-case set.
+composeEndo : (d : Distinction) → (S d → S d) → (S d → S d) → S d → S d
+composeEndo d f g x = f (g x)
+
+composeCase : (d : Distinction) → EndoCase → EndoCase → EndoCase
+composeCase d c e =
+  K₄.classify d (composeEndo d (K₄.interpret d c) (K₄.interpret d e))
+
+endomorphism-cases-closed :
+  (d : Distinction) →
+  (c e : EndoCase) →
+  Σ EndoCase
+    (λ h → K₄.interpret d h ≗
+      composeEndo d (K₄.interpret d c) (K₄.interpret d e))
+endomorphism-cases-closed d c e =
+  composeCase d c e ,
+  K₄.classify-sound d (composeEndo d (K₄.interpret d c) (K₄.interpret d e))
+\end{code}
+
+The following records package the representation contract. The field
+\AgdaField{closure-realize} expresses complete realisation; the field
+\AgdaField{closure-reflect-realize} expresses separation by preventing
+realisation from identifying cases; and
+\AgdaField{closure-no-extra} expresses no surplus by forcing every
+carrier element to come from a case.
+
+\begin{code}
+-- § Faithful representation of the four endomorphism cases.
+record FaithfulClosure : Set1 where
+  field
+    closure-carrier         : Set
+    closure-realize         : EndoCase → closure-carrier
+    closure-reflect         : closure-carrier → EndoCase
+    closure-reflect-realize :
+      (c : EndoCase) → closure-reflect (closure-realize c) ≡ c
+
+-- § Minimality: no carrier element is present unless some case realizes it.
+record MinimalClosure : Set1 where
+  field
+    faithful-closure : FaithfulClosure
+    closure-no-extra :
+      (v : FaithfulClosure.closure-carrier faithful-closure) →
+      Σ EndoCase
+        (λ c → FaithfulClosure.closure-realize faithful-closure c ≡ v)
+
+CanonicalClosureVertex : Set
+CanonicalClosureVertex = EndoCase
+
+CanonicalClosureEdge : CanonicalClosureVertex → CanonicalClosureVertex → Set
+CanonicalClosureEdge c e = c ≠ e
+
+canonical-minimal-closure : MinimalClosure
+canonical-minimal-closure = record
+  { faithful-closure = record
+      { closure-carrier         = EndoCase
+      ; closure-realize         = λ c → c
+      ; closure-reflect         = λ c → c
+      ; closure-reflect-realize = λ c → refl
+      }
+  ; closure-no-extra = λ v → v , refl
+  }
+\end{code}
+
+The two maps in a faithful minimal closure are inverse. One direction is
+the field \AgdaField{closure-reflect-realize}; the other follows from
+\AgdaField{closure-no-extra}. Hence every carrier satisfying the three
+representation conditions is equivalent to the canonical four-case
+carrier.
+
+\begin{code}
+minimal-realize-reflect :
+  (m : MinimalClosure) →
+  (v : FaithfulClosure.closure-carrier (MinimalClosure.faithful-closure m)) →
+  FaithfulClosure.closure-realize (MinimalClosure.faithful-closure m)
+    (FaithfulClosure.closure-reflect (MinimalClosure.faithful-closure m) v)
+  ≡ v
+minimal-realize-reflect m v with MinimalClosure.closure-no-extra m v
+... | c , p = trans (sym (cong realize q)) p
+  where
+    fc = MinimalClosure.faithful-closure m
+    realize = FaithfulClosure.closure-realize fc
+    reflect = FaithfulClosure.closure-reflect fc
+    reflect-realize = FaithfulClosure.closure-reflect-realize fc
+
+    q : c ≡ reflect v
+    q = trans (sym (reflect-realize c)) (cong reflect p)
+
+minimal-realize-injective :
+  (m : MinimalClosure) →
+  (c e : EndoCase) →
+  FaithfulClosure.closure-realize (MinimalClosure.faithful-closure m) c
+    ≡ FaithfulClosure.closure-realize (MinimalClosure.faithful-closure m) e →
+  c ≡ e
+minimal-realize-injective m c e p =
+  trans (sym (FaithfulClosure.closure-reflect-realize fc c))
+    (trans (cong (FaithfulClosure.closure-reflect fc) p)
+      (FaithfulClosure.closure-reflect-realize fc e))
+  where
+    fc = MinimalClosure.faithful-closure m
+
+case-has-closure-vertex :
+  (m : MinimalClosure) →
+  (c : EndoCase) →
+  Σ (FaithfulClosure.closure-carrier (MinimalClosure.faithful-closure m))
+    (λ v → FaithfulClosure.closure-realize (MinimalClosure.faithful-closure m) c ≡ v)
+case-has-closure-vertex m c =
+  FaithfulClosure.closure-realize (MinimalClosure.faithful-closure m) c , refl
+
+closure-vertex-from-case :
+  (m : MinimalClosure) →
+  (v : FaithfulClosure.closure-carrier (MinimalClosure.faithful-closure m)) →
+  Σ EndoCase
+    (λ c → FaithfulClosure.closure-realize (MinimalClosure.faithful-closure m) c ≡ v)
+closure-vertex-from-case m v = MinimalClosure.closure-no-extra m v
+
+minimal-closure-bijection :
+  (m : MinimalClosure) →
+  SetIso
+    (FaithfulClosure.closure-carrier (MinimalClosure.faithful-closure m))
+    EndoCase
+minimal-closure-bijection m = record
+  { to      = FaithfulClosure.closure-reflect fc
+  ; from    = FaithfulClosure.closure-realize fc
+  ; to-from = FaithfulClosure.closure-reflect-realize fc
+  ; from-to = minimal-realize-reflect m
+  }
+  where
+    fc = MinimalClosure.faithful-closure m
+\end{code}
+
+Dropping any one field breaks the intended meaning of representation.
+Dropping \AgdaField{closure-reflect-realize} re-admits identification of
+cases. Dropping the totality of \AgdaField{closure-realize} leaves some
+case without a vertex. Dropping \AgdaField{closure-no-extra} permits a
+carrier element that no endomorphism case realizes. The conditions are
+therefore not selected because they yield $K_4$; they are the precise
+contract under which representing the four-case classifier has any
+minimal faithful meaning. The concrete
+\AgdaDatatype{K4Vertex} below is the explicit four-constructor carrier
+used by the richer invariant record.
+
 %───────────────────────────────────────────────────────────────────────────
 \section{Structural infrastructure}
 \label{sec:k4-representation:structural-infrastructure}
