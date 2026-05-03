@@ -26,14 +26,16 @@
 
 \begin{abstract}
 This note is the compact map and self-contained formal kernel of
-\emph{Void and Form}.  It does not ask what emerges from a presupposed
-``nothing''.  It asks under which conditions formal description is
-possible at all.  The pre-formal answer is the availability of
-distinguishable positions: without them no relation, judgement,
-equation, map, representation, truth-value, or falsehood can be
-formulated.  \emph{Void} names this boundary.  It is not the empty set,
-not the empty type, and not a physical nothing; it is the absence of the
-domain in which those notions could already occur.
+\emph{Void and Form}, proposed as a theory of formulability: an account
+of the conditions under which mathematical, logical, and physical
+description can be stated without collapse.  The note does not ask what
+emerges from a presupposed ``nothing''.  It asks under which conditions
+formal description is possible at all.  The pre-formal answer is the
+availability of distinguishable positions: without them no relation,
+judgement, equation, map, representation, truth-value, or falsehood can
+be formulated.  \emph{Void} names this boundary.  It is not the empty
+set, not the empty type, and not a physical nothing; it is the absence
+of the domain in which those notions could already occur.
 
 The checked kernel begins once distinguishability is granted as data.
 In intensional Martin-L\"of type theory, a binary distinction is
@@ -49,14 +51,17 @@ of an n-ary template; and at $n=3$ the n-ary record is definitionally
 equivalent to a binary package of three pairwise separations and a
 nested binary cover.
 
-The note does not claim that such a distinction takes place.  It
-records what follows when the formal threshold is crossed.  The thesis
-that distinction is foundational is at least as old as Spencer-Brown's
-\emph{Laws of Form} and is not asserted here as new.  The contribution
-is the precise, machine-checked statement that, under the explicitly
-fixed conditions of representation, the closure of binary distinction
-is $K_4$, unique up to isomorphism, and dependent back on the data from
-which it was built.
+The formulability claim is therefore not treated as a theorem of this
+note.  It is the architectural reading of the checked chain.  The note
+itself records the conditional formal core: if the formal threshold is crossed
+by supplying the data of binary distinction, then the displayed closure
+and dependency results follow.  The thesis that distinction is
+foundational is at least as old as Spencer-Brown's \emph{Laws of Form}
+and is not asserted here as new.  The contribution is the precise,
+machine-checked statement that, under the explicitly fixed conditions
+of representation, the closure of binary distinction is $K_4$, unique
+up to isomorphism, and dependent back on the data from which it was
+built.
 \end{abstract}
 
 \section*{How to read this note}
@@ -68,20 +73,22 @@ products, the empty type, and negation.  The full file
 \texttt{Void.lagda.tex} rebuilds that infrastructure internally and
 continues with constructions that are out of scope for this note.
 
-The note has two layers.  First, it names the pre-formal boundary at
-which formalisation becomes possible at all: relations, morphisms,
-judgements, and equations already presuppose a field in which one place
-can be separated from another.  This is the conceptual reason for
-taking binary distinction as the starting datum; it is not an Agda
-theorem.  Second, it records the checked statements: normal form,
-exhaustion, four-vertex closure, and dependency back to the starting
-data.
+The note has three layers.  First, it names the claim that motivates the
+project: \emph{Void and Form} is a proposed theory of formulability, not
+a proof that physics has already been derived.  Second, it names the
+pre-formal boundary at which formalisation becomes possible at all:
+relations, morphisms, judgements, and equations already presuppose a
+field in which one place can be separated from another.  This is the
+conceptual reason for taking binary distinction as the starting datum;
+it is not an Agda theorem.  Third, it records the checked statements:
+normal form, exhaustion, four-vertex closure, and dependency back to
+the starting data.
 
-The code is narrower.  It starts only after the data are granted.  From
-that point on, every formal claim below is a term checked by Agda.  The
-tetrahedron is only the geometric reading of the complete graph on the
-four endomorphism cases; it is not an additional assumption used in the
-proof.
+The code is narrower than the larger claim, and that is the point.  It
+starts only after the data are granted.  From that point on, every
+formal claim below is a term checked by Agda.  The tetrahedron is only
+the geometric reading of the complete graph on the four endomorphism
+cases; it is not an additional assumption used in the proof.
 
 \section*{Map of the project}
 
@@ -106,13 +113,18 @@ distinction, an occurrence carries no information.  Information
 therefore presupposes distinction, and an inhabited distinction
 requires at least two distinguishable occurrences.  This binary shape
 is minimal because every further difference already relies on it.
+\end{description}
+
+\subsection*{Void: formal execution}
+
+\begin{description}
 
 \item[Level 2: Two.] The first stable formal carrier is
 \AgdaDatatype{Two}.  It contains two separated points and no third
 generator.  It is not a truth-value object; it is the normal form of
-distinction.  From this level onward the formal threshold is crossed:
-MLTT and Agda can execute the consequences of the datum they have
-received.
+the \AgdaRecord{Distinction} record.  From this level onward the formal
+threshold is crossed: MLTT and Agda execute the consequences of the
+datum they have received.
 
 \item[Level 3: Logic.] Formal systems operate on structures in which
 distinguishable positions are already available.  Relation, morphism,
@@ -172,11 +184,11 @@ given; it cannot produce the very field of separability from within a
 field that it already presupposes.
 
 The following display is therefore not Agda code and not a theorem of
-MLTT.  It is a schematic boundary marker: it says where ontology hands
-the first stable datum to formalisation.  The names in the display are
-not internal definitions, and the arrows are not checked implications;
-they are meta-level dependency markers for the passage into the formal
-part.
+MLTT.  It is a schematic boundary marker: it states where the proposed
+theory of formulability reaches its formal threshold.  The names in the
+display are not internal definitions, and the arrows are not checked
+implication terms; they are meta-level dependency markers for the
+passage into the formal part.
 
 \[
 \begin{array}{ll}
@@ -231,10 +243,14 @@ germ of temporal and spatial structure: without an interval of origin
 or a gap of contact, the two occurrences collapse back into one.
 
 This boundary is not a theorem of the development; it is the condition
-under which the development can be read as a theorem at all.
-Only the last line enters Agda.  From \(\mathrm{Dist}(S)\) onward, the
-schematic notation is replaced by checked terms.  The rest of this note
-records that checked consequence.
+under which the development can be read as a theorem at all.  This is
+also why the formulability claim is architectural rather than merely
+decorative:
+the claim names the whole dependency from formulability to formal
+closure, while the code checks the segment that can be expressed as
+terms.  Only the last line enters Agda.  From \(\mathrm{Dist}(S)\)
+onward, the schematic notation is replaced by checked terms.  The rest
+of this note records that checked consequence.
 
 \section*{Why two cannot occur without separation}
 
@@ -3609,11 +3625,11 @@ the endomorphism set of the binary normal form.
 The scope of this note is narrow by design.
 
 \emph{What is not claimed.} Nothing in the preceding sections asserts
-that a binary distinction takes place. The development never builds
-an inhabitant of \AgdaRecord{Distinction} without supplied data; every
-Distinction-valued construction below the abstract takes a Distinction
-as input. The proofs are silent on the question of whether such an
-input exists in any external sense.
+that a binary distinction takes place as an event in nature. The
+development never builds an inhabitant of \AgdaRecord{Distinction}
+without supplied data; every Distinction-valued construction below the
+abstract takes a Distinction as input. The proofs are silent on the
+question of whether such an input exists in any external sense.
 
 \emph{What is conceptually argued, not formally proved.} The
 introductory paragraphs argue that any formalisation at all already
@@ -3638,10 +3654,19 @@ says only what follows when the stated data are granted.
 No further constructions are treated here. They are outside the
 present claim.
 
+\emph{What the theory of formulability adds.} The theory of
+formulability is the architectural thesis that this conditional formal chain is not an
+isolated trick, but the first stable skeleton of any theory capable of
+formulation.  That thesis is not a hidden Agda lemma.  It is the reading
+that makes the chain matter: the pre-formal boundary explains why the
+datum is unavoidable, the checked kernel explains what the datum forces,
+and \emph{Form} tests how far the resulting invariant ledger can be
+read as a structure of physical description.
+
 \section{Placement}
 
-The note is brief enough to mistake for naivety; this section locates
-it in three lineages so that the contribution is read for what it is.
+This section locates the contribution in three lineages so that the
+formal result is read at the right level.
 
 \emph{Spencer-Brown.}  The thesis that distinction is the foundational
 act is at least as old as \emph{Laws of Form} (1969).  The present
@@ -3675,12 +3700,13 @@ which it was built.
 
 \section{Outlook}
 
-The core result stops at the framework-forced closure of binary distinction.  Its
-role in the larger development is not to prove everything at once, but
-to fix the first carrier on which later constructions may be tested.
-Once the four-case closure is fixed, further claims can be separated
-cleanly: some are formal consequences of the core, some are additional
-constructions over it, and some belong only to the interpretive layer.
+The core result stops at the framework-forced closure of binary
+distinction.  Its role in the larger development is not to prove
+everything at once, but to fix the first carrier on which the larger
+claim can be tested without handwaving.  Once the four-case closure is fixed,
+further claims can be separated cleanly: some are formal consequences of
+the core, some are additional constructions over it, and some belong
+only to the interpretive layer.
 
 The next formal step in \emph{Void and Form} is therefore not a jump to
 a global conclusion.  It is the controlled question of what can be built
@@ -3695,7 +3721,9 @@ the kernel.  The direction is one-way: the checked kernel exports an
 invariant ledger; \emph{Form} reads that ledger structurally and, where
 the reading is explicit enough, physically.  A failed physical reading
 would not refute the normal-form theorem or the four-case closure.  It
-would refute that interpretation.
+would refute that interpretation.  A successful reading would not turn
+the interpretation into an Agda theorem; it would support the larger
+claim by showing that the formal skeleton has empirical reach.
 
 This does not make \emph{Form} decorative.  Its empirical surface is
 deliberately exposed.  The physical identifications are tested by

@@ -251,7 +251,8 @@
 \centering
 \vspace*{3cm}
 {\Huge\bfseries Void}\\[0.5cm]
-{\Large\itshape Conditions of Formulability}\\[2cm]
+{\Large\itshape Conditions of Formulability}\\[0.4cm]
+{\large A Formal Kernel for a Theory of Formulability}\\[2cm]
 {\large Johannes Michael Wielsch}\\[4cm]
 \begin{tikzpicture}[scale=2]
   \coordinate (A) at (0,0); \coordinate (B) at (1,0);
@@ -281,11 +282,11 @@
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-This work does not ask what emerges from a presupposed ``nothing''. It asks under which conditions formal description is possible at all. The starting point is the minimal condition of every formal theory: distinguishable positions. Without such distinguishability, no relation, judgement, equation, map, representation, truth-value, or falsehood can be formulated. \emph{Void} names this pre-formal boundary. It is not the empty set, not the empty type, and not a physical nothing; it is the absence of the domain in which those notions could already occur.
+This work is the first volume of \emph{Void and Form}, proposed as a theory of formulability: an account of the conditions under which mathematical, logical, and physical description can become stable enough to be stated. It does not ask what emerges from a presupposed ``nothing''. It asks under which conditions formal description is possible at all. The starting point is the minimal condition of every formal theory: distinguishable positions. Without such distinguishability, no relation, judgement, equation, map, representation, truth-value, or falsehood can be formulated. \emph{Void} names this pre-formal boundary. It is not the empty set, not the empty type, and not a physical nothing; it is the absence of the domain in which those notions could already occur.
 
 Once distinguishability is granted, the boundary receives a formal representative: two non-collapsing occurrences that exhaust their carrier. The claim that this is the minimal entry is a boundary argument, not itself an Agda theorem; the theorem begins only after the representative has been supplied. Inside intensional Martin-L\"of type theory, checked by Agda under \AgdaFlag{safe} and \AgdaFlag{without-K}, the record \texttt{Distinction} represents the threshold as a carrier, two separated boundary points, and an exhaustive cover. Every such structure has the canonical normal form \texttt{Two}; its endomorphisms exhaust to four cases; representing those cases with separation, complete realisation, and no surplus forces a four-element structure with complete simple adjacency; and the resulting structure points back to the distinction from which it arose.
 
-The argument is therefore not a derivation from an ontological beginning. It is an analysis of the conditions under which formal theories can be formulated, followed by the machine-checked derivation of the first non-trivial structure that necessarily appears once those conditions are represented. The later arithmetic, spectral, and interpretive layers of the book unfold over that survivor. They do not supply a new generator.
+The argument is therefore not a derivation from an ontological beginning. It is an analysis of the conditions under which formal theories can be formulated, followed by the machine-checked derivation of the first non-trivial structure that necessarily appears once those conditions are represented. The formulability claim is the architectural reading of this whole dependency: the pre-formal boundary explains why the datum matters, the Agda development checks what the datum forces, and the later volume \emph{Form} tests how far the resulting invariant ledger can be read as a structure of physical description. The later arithmetic, spectral, and interpretive layers of the book unfold over that survivor. They do not supply a new generator.
 
 \section*{Structural Schema}
 \addcontentsline{toc}{chapter}{Structural Schema}
@@ -312,6 +313,8 @@ The argument is therefore not a derivation from an ontological beginning. It is 
 
 The first two levels are not formal statements inside a type system. They state the conditions under which formal statements can appear. They are not left informal because notation is missing, but because they concern the possibility of introducing notation in the first place. The passage from boundary to \texttt{Distinction} is therefore the first formal grant, not a theorem about the boundary itself. From Level 2 onward the formal theory begins, and the claims are expressible and checkable inside it.
 
+The proposed theory of formulability is not an additional ninth level. It is the reading of the chain as a whole. If Level 0 and Level 1 are removed, the formal code loses its reason for beginning with distinction. If Level 2 through Level 4 fail, the claim loses its checked kernel. If Level 5 through Level 8 are treated as theorems rather than structural readings, the claim overreaches. The work is held together only because these statuses are kept separate and ordered.
+
 \section*{Inheritance}
 \addcontentsline{toc}{chapter}{Inheritance}
 
@@ -329,7 +332,7 @@ What determines invariance is the automorphism group. Evariste Galois showed tha
 
 The categorical perspective---that structure is characterized by the maps it admits---descends from William Lawvere and the semantic tradition of Alfred Tarski.
 
-What is new here is not the question but the execution. The constraints are explicit, minimal, and mechanically checked once the formal threshold is crossed.
+What is new here is not the question but the execution. The constraints are explicit, minimal, and mechanically checked once the formal threshold is crossed. The claim that this amounts to a theory of formulability is therefore not a decorative title placed above the proof; it is the architectural consequence of making the dependency from boundary, to distinction, to closure, to invariant ledger explicit.
 
 \mainmatter
 
@@ -378,16 +381,17 @@ The opening claim is deliberately modest in its formal status and severe in its 
 
 The claim can be tested by trying to remove the cut. Remove the distinction between sign and signed, and no representation remains. Remove the distinction between two sides of an equation, and equality has nothing to compare. Remove the distinction between source and target, and no map remains. Remove the distinction between premise and conclusion, and no inference remains. What disappears in each case is not a technical convenience but the possibility of the form itself.
 
-For that reason the reader is asked to keep four statuses separate throughout the book.
+For that reason the reader is asked to keep five statuses separate throughout the book.
 
 \begin{enumerate}
 \item \textbf{Boundary arguments} name what formalisation already presupposes. They are not Agda theorems.
 \item \textbf{Formal representations} translate the boundary into explicit data that a selected proof assistant can manipulate.
 \item \textbf{Machine-checked theorems} prove what follows from those data under the displayed rules.
+\item \textbf{The formulability claim} is the architectural thesis that the checked chain exposes the first stable skeleton of formulability itself.
 \item \textbf{Interpretive readings} belong to the companion volume \emph{Form}, where physical vocabulary is attached only after the formal record has closed.
 \end{enumerate}
 
-Confusing these four statuses destroys the project. Treat the boundary argument as a theorem, and the beginning overclaims. Treat the checked theorems as metaphor, and the execution is lost. Treat the physical readings as premises, and the numerology objection becomes justified. The book survives only if the statuses remain visible.
+Confusing these statuses destroys the project. Treat the boundary argument as a theorem, and the beginning overclaims. Treat the checked theorems as metaphor, and the execution is lost. Treat the formulability claim as a slogan, and the chain loses its reason for being. Treat the physical readings as premises, and the numerology objection becomes justified. The book survives only if the statuses remain visible.
 
 \chapter{Representation Requires A Cut}
 \label{ch:representation-requires-cut}
@@ -504,6 +508,8 @@ Intensional Martin-L\"of type theory provides such a carrier for this book. It m
 
 This is why MLTT and Agda enter here: not as metaphysical origin, and not as the only conceivable formal clothing of the argument, but as the expression in which the present execution is carried out. The proof that another assistant can carry the same structure would be a further theorem of translation or reconstruction. It is not assumed here, and it is not needed in order for the present file to run.
 
+The formulability claim does not depend on Agda being metaphysically privileged. It depends on the fact that this execution is explicit enough to expose the dependency chain. Another carrier could strengthen the claim by reconstructing the same chain under different rules; it could also reveal exactly where the present chain depends on MLTT. Either outcome would be mathematical progress. What cannot be done is to dismiss the claim as mere style while ignoring the checked segment that gives it weight.
+
 \section{What Remains Open}
 \label{sec:formalisations:what-remains-open}
 
@@ -520,6 +526,8 @@ Until such reconstructions are written, the honest statement is exact: this book
 The machine enters only after the threshold has been crossed. Agda can verify that a term has the type it claims to have. It can verify that a case split is exhaustive, that a contradiction has no branch, that a construction uses no postulate, and that an alleged equality reduces to \texttt{refl}. It cannot verify, from nowhere, the pre-formal necessity of representation itself. That necessity is what makes formal verification possible in the first place.
 
 This division is not a retreat. It is the contract that keeps the work honest. Before the threshold, the book argues that formalisation presupposes distinguishable positions. After the threshold, every claimed consequence is submitted to the type checker. The pre-formal argument does not pretend to be code. The formal development does not pretend to have generated its own condition of possibility.
+
+This is also where the theory of formulability becomes testable rather than merely visionary. The vision says that formulability begins with distinction. The method receives that distinction as explicit data. The checker then decides whether the claimed normal form, classification, closure, and return to the datum actually follow. If the chain breaks, the formulability claim breaks with it. If the chain holds, the claim is no longer only philosophical language; it has a formal spine.
 
 The compiler flags used in this work---\AgdaFlag{safe} and \AgdaFlag{without-K}---restrict the formal environment further. No postulates can be introduced, and no appeal to the uniqueness of identity proofs is permitted. These flags do not create the surviving structure; they ensure that the execution cannot smuggle in extra freedom while the eliminative argument is carried out.
 
@@ -542,7 +550,7 @@ The cover is crucial. MLTT does not allow the inference from ``only two points h
 
 After this point the text changes status. The prose may still motivate, orient, and interpret, but the mathematical claims are tied to the Agda development that follows. A construction must be an inhabitant. An equality must reduce or be proved. A contradiction must have no branch. A classification must cover all cases. A uniqueness claim must state the relevant equivalence and close it.
 
-The first code block therefore does not begin the ontology. It begins the execution. The threshold has already forced the demand for a cut at the level of boundary argument; the formal file now receives that demand as explicit data and lets the checker eliminate whatever cannot survive it.
+The first code block therefore does not begin the ontology. It begins the execution. The threshold has already forced the demand for a cut at the level of boundary argument; the formal file now receives that demand as explicit data and lets the checker eliminate whatever cannot survive it. This is the spine of the whole project: claim, data, execution, closure, and interpretation must remain connected without being confused.
 
 \part{Foundation}
 
@@ -32752,7 +32760,13 @@ the four basic invariants of that record are identified inside the
 system; and the singleton presupposes the original distinction.
 The discrete argument has reached its boundary.
 
-This completes the proof of the discrete kernel.
+This completes the proof of the discrete kernel. It does not complete
+the theory of formulability; it supplies the part of that theory that can be
+submitted to the type checker. The larger claim begins before the code,
+where formulability is identified with the need for distinction, and
+continues after the code, where the invariant ledger is read by
+\emph{Form}. The present volume closes the middle term: the formal chain
+from represented distinction to invariant closure and back.
 
 %─────────────────────────────────────────────────────────────────────────────
 \chapter*{Outlook}
@@ -32778,6 +32792,12 @@ They determine the discrete ground on which such a theory would
 have to stand, and the structural shape of the formulas that
 ground would permit.
 
+This is why the claim of the larger work is a theory of formulability
+rather than a completed physics. The present volume fixes the formal
+skeleton that any such reading must respect. The later volume may attach
+physical vocabulary, compare observables, and expose failure conditions;
+it may not retroactively change the kernel it inherits.
+
 \section*{Two boundaries of the universal claim}
 
 Two boundaries are worth naming explicitly, because they limit how
@@ -32791,6 +32811,14 @@ lives at a single universe level; a routine universe-polymorphic
 restatement is available but adds no new mathematical content. The
 universal reading therefore holds inside the formal setting and
 stops at its boundary.
+
+The formulability claim crosses that boundary only as a thesis about
+formulability, not as a theorem ranging over all possible foundations.
+Its force comes from the fact that every formalism capable of statement
+must already separate marks, rules, judgements, and failures; its formal
+weight comes from the Agda chain carried out here for one disciplined
+carrier. A reconstruction in another foundation would not weaken this
+claim. It would test and sharpen it.
 
 \section*{Where the text ends}
 

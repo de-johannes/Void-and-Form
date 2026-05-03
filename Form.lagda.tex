@@ -248,12 +248,52 @@
 
 \frontmatter
 
-% ─────────────────────────────────────────────────────────────────────
-%  Frontmatter (Abstract / Debts / Road Map / How to Read / Formal
-%  Environment) will be written *after* the chapters of Part I and II
-%  are settled.  The frontmatter sets expectations; we cannot set them
-%  before we know how the body actually reads.
-% ─────────────────────────────────────────────────────────────────────
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+\emph{Form} is the interpretive volume of \emph{Void and Form}, a
+proposed theory of formulability.  \emph{Void} supplies the checked
+kernel:
+from a represented binary distinction it derives the normal form
+\texttt{Two}, the four endomorphism cases, the $K_4$ closure, the
+arithmetic and invariant ledger, and the dependency back to
+\texttt{Distinction}.  \emph{Form} asks what that closed ledger means if
+it is read as the structural skeleton of physical description.
+
+The book does not claim that Agda proves the Standard Model, General
+Relativity, or the physical universe.  It claims something sharper and
+more vulnerable: once the formal kernel is imported, the physical ledger
+can be read as a sequence of identifications constrained by that kernel.
+The arithmetic is theorem. The identifications are structural
+hypotheses.  The comparisons with measurement are empirical exposure.
+
+The formulability claim is therefore carried by a three-part
+architecture.  First, the pre-formal boundary says why description requires distinction.
+Second, the checked kernel says what a represented binary distinction
+forces.  Third, this volume tests whether the resulting invariant ledger
+can organise the quantities that physics currently takes as inputs.  If
+the formal kernel fails, the project fails mathematically.  If the
+physical identifications fail, the interpretation fails.  If both hold,
+the claim of a theory of formulability gains its intended force: not as a
+proof that physics was deduced from nothing, but as a structured account
+of why physical description can have the form it has.
+
+\chapter*{How to Read \emph{Form}}
+\addcontentsline{toc}{chapter}{How to Read Form}
+
+Every chapter below should be read with one distinction in place.
+Statements imported from \emph{Void} are formal results checked by Agda
+under \AgdaFlag{safe} and \AgdaFlag{without-K}.  Statements that attach
+those results to spacetime, gauge structure, particle masses,
+cosmology, or observation are interpretations.  They are not weaker
+because they are interpretations; they are simply accountable in a
+different court.  The compiler checks the kernel.  Mathematics checks
+the local derivations.  Experiment checks the physical readings.
+
+This volume is therefore where the claim becomes exposed.  A theory of
+formulability that never meets physics would be only architecture.  A
+physics reading with no checked kernel would be numerology.  \emph{Form}
+exists because the two must be held together without being confused.
 
 \mainmatter
 
@@ -361,7 +401,7 @@ What the next chapter will examine is what lies on the far side of those boundar
 
 These are not loose ends in any particular theory. They are systematically the same kind of question: questions about what was \textit{taken as given} when each movement of the four-century chain began its work. Newton took space, time, and mass. Maxwell took the field. Einstein took matter. Quantum field theory took the parameters. Each theory pushed the boundary outward; none erased it.
 
-If a theory could be found that pushed it further---if the values that everyone has measured turned out to be derivable from a single, more austere starting point---it would not contradict the four centuries of work just summarized. It would extend them in the same direction they have always moved: toward shorter languages, fewer assumed quantities, more universal laws. This book will eventually propose such a starting point. That proposal must wait. Before it can be made, the open ledger has to be named.
+If a theory could be found that pushed it further---if the values that everyone has measured turned out to be derivable from a single, more austere starting point---it would not contradict the four centuries of work just summarized. It would extend them in the same direction they have always moved: toward shorter languages, fewer assumed quantities, more universal laws. This book proposes such a starting point, but not as a new physical substance or a hidden dynamical field. It proposes the checked closure of binary distinction as the formal skeleton of a theory of formulability. Before that proposal can be evaluated, the open ledger has to be named.
 
 % ─────────────────────────────────────────────────────────────────────
 \chapter{The Open Ledger}
@@ -828,9 +868,11 @@ It is equally important to be clear about what \textit{Void} does not do.
 
 \textit{Void} does not predict measurements. It computes integers. Whether those integers, when interpreted physically, agree with measurements is a question about the soundness of the interpretation, not about the soundness of \textit{Void}. If a measurement disagrees with one of \textit{Void}'s integers under a particular identification, the identification is wrong; \textit{Void}'s integer remains what it is.
 
+This does not make \textit{Void} irrelevant to physics. It makes its role exact. A theory of formulability cannot begin by assuming the open ledger of physics and then explaining it. It must first produce a closed formal ledger whose entries are not tuned to the measurements. Only then can \textit{Form} ask whether the physical ledger is a reading of that formal one.
+
 \section*{Why This Matters}
 
-The reader is now in a position to understand what the next chapter is about to do. \textit{Form} is going to import \textit{Void}'s result via a single line of Agda code. After the import, the exported theorem and invariant names are in scope. None of the formal kernel has to be re-derived in this volume, because \textit{Form} is not a second proof of \textit{Void}.
+The reader is now in a position to understand what the next chapter is about to do. \textit{Form} is going to import \textit{Void}'s result via a single line of Agda code. After the import, the exported theorem and invariant names are in scope. None of the formal kernel has to be re-derived in this volume, because \textit{Form} is not a second proof of \textit{Void}. It is the test of whether the imported kernel can carry the formulability claim into the domain where physics keeps its unexplained inputs.
 
 What this book then does---in Parts IV through VII---is the work of identification. The numbers from \textit{Void}'s ledger are matched, one by one, against the numbers in physics's open ledger. The matching is offered as hypothesis, not as proof: \textit{Void}'s arithmetic is theorem, but the assertion that \textit{Void}'s $137$ is physics's $\alpha^{-1}$ is a claim about the world that experiment can confirm or refute. The boundary between theorem and identification is the boundary between the two volumes.
 
@@ -843,7 +885,7 @@ The next chapter performs the import.
 
 \epigraph{``The miracle of the appropriateness of the language of mathematics for the formulation of the laws of physics is a wonderful gift which we neither understand nor deserve.''}{Eugene Wigner, 1960}
 
-The previous chapter narrated, in plain language, what \textit{Void} proves. This chapter does the import in the literal sense: a single line of Agda code that brings every result of \textit{Void} into scope. After this line, the rest of the book has access to the seven invariants, the closed arithmetic, the closure isomorphism, and every supporting lemma that \textit{Void} required. Nothing further has to be assumed. Nothing further can be added.
+The previous chapter narrated, in plain language, what \textit{Void} proves. This chapter performs the import in the literal sense: a single line of Agda code that brings every result of \textit{Void} into scope. After this line, the rest of the book has access to the seven invariants, the closed arithmetic, the closure isomorphism, and every supporting lemma that \textit{Void} required. Nothing further has to be assumed. Nothing further can be added.
 
 \section*{The Compiler Discipline}
 
@@ -892,15 +934,17 @@ The import is not a metaphor for borrowed authority. It is the line that keeps t
 
 This separation is not bureaucratic; it is the foundation of the book's epistemic claim. If a physical identification fails---if some measured value disagrees with the corresponding \textit{Void} invariant---the failure is in the identification, not in the mathematics. The integer $137$ remains a theorem of \textit{Void}; the claim ``$137 = \alpha^{-1}$'' is a hypothesis of \textit{Form}. Each part of the book preserves the boundary that the import imposes.
 
-\section*{The Two-Phase Chain}
+\section*{The Three-Phase Chain}
 
 With the import made, the structural shape of what this book and \textit{Void} together accomplish becomes precise.
 
 \textit{Void}, in phase one, represents the binary distinction threshold as data, reduces it to \texttt{Two}, exhausts the four endomorphism cases, closes their faithful representation at $K_4$, and proves that the closed record presupposes the originating distinction. This is a closed mathematical result; it does not depend on physics, and it cannot be modified by physics.
 
-\textit{Form}, in phase two, opens the result and reads it structurally, then physically where the reading is explicit and falsifiable. Every chapter from this point on takes \textit{Void}'s exported invariants as the input to an identification. The geometry of $K_4$ is proposed as the structural skeleton of spacetime; its Laplacian spectrum is proposed as a source for Einstein-type tensors; its symmetry data are compared with the gauge architecture of the Standard Model; its Fermat prime appears in the mass formulas of the leptons; its closure constant becomes the candidate for $\alpha^{-1}$.
+\textit{Form}, in phase two, opens the result and reads it structurally. Every chapter from this point on takes \textit{Void}'s exported invariants as the input to an identification. The geometry of $K_4$ is proposed as the structural skeleton of spacetime; its Laplacian spectrum is proposed as a source for Einstein-type tensors; its symmetry data are compared with the gauge architecture of the Standard Model; its Fermat prime appears in the mass formulas of the leptons; its closure constant becomes the candidate for $\alpha^{-1}$.
 
-Phase two is not a derivation in the same sense that phase one is. Phase one proves the formal ledger; phase two assigns structural and physical names to entries of that ledger. The arithmetic is locked. The names are offered, defended, tested.
+The empirical surface is phase three. Once a structural identification is made, it must face measurement: sigma deviations, correction chains, failed alternatives, and future tests. Phase three is not checked by Agda. It is checked by the world.
+
+Only the three phases together carry the formulability claim. Phase one supplies the formal skeleton. Phase two gives the skeleton physical meaning. Phase three exposes that meaning to failure. The arithmetic is locked. The names are offered, defended, tested.
 
 \section*{What the Reader Should Hold in Mind}
 
@@ -10214,9 +10258,9 @@ theorem-gauss-bonnet-scalar = refl
 \section{Ontological Necessity}
 \label{sec:ontological-necessity}
 
-The final record of this section states the dependency in the only form the compiler can check. The observations represented here---three spatial dimensions, Lorentz signature, Einstein symmetry---are packaged together with the binary state count (\texttt{states-per-distinction}~$= 2$). The record does not prove the Standard Model from ontology. It states that this physical reading is written only after the binary ledger is in place.
+The final record of this section states the dependency in the only form the compiler can check. The observations represented here---three spatial dimensions, Lorentz signature, Einstein symmetry---are packaged together with the binary state count (\texttt{states-per-distinction}~$= 2$). The record does not prove the Standard Model from ontology. It states something narrower and more useful for a theory of formulability: this physical reading is well-formed only after the binary ledger is in place.
 
-The chain is not a reverse derivation from the Standard Model back to distinction. It is a dependency ledger: the interpretation presupposes the formal invariants, the invariants presuppose $K_4$, and \textit{Void} proves that the closed record presupposes distinction.
+The chain is not a reverse derivation from the Standard Model back to distinction. It is a dependency ledger: the interpretation presupposes the formal invariants, the invariants presuppose $K_4$, and \textit{Void} proves that the closed record presupposes distinction. This is the exact sense in which \emph{Form} can say necessity without overclaiming: not ``the world has been proved,'' but ``this physical grammar cannot be stated without the imported formal spine.''
 
 \begin{code}
 -- $ Ontological Necessity — The physical reading is stated only with the binary ledger in place.
@@ -11199,7 +11243,7 @@ This book began at the boundary where physics can no longer supply its own first
 
 The Standard Model was not \emph{derived} in the sense of a continuum quantum field theory with a Lagrangian, Feynman rules, and scattering amplitudes. It was \emph{identified} at the invariant level: the algebraic data of a four-vertex graph were matched to the numbers that appear in particle physics, cosmology, and general relativity. The algebra is locked. The identification is offered. The distinction matters because it is the line on which the whole book stands.
 
-This is where physics begins.
+This is where the theory of formulability makes its claim. Physics does not begin from nothing; it begins once a grammar of stable description is already in place. \textit{Void} gives that grammar a checked kernel. \textit{Form} asks whether the open ledger of physics is a reading of it.
 
 \section*{On Debts}
 
@@ -11231,7 +11275,7 @@ The \textbf{mathematician} asks: is the identification of $K_4$ invariants with 
 
 The \textbf{physicist} asks: where is the Lagrangian? Where are the Feynman rules? Where are the cross-section predictions? Fair. Those are the next presentations of the same closed structure, not repairs to an unfinished foundation. A Lagrangian compatible with this book must be a presentation of \texttt{StandardModelFromK4}; Feynman rules must respect \texttt{QFT-Loop-Structure}; cross-sections must reduce to the correction records and the Cauchy-real bridge already sealed. Designing a falsification experiment requires only the predictions in Chapter~\ref{ch:predictions}. Several of them are within current experimental reach. Go measure them.
 
-The \textbf{philosopher} asks: what does it mean for the laws of physics to be \emph{forced}? If no other structure could have produced a consistent universe, then the question ``why does the universe exist?'' dissolves into the question ``why does $2 + 2 = 4$?''---and that question has no interesting answer, because the alternative is not a different universe, but a contradiction. Necessity of this kind is not magical. It is just the absence of any other option. The universe is the way it is for the same reason that a proof has only one conclusion: because the alternatives are provably empty.
+The \textbf{philosopher} asks: what does it mean for the laws of physics to be \emph{forced}? The honest answer is layered. The formal kernel is forced relative to its minimal datum and representation contract. The physical reading is forced only if the open ledger of physics is indeed a reading of that kernel. Under that thesis, the question ``why these numbers?'' changes form: it no longer asks why nature selected one arbitrary parameter set from many, but why physical description has the only invariant grammar that survived the formal chain. Necessity of this kind is not magic. It is the absence of a surviving alternative at the relevant level.
 
 \medskip
 
@@ -11241,7 +11285,7 @@ This is not a failure of the theory. It is the theory working exactly as it shou
 
 \medskip
 
-Feynman once said: if you think you understand quantum mechanics, you don't understand quantum mechanics. The spirit of that remark applies here. If this book is right, then the right response is not satisfaction---it is the slightly vertiginous feeling that the universe had no choice, and neither did we. Uncomfortable. Probably correct. Certainly checkable.
+Feynman once said: if you think you understand quantum mechanics, you don't understand quantum mechanics. The spirit of that remark applies here. If this book is right, then the right response is not satisfaction---it is the slightly vertiginous feeling that formulability itself had less freedom than we thought. Uncomfortable. Possibly correct. Certainly checkable.
 
 Check it.
 
@@ -11249,8 +11293,8 @@ Check it.
 
 \begin{center}
 \textit{The tetrahedron does not explain the universe.}\\
-\textit{The universe explains the tetrahedron.}\\
-\textit{We merely noticed.}\\
+\textit{The universe is intelligible only if something like the tetrahedron can be read.}\\
+\textit{We merely followed the chain.}\\
 \textit{Bless you.}
 \end{center}
 

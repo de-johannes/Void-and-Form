@@ -1,7 +1,11 @@
 # Void and Form
 
-This repository is governed by one structural claim: formal description
-does not begin from a presupposed ``nothing``. It begins only after
+`Void and Form` is proposed as a theory of formulability: an account of
+the conditions under which mathematical, logical, and physical
+description can become stable enough to be stated at all.
+
+The project is governed by one structural claim. Formal description does
+not begin from a presupposed ``nothing``. It begins only after
 distinguishable positions are available. Without distinguishability, no
 relation, judgement, equation, map, representation, truth-value, or
 falsehood can be formulated.
@@ -9,23 +13,37 @@ falsehood can be formulated.
 `Void` names the pre-formal boundary before such formulation is
 possible. It is not the empty set, not the empty type, and not a
 physical nothing. It is the absence of the domain in which those notions
-could already occur. `Form` names the later interpretive reading of the
-structure that survives once this boundary has been crossed.
+could already occur. `Form` names the structural interpretation of the
+mathematical closure that appears once this boundary is represented.
 
-The project is therefore not a derivation from an ontological beginning.
-It is an analysis of the conditions under which formal theories can be
-formulated, followed by the machine-checked derivation of the first
-non-trivial structure that necessarily appears once those conditions are
-represented.
+The central claim has three layers:
+
+- **Vision.** The work asks whether the architecture of formulability can
+  be traced to a single irreducible distinction.
+- **Method.** The formal core is executed in Agda under
+  `--safe --without-K`. The relevant claims are implemented as terms,
+  records, classifications, equivalences, and contradiction eliminations.
+- **Interpretation.** The physical and ontological readings in `Form` are
+  structural interpretations of the checked kernel. They are not
+  presented as machine-checked proofs of physics.
+
+This is not a retreat from the universal claim. It is the condition under
+which the claim becomes scientifically legible: the formal chain carries
+the architectural claim, and the architectural claim explains why the
+formal chain matters.
 
 ---
 
 ## Structural schema
 
-This is the table of contents for the repository. It fixes the status of
-each layer before any technical theorem is inspected.
+This table fixes the status of each layer before any technical theorem is
+inspected. The first two levels state the pre-formal conditions of
+formulability. From Level 2 onward, the formal claims of `Void` are
+expressible and checkable inside intensional Martin-Lof type theory as
+implemented in Agda; the later `Form` levels are structural readings of
+that checked kernel.
 
-### Void: conditions of formulability
+### Void: conditions of formulability (pre-formal)
 
 - **Level 0: Void.** No type, no term, no carrier. The schematic marker
   is $\mathcal{V} \notin \mathit{Set}_\omega$. Void is not a
@@ -35,20 +53,23 @@ each layer before any technical theorem is inspected.
   difference. Without distinction, an occurrence carries no information.
   Information therefore is not added to Void; it is the first condition
   under which non-collapse can be spoken of at all.
+
+### Void: formal execution (machine-checked)
+
 - **Level 2: Two.** The first stable formal carrier is
   `data Two : Set where L R : Two`. It contains two separated points and
-  no third generator. It is not a truth-value object; it is the normal
-  form of distinction. From this level onward the formal threshold is
-  crossed: Martin-Lof type theory and Agda can execute consequences.
+  no third generator. It is the normal form of the `Distinction` record,
+  not a prior truth-value object.
 - **Level 3: Logic.** Formal systems operate on structures in which
   positions can be distinguished, related, mapped, and judged. Logic
   does not create distinction; it presupposes it as the condition of its
   own syntax and semantics.
-- **Level 4: Mathematics.** Once the binary carrier is represented, its
-  endomorphism space has exactly four cases. The faithful closure of
-  those cases is the complete graph on four vertices, $K_4$. Arithmetic,
-  spectral structure, and invariant ledgers unfold over that survivor;
-  they do not supply a new generator.
+- **Level 4: Mathematics.** Once the binary carrier is represented, the
+  endomorphism space `Two -> Two` has exactly four cases. Under the
+  explicit representation contract of separation, complete realisation,
+  and no surplus, those cases close as the complete graph on four
+  vertices, $K_4$. Arithmetic, spectral structure, and invariant ledgers
+  unfold over that closure; they do not supply a new generator.
 
 ### Form: structural reading and interpretation
 
@@ -71,6 +92,30 @@ each layer before any technical theorem is inspected.
   new level inherits the constraint of the previous level and asks what
   still survives without contradiction.
 
+## The claim and its chain
+
+The formulability claim is not that Agda has proved the physical
+universe. The claim is that the project gives a formal basis for a
+theory of formulability.
+
+The chain is:
+
+1. Formal description presupposes distinguishable positions.
+2. A represented binary distinction is the first stable formal carrier.
+3. Every such carrier has normal form `Two`.
+4. The endomorphism space `Two -> Two` has exactly four cases.
+5. A faithful representation of those four cases closes as $K_4$.
+6. The closed record presupposes the originating `Distinction`.
+7. Arithmetic and invariant ledgers are developed internally over that
+  closed kernel.
+8. `Form` reads the kernel as a structural basis for physical and
+  epistemological description.
+
+If any formal step in this chain fails, the formulability claim loses
+its formal base. If the chain holds, the claim is not a stylistic
+flourish: it is the architectural reading of the checked dependency
+structure.
+
 ## Meta-theoretical status
 
 Levels 0 and 1 are not formal statements inside a type system. They
@@ -82,8 +127,9 @@ This distinction is the core discipline of the project. Treat the
 pre-formal boundary as an Agda theorem, and the beginning overclaims.
 Treat the checked theorems as metaphor, and the execution is lost.
 Treat the physical readings as premises, and the interpretation becomes
-numerology. The chain survives only while these statuses remain
-separate.
+numerology. Treat the formulability claim as a mere slogan, and the
+chain loses its reason for being. The work stands only while claim,
+proof, and interpretation keep their proper status.
 
 ### Status ledger
 
@@ -96,15 +142,18 @@ status.
   conditions under which a formal theorem can begin, and the formal
   file then receives those conditions as explicit data.
 - **Framework contracts.** The binary entry, the representation contract
-  of separation/realisation/no surplus, the use of MLTT/Agda under
-  `--safe --without-K`, and the structural or physical readings in
-  `Form` are argued and fixed as the framework of execution. They are
-  not hidden `refl`-facts.
+  of separation/realisation/no surplus, and the use of MLTT/Agda under
+  `--safe --without-K` are argued and fixed as the framework of formal
+  execution. They are not hidden `refl`-facts.
 - **Checked kernel.** From the displayed `Distinction` data onward, the
   normal form `Two`, the four endomorphism cases, the $K_4$ closure
   relative to the representation contract, the loop back to
   `Distinction`, and the invariant/evaluation records are machine
   checked inside the stated formal setting.
+- **Structural interpretation.** The physical readings in `Form` are
+  presented as interpretations of the checked kernel. They can be
+  argued, compared, and falsified as readings of the world, but they are
+  not labelled as Agda theorems.
 
 ## Inheritance
 
@@ -116,8 +165,10 @@ logical boundary work of Wittgenstein, Godel, and Tarski.
 
 What is new here is not the question but the execution. The constraints
 are explicit, minimal, and mechanically checked once the formal
-threshold is crossed. The work does not design a system; it eliminates
-unstable alternatives until only the closed discrete kernel remains.
+threshold is crossed. The work does not merely design a system; it asks
+what structure remains when weaker or richer beginnings are eliminated.
+That survivor is the formal basis of the proposed theory of
+formulability.
 
 ## Reading order
 
@@ -133,9 +184,9 @@ binary normal form, classifies the four endomorphism cases, closes them
 at $K_4$, and carries the arithmetic and invariant ledger that remain
 inside the formal layer.
 
-[Form.lagda.tex](Form.lagda.tex) is separate. It must be read as the
-interpretive volume. It may attach physical vocabulary to the invariant
-ledger, but those identifications are hypotheses about the world, not
+[Form.lagda.tex](Form.lagda.tex) is the interpretive volume. It carries
+the theory of formulability into physical and epistemological language.
+Its identifications are structural hypotheses about the world, not
 theorems of `Void`.
 
 ## Formal hinge
@@ -144,7 +195,7 @@ Once the data of a binary distinction are represented - two separated,
 exhaustive points, and no further generator - the Agda-checked spine is
 the following:
 
-- **Normal form** (`two-normal-form`, [L1685](Void.lagda.tex#L1685)).
+- **Normal form** (`two-normal-form`, [L1693](Void.lagda.tex#L1693)).
   Every record `(S, l, r, l != r, cover)` over `S : Set` is
   boundary-preservingly isomorphic to the canonical inhabitant on
   `Two`. The theorem quantifies internally over every type in `Set`
@@ -152,39 +203,40 @@ the following:
   level-polymorphic version `two-normal-formℓ` extends the same result
   across the universe hierarchy.
 - **Exhaustion of endomorphisms** (`EndoCase`, `classify-sound`,
-  `classify-unique`, [L1178](Void.lagda.tex#L1178),
-  [L1438-L1454](Void.lagda.tex#L1438-L1454)). The endomorphism space
+  `classify-unique`, [L1186](Void.lagda.tex#L1186),
+  [L1308](Void.lagda.tex#L1308), [L1369](Void.lagda.tex#L1369)). The endomorphism space
   `Two -> Two` has exactly four cases: identity, swap, and the two
   constants. Nothing else survives.
 - **Carrier closure** (`FaithfulClosure`, `MinimalClosure`,
-  `K4Record-is-canonical`, [L26746-L26755](Void.lagda.tex#L26746-L26755),
-  [L27351](Void.lagda.tex#L27351)). The representation contract is
+  `K4Record-is-canonical`, [L26754-L26763](Void.lagda.tex#L26754-L26763),
+  [L27359](Void.lagda.tex#L27359)). The representation contract is
   explicit: separation keeps distinct cases apart, complete realisation
   gives every case a vertex, and no surplus forbids vertices not
   realized by a case. Under that contract, fewer than four vertices
   identify cases, while more than four add structure not forced by the
   four cases.
-- **Dependency, not emergence** (`record-presupposes-distinction`,
-  [L31959](Void.lagda.tex#L31959)). Every inhabitant of `K4Record`
-  entails an inhabitant of `Distinction`. The surviving record is not an
-  independent carrier; it presupposes and reprojects the originating
+- **Dependency theorem** (`record-presupposes-distinction`,
+  [L31967](Void.lagda.tex#L31967)). Every inhabitant of `K4Record`
+  entails an inhabitant of `Distinction`. The closed record is not an
+  independent axiom; it presupposes and reprojects the originating
   distinction.
 
 If this hinge fails, the larger development fails at its root. If it
 holds, the remaining formal work is continuation over the survivor, not
-the addition of a new generator.
+the addition of a new generator. This hinge is where the formulability
+claim earns its formal weight: the architecture is not asserted first
+and decorated later; it is carried by the dependency chain.
 
 ## Note on the author
 
-I am not a mathematician. No degree, no institutional affiliation. Over
-the last eighteen months I formalized one question in Agda: what must
-necessarily follow once the minimal data of binary distinction are
-represented, and nothing else is granted? The work was developed with
-the help of large language models; the Agda type checker is the only
-judge of what stands. This document is written for readers who want to
-verify the formal claims. Where my terminology departs from standard
-usage, the corresponding Agda definition is cited by line number so that
-the formal content can be read directly.
+This project was developed outside an institutional mathematics setting
+and with the help of large language models. Those facts explain the
+working process; they do not decide the formal status of the results.
+The Agda type checker is the judge of the checked kernel. This document
+is written for readers who want to inspect that kernel directly. Where
+the philosophical terminology is stronger than standard mathematical
+usage, the corresponding Agda definition or theorem is cited so that the
+formal content can be read without relying on the prose.
 
 ---
 
