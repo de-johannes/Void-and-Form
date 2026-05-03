@@ -283,7 +283,7 @@
 
 This work does not ask what emerges from a presupposed ``nothing''. It asks under which conditions formal description is possible at all. The starting point is the minimal condition of every formal theory: distinguishable positions. Without such distinguishability, no relation, judgement, equation, map, representation, truth-value, or falsehood can be formulated. \emph{Void} names this pre-formal boundary. It is not the empty set, not the empty type, and not a physical nothing; it is the absence of the domain in which those notions could already occur.
 
-Once distinguishability is granted, it has a minimal realised form: two non-collapsing occurrences that exhaust their carrier. This minimality is not an additional assumption. A single occurrence carries no distinction, and every further difference already presupposes a binary articulation by which one position can be told from another. From this point onward the book becomes formal. Inside intensional Martin-L\"of type theory, checked by Agda under \AgdaFlag{safe} and \AgdaFlag{without-K}, the record \texttt{Distinction} represents the threshold as a carrier, two separated boundary points, and an exhaustive cover. Every such structure has the canonical normal form \texttt{Two}; its endomorphisms exhaust to four cases; representing those cases with separation, complete realisation, and no surplus forces a four-element structure with complete simple adjacency; and the resulting structure points back to the distinction from which it arose.
+Once distinguishability is granted, the boundary receives a formal representative: two non-collapsing occurrences that exhaust their carrier. The claim that this is the minimal entry is a boundary argument, not itself an Agda theorem; the theorem begins only after the representative has been supplied. Inside intensional Martin-L\"of type theory, checked by Agda under \AgdaFlag{safe} and \AgdaFlag{without-K}, the record \texttt{Distinction} represents the threshold as a carrier, two separated boundary points, and an exhaustive cover. Every such structure has the canonical normal form \texttt{Two}; its endomorphisms exhaust to four cases; representing those cases with separation, complete realisation, and no surplus forces a four-element structure with complete simple adjacency; and the resulting structure points back to the distinction from which it arose.
 
 The argument is therefore not a derivation from an ontological beginning. It is an analysis of the conditions under which formal theories can be formulated, followed by the machine-checked derivation of the first non-trivial structure that necessarily appears once those conditions are represented. The later arithmetic, spectral, and interpretive layers of the book unfold over that survivor. They do not supply a new generator.
 
@@ -293,9 +293,9 @@ The argument is therefore not a derivation from an ontological beginning. It is 
 \begin{description}
 \item[Level 0: Void.] No type, no term, no carrier. The schematic marker is $\mathcal{V} \notin \mathit{Set}_\omega$. Void is not a stable endpoint in the sense of a foundation, because every act of positing already presupposes structure. It is therefore not refutably unstable; it is conceptually non-closable. This level is marked, not proved.
 
-\item[Level 1: Information.] Information is understood in Bateson's minimal sense: a difference that makes a difference. Without distinction, an occurrence carries no information; a single undifferentiated occurrence collapses back into the boundary. Information therefore presupposes distinction, and an inhabited distinction requires at least two distinguishable occurrences. This binary shape is minimal because every further difference already relies on it.
+\item[Level 1: Information.] Information is understood in Bateson's minimal sense: a difference that makes a difference. Without distinction, an occurrence carries no information; a single undifferentiated occurrence collapses back into the boundary. Information therefore presupposes distinction. The binary shape is the first non-collapsing candidate in the boundary argument, because every further difference already relies on one position being told from another.
 
-\item[Level 2: Two.] The first stable formal carrier is \texttt{data Two : Set where L R : Two}. It contains two separated points and no third generator. It is not a truth-value object; it is the normal form of distinction. From this level onward the formal threshold is crossed: MLTT and Agda can execute the consequences of the datum they have received.
+\item[Level 2: Two.] The formal representative used here is \texttt{data Two : Set where L R : Two}. It contains two separated points and no third generator. It is not a truth-value object; it is the normal form of distinction once the binary data have been granted. From this level onward the formal threshold is crossed: MLTT and Agda can execute the consequences of the datum they have received.
 
 \item[Level 3: Logic.] Formal systems operate on structures in which distinguishable positions are already available. Relation, morphism, judgement, and equation do not construct that availability; they use it. MLTT is the clean carrier used here, not the origin of the cut.
 
@@ -310,7 +310,7 @@ The argument is therefore not a derivation from an ontological beginning. It is 
 \item[Level 8: Induction.] No new external generator is postulated. More complex structures are read as repeated applications and stabilisations of the original distinction. Induction is the law of that repetition. This is a structural reading, not a reductionist claim about all mathematics.
 \end{description}
 
-The first two levels are not formal statements inside a type system. They state the conditions under which formal statements can appear. They are not left informal because notation is missing, but because they concern the possibility of introducing notation in the first place. From Level 2 onward the formal theory begins, and the claims are expressible and checkable inside it.
+The first two levels are not formal statements inside a type system. They state the conditions under which formal statements can appear. They are not left informal because notation is missing, but because they concern the possibility of introducing notation in the first place. The passage from boundary to \texttt{Distinction} is therefore the first formal grant, not a theorem about the boundary itself. From Level 2 onward the formal theory begins, and the claims are expressible and checkable inside it.
 
 \section*{Inheritance}
 \addcontentsline{toc}{chapter}{Inheritance}
@@ -542,7 +542,7 @@ The cover is crucial. MLTT does not allow the inference from ``only two points h
 
 After this point the text changes status. The prose may still motivate, orient, and interpret, but the mathematical claims are tied to the Agda development that follows. A construction must be an inhabitant. An equality must reduce or be proved. A contradiction must have no branch. A classification must cover all cases. A uniqueness claim must state the relevant equivalence and close it.
 
-The first code block therefore does not begin the ontology. It begins the execution. The threshold has already forced the demand for a cut; the formal file now receives that demand as explicit data and lets the checker eliminate whatever cannot survive it.
+The first code block therefore does not begin the ontology. It begins the execution. The threshold has already forced the demand for a cut at the level of boundary argument; the formal file now receives that demand as explicit data and lets the checker eliminate whatever cannot survive it.
 
 \part{Foundation}
 
@@ -5121,13 +5121,13 @@ already been fixed by the spatial reading.
 \label{ch:forced-spatial-extension}
 %═══════════════════════════════════════════════════════════════════════════
 
-The invariant ledger of $K_4$ has been forced. What it \emph{is}, however,
+The invariant ledger of $K_4$ has been fixed inside the formal representative. What structural extension reading it supports, however,
 has not yet been read off. The four numbers $V$, $E$, $d$, $\chi$ are not
 a tuple of independent quantities a posteriori arranged on a graph: they
 are the count, the connectivity, the dimensionality, and the closure
 condition of one and the same surviving object. This chapter names that
-object. The naming is not a definition added by hand; it is forced by
-premises already proved.
+object as structural extension. The naming is constrained by premises
+already proved; it is not a metric or physical interpretation.
 
 \section{The Order of Forcing}
 \label{sec:spatial-extension:order-of-forcing}
@@ -5311,7 +5311,7 @@ A scalar value: the integer $\mathcal{C} = 137$ does not yet appear at
 the level of this chapter. It is a particular invariant of the
 extension structure, evaluated by the arithmetic of the next part.
 The fact that the formula has the form $V^d \cdot \chi + d^2$ rather
-than another arithmetic combination is itself forced ---
+than another arithmetic combination is fixed inside the kind/formula framework ---
 \hyperref[ch:invariant-kinds]{Chapter~\ref*{ch:invariant-kinds}} closes
 that question --- but the closure occurs after the arithmetic
 infrastructure is in place.
@@ -9593,7 +9593,7 @@ related by the disjointness lemmas of the previous section.
 of both terms and exhibits the disjointness needed for the additive
 combination.
 
-\textbf{Consequence:} the form $V^d \cdot \chi + d^2$ is no longer a
+\textbf{Consequence:} inside the displayed kind discipline, the form $V^d \cdot \chi + d^2$ is no longer a
 choice. It is the only combination of these four invariants whose
 inner factors share their kind and whose outer factors do not.
 
@@ -10392,12 +10392,12 @@ of four invariants admits.
 single structural witness named above. None remains free, and none is
 closed by enumeration.
 
-\textbf{Consequence:} the form $V^d \cdot \chi + d^2$ is the unique
+\textbf{Consequence:} within the displayed expression grammar and its obligations, the form $V^d \cdot \chi + d^2$ is the unique
 combination of the four refinement-stable invariants of the closed
 $K_4$ record that respects every structural fact carried by the
 record. The integer it produces on $K_4$ is therefore not the value
-of one candidate among many. It is the value of the only structurally
-admissible candidate.
+of one candidate among that grammar. It is the value of the only structurally
+admissible candidate there.
 
 Each of the six structural witnesses listed above is mechanically
 discharged by a record built from existing book lemmas: the

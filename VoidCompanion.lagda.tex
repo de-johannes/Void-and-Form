@@ -845,13 +845,14 @@ requirement yields exactly the following three conditions.
   one of these cases.
 \end{enumerate}
 
-These conditions are not additional structural assumptions.  They are
-exactly what is required if ``representation'' is taken to mean that
-each endomorphism case is carried as a distinct and retrievable element
-of the carrier, and that every element of the carrier corresponds to
-such a case.  Without separation, cases collapse; without realisation,
-cases are missing; without the no-surplus condition, additional
-structure is introduced.
+These conditions are the representation contract used in this note.
+They make explicit what ``representation'' means here: each
+endomorphism case is carried as a distinct and retrievable element of
+the carrier, and every element of the carrier corresponds to such a
+case.  Without separation, cases collapse; without realisation, cases
+are missing; without the no-surplus condition, additional structure is
+introduced.  The contract is argued and displayed; it is not disguised
+as a theorem that precedes its own definition.
 
 Under these three conditions, fewer than four vertices cannot represent
 the four cases without identification.  If two cases are identified,
@@ -880,8 +881,8 @@ The following small records package the three conditions.  The record
 The record \AgdaRecord{MinimalClosure} adds no surplus through
 \AgdaField{no-extra}.
 
-These conditions are therefore not independent choices,
-but unpack the content of this notion of representation.
+These conditions are therefore not independent choices once this notion
+of representation has been fixed; they unpack that notion.
 
 \begin{code}
 record FaithfulClosure : Set₁ where
@@ -993,9 +994,9 @@ cases.  Dropping the totality of \AgdaField{realize} re-admits cases
 without vertices.  Dropping \AgdaField{no-extra} re-admits vertices
 without cases.  In each case, what survives is no longer a
 representation of the four-case set in the intended sense.  The three
-fields are therefore not chosen because they yield $K_4$; they are
-fixed because dropping any one breaks representation, and $K_4$
-follows.
+fields are therefore not chosen because they yield $K_4$; within this
+contract they are fixed because dropping any one breaks representation,
+and $K_4$ follows.
 
 The companion proves these three load-bearing lemmas against its own
 slim records \AgdaRecord{FaithfulClosure} and \AgdaRecord{MinimalClosure}
@@ -1151,7 +1152,7 @@ and equations all require distinguishable positions before they can be
 used.  This is a remark on the conditions under which formalisation is
 possible, not a theorem.  Nothing in the Agda code attempts to prove it,
 and the formal results below do not depend on it: they begin once the
-data is granted.
+data are granted.
 
 \emph{What is machine-proved.} The conditional consequence is what
 the Agda code establishes. Given a structure with two
@@ -1162,7 +1163,7 @@ surplus yields the four-case carrier with complete simple adjacency;
 and the closure entails the data from which it was built. The result
 therefore does not say that every theory begins with such a distinction,
 nor that every mathematical object reduces to \AgdaDatatype{Two}. It
-says only what follows when the stated data is granted.
+says only what follows when the stated data are granted.
 
 No further constructions are treated here. They are outside the
 present claim.
@@ -1204,7 +1205,7 @@ which it was built.
 
 \section{Outlook}
 
-The core result stops at the forced closure of binary distinction.  Its
+The core result stops at the framework-forced closure of binary distinction.  Its
 role in the larger development is not to prove everything at once, but
 to fix the first carrier on which later constructions may be tested.
 Once the four-case closure is fixed, further claims can be separated

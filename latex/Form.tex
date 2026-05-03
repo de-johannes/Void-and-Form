@@ -805,7 +805,7 @@ Once $K_4$ is forced, the invariants of $K_4$ as a graph are also forced. \texti
 \item \emph{Euler characteristic}: $\chi = V - E + F = 4 - 6 + 4 = 2$, where $F = 4$ is the number of triangular faces in the unique tetrahedral embedding.
 \item \emph{Gravitational coupling}: $\kappa = 2(d+1) = 8$. This is the coefficient that arises in \textit{Void}'s derivation of the Laplacian eigenvalue structure on $K_4$, and it will play the role of Einstein's $\kappa$ in Part IV of this book.
 \item \emph{Fermat prime}: $F_2 = 2^{2^2} + 1 = 17$. This appears in \textit{Void}'s analysis of the Clifford algebra associated with the $K_4$ structure, where the spinor representation has dimension $2^V = 16$, and the next prime number---the smallest integer larger than $16$ with no proper divisors---is $17$.
-\item \emph{Closure constant}: $\mathcal{C} = V^d \cdot \chi + d^2 = 64 \cdot 2 + 9 = 137$. This is the simplex evaluation: a polynomial in the $K_4$ invariants that \textit{Void} shows is the unique degree-$\le 3$ expression in $\{V, E, d, \chi\}$ taking a prime value, and that value is $137$.
+\item \emph{Closure constant}: $\mathcal{C} = V^d \cdot \chi + d^2 = 64 \cdot 2 + 9 = 137$. This is the simplex evaluation: within the expression grammar and obligation record developed in \textit{Void}, the canonical formula is the unique admissible form, and on $K_4$ its value is $137$.
 \end{itemize}
 
 These seven numbers are not chosen. They are read off, mechanically, from the structure that the closure argument fixed. \textit{Void}'s proof is not an obsolete staged generation story. It is a normal-form, classification, closure, and dependency theorem over the represented binary datum.
@@ -894,7 +894,7 @@ After this single line, the following are now in scope:
 \begin{itemize}
 \item The complete graph $K_4$ as a formally defined object, with its four vertices, its six edges, and its three-fold degree structure.
 \item The Laplacian operator on $K_4$, defined as a $4 \times 4$ integer matrix, together with the proof that its eigenvalue spectrum is $\{0, 4, 4, 4\}$.
-\item The closed simplex evaluation $V^d \cdot \chi + d^2 = 137$, together with the exhaustive classification proving that no other degree-$\le 3$ polynomial in $\{V, E, d, \chi\}$ takes a prime value.
+\item The closed simplex evaluation $V^d \cdot \chi + d^2 = 137$, together with the expression-grammar audit proving that no other admissible form in the displayed framework displaces it.
 \item The integers $\mathbb{Z}$, the rationals $\mathbb{Q}$, and the Cauchy real numbers $\mathbb{R}$, constructed inside \textit{Void}'s formal development rather than imported as physical assumptions.
 \item The Fermat prime $F_2 = 17 = 2^{2^2} + 1$, derived through the analysis of the Clifford algebra dimension $2^V = 16$ on $K_4$.
 \item The binary normal form, the four \texttt{EndoCase}s of \texttt{Two -> Two}, the canonical $K_4$ presentation, and the dependency theorem \texttt{record-presupposes-distinction}.
@@ -927,7 +927,7 @@ Three things, going forward.
 
 \emph{The integers are not negotiable.} When this book states ``$V^d \chi + d^2 = 137$,'' it does so on the authority of \textit{Void}'s mechanical proof. The number cannot be different without changing the formal kernel and making Agda accept the new proof. The arithmetic is final relative to the checked kernel.
 
-\emph{The identifications are negotiable.} When this book states ``$137 = \alpha^{-1}$,'' it does so as a physical hypothesis. The hypothesis is testable: $\alpha^{-1}$ has been measured to twelve significant figures, and the measured value is $137.035\,999\,084(21)$. The integer agreement is exact at the integer level; the small fractional residual ($0.036\%$) is handled by the correction chain and classified by the formula ledger. If the measured value had been $138$ rather than $137$, the identification would have failed---and \textit{Void}'s integer would be looking for a different physical home.
+\emph{The identifications are negotiable.} When this book states ``$137 = \alpha^{-1}$,'' it does so as a physical hypothesis. The hypothesis is testable: $\alpha^{-1}$ has been measured to twelve significant figures, and the measured value is $137.035\,999\,084(21)$. The integer agreement is exact at the integer level; the small fractional residual ($0.036\%$) is not a theorem of \textit{Void}. Later chapters treat it as the target of a correction chain and a physical test. If the measured value had been $138$ rather than $137$, the identification would have failed---and \textit{Void}'s integer would be looking for a different physical home.
 
 \emph{The two are kept separate at every point.} Each subsequent chapter signals the distinction explicitly: theorem (proved in \textit{Void}), identification (offered in this book), what would falsify the identification. The signaling is not decoration; it is the only way to read the book honestly. The compiler verifies the theorems; the reader verifies the identifications; the reader and the experimenter together verify the falsifiability.
 

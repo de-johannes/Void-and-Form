@@ -25,7 +25,7 @@ represented.
 This is the table of contents for the repository. It fixes the status of
 each layer before any technical theorem is inspected.
 
-### Void: the necessary - conditions of formulability
+### Void: conditions of formulability
 
 - **Level 0: Void.** No type, no term, no carrier. The schematic marker
   is $\mathcal{V} \notin \mathit{Set}_\omega$. Void is not a
@@ -85,6 +85,27 @@ Treat the physical readings as premises, and the interpretation becomes
 numerology. The chain survives only while these statuses remain
 separate.
 
+### Status ledger
+
+The strongest claims in the project do not all have the same epistemic
+status.
+
+- **Boundary markers.** Pre-formal distinguishability, `Void` as the
+  boundary before type/term/carrier, and the passage from that boundary
+  to the record `Distinction` are not Agda theorems. They mark the
+  conditions under which a formal theorem can begin, and the formal
+  file then receives those conditions as explicit data.
+- **Framework contracts.** The binary entry, the representation contract
+  of separation/realisation/no surplus, the use of MLTT/Agda under
+  `--safe --without-K`, and the structural or physical readings in
+  `Form` are argued and fixed as the framework of execution. They are
+  not hidden `refl`-facts.
+- **Checked kernel.** From the displayed `Distinction` data onward, the
+  normal form `Two`, the four endomorphism cases, the $K_4$ closure
+  relative to the representation contract, the loop back to
+  `Distinction`, and the invariant/evaluation records are machine
+  checked inside the stated formal setting.
+
 ## Inheritance
 
 The thesis that distinction precedes structured description is not new.
@@ -132,7 +153,7 @@ the following:
   across the universe hierarchy.
 - **Exhaustion of endomorphisms** (`EndoCase`, `classify-sound`,
   `classify-unique`, [L1178](Void.lagda.tex#L1178),
-  [L1438-1421](Void.lagda.tex#L1438-L1454)). The endomorphism space
+  [L1438-L1454](Void.lagda.tex#L1438-L1454)). The endomorphism space
   `Two -> Two` has exactly four cases: identity, swap, and the two
   constants. Nothing else survives.
 - **Carrier closure** (`K4Record-is-canonical`,
@@ -183,7 +204,7 @@ layer and to the chapter heading that opens it.
   [L1178](Void.lagda.tex#L1178); classification module `K₄` at
   [L1212](Void.lagda.tex#L1212); top-level wrappers
   `k4-classification-sound` / `-unique` at
-  [L1471–1454](Void.lagda.tex#L1438-L1454).
+  [L1438–L1454](Void.lagda.tex#L1438-L1454).
 - **Two-normal form, orientation, automorphisms.** Chapter
   `Two Normal Form` at [L1554](Void.lagda.tex#L1554);
   `two-normal-form` at [L1685](Void.lagda.tex#L1685);
@@ -262,7 +283,7 @@ equality with its standard eliminator.
 module Void where
 ```
 
-Reference: [Void.lagda.tex L596–568](Void.lagda.tex#L563-L568).
+Reference: [Void.lagda.tex L563–L568](Void.lagda.tex#L563-L568).
 
 ---
 
@@ -289,7 +310,7 @@ Two-distinction = record
 `Two-distinction` is the canonical inhabitant of the general
 `Distinction` record. This — and only this — is the input to the
 development. References:
-[Void.lagda.tex L1601–1589](Void.lagda.tex#L1568-L1589),
+[Void.lagda.tex L1568–L1589](Void.lagda.tex#L1568-L1589),
 [L1685](Void.lagda.tex#L1685) (`two-normal-form`).
 
 ---
@@ -336,7 +357,7 @@ References:
 [Void.lagda.tex L837](Void.lagda.tex#L837) (`Distinction`),
 [L1603](Void.lagda.tex#L1603) (`DistinctionIso`),
 [L1685](Void.lagda.tex#L1685) (`two-normal-form`),
-[L1954–1935](Void.lagda.tex#L1921-L1935) (orientation classification:
+[L1921–L1935](Void.lagda.tex#L1921-L1935) (orientation classification:
 `orientation-exhaustive`, `law1-10-orientation-exhaustive`).
 
 ---
@@ -370,7 +391,7 @@ out further cases by absurd patterns on `distinct`.
 References:
 [Void.lagda.tex L1178](Void.lagda.tex#L1178) (`EndoCase`),
 [L1212](Void.lagda.tex#L1212) (classification module `K₄`),
-[L1471–1454](Void.lagda.tex#L1438-L1454) (top-level wrappers).
+[L1438–L1454](Void.lagda.tex#L1438-L1454) (top-level wrappers).
 
 ---
 
@@ -481,9 +502,9 @@ theorems. The Form layer does not strengthen any claim made in
 `Void.lagda.tex` and is cited separately.
 
 References:
-[Form.lagda.tex L268](Form.lagda.tex#L268),
-[L900](Form.lagda.tex#L900),
-[L1342–1346](Form.lagda.tex#L1342-L1346).
+[Form.lagda.tex L270](Form.lagda.tex#L270),
+[L897](Form.lagda.tex#L897),
+[L1341–L1345](Form.lagda.tex#L1341-L1345).
 
 ---
 
