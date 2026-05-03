@@ -506,6 +506,41 @@ References:
 [L897](Form.lagda.tex#L897),
 [L1341–L1345](Form.lagda.tex#L1341-L1345).
 
+### Empirical surface of Form
+
+The separation above does not reduce `Form` to a catalogue of suggestive
+integers. Its claim is sharper and more vulnerable: once a
+Void-internal invariant is read as a physical observable, the reading is
+tested by correction chains, sigma deviations, and explicit failure
+conditions. A failed physical identification would not break `Void`, but
+it would break that part of `Form`.
+
+The current Form ledger reports the following post-correction empirical
+comparisons:
+
+| Observable | Form comparison |
+|---|---|
+| $\alpha^{-1}$ | second-order correction $137 + 11/306 + 295/(306 \cdot 137^2) = 137.035\,999\,076\ldots$, within $0.4\sigma$ of CODATA; alternative interpolation degrees are listed as $2445\sigma$ and $4891\sigma$ failures ([Form.lagda.tex L4907–L4945](Form.lagda.tex#L4907-L4945)). |
+| $m_p/m_e$ | correction chain $949\sigma \to 20\sigma \to 0.08\sigma$ ([Form.lagda.tex L5799](Form.lagda.tex#L5799)). |
+| $m_\mu/m_e$ | correction chain $36\sigma \to 13\sigma \to 0.12\sigma$ ([Form.lagda.tex L5800](Form.lagda.tex#L5800)). |
+| $m_\tau/m_\mu$ | remains closed at about $0.1\sigma$ through the mass-ratio chain ([Form.lagda.tex L5801](Form.lagda.tex#L5801)). |
+| $\sin^2\!\theta_W$ | weak-mixing chain $7.7\sigma \to 5.0\sigma \to 3.5\sigma \to 0.001\sigma$ ([Form.lagda.tex L6031](Form.lagda.tex#L6031)). |
+| $\Omega_m$ | $K_4$ gives $\Omega_m \approx 0.3183$, within $0.5\sigma$ of Planck; $K_3$ and $K_5$ are reported as $10.9\sigma$ and $11.8\sigma$ away ([Form.lagda.tex L1717–L1735](Form.lagda.tex#L1717-L1735)). |
+
+`Form` also names tests that remain open or frontier-facing. The
+B-meson lepton-universality anomaly is tied to the muon bridge factor
+$16/69 \approx 0.232$ as a Wilson-coefficient target, to be tested
+against the full published $R_K$ central value and uncertainty
+([Form.lagda.tex L8899–L8931](Form.lagda.tex#L8899-L8931)). The doubly
+charmed baryon ledger predicts the two-slot $\Xi_{cc}$ doublet structure,
+with the reported LHCb $7\sigma$ observation read as physical occupation
+of that ledger rather than as a mass prediction
+([Form.lagda.tex L9010–L9034](Form.lagda.tex#L9010-L9034)). The frontier
+register predicts exactly two gravitational-wave polarizations, no scalar
+or vector extras, a neutrino seesaw at loop depth $5$, Planck-scale
+curvature $R = 12$, no fourth generation, and no extra spacetime
+dimension ([Form.lagda.tex L10990–L11112](Form.lagda.tex#L10990-L11112)).
+
 ---
 
 ## 10. What is and is not claimed
