@@ -47,9 +47,10 @@ carrier with complete simple adjacency; and every such closure points
 back to the data from which it was built.  In addition, the cardinality
 of the entry datum is itself made formal: a singleton carrier admits no
 \AgdaRecord{Distinction}; the original record is exactly the $n=2$ case
-of an n-ary template; and at $n=3$ the n-ary record is definitionally
-equivalent to a binary package of three pairwise separations and a
-nested binary cover.
+of an n-ary template; and at $n=3$ the n-ary record is canonically
+recoverable from a binary package of three pairwise separations and a
+nested binary cover, with the displayed boundary fields closing by
+checked equality.
 
 The formulability claim is therefore not treated as a theorem of this
 note.  It is the architectural reading of the checked chain.  The note
@@ -507,8 +508,11 @@ no-distinction-on-Dn1 d1 d φ φ-inj =
 
 \emph{Binary equals the existing record.}  At $n=2$ the n-ary record
 is mutually convertible with the original \AgdaRecord{Distinction}.
-The two constructions are mechanical and demonstrate that no
-information is lost in either direction.
+The two constructions are mechanical and demonstrate that no boundary
+information is lost in either direction.  Because the records contain
+function fields, the companion does not claim an unqualified record
+equality of the conversions; instead it states the recoverable carrier
+and boundary fields explicitly.
 
 \begin{code}
 distinction-to-Dn2 : Distinction → Distinction-n 2
@@ -549,6 +553,31 @@ Dn2-to-distinction d = record
     cov x with cover x
     ... | fz , p    = inj₁ p
     ... | fs fz , p = inj₂ p
+
+record DistinctionDn2Equivalence : Set₁ where
+  field
+    from-to-carrier   : (d : Distinction) →
+      Distinction.S (Dn2-to-distinction (distinction-to-Dn2 d)) ≡ Distinction.S d
+    from-to-left      : (d : Distinction) →
+      Distinction.left (Dn2-to-distinction (distinction-to-Dn2 d)) ≡ Distinction.left d
+    from-to-right     : (d : Distinction) →
+      Distinction.right (Dn2-to-distinction (distinction-to-Dn2 d)) ≡ Distinction.right d
+    to-from-carrier   : (d : Distinction-n 2) →
+      Distinction-n.S (distinction-to-Dn2 (Dn2-to-distinction d)) ≡ Distinction-n.S d
+    to-from-point-0   : (d : Distinction-n 2) →
+      Distinction-n.point (distinction-to-Dn2 (Dn2-to-distinction d)) fz ≡ Distinction-n.point d fz
+    to-from-point-1   : (d : Distinction-n 2) →
+      Distinction-n.point (distinction-to-Dn2 (Dn2-to-distinction d)) (fs fz) ≡ Distinction-n.point d (fs fz)
+
+theorem-distinction-Dn2-equivalence : DistinctionDn2Equivalence
+theorem-distinction-Dn2-equivalence = record
+  { from-to-carrier = λ _ → refl
+  ; from-to-left    = λ _ → refl
+  ; from-to-right   = λ _ → refl
+  ; to-from-carrier = λ _ → refl
+  ; to-from-point-0 = λ _ → refl
+  ; to-from-point-1 = λ _ → refl
+  }
 \end{code}
 
 \emph{Higher arity carries only pairwise binary plus a nested
@@ -645,6 +674,37 @@ binary-to-Dn3 b = record
     ... | inj₁ p          = fz , p
     ... | inj₂ (inj₁ p)   = fs fz , p
     ... | inj₂ (inj₂ p)   = fs (fs fz) , p
+
+record Dn3BinaryReconstruction : Set₁ where
+  field
+    extracted-carrier   : (d : Distinction-n 3) →
+      Dn3-binary-data.S (Dn3-to-binary d) ≡ Distinction-n.S d
+    extracted-point-0   : (d : Distinction-n 3) →
+      Dn3-binary-data.p0 (Dn3-to-binary d) ≡ Distinction-n.point d fz
+    extracted-point-1   : (d : Distinction-n 3) →
+      Dn3-binary-data.p1 (Dn3-to-binary d) ≡ Distinction-n.point d (fs fz)
+    extracted-point-2   : (d : Distinction-n 3) →
+      Dn3-binary-data.p2 (Dn3-to-binary d) ≡ Distinction-n.point d (fs (fs fz))
+    reconstructed-carrier : (b : Dn3-binary-data) →
+      Distinction-n.S (binary-to-Dn3 b) ≡ Dn3-binary-data.S b
+    reconstructed-point-0 : (b : Dn3-binary-data) →
+      Distinction-n.point (binary-to-Dn3 b) fz ≡ Dn3-binary-data.p0 b
+    reconstructed-point-1 : (b : Dn3-binary-data) →
+      Distinction-n.point (binary-to-Dn3 b) (fs fz) ≡ Dn3-binary-data.p1 b
+    reconstructed-point-2 : (b : Dn3-binary-data) →
+      Distinction-n.point (binary-to-Dn3 b) (fs (fs fz)) ≡ Dn3-binary-data.p2 b
+
+theorem-Dn3-binary-reconstruction : Dn3BinaryReconstruction
+theorem-Dn3-binary-reconstruction = record
+  { extracted-carrier     = λ _ → refl
+  ; extracted-point-0     = λ _ → refl
+  ; extracted-point-1     = λ _ → refl
+  ; extracted-point-2     = λ _ → refl
+  ; reconstructed-carrier = λ _ → refl
+  ; reconstructed-point-0 = λ _ → refl
+  ; reconstructed-point-1 = λ _ → refl
+  ; reconstructed-point-2 = λ _ → refl
+  }
 \end{code}
 
 What these proofs together establish is the formal counterpart of
@@ -657,18 +717,24 @@ closes the bridge by showing that no \AgdaRecord{Distinction} can
 inject into such a carrier without contradicting
 \AgdaField{separated}.  The original record is exactly the $n=2$
 case of an n-ary template (\AgdaFunction{distinction-to-Dn2},
-\AgdaFunction{Dn2-to-distinction}).  At $n=3$, the conversions
+\AgdaFunction{Dn2-to-distinction}), with the carrier and boundary
+roundtrips bundled in
+\AgdaFunction{theorem-distinction-Dn2-equivalence}.  At $n=3$, the conversions
 \AgdaFunction{Dn3-to-binary} and \AgdaFunction{binary-to-Dn3} prove
 more than that ternary data carries binary content: they prove that
 ternary data is recoverable from binary content, since the binary
 package of three pairwise separations and a nested binary cover
-reconstructs a \AgdaRecord{Distinction-n} \AgdaNumber{3}.
+reconstructs a \AgdaRecord{Distinction-n} \AgdaNumber{3}.  The
+recoverable carrier and boundary fields are collected in
+\AgdaFunction{theorem-Dn3-binary-reconstruction}.
 
 The scope of this last claim is precisely the scope of the framework.
 The theorem says that, inside this development, every inhabitant of
-\AgdaRecord{Distinction-n} \AgdaNumber{3} is definitionally equivalent
-to a binary package; it does not assert that no other foundation could
-treat ``three positions'' as a primitive entity.  An ontology that
+\AgdaRecord{Distinction-n} \AgdaNumber{3} is recoverable from a binary
+package at the displayed carrier and boundary fields; it does not
+assert that all function fields are definitionally identical after a
+roundtrip, nor that no other foundation could treat ``three positions''
+as a primitive entity.  An ontology that
 posits an irreducible ternary primitive is not refuted here.  What is
 shown is that within the present record-based, --safe --without-K
 fragment of MLTT, the n-ary record at $n=3$ adds no information beyond
@@ -744,11 +810,36 @@ two-normal-form d = record
   ; to-from    = toTwo-fromTwo d
   ; from-to    = fromTwo-toTwo d
   }
+
+record NormalFormEqualityDiscipline (d : Distinction) : Set where
+  field
+    fromTwo-L-definitional : fromTwo d L ≡ Distinction.left d
+    fromTwo-R-definitional : fromTwo d R ≡ Distinction.right d
+    toTwo-left-propositional : toTwo d (Distinction.left d) ≡ L
+    toTwo-right-propositional : toTwo d (Distinction.right d) ≡ R
+    toTwo-fromTwo-propositional : (y : Two) → toTwo d (fromTwo d y) ≡ y
+    fromTwo-toTwo-propositional : (x : Distinction.S d) → fromTwo d (toTwo d x) ≡ x
+
+theorem-normal-form-equality-discipline :
+  (d : Distinction) → NormalFormEqualityDiscipline d
+theorem-normal-form-equality-discipline d = record
+  { fromTwo-L-definitional = refl
+  ; fromTwo-R-definitional = refl
+  ; toTwo-left-propositional = toTwo-left d
+  ; toTwo-right-propositional = toTwo-right d
+  ; toTwo-fromTwo-propositional = toTwo-fromTwo d
+  ; fromTwo-toTwo-propositional = fromTwo-toTwo d
+  }
 \end{code}
 
 This is the whole normal-form argument.  No choice is made in the map:
 the cover field gives only two possible cases, and the separation field
-rules out the contradictory boundary cases.
+rules out the contradictory boundary cases.  The equality discipline is
+explicit.  The map \AgdaFunction{fromTwo} computes by pattern matching,
+so its two endpoint equations close by \AgdaInductiveConstructor{refl}.
+The equations involving \AgdaFunction{toTwo} are propositional
+equalities: they use the supplied cover and, when the wrong boundary is
+selected, the separation witness eliminates the impossible branch.
 
 \section{Endomorphisms of Two}
 
@@ -949,6 +1040,43 @@ realize-reflect m v with MinimalClosure.no-extra m v
     q = trans (sym (reflect-realize c)) (cong reflect p)
 \end{code}
 
+The same information can be displayed as a compact $K_4$ presentation.
+This is not the large invariant record of the main kernel; it is the
+companion-level graph layer forced by any minimal representation of the
+four endomorphism cases.  Vertices are the carrier of the closure,
+edges connect vertices whose reflected cases are distinct, and the two
+roundtrips certify that no case is lost and no vertex is surplus.
+
+\begin{code}
+record K4Presentation : Set₁ where
+  field
+    vertices              : Set
+    edge                  : vertices → vertices → Set
+    realize-vertex        : EndoCase → vertices
+    reflect-vertex        : vertices → EndoCase
+    reflect-realize-vertex : (c : EndoCase) → reflect-vertex (realize-vertex c) ≡ c
+    realize-reflect-vertex : (v : vertices) → realize-vertex (reflect-vertex v) ≡ v
+    edge-complete         : (v w : vertices) → edge v w ≡ (¬ (reflect-vertex v ≡ reflect-vertex w))
+    represented-closure   : MinimalClosure
+
+minimal-closure-presentation : (m : MinimalClosure) → K4Presentation
+minimal-closure-presentation m = record
+  { vertices               = FaithfulClosure.V fc
+  ; edge                   = λ v w → ¬ (FaithfulClosure.reflect fc v ≡ FaithfulClosure.reflect fc w)
+  ; realize-vertex         = FaithfulClosure.realize fc
+  ; reflect-vertex         = FaithfulClosure.reflect fc
+  ; reflect-realize-vertex = FaithfulClosure.reflect-realize fc
+  ; realize-reflect-vertex = realize-reflect m
+  ; edge-complete          = λ _ _ → refl
+  ; represented-closure    = m
+  }
+  where
+    fc = MinimalClosure.closure m
+
+canonicalK4Presentation : K4Presentation
+canonicalK4Presentation = minimal-closure-presentation canonicalK4
+\end{code}
+
 The three record fields are not three independent stipulations.  Each
 one is exactly the load-bearing piece of one of the three
 representation conditions, and the following lemmas name that load.
@@ -1125,28 +1253,78 @@ The four-vertex structure is therefore not an independent foundation;
 it is, up to the bijection just constructed, the endomorphism set of
 the normal form of any binary distinction.
 
-\emph{The constant.}  At the bare level of returning a value of type
-\AgdaRecord{Distinction}, every minimal closure determines a
-distinction, namely the canonical one.  The corresponding Agda term is
-a constant function.  The reason it is a constant and not a richer
-structural map is honest: a \AgdaRecord{Distinction} has a two-element
-carrier, while the closure carrier has four; no map of records
-\AgdaBound{m} : \AgdaRecord{MinimalClosure} \AgdaSymbol{→}
-\AgdaRecord{Distinction} can be a bijection on carriers.  The actual
-bijective content lives one level below, in
-\AgdaFunction{closure-bijection-EndoCase} above.  The constant below
-is the bookkeeping shadow of that bijective content, recorded as such.
+\emph{Canonical re-projection.}  At the level of returning a value of
+type \AgdaRecord{Distinction}, every minimal closure re-projects to
+the canonical binary distinction.  This is not a carrier-level
+isomorphism between four vertices and two points; such an isomorphism
+would be false.  The carrier-level bijection is the checked map to
+\AgdaDatatype{EndoCase} above.  The re-projection below records the
+dependency at the \AgdaRecord{Distinction} level: the four-case closure
+is readable only through the binary normal form whose endomorphisms it
+represents.
 
 \begin{code}
 k4-presupposes-distinction : MinimalClosure → Distinction
 k4-presupposes-distinction _ = Two-distinction
+
+record FormalClosureChain (d : Distinction) : Set₁ where
+  field
+    binary-normal-form        : DistinctionIso d Two-distinction
+    equality-discipline       : NormalFormEqualityDiscipline d
+    endomorphism-classifier   : (Two → Two) → EndoCase
+    classifier-is-sound       : (f : Two → Two) →
+      Pointwise f (interpret (endomorphism-classifier f))
+    classifier-is-unique      :
+      (f : Two → Two) (c : EndoCase) →
+      Pointwise f (interpret c) → endomorphism-classifier f ≡ c
+    composition-is-closed     :
+      (c e : EndoCase) →
+      Σ EndoCase (λ r → Pointwise (interpret r) (interpret c ∘₂ interpret e))
+    k4-presentation           : K4Presentation
+    closure-carrier-bijection : Bijection (K4Presentation.vertices k4-presentation) EndoCase
+    reprojected-distinction   : Distinction
+    reprojection-is-canonical : reprojected-distinction ≡ Two-distinction
+
+theorem-formal-closure-chain :
+  (d : Distinction) → FormalClosureChain d
+theorem-formal-closure-chain d = record
+  { binary-normal-form        = two-normal-form d
+  ; equality-discipline       = theorem-normal-form-equality-discipline d
+  ; endomorphism-classifier   = classify
+  ; classifier-is-sound       = classify-sound
+  ; classifier-is-unique      = classify-unique
+  ; composition-is-closed     = endomorphisms-closed
+  ; k4-presentation           = canonicalK4Presentation
+  ; closure-carrier-bijection = closure-bijection-EndoCase canonicalK4
+  ; reprojected-distinction   = k4-presupposes-distinction canonicalK4
+  ; reprojection-is-canonical = refl
+  }
+
+record Dn2FormalClosureChain (d : Distinction-n 2) : Set₁ where
+  field
+    n2-equivalence       : DistinctionDn2Equivalence
+    left-is-point-0      : Distinction.left (Dn2-to-distinction d) ≡ Distinction-n.point d fz
+    right-is-point-1     : Distinction.right (Dn2-to-distinction d) ≡ Distinction-n.point d (fs fz)
+    closure-chain        : FormalClosureChain (Dn2-to-distinction d)
+
+theorem-Dn2-formal-closure-chain :
+  (d : Distinction-n 2) → Dn2FormalClosureChain d
+theorem-Dn2-formal-closure-chain d = record
+  { n2-equivalence     = theorem-distinction-Dn2-equivalence
+  ; left-is-point-0    = refl
+  ; right-is-point-1   = refl
+  ; closure-chain      = theorem-formal-closure-chain (Dn2-to-distinction d)
+  }
 \end{code}
 
 The full formalisation uses a richer \AgdaRecord{K4Record}.  The
 structural dependency carries over without change: the closure carrier
 is not an independent foundation, it is, by
 \AgdaFunction{closure-bijection-EndoCase}, in checked bijection with
-the endomorphism set of the binary normal form.
+the endomorphism set of the binary normal form.  The record
+\AgdaFunction{theorem-formal-closure-chain} bundles the route as one
+object, and \AgdaFunction{theorem-Dn2-formal-closure-chain} states the
+same route from the $n=2$ template.
 
 \part*{Part III.\quad Frame}
 

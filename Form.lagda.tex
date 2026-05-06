@@ -885,7 +885,7 @@ The next chapter performs the import.
 
 \epigraph{``The miracle of the appropriateness of the language of mathematics for the formulation of the laws of physics is a wonderful gift which we neither understand nor deserve.''}{Eugene Wigner, 1960}
 
-The previous chapter narrated, in plain language, what \textit{Void} proves. This chapter performs the import in the literal sense: a single line of Agda code that brings every result of \textit{Void} into scope. After this line, the rest of the book has access to the seven invariants, the closed arithmetic, the closure isomorphism, and every supporting lemma that \textit{Void} required. Nothing further has to be assumed. Nothing further can be added.
+The previous chapter narrated, in plain language, what \textit{Void} proves. This chapter performs the import in the literal sense: a single line of Agda code that brings every result of \textit{Void} into scope. After this line, the rest of the book has access to the seven invariants, the closed arithmetic, the closure isomorphism, and every supporting lemma that \textit{Void} required. No further Level~1 content is assumed by \textit{Form}; what follows can only rename, package, interpret, or test what the kernel exports.
 
 \section*{The Compiler Discipline}
 
@@ -1208,9 +1208,9 @@ alpha-from-spectral = alpha-inverse-integer
 
 A skeptic might ask: what is special about $K_4$? Why not the triangle $K_3$, or the five-vertex complete graph $K_5$?
 
-The elimination---carried out in \textit{Void}---rules them out on structural grounds. But even at the level of the physics identification, the alternatives do not survive. $K_3$ would give three spacetime dimensions (two spatial, one time), a degree of 2, and a gravitational coupling $\kappa = 6$. The formula $V^d \cdot \chi + d^2$ on $K_3$ would yield $3^2 \cdot 1 + 2^2 = 13$---not a measured coupling constant. $K_5$ would give five spacetime dimensions, degree 4, and the formula evaluates to $5^4 \cdot 2 + 4^2 = 1266$---also not a known constant.
+The elimination carried out in \textit{Void} rules out $K_3$ and $K_5$ as replacements for the four-case closure: three vertices cannot carry four separated endomorphism cases, and a fifth vertex is surplus relative to the minimal closure contract. The physics filter below is a second, narrower test. It asks what happens if the same displayed formulas are evaluated on the neighboring complete graphs. $K_3$ would give three spacetime dimensions (two spatial, one time), a degree of 2, and a gravitational coupling $\kappa = 6$. The formula $V^d \cdot \chi + d^2$ on $K_3$ gives $3^2 \cdot 2 + 2^2 = 22$. $K_5$ would give five spacetime dimensions, degree 4, and the formula evaluates to $5^4 \cdot 2 + 4^2 = 1266$.
 
-Only $K_4$ hits 137. Only $K_4$ gives $3 + 1$ spacetime. Only $K_4$ survives.% \VoidRef{law:graph-presentation:k3-failure}{elimination of K₃ in Void}
+Only $K_4$ hits 137 inside this displayed neighboring-family test. Only $K_4$ gives $3 + 1$ spacetime under the proposed degree reading. The formal closure result and the physical comparison point in the same direction, but they remain different kinds of verdict.% \VoidRef{law:graph-presentation:k3-failure}{elimination of K₃ in Void}
 
 \begin{code}
 -- $ Alternative graph vertex/edge counts
@@ -1267,13 +1267,13 @@ eulerCharValue : ℕ
 eulerCharValue = eulerChar-computed
 \end{code}
 
-The argument above is not rhetorical---each failure has a formal witness. The alpha formula $V^d \cdot \chi + d^2$ evaluated on $K_3$ or $K_5$ reduces to a numeral whose inequality to $137$ the type-checker certifies by an absurd pattern. There is no escape route. The alternatives are not merely imprecise: they are type-provably uninhabited.
+The argument above is not rhetorical---each displayed failure has a formal witness. The alpha formula $V^d \cdot \chi + d^2$ evaluated on $K_3$ or $K_5$ reduces to a numeral whose inequality to $137$ the type-checker certifies by an absurd pattern. Inside this local $K_3/K_4/K_5$ comparison, the alternatives are not merely imprecise: the required equality types are uninhabited.
 
-\textbf{Constraint:} The three concurrent criteria---$\alpha^{-1} = 137$, $m_p/m_e = 1836$, and $d = 3$ spatial dimensions---must hold simultaneously under any surviving graph's invariants.
+\textbf{Constraint:} The three concurrent criteria---$\alpha^{-1} = 137$, $m_p/m_e = 1836$, and $d = 3$ spatial dimensions---must hold simultaneously inside the displayed neighboring-graph test.
 
 \textbf{Elimination:} $K_3$ ($V{=}3$, $d{=}2$, $\chi{=}2$): the alpha formula gives $3^2 \cdot 2 + 2^2 = 22$; the proton formula gives $4 \cdot 8 \cdot 17 = 544$. $K_5$ ($V{=}5$, $d{=}4$, $\chi{=}2$): the alpha formula gives $5^4 \cdot 2 + 4^2 = 1266$; the spatial dimension is $4 \neq 3$. The four absurdity proofs close by pattern match \texttt{()}.
 
-\textbf{Consequence:} $K_4$ is the unique complete graph on which all three criteria hold simultaneously. Each field below that names an alternative closes by \texttt{λ ()}; each field that confirms $K_4$ closes by \texttt{refl}. The asymmetry is not rhetorical---it is structural.
+\textbf{Consequence:} $K_4$ is the unique survivor inside this finite test. Each field below that names an alternative closes by \texttt{λ ()}; each field that confirms $K_4$ closes by \texttt{refl}. The asymmetry is not rhetorical---it is structural.
 
 \begin{code}
 -- $ Formal Alternative Graph Elimination
@@ -1409,7 +1409,54 @@ theorem-epistemic-separation = record
   ; number-is-forced       = refl
   ; interpretation-is-phys = refl
   ; test-is-empirical      = refl }
+
+-- $ Scope ledger for the K₄/K₃/K₅ discussion.
+-- $ The Void closure theorem and the displayed neighboring-graph
+-- $ formula test are not the same claim.
+data EliminationScope : Set where
+  void-closure-scope       : EliminationScope
+  neighboring-test-scope   : EliminationScope
+  physical-reading-scope   : EliminationScope
+
+record K4EliminationScopeBoundary : Set where
+  field
+    closure-scope              : EliminationScope
+    neighboring-filter-scope   : EliminationScope
+    physical-comparison-scope  : EliminationScope
+    neighboring-filter-record  : AlternativeGraphElimination
+    closure-claim-level        : ClaimLevel
+    neighboring-filter-level   : ClaimLevel
+    physical-comparison-level  : ClaimLevel
+    closure-is-formal-scope    : closure-scope ≡ void-closure-scope
+    filter-is-neighboring      : neighboring-filter-scope ≡ neighboring-test-scope
+    comparison-is-physical-scope : physical-comparison-scope ≡ physical-reading-scope
+    closure-is-formal          : closure-claim-level ≡ formal-ledger
+    filter-is-forced-ledger    : neighboring-filter-level ≡ forced-ledger
+    comparison-is-physical     : physical-comparison-level ≡ physical-identification
+
+theorem-k4-elimination-scope-boundary : K4EliminationScopeBoundary
+theorem-k4-elimination-scope-boundary = record
+  { closure-scope               = void-closure-scope
+  ; neighboring-filter-scope    = neighboring-test-scope
+  ; physical-comparison-scope   = physical-reading-scope
+  ; neighboring-filter-record   = theorem-alternative-graph-elimination
+  ; closure-claim-level         = formal-ledger
+  ; neighboring-filter-level    = forced-ledger
+  ; physical-comparison-level   = physical-identification
+  ; closure-is-formal-scope     = refl
+  ; filter-is-neighboring       = refl
+  ; comparison-is-physical-scope = refl
+  ; closure-is-formal           = refl
+  ; filter-is-forced-ledger     = refl
+  ; comparison-is-physical      = refl }
 \end{code}
+
+The scope record prevents the central equivocation.  \textit{Void}'s closure
+result eliminates the wrong carrier for the four endomorphism cases.  The
+later $K_3/K_4/K_5$ block is a neighboring-family formula test.  The proposed
+spacetime and constant names are a physical reading of the survivor.  These
+three verdicts reinforce one another, but they do not collapse into a single
+claim.
 
 The ledger below lists the numbers that the $K_4$ computation produces (Level 2), placed alongside the numbers that experiments have measured. The claim that these mathematical quantities \emph{correspond} to the physical constants of our universe is a Level 3 interpretation. If any row disagrees irreconcilably with improved measurements, the physical interpretation fails. The underlying mathematics (Level 1 and 2), being formally verified, remains true but physically irrelevant.
 
@@ -1442,9 +1489,9 @@ baryon-photon-ratio-int = 6
 
 The ledger so far: $\alpha^{-1} = 137$, $m_p/m_e = 1836$, $m_\mu/m_e = 207$, $m_\tau/m_\mu = 17$, $n_s \approx 0.9649$, $\eta_b \approx 6 \times 10^{-10}$. Each is an integer (or integer-scaled value) that appears both in the PDG tables and in the $K_4$ arithmetic. Whether the agreement is coincidence or consequence is the question this book lays open.
 
-Two records close the ledger. The first, \texttt{IdentityLedger}, bundles the four exact integer matches against PDG~2024 central values: $\alpha^{-1}$, $m_p/m_e$, $m_\mu/m_e$, and $m_\tau/m_\mu = F_2 = 17$. The second, \texttt{StructuralLedger}, records the three architectural identifications---spacetime dimension, spatial dimension, fermion generation count---together with the cosmological constant $\Lambda = d = 3$. Both sides of every equality reduce to the same numeral by computation; all fields in both records close by \texttt{refl}.
+Two records close the ledger at the integer level. The first, \texttt{IdentityLedger}, bundles the four exact integer matches against PDG~2024 central values: $\alpha^{-1}$, $m_p/m_e$, $m_\mu/m_e$, and $m_\tau/m_\mu = F_2 = 17$. The second, \texttt{StructuralLedger}, records the three architectural readings---spacetime dimension, spatial dimension, fermion generation count---together with the discrete assignment $\Lambda = d = 3$. Both sides of every displayed equality reduce to the same numeral by computation; the physical names attached to those numerals remain Level~3 identifications.
 
-\textbf{What this proves:} The $K_4$ arithmetic is consistent with the integer-truncated PDG values, and the graph's structural invariants match the observed architecture of spacetime and matter. The type checker confirms the arithmetic.
+\textbf{What this proves:} The $K_4$ arithmetic is consistent with the integer-truncated PDG values, and the graph's structural invariants supply integer candidates for the observed architecture of spacetime and matter. The type checker confirms the arithmetic.
 
 \textbf{What this does not prove:} That the universe is described by $K_4$. That is a physical claim. The records prove only that the numbers match---the interpretation remains open to experiment.
 
@@ -1609,17 +1656,17 @@ theorem-delta = record
 
 In standard cosmology, the cosmological constant $\Lambda$ is the energy density of empty space. It was Einstein's ``biggest blunder''---a term he added to his equations, then removed, only for observations to demand it back. Its measured value is tiny, positive, and unexplained.
 
-From $K_4$: $\Lambda = d = 3$ in discrete units.
+From $K_4$: $d = 3$ in discrete units.  \textit{Form}'s proposed identification reads this degree as the ledger value assigned to $\Lambda$.
 
-That is the identification. The degree of the complete graph---the number of edges meeting at each vertex---is the cosmological constant. The dilution exponent is $\chi = 2$, which governs how the energy density drops with expansion: proportional to $a^{-\chi}$, where $a$ is the scale factor. In continuous physics, this matches the behavior of curvature-dominated expansion.
+That is the boundary. The degree of the complete graph---the number of edges meeting at each vertex---is a forced structural integer; the claim that this integer is the cosmological-constant slot is a physical identification. The dilution exponent is $\chi = 2$, which gives the discrete scaling law proportional to $a^{-\chi}$, where $a$ is the scale factor. In continuous physics, this has the same exponent as curvature-dominated expansion.
 
 Natural units set $c = \hbar = 1$, consistent with the discrete framework where the lattice spacing and the quantum of action are both unity.
 
-\textbf{Constraint:} The cosmological constant must be a graph invariant of $K_4$ that is simultaneously consistent with the handshaking lemma, the spatial dimension, and the Euler balance.
+\textbf{Constraint:} For the $\Lambda$ identification to be admissible, the selected graph invariant must be simultaneously consistent with the handshaking lemma, the spatial dimension, and the Euler balance.
 
-\textbf{Construction:} $\Lambda = d = 3$ is the unique assignment satisfying five independent routes: vertex excess, degree, handshaking $V \cdot d = \chi \cdot E$, Euler--edge ratio, and edge-to-vertex balance. All five close to \texttt{refl}.
+\textbf{Construction:} The degree $d = 3$ satisfies five structurally distinct routes: vertex excess, degree, handshaking $V \cdot d = \chi \cdot E$, Euler--edge ratio, and edge-to-vertex balance. All five close to \texttt{refl}.
 
-\textbf{Consequence:} Any assignment $\Lambda \neq d$ breaks at least one of the five consistency routes. The identification is over-determined: five checks, one number.
+\textbf{Consequence:} Any different integer assignment inside this five-route ledger breaks at least one consistency route. The structural number is over-determined; the physical name remains the exposed identification.
 
 \begin{code}
 -- $ The Cosmological Constant — Λ = d = K4-deg = 3 in discrete units. The dilution exponent is χ = 2.
@@ -1747,9 +1794,29 @@ theorem-lambda-5pillar = record
   ; cross-euler-formula = refl
   ; convergence-from-vertex = refl
   ; convergence-from-euler-edges = refl }
+
+record LambdaIdentificationBoundary : Set where
+  field
+    structural-web             : CosmologicalConstant5Pillar
+    discrete-degree-is-three   : K4-deg ≡ 3
+    dilution-exponent-is-chi   : two ≡ K4-chi
+    lambda-name-level          : ClaimLevel
+    lambda-test-level          : ClaimLevel
+    lambda-name-is-physical    : lambda-name-level ≡ physical-identification
+    lambda-test-is-experimental : lambda-test-level ≡ experimental-test
+
+theorem-lambda-identification-boundary : LambdaIdentificationBoundary
+theorem-lambda-identification-boundary = record
+  { structural-web              = theorem-lambda-5pillar
+  ; discrete-degree-is-three    = refl
+  ; dilution-exponent-is-chi    = refl
+  ; lambda-name-level           = physical-identification
+  ; lambda-test-level           = experimental-test
+  ; lambda-name-is-physical     = refl
+  ; lambda-test-is-experimental = refl }
 \end{code}
 
-The five-pillar record above is not a single theorem. It is a \emph{consistency web}: five independent routes, all arriving at $\Lambda = 3$. The cosmological constant equals the graph degree. It also equals the number of QCD colors, the number of spatial dimensions, and the vertex-minus-one count. Separately, the handshaking lemma $V \cdot d = \chi \cdot E$ ties the same number into the edge-Euler balance, and the ratio $(E \cdot \chi)/V = 12/4 = 3$ confirms it from the opposite direction.
+The five-pillar record above is not a single theorem. It is a \emph{consistency web}: five structurally distinct routes, all arriving at the integer $3$. The proposed cosmological-constant slot equals the graph degree. The same integer also appears as the color-count slot, the spatial-dimension slot, and the vertex-minus-one count. Separately, the handshaking lemma $V \cdot d = \chi \cdot E$ ties the same number into the edge-Euler balance, and the ratio $(E \cdot \chi)/V = 12/4 = 3$ confirms it from the opposite direction.
 
 If these five routes disagreed, the identification would fail. They agree. That is not a proof that $\Lambda = 3$ is physically correct---it is a proof that the identification is internally consistent.
 
@@ -1772,13 +1839,13 @@ The density parameter $\Omega_m = V / (2\pi\chi)$ is therefore entirely $K_4$-de
 
 The two appearances of $\chi$ do not duplicate one hidden freedom. The $\chi$ in $2\pi\chi$ is the global Euler weight of the curvature integral. The $\chi$ entries inside the BBP ledger belong to the coefficient pattern that realizes $\pi$. One occurrence scales the observable; the other fixes the route by which the transcendental limit enters. They occupy different logical slots in the same invariant chain.
 
-The alternatives tell the story. $K_3$ predicts $\Omega_m \approx 0.2387$, which is $10.9\sigma$ away from Planck. $K_5$ predicts $0.3978$, which is $11.8\sigma$ away. Only $K_4$ falls within the measurement uncertainty. The complete graph on four vertices is the unique survivor of the cosmological filter, just as it was the unique survivor of the elimination chain.
+The neighboring alternatives tell the story. $K_3$ predicts $\Omega_m \approx 0.2387$, which is $10.9\sigma$ away from Planck. $K_5$ predicts $0.3978$, which is $11.8\sigma$ away. Inside this $K_3/K_4/K_5$ comparison, only $K_4$ falls within the integer-scaled one-sigma filter. The empirical filter echoes the formal elimination chain without being the same kind of result.
 
 \textbf{Constraint:} The matter density fraction $\Omega_m = V/(2\pi\chi)$ uses three ingredients: $V$, $\chi$, and $\pi$. The first two are direct graph invariants. The third is represented by the BBP coefficient ledger whose every coefficient is a $K_4$ invariant (\texttt{BBP-K4-Identification}, ten fields, all \texttt{refl}). No experimental input enters the arithmetic realizer imported from \textit{Void}.
 
-\textbf{Elimination:} $K_3$ predicts $\Omega_m \approx 0.2387$ ($10.9\sigma$ from Planck). $K_5$ predicts $0.3978$ ($11.8\sigma$). Both are annihilated by the cosmological filter. Only $K_4$ with $\Omega_m = V/(2\pi\chi) \approx 0.3183$ falls within $0.5\sigma$.
+\textbf{Elimination:} $K_3$ predicts $\Omega_m \approx 0.2387$ ($10.9\sigma$ from Planck). $K_5$ predicts $0.3978$ ($11.8\sigma$). Both fail this displayed cosmological filter. Only $K_4$ with $\Omega_m = V/(2\pi\chi) \approx 0.3183$ falls within the integer-scaled one-sigma window.
 
-\textbf{Consequence:} The density filter eliminates every complete graph except $K_4$. The survivor is unique. The factor $2\pi$ is itself $K_4$-native: it is $\chi$ times the BBP limit, a convergent series in the invariant basis $\{\chi, V, \kappa, d, E\}$. The discriminating variable $V/\chi$ is a pure graph ratio.
+\textbf{Consequence:} The density filter eliminates the neighboring alternatives tested here and leaves $K_4$ as the local survivor. The factor $2\pi$ enters through a $K_4$-native BBP coefficient ledger: it is $\chi$ times a convergent series in the invariant basis $\{\chi, V, \kappa, d, E\}$. The discriminating variable $V/\chi$ is a pure graph ratio.
 
 \begin{code}
 -- $ BBP-K4-Identification: proved in Void (law16B-8a-bbp-k4).
@@ -1878,6 +1945,53 @@ theorem-K4-sigma = refl
 theorem-K5-sigma : 828 divℕ planck-omega-m-sigma ≡ 11
 theorem-K5-sigma = refl
 
+data OmegaMCandidate : Set where
+  omega-K3-candidate : OmegaMCandidate
+  omega-K4-candidate : OmegaMCandidate
+  omega-K5-candidate : OmegaMCandidate
+
+omega-candidate-scaled : OmegaMCandidate → ℕ
+omega-candidate-scaled omega-K3-candidate = omega-m-K3
+omega-candidate-scaled omega-K4-candidate = omega-m-K4
+omega-candidate-scaled omega-K5-candidate = omega-m-K5
+
+omega-candidate-sigma-quotient : OmegaMCandidate → ℕ
+omega-candidate-sigma-quotient omega-K3-candidate = 10
+omega-candidate-sigma-quotient omega-K4-candidate = 0
+omega-candidate-sigma-quotient omega-K5-candidate = 11
+
+omega-zero-sigma-unique :
+  (c : OmegaMCandidate) →
+  omega-candidate-sigma-quotient c ≡ 0 →
+  c ≡ omega-K4-candidate
+omega-zero-sigma-unique omega-K3-candidate ()
+omega-zero-sigma-unique omega-K4-candidate _ = refl
+omega-zero-sigma-unique omega-K5-candidate ()
+
+record OmegaMCandidateFilterBridge : Set where
+  field
+    k3-scaled-value       : omega-candidate-scaled omega-K3-candidate ≡ 2387
+    k4-scaled-value       : omega-candidate-scaled omega-K4-candidate ≡ 3183
+    k5-scaled-value       : omega-candidate-scaled omega-K5-candidate ≡ 3978
+    k3-sigma-quotient     : omega-candidate-sigma-quotient omega-K3-candidate ≡ 10
+    k4-sigma-quotient     : omega-candidate-sigma-quotient omega-K4-candidate ≡ 0
+    k5-sigma-quotient     : omega-candidate-sigma-quotient omega-K5-candidate ≡ 11
+    unique-zero-sigma     : (c : OmegaMCandidate) → omega-candidate-sigma-quotient c ≡ 0 → c ≡ omega-K4-candidate
+    empirical-filter-level : ClaimLevel
+    empirical-filter-is-test : empirical-filter-level ≡ experimental-test
+
+theorem-omega-m-candidate-filter-bridge : OmegaMCandidateFilterBridge
+theorem-omega-m-candidate-filter-bridge = record
+  { k3-scaled-value          = refl
+  ; k4-scaled-value          = refl
+  ; k5-scaled-value          = refl
+  ; k3-sigma-quotient        = refl
+  ; k4-sigma-quotient        = refl
+  ; k5-sigma-quotient        = refl
+  ; unique-zero-sigma        = omega-zero-sigma-unique
+  ; empirical-filter-level   = experimental-test
+  ; empirical-filter-is-test = refl }
+
 record OmegaM-5PillarProof : Set where
   field
     forced-vertices-carry-curvature : omega-m-numerator-K4 ≡ K4-V
@@ -1929,7 +2043,7 @@ theorem-dark-per-channel = refl
 
 \section{Dark Energy and the Baryonic Fraction}
 
-The dark sector has $E - 1 = 5$ channels---one fewer than the total edge count. The subtraction is the point: the single channel $V-d=1$ is already occupied by the baryonic residue, so the dark ledger receives the remaining five edge channels and no sixth hidden channel can be smuggled in. The baryon density is $\Omega_b = (V - d)/(F_2 + d) = 1/20 = 0.05$, and the dark energy fraction fills the remainder: $1 - \Omega_m = 0.6817$, partitioned across those five channels at $\sim 0.1363$ each. The baryon fraction $\Omega_b = 1/20$ and the dark channel count $E - 1 = 5$ are pure $K_4$ ratios. The matter density $\Omega_m = V/(2\pi\chi)$ completes the picture: $V$, $\chi$ are graph invariants, and $\pi$ is the limit of the BBP series whose every coefficient is a $K_4$ invariant.
+The residual channel ledger has $E - 1 = 5$ slots---one fewer than the total edge count. The subtraction is the point: the single channel $V-d=1$ is already occupied by the baryonic residue, so the remaining five edge channels are the only available slots for the proposed dark-sector reading. The baryon density is $\Omega_b = (V - d)/(F_2 + d) = 1/20 = 0.05$, and the complement $1 - \Omega_m = 0.6817$ partitions across those five slots at $\sim 0.1363$ each. The baryon fraction $\Omega_b = 1/20$ and the residual channel count $E - 1 = 5$ are pure $K_4$ ratios. Calling the five residual slots ``dark channels'' is a physical interpretation of that ratio ledger.
 
 \begin{code}
 -- $ Baryon-Photon Ratio η — η = Ωb / (F₂ + d) = 1/20. Scaled: baryon density / 20.
@@ -1983,6 +2097,30 @@ theorem-dark-channel-partition = record
   ; dark-count-is-E-minus-one = refl
   ; dark-count-is-five        = refl
   ; channels-exhaust-E        = refl }
+
+record DarkSectorInterpretationBoundary : Set where
+  field
+    formal-partition        : DarkChannelPartition
+    residual-count-is-five  : dark-channel-count ≡ 5
+    baryon-fraction-denom   : omega-b-denominator ≡ 20
+    dark-name-level         : ClaimLevel
+    baryon-name-level       : ClaimLevel
+    dark-test-level         : ClaimLevel
+    dark-name-is-physical   : dark-name-level ≡ physical-identification
+    baryon-name-is-physical : baryon-name-level ≡ physical-identification
+    dark-test-is-experimental : dark-test-level ≡ experimental-test
+
+theorem-dark-sector-interpretation-boundary : DarkSectorInterpretationBoundary
+theorem-dark-sector-interpretation-boundary = record
+  { formal-partition          = theorem-dark-channel-partition
+  ; residual-count-is-five    = refl
+  ; baryon-fraction-denom     = refl
+  ; dark-name-level           = physical-identification
+  ; baryon-name-level         = physical-identification
+  ; dark-test-level           = experimental-test
+  ; dark-name-is-physical     = refl
+  ; baryon-name-is-physical   = refl
+  ; dark-test-is-experimental = refl }
 
 -- $ Bare Fraction (dark/baryon ratio) — Ωₘ-bare = V/(2πχ), Ωb = 1/20. The bare matter fraction is 3/10.
 
@@ -2078,6 +2216,80 @@ theorem-spectral-capacity-from-aut = record
   ; capacity-is-aut-order = refl
   ; zero-mode-removed     = refl }
 
+record SpectralIndexInterpretationBoundary : Set where
+  field
+    formal-realizer       : SpectralIndexRealizer
+    scaled-value-is-9661  : ns-scaled ≡ 9661
+    capacity-bridge       : SpectralCapacityFromAut
+    spectral-name-level   : ClaimLevel
+    spectral-test-level   : ClaimLevel
+    spectral-name-is-physical : spectral-name-level ≡ physical-identification
+    spectral-test-is-experimental : spectral-test-level ≡ experimental-test
+
+theorem-spectral-index-interpretation-boundary : SpectralIndexInterpretationBoundary
+theorem-spectral-index-interpretation-boundary = record
+  { formal-realizer              = theorem-spectral-index-realizer
+  ; scaled-value-is-9661         = theorem-ns-scaled
+  ; capacity-bridge              = theorem-spectral-capacity-from-aut
+  ; spectral-name-level          = physical-identification
+  ; spectral-test-level          = experimental-test
+  ; spectral-name-is-physical    = refl
+  ; spectral-test-is-experimental = refl }
+
+-- $ Cosmological boundary ledger: the ratios are forced arithmetic;
+-- $ Lambda, matter density, baryon/dark language, and spectral tilt
+-- $ are physical readings tested against observation.
+record CosmologyInterpretationLedger : Set where
+  field
+    cosmology-lambda-boundary     : LambdaIdentificationBoundary
+    cosmology-omega-filter        : OmegaMCandidateFilterBridge
+    cosmology-omega-structure     : OmegaM-5PillarProof
+    cosmology-baryon-structure    : CosmologyBaryonMatterProof
+    cosmology-dark-boundary       : DarkSectorInterpretationBoundary
+    cosmology-spectral-boundary   : SpectralIndexInterpretationBoundary
+    cosmology-lambda-value        : K4-deg ≡ 3
+    cosmology-omega-m-scaled      : omega-m-K4 ≡ 3183
+    cosmology-baryon-num          : omega-b-numerator ≡ 1
+    cosmology-baryon-den          : omega-b-denominator ≡ 20
+    cosmology-dark-channel-count  : dark-channel-count ≡ 5
+    cosmology-spectral-scaled     : ns-scaled ≡ 9661
+    cosmology-arithmetic-level    : ClaimLevel
+    cosmology-name-level          : ClaimLevel
+    cosmology-test-level          : ClaimLevel
+    cosmology-arithmetic-forced   : cosmology-arithmetic-level ≡ forced-ledger
+    cosmology-names-physical      : cosmology-name-level ≡ physical-identification
+    cosmology-tests-empirical     : cosmology-test-level ≡ experimental-test
+
+theorem-cosmology-interpretation-ledger : CosmologyInterpretationLedger
+theorem-cosmology-interpretation-ledger = record
+  { cosmology-lambda-boundary    = theorem-lambda-identification-boundary
+  ; cosmology-omega-filter       = theorem-omega-m-candidate-filter-bridge
+  ; cosmology-omega-structure    = theorem-omega-m-5pillar
+  ; cosmology-baryon-structure   = theorem-cosmology-baryon-matter
+  ; cosmology-dark-boundary      = theorem-dark-sector-interpretation-boundary
+  ; cosmology-spectral-boundary  = theorem-spectral-index-interpretation-boundary
+  ; cosmology-lambda-value       = refl
+  ; cosmology-omega-m-scaled     = refl
+  ; cosmology-baryon-num         = refl
+  ; cosmology-baryon-den         = refl
+  ; cosmology-dark-channel-count = refl
+  ; cosmology-spectral-scaled    = theorem-ns-scaled
+  ; cosmology-arithmetic-level   = forced-ledger
+  ; cosmology-name-level         = physical-identification
+  ; cosmology-test-level         = experimental-test
+  ; cosmology-arithmetic-forced  = refl
+  ; cosmology-names-physical     = refl
+  ; cosmology-tests-empirical    = refl
+  }
+\end{code}
+
+The cosmological package is now visible as one ledger.  The formal side
+contains $d=3$, $\Omega_m\cdot 10^4=3183$, $\Omega_b=1/20$, five residual
+edge channels, and $n_s\cdot 10^4=9661$.  The physical side names these
+entries as cosmological constant, matter density, baryonic fraction, dark
+channels, and spectral tilt.  The two sides touch only at the test layer.
+
+\begin{code}
 -- $ Alpha from spectral and operad methods
 theorem-alpha-integer : alpha-inverse-integer ≡ 137
 theorem-alpha-integer = refl
@@ -2234,6 +2446,67 @@ tau-muon-bare = tree-poly-3
 
 law-tau-muon-bare-17 : tau-muon-bare ≡ 17
 law-tau-muon-bare-17 = refl
+
+-- $ Tree-value assignment bridge.  The three integer values are not
+-- $ interchangeable once the integer targets 1836, 207, and 17 are fixed.
+-- $ The physical names of the targets remain identifications; the
+-- $ one-to-one arithmetic matching is checked here.
+
+data TreeMassSlot : Set where
+  tree-proton-slot : TreeMassSlot
+  tree-muon-slot   : TreeMassSlot
+  tree-tau-slot    : TreeMassSlot
+
+eval-tree-slot : TreeMassSlot → ℕ
+eval-tree-slot tree-proton-slot = proton-mass-bare
+eval-tree-slot tree-muon-slot   = muon-mass-bare
+eval-tree-slot tree-tau-slot    = tau-muon-bare
+
+tree-slot-1836-unique :
+  (s : TreeMassSlot) →
+  eval-tree-slot s ≡ 1836 →
+  s ≡ tree-proton-slot
+tree-slot-1836-unique tree-proton-slot _ = refl
+tree-slot-1836-unique tree-muon-slot   ()
+tree-slot-1836-unique tree-tau-slot    ()
+
+tree-slot-207-unique :
+  (s : TreeMassSlot) →
+  eval-tree-slot s ≡ 207 →
+  s ≡ tree-muon-slot
+tree-slot-207-unique tree-proton-slot ()
+tree-slot-207-unique tree-muon-slot   _ = refl
+tree-slot-207-unique tree-tau-slot    ()
+
+tree-slot-17-unique :
+  (s : TreeMassSlot) →
+  eval-tree-slot s ≡ 17 →
+  s ≡ tree-tau-slot
+tree-slot-17-unique tree-proton-slot ()
+tree-slot-17-unique tree-muon-slot   ()
+tree-slot-17-unique tree-tau-slot    _ = refl
+
+record TreeIntegerAssignmentBridge : Set where
+  field
+    proton-integer-fixed : eval-tree-slot tree-proton-slot ≡ 1836
+    muon-integer-fixed   : eval-tree-slot tree-muon-slot ≡ 207
+    tau-integer-fixed    : eval-tree-slot tree-tau-slot ≡ 17
+    proton-slot-unique   : (s : TreeMassSlot) → eval-tree-slot s ≡ 1836 → s ≡ tree-proton-slot
+    muon-slot-unique     : (s : TreeMassSlot) → eval-tree-slot s ≡ 207 → s ≡ tree-muon-slot
+    tau-slot-unique      : (s : TreeMassSlot) → eval-tree-slot s ≡ 17 → s ≡ tree-tau-slot
+    assignment-level     : ClaimLevel
+    assignment-is-physical : assignment-level ≡ physical-identification
+
+theorem-tree-integer-assignment-bridge : TreeIntegerAssignmentBridge
+theorem-tree-integer-assignment-bridge = record
+  { proton-integer-fixed   = refl
+  ; muon-integer-fixed     = refl
+  ; tau-integer-fixed      = refl
+  ; proton-slot-unique     = tree-slot-1836-unique
+  ; muon-slot-unique       = tree-slot-207-unique
+  ; tau-slot-unique        = tree-slot-17-unique
+  ; assignment-level       = physical-identification
+  ; assignment-is-physical = refl }
 \end{code}
 
 %───────────────────────────────────────────────────────────────────────────
@@ -2252,8 +2525,10 @@ The tau-to-muon ratio is the bare Fermat prime $F_2 = 17$.
 No free parameter enters any of these expressions.  Each factorisation
 is a monomial in the five $K_4$ invariants $\{V, E, d, \chi, \kappa\}$
 extended by the unique Fermat stratum $F_2 = 2^{2^2} + 1$.  The
-Agda type-checker confirms each claimed value by \texttt{refl}, so the
-mass hierarchy is a \emph{theorem}, not an ansatz.
+Agda type-checker confirms each integer value by \texttt{refl}.  What is
+theorematic is the tree-level integer ledger; what remains physical is
+the identification of those integers with the proton, muon, and tau
+mass ratios.
 
 The universal loop numerator $11 = E + d + \chi$ is the unique survivor of
 an exhaustive classification over all eight $\{0,1\}$-linear combinations
@@ -2284,7 +2559,7 @@ not a continuous renormalization flow.  The identity $576 = (Vd)^2 \chi^2$
 reveals the electroweak volume as a perfect square, encoding the
 product of two independent $K_4$ structures.
 
-This also fixes the reading order of the correction chain. First come the tree-level masses. Then the universal numerator $11$ meets the hadronic volume $72$. Then the same numerator is carried upward by the single scale jump $\kappa$ to the electroweak volume $576$. Only after those two sector assignments are fixed does the separate RG slope $1/274$ enter. The sectors do not sit side by side as optional formulas. They arrive in forced order.
+This fixes a neutral reading order before any sector is named. First come the tree-level integers. Then the universal numerator $11$ meets the unscaled bulk volume $72$. Then the same numerator is carried upward by the single scale jump $\kappa$ to the extended volume $576$. Only after those two formal scales are fixed does the separate RG slope $1/274$ enter. The physical names QCD, electroweak, proton, and Weinberg angle are added to this already-oriented pair; they are not imported from \textit{Void}.
 
 The renormalization-group slope occupies a separate tier: its
 denominator is $2\alpha^{-1} = 274$, a quantity that belongs to the
@@ -2303,9 +2578,10 @@ and $D_{\mathrm{EW}} = \kappa \cdot 72 = 576$.  The RG slope $1/274$
 is the unique irreducible fraction with denominator $2\alpha^{-1}$.
 
 \textbf{Consequence:}
-Three denominators---$72$, $576$, $274$---are forced by the graph.
-Together with the numerator $11$, they generate the entire
-correction chain.
+Three denominators---$72$, $576$, $274$---are forced by the graph at
+the arithmetic level.  Together with the numerator $11$, they generate
+the neutral correction skeleton.  The physical sector names remain a
+separate identification layer.
 
 \begin{code}
 -- $ Canonical volume laws
@@ -2458,15 +2734,72 @@ theorem-correction-assignment-boundary = record
   ; ew-is-physical         = refl
   ; proton-is-physical     = refl
   ; weinberg-is-physical   = refl }
+
+-- $ Neutral bridge: before Form attaches physical names, Void fixes an
+-- $ oriented two-scale pair.  The bulk scale is the unscaled VEd volume;
+-- $ the extended scale is exactly its κ-multiple.  Swapping them breaks
+-- $ the defining equations.
+
+data LoopScaleRole : Set where
+  bulk-role     : LoopScaleRole
+  extended-role : LoopScaleRole
+
+loop-scale-denominator : LoopScaleRole → ℕ
+loop-scale-denominator bulk-role     = loop-denom-QCD
+loop-scale-denominator extended-role = loop-denom-EW
+
+bulk-role-unique :
+  (r : LoopScaleRole) →
+  loop-scale-denominator r ≡ loop-denom-QCD →
+  r ≡ bulk-role
+bulk-role-unique bulk-role _ = refl
+bulk-role-unique extended-role ()
+
+extended-role-unique :
+  (r : LoopScaleRole) →
+  loop-scale-denominator r ≡ loop-denom-EW →
+  r ≡ extended-role
+extended-role-unique bulk-role ()
+extended-role-unique extended-role _ = refl
+
+loop-scale-swap-impossible : Impossible (loop-denom-EW ≡ loop-denom-QCD)
+loop-scale-swap-impossible ()
+
+record BulkExtendedLoopBridge : Set where
+  field
+    neutral-scales            : LoopScaleRealizer
+    bulk-denominator          : loop-scale-denominator bulk-role ≡ 72
+    extended-denominator      : loop-scale-denominator extended-role ≡ 576
+    extended-is-kappa-bulk    : loop-scale-denominator extended-role ≡ loop-scale-denominator bulk-role * κ-discrete
+    bulk-is-unique            : (r : LoopScaleRole) → loop-scale-denominator r ≡ loop-denom-QCD → r ≡ bulk-role
+    extended-is-unique        : (r : LoopScaleRole) → loop-scale-denominator r ≡ loop-denom-EW → r ≡ extended-role
+    swapped-scales-impossible : Impossible (loop-denom-EW ≡ loop-denom-QCD)
+    sector-naming-level       : ClaimLevel
+    sector-naming-is-physical : sector-naming-level ≡ physical-identification
+
+theorem-bulk-extended-loop-bridge : BulkExtendedLoopBridge
+theorem-bulk-extended-loop-bridge = record
+  { neutral-scales            = theorem-loop-scale-realizer
+  ; bulk-denominator          = refl
+  ; extended-denominator      = refl
+  ; extended-is-kappa-bulk    = law-EW-scales-by-kappa
+  ; bulk-is-unique            = bulk-role-unique
+  ; extended-is-unique        = extended-role-unique
+  ; swapped-scales-impossible = loop-scale-swap-impossible
+  ; sector-naming-level       = physical-identification
+  ; sector-naming-is-physical = refl }
 \end{code}
 
-The loop numerator $11$ now descends into two physical channels.
-At the QCD scale, the proton correction is $+11/72$.  The plus sign
-is forced: a hadron is heavier than its tree-level prediction, because
-the strong interaction adds binding energy.  At the electroweak scale,
-the correction is $-11/576$.  The minus sign is forced: the Weinberg
-angle $\sin^2\!\theta_W$ is a \emph{mixing ratio}, and the loop
-correction reduces it from its tree-level value $\chi/\kappa = 1/4$.
+The loop numerator $11$ now descends into two oriented formal roles.
+The bulk role has denominator $72$; the extended role has denominator
+$576 = \kappa \cdot 72$.  The record above proves that these two roles
+cannot be exchanged while preserving their definitions.  \textit{Form}
+then reads the bulk role as the QCD-scale proton correction and the
+extended role as the electroweak correction to the Weinberg angle.
+Under that physical reading the proton correction is $+11/72$, while
+the Weinberg correction is $-11/576$: the signs are fixed by the
+orientation of the two observables, not by a hidden extra theorem in
+\textit{Void}.
 
 Both fractions share the same numerator because a single observable
 generates the correction at every scale.  The denominator changes from
@@ -2531,6 +2864,42 @@ law-weinberg-tree = refl
 law-weinberg-denom : weinberg-tree-den ≡ 8
 law-weinberg-denom = refl
 
+-- $ Boundary record for the five tree-level observable values.
+-- $ The integers and rational numerator/denominator are forced ledger;
+-- $ the physical observable names are Form-level identifications.
+record TreeObservableInterpretationBoundary : Set where
+  field
+    tree-alpha-137       : alpha-inverse-integer ≡ 137
+    tree-proton-1836     : proton-mass-bare ≡ 1836
+    tree-muon-207        : muon-mass-bare ≡ 207
+    tree-tau-17          : tau-muon-bare ≡ 17
+    tree-weinberg-num-2  : weinberg-tree-num ≡ 2
+    tree-weinberg-den-8  : weinberg-tree-den ≡ 8
+    tree-mass-assignment : TreeIntegerAssignmentBridge
+    tree-arithmetic-level : ClaimLevel
+    tree-name-level       : ClaimLevel
+    tree-test-level       : ClaimLevel
+    tree-arithmetic-forced : tree-arithmetic-level ≡ forced-ledger
+    tree-names-physical   : tree-name-level ≡ physical-identification
+    tree-tests-empirical  : tree-test-level ≡ experimental-test
+
+theorem-tree-observable-interpretation-boundary : TreeObservableInterpretationBoundary
+theorem-tree-observable-interpretation-boundary = record
+  { tree-alpha-137        = refl
+  ; tree-proton-1836      = law-proton-bare-1836
+  ; tree-muon-207         = law-muon-bare-207
+  ; tree-tau-17           = law-tau-muon-bare-17
+  ; tree-weinberg-num-2   = law-weinberg-tree
+  ; tree-weinberg-den-8   = law-weinberg-denom
+  ; tree-mass-assignment  = theorem-tree-integer-assignment-bridge
+  ; tree-arithmetic-level = forced-ledger
+  ; tree-name-level       = physical-identification
+  ; tree-test-level       = experimental-test
+  ; tree-arithmetic-forced = refl
+  ; tree-names-physical   = refl
+  ; tree-tests-empirical  = refl
+  }
+
 -- $ Electroweak loop correction: 11/576
 ew-loop : ℚ
 -- $ 11/576
@@ -2553,6 +2922,12 @@ law-ew-same-numerator = refl
 law-ew-denom-from-QCD : loop-denom-EW ≡ proton-loop-den * κ-discrete
 law-ew-denom-from-QCD = refl
 \end{code}
+
+The five tree values are therefore separated before any loop correction
+acts: $137$, $1836$, $207$, $17$, and the Weinberg tree quotient $2/8$.
+The record fixes the arithmetic positions and marks the physical names as
+identifications.  The correction chain can now move without smuggling the
+names back into \textit{Void}.
 
 %───────────────────────────────────────────────────────────────────────────
 \subsubsection*{The Muon Bridge: $\kappa \chi = 16$}
@@ -2765,7 +3140,41 @@ theorem-muon-bridge-classification = record
   ; survivor-is-16        = refl
   ; denominator-is-69     = refl
   }
+
+-- $ Boundary record: the theorem fixes the bridge integer and its
+-- $ denominator; the word "muon" is a physical reading of that bridge.
+record MuonBridgeInterpretationBoundary : Set where
+  field
+    muon-bridge-classified       : MuonBridgeClassification
+    muon-bridge-numerator-16     : muon-loop-num ≡ 16
+    muon-bridge-denominator-69   : muon-loop-den ≡ 69
+    muon-bridge-arithmetic-level : ClaimLevel
+    muon-bridge-name-level       : ClaimLevel
+    muon-bridge-test-level       : ClaimLevel
+    muon-bridge-arithmetic-forced : muon-bridge-arithmetic-level ≡ forced-ledger
+    muon-bridge-name-is-physical : muon-bridge-name-level ≡ physical-identification
+    muon-bridge-test-is-empirical : muon-bridge-test-level ≡ experimental-test
+
+theorem-muon-bridge-interpretation-boundary : MuonBridgeInterpretationBoundary
+theorem-muon-bridge-interpretation-boundary = record
+  { muon-bridge-classified        = theorem-muon-bridge-classification
+  ; muon-bridge-numerator-16      = law-muon-loop-num
+  ; muon-bridge-denominator-69    = law-muon-loop-den
+  ; muon-bridge-arithmetic-level  = forced-ledger
+  ; muon-bridge-name-level        = physical-identification
+  ; muon-bridge-test-level        = experimental-test
+  ; muon-bridge-arithmetic-forced = refl
+  ; muon-bridge-name-is-physical  = refl
+  ; muon-bridge-test-is-empirical = refl
+  }
 \end{code}
+
+The compiler has now sealed exactly what can be sealed: the bridge
+integer $16$, the denominator $69$, and the uniqueness of the
+$\kappa\chi$ survivor.  Reading this survivor as the muon inter-channel
+correction is the next layer.  It is a physical identification of a
+forced ledger entry, not a new theorem secretly imported into
+\textit{Void}.
 
 %───────────────────────────────────────────────────────────────────────────
 \subsubsection*{The Tau Bridge: Extension by $\chi$}
@@ -2937,7 +3346,39 @@ theorem-tau-correction-classification = record
   ; denominator-is-153 = refl
   ; unique-survivor = tbe-unique
   }
+
+-- $ Boundary record: the theorem fixes the tau extension fraction;
+-- $ the lepton-tier name and its empirical success remain Form-level.
+record TauCorrectionInterpretationBoundary : Set where
+  field
+    tau-correction-classified       : TauCorrectionClassification
+    tau-correction-numerator-28     : tau-loop-num ≡ 28
+    tau-correction-denominator-153  : tau-loop-den ≡ 153
+    tau-correction-arithmetic-level : ClaimLevel
+    tau-correction-name-level       : ClaimLevel
+    tau-correction-test-level       : ClaimLevel
+    tau-correction-arithmetic-forced : tau-correction-arithmetic-level ≡ forced-ledger
+    tau-correction-name-is-physical : tau-correction-name-level ≡ physical-identification
+    tau-correction-test-is-empirical : tau-correction-test-level ≡ experimental-test
+
+theorem-tau-correction-interpretation-boundary : TauCorrectionInterpretationBoundary
+theorem-tau-correction-interpretation-boundary = record
+  { tau-correction-classified        = theorem-tau-correction-classification
+  ; tau-correction-numerator-28      = law-tau-loop-num
+  ; tau-correction-denominator-153   = law-tau-loop-den
+  ; tau-correction-arithmetic-level  = forced-ledger
+  ; tau-correction-name-level        = physical-identification
+  ; tau-correction-test-level        = experimental-test
+  ; tau-correction-arithmetic-forced = refl
+  ; tau-correction-name-is-physical  = refl
+  ; tau-correction-test-is-empirical = refl
+  }
 \end{code}
+
+The tau block has the same shape.  The finite filters force
+$\chi = 2$ as the extension, hence $28/153$ as the irreducible
+fraction.  The assertion that this fraction is the tau correction is
+the physical reading that \textit{Form} exposes to measurement.
 
 %───────────────────────────────────────────────────────────────────────────
 \subsubsection*{The Coupling Volume: $d \cdot E \cdot F_2 = 306$}
@@ -4949,9 +5390,9 @@ theorem-dcm-ew-576 = refl
 %───────────────────────────────────────────────────────────────────────────
 
 The first-order correction $\alpha^{-1} = 137 + 11/306$ leaves a residual of
-$7.5 \times 10^{-9}$ from the CODATA value $137.035999084(21)$.  This residual
-is not noise.  It is the unique second-order term forced by the coupling volume
-partition.
+$7.5 \times 10^{-9}$ from the CODATA value $137.035999084(21)$.  The residual
+is the next test.  It can be answered only if the coupling volume itself
+provides a second-order term without importing a fitted coefficient.
 
 The coupling volume $q = 306$ splits exhaustively into $p = 11$ active channels
 and $q - p = 295$ passive channels.  The completeness identity
@@ -4982,11 +5423,14 @@ Two points fix a line:
   = 137 + \frac{11}{306} + \frac{295}{306 \cdot 137^2}
 \]
 This evaluates to $137.035\,999\,076\ldots$, within $0.4\,\sigma$ of
-CODATA.  The formula has zero free parameters: $C$, $p$, and $q$ are proved in
-earlier sections; the complement $q - p$ is forced by completeness; the
-affine form is the unique interpolation consistent with both boundary
-conditions.  Alternative interpolation degrees fail catastrophically
-($n = 2$: $2445\,\sigma$; $n = 3$: $4891\,\sigma$).
+CODATA.  Inside the affine endpoint class, the formula has zero free
+parameters: $C$, $p$, and $q$ are proved in earlier sections; the complement
+$q - p$ is fixed by completeness; and the line is the degree-minimal
+interpolation through the two internal endpoints.  Higher-degree
+interpolations are not annihilated as numerical functions; they are rejected
+as
+\emph{under-determined by the $K_4$ ledger}, because each adds coefficients
+that no displayed invariant fixes.
 
 \medskip
 \noindent
@@ -5018,9 +5462,10 @@ Each structural factor is verified:
 \noindent
 \textbf{Consequence:}
 $\alpha^{-1}_{\mathrm{2nd}} = 137\! +\! 11/306 \!+\! 295/5743314
-\approx 137.036\,0$ matches measurement to $0.4\,\sigma$.  The logical chain
-is closed: $K_4$ structure $\to$ loop numerator $\to$ coupling volume
-$\to$ strong-coupling fixed point $\to$ unique affine correction.
+\approx 137.036\,0$ matches measurement to $0.4\,\sigma$.  The formal chain
+closes the numerator, denominator, complement, and affine endpoint ledger.
+Identifying the resulting rational with the physical fine-structure value is
+the experimental layer that CODATA tests.
 
 \begin{code}
 -- $ The second-order correction: 295 / (306 × 137²) = 295 / 5743314.
@@ -5371,7 +5816,48 @@ theorem-degree-count-forcing = record
   ; degree-2-free       = refl
   ; degree-3-free       = refl
   }
+
+-- $ Boundary record: the second-order arithmetic is forced inside
+-- $ the affine endpoint ledger; the physical alpha name and CODATA
+-- $ agreement remain Form-level identification and test.
+record AlphaSecondOrderInterpretationBoundary : Set where
+  field
+    alpha-second-order-structure       : SecondOrderCorrectionStructure
+    alpha-second-order-endpoints       : StrongCouplingFixedPoint
+    alpha-second-order-rigidity        : CouplingVolumeRigidity
+    alpha-second-order-degree-count    : DegreeCountForcing
+    alpha-second-order-arithmetic-level : ClaimLevel
+    alpha-affine-ledger-level          : ClaimLevel
+    alpha-physical-name-level          : ClaimLevel
+    alpha-codata-comparison-level      : ClaimLevel
+    alpha-second-order-arithmetic-forced : alpha-second-order-arithmetic-level ≡ forced-ledger
+    alpha-affine-ledger-forced         : alpha-affine-ledger-level ≡ forced-ledger
+    alpha-physical-name-is-physical    : alpha-physical-name-level ≡ physical-identification
+    alpha-codata-comparison-is-test    : alpha-codata-comparison-level ≡ experimental-test
+
+theorem-alpha-second-order-interpretation-boundary : AlphaSecondOrderInterpretationBoundary
+theorem-alpha-second-order-interpretation-boundary = record
+  { alpha-second-order-structure        = theorem-second-order-correction
+  ; alpha-second-order-endpoints        = theorem-strong-coupling-fixed-point
+  ; alpha-second-order-rigidity         = theorem-coupling-volume-rigidity
+  ; alpha-second-order-degree-count     = theorem-degree-count-forcing
+  ; alpha-second-order-arithmetic-level = forced-ledger
+  ; alpha-affine-ledger-level           = forced-ledger
+  ; alpha-physical-name-level           = physical-identification
+  ; alpha-codata-comparison-level       = experimental-test
+  ; alpha-second-order-arithmetic-forced = refl
+  ; alpha-affine-ledger-forced          = refl
+  ; alpha-physical-name-is-physical     = refl
+  ; alpha-codata-comparison-is-test     = refl
+  }
 \end{code}
+
+The boundary record prevents the second-order result from doing two jobs at
+once.  The arithmetic tower is forced inside the displayed affine endpoint
+ledger: $q$, $q-p$, $qC^2$, endpoint completeness, and degree-minimality are
+all checked terms.  The sentence ``this is the measured fine-structure
+constant'' is not checked by Agda.  It is the physical identification, and
+CODATA is the test.
 
 %───────────────────────────────────────────────────────────────────────────
 \subsubsection*{The Electromagnetic Projection}
@@ -6059,7 +6545,47 @@ theorem-weak-mixing-correction = record
   ; den-value              = refl
   ; fraction-irreducible   = refl
   }
+
+-- $ Boundary record for the depth correction tower.
+-- $ The tier arithmetic is formal; assigning the tiers to measured
+-- $ observables and quoting sigma residuals is the empirical layer.
+record CorrectionDepthInterpretationBoundary : Set where
+  field
+    depth-em-structure          : EMProjectionStructure
+    depth-strong-structure      : StrongVolumeCorrectionStructure
+    depth-weak-structure        : WeakMixingCorrectionStructure
+    depth-em-scale              : em-projection-den ≡ alpha-inverse-integer * alpha-inverse-integer
+    depth-strong-scale          : strong-denom ≡ κ-discrete * degree-K4 * degree-K4 * alpha-inverse-integer * alpha-inverse-integer
+    depth-weak-scale            : weak-mixing-den ≡ κ-discrete * κ-discrete * alpha-inverse-integer * alpha-inverse-integer
+    depth-arithmetic-level      : ClaimLevel
+    depth-observable-name-level : ClaimLevel
+    depth-sigma-table-level     : ClaimLevel
+    depth-arithmetic-is-forced  : depth-arithmetic-level ≡ forced-ledger
+    depth-names-are-physical    : depth-observable-name-level ≡ physical-identification
+    depth-table-is-test         : depth-sigma-table-level ≡ experimental-test
+
+theorem-correction-depth-interpretation-boundary : CorrectionDepthInterpretationBoundary
+theorem-correction-depth-interpretation-boundary = record
+  { depth-em-structure          = theorem-em-projection
+  ; depth-strong-structure      = theorem-strong-volume-correction
+  ; depth-weak-structure        = theorem-weak-mixing-correction
+  ; depth-em-scale              = refl
+  ; depth-strong-scale          = refl
+  ; depth-weak-scale            = refl
+  ; depth-arithmetic-level      = forced-ledger
+  ; depth-observable-name-level = physical-identification
+  ; depth-sigma-table-level     = experimental-test
+  ; depth-arithmetic-is-forced  = refl
+  ; depth-names-are-physical    = refl
+  ; depth-table-is-test         = refl
+  }
 \end{code}
+
+The depth tower is now divided cleanly.  Agda checks the three scales
+$C^2$, $\kappa d^2 C^2$, and $\kappa^2 C^2$, together with their
+irreducible numerators.  The assignment of these tiers to measured
+observables is the physical reading, and the sigma table is the
+experimental verdict on that reading.
 
 The complete correction chain across all observables:
 %
@@ -6380,13 +6906,13 @@ theorem-higgs-mass = record
   ; correction-bounded = s≤s (s≤s (s≤s z≤n)) }
 \end{code}
 
-The correction chain has five sectors, each established by a dedicated classification record: the proton correction ($+11/72$, QCD), the Weinberg correction ($-11/576$, electroweak), the muon bridge ($-16/69$, inter-channel), the tau extension ($-28/153$), and the electromagnetic coupling ($+11/306$), with the baryon fraction ($8/51$) closing the matter sector. The master record below assembles all five into a single verifiable term. It is not a convenience---it is a proof that the five sectors are fields of one coherent structure, not five coincidences.
+The correction chain has five formal sectors, each established by a dedicated classification record: the bulk correction ($+11/72$), the extended correction ($-11/576$), the muon bridge ($-16/69$), the tau extension ($-28/153$), and the electromagnetic coupling ($+11/306$), with the baryon fraction ($8/51$) closing the matter-sector reading. The master record below assembles the numerators, denominators, and uniqueness witnesses into a single verifiable term. It proves coherence of the arithmetic skeleton; the physical sector names are the interpretation placed on that skeleton.
 
 \textbf{Constraint:} The correction chain is complete only if all five sectors share the same universal loop numerator ($11 = E + d + \chi$) and each denominator is uniquely forced by the $K_4$ invariant basis.
 
 \textbf{Construction:} \texttt{CorrectionChainRecord} collects the numerator and denominator of every correction sector plus the key uniqueness theorem for the muon bridge (\texttt{mbc-spinor-eq}) and the Fermat prime derivation $p \cdot d + 1 = \chi \cdot F_2$. Every field closes by \texttt{refl} or by naming the relevant classification proof.
 
-\textbf{Consequence:} No correction fraction is independent. The six classification records are the exploded view; the master record is the assembled mechanism.
+\textbf{Consequence:} No correction fraction is independent at the arithmetic level. The six classification records are the exploded view; the master record is the assembled ledger. Reading that ledger as QCD, electroweak, lepton, baryon, or electromagnetic physics remains the Form-level identification.
 
 \begin{code}
 -- $ Master Correction Chain Record.
@@ -6439,7 +6965,33 @@ theorem-correction-chain = record
   ; baryon-F₂-coprime     = refl
   ; baryon-num-is-8       = refl
   ; baryon-den-is-51      = refl }
+
+record CorrectionChainInterpretationBoundary : Set where
+  field
+    correction-chain-structure : CorrectionChainRecord
+    correction-arithmetic-level : ClaimLevel
+    correction-sector-name-level : ClaimLevel
+    correction-test-level : ClaimLevel
+    correction-arithmetic-forced : correction-arithmetic-level ≡ forced-ledger
+    correction-names-physical : correction-sector-name-level ≡ physical-identification
+    correction-tests-empirical : correction-test-level ≡ experimental-test
+
+theorem-correction-chain-interpretation-boundary : CorrectionChainInterpretationBoundary
+theorem-correction-chain-interpretation-boundary = record
+  { correction-chain-structure = theorem-correction-chain
+  ; correction-arithmetic-level = forced-ledger
+  ; correction-sector-name-level = physical-identification
+  ; correction-test-level = experimental-test
+  ; correction-arithmetic-forced = refl
+  ; correction-names-physical = refl
+  ; correction-tests-empirical = refl }
 \end{code}
+
+The boundary record closes the temptation to let the master term do too much.
+Agda checks the shared numerator, the sector denominators, the bridge witnesses,
+and the coprime extension.  It does not check the words QCD, electroweak,
+muon, tau, baryon, or electromagnetic.  Those names are the physical reading of
+the already-assembled ledger.
 
 % ──────────────────────────────────────────────────────────────────────────────
 \chapter{Exclusivity and Doubling}
@@ -6448,10 +7000,11 @@ theorem-correction-chain = record
 
 The Nielsen--Ninomiya theorem forbids chiral fermions on any hypercubic
 lattice in four dimensions: every pole of the propagator has a mirror-image
-doubler, making the chiral anomaly vanish identically.  $K_4$ evades this
-no-go theorem because it is not a hypercubic lattice.  Its massive pole
-count equals the eigenmode multiplicity of its adjacency matrix, which is
-$d = 3$---not $2^d = 16$.  The doubler count is exactly zero.
+doubler, making the chiral anomaly vanish identically.  $K_4$ is not a
+hypercubic lattice, so the no-go theorem does not apply to the finite graph
+ledger used here.  Its massive-pole candidate count is read from the eigenmode
+multiplicity, which is $d = 3$---not $2^d = 16$.  The local doubler variable in
+the finite ledger is zero.
 
 Exclusivity then asks: why $K_4$ and no other graph?  $K_3$ collapses the
 gauge sector ($F = 1$); $K_5$ destroys the spin-statistics connection
@@ -6469,8 +7022,9 @@ $K_5$: $V{=}5$, $\chi{=}7$---fails on $\chi \neq 2$ and $V \neq 4$.
 Only $K_4$ survives.
 
 \textbf{Consequence:}
-$K_4$ is the unique complete graph that admits chiral fermions and satisfies
-all five structural pillars.  There is no runner-up.
+$K_4$ is the unique survivor inside this displayed complete-graph test.  The
+chiral-fermion reading is a physical interpretation of that finite ledger, not
+a continuum lattice theorem proved inside \textit{Form}.
 
 \begin{code}
 -- $ Fermion Doubling — K₄ evades Nielsen-Ninomiya: not a hypercubic lattice.
@@ -6518,12 +7072,12 @@ theorem-fermion-doubling = record
 \subsubsection*{Alternative Graph Elimination}
 %───────────────────────────────────────────────────────────────────────────
 
-If $K_3$ is substituted into the proton mass formula, the result deviates
-from $1836$ by an order of magnitude.  If $K_5$ is substituted, the result
-overshoots by a factor of~$4$.  Neither graph reproduces the measured
-proton-to-electron mass ratio.  The gauge coupling sum $d + \chi + 1 = E$
-holds only for $K_4$: in $K_3$, $2 + 3 + 1 = 6 \neq 3$; in $K_5$,
-$4 + 6 + 1 = 11 \neq 10$.
+If $K_3$ is substituted into the local proton-mass expression, the result
+misses $1836$ by an order of magnitude.  If $K_5$ is substituted, the result
+overshoots by a factor of~$4$.  Neither neighboring graph reproduces the
+integer target under this substitution.  The gauge-coupling sum
+$d + \chi + 1 = E$ holds only for $K_4$: in $K_3$, $2 + 3 + 1 = 6 \neq 3$;
+in $K_5$, $4 + 6 + 1 = 11 \neq 10$.
 
 \begin{code}
 -- $ K₄ Exclusivity for Masses (alternative graph elimination) — Only K₄ gives integer proton/electron ratio = 1836.
@@ -6572,11 +7126,12 @@ theorem-gauge-coupling = record
 \label{ch:forces-from-graph}
 % ──────────────────────────────────────────────────────────────────────────────
 
-The preceding chapters derived what the forces \emph{are}: three gauge groups,
-their ranks, their boson counts.  This chapter derives what the forces
-\emph{do}.  A static catalogue of symmetries is inert without dynamics---without
-the mechanism that turns a gauge label into a field equation, a curvature
-into a geodesic, a colour charge into confinement.  $K_4$ supplies all three.
+The preceding chapters fixed the finite ledger read as three gauge groups,
+their ranks, and their boson counts.  This chapter records the companion
+ledger for dynamics: Wilson-loop count, deficit-angle curvature, geodesic
+diameter, and area-law candidates.  A static catalogue of symmetries is inert
+without a rule for how it acts; $K_4$ supplies finite quantities that \textit{Form}
+can read as gauge motion, curvature, and confinement.
 
 Every triangle in $K_4$ is a Wilson loop: a closed path along three edges
 that measures the holonomy of the gauge connection.  There are exactly
@@ -6608,8 +7163,9 @@ Wilson loop count = $F = 4$.  Loop order = $1$ per face.  Both are read from
 the simplicial structure of $K_4$ and verified by \texttt{refl}.
 
 \textbf{Consequence:}
-The gauge path integral at leading order is a four-fold sum, one term per face.
-No finer decomposition exists; no coarser one captures all holonomies.
+The finite loop ledger contains four face terms, one per triangular face.  The
+continuum phrase ``gauge path integral'' is the physical reading of this finite
+sum, not an additional theorem about a functional measure.
 
 \begin{code}
 -- $ Gauge Theory — Wilson loops, Feynman path integral on K₄ — Triangle count = 4, loop order = 1 (from Void).
@@ -6839,8 +7395,9 @@ Minimal Wilson area $= 1$ face.  String tension $\propto 1/F = 1/4$.
 Quarks per baryon $= d = 3 ={}$ edges per triangle.
 
 \textbf{Consequence:}
-No quark can escape its triangle.  The confining geometry is the
-face structure of $K_4$ itself.
+The finite ledger supplies a one-face area-law candidate with matching color
+and triangle counts.  Calling this QCD confinement is the physical
+interpretation; Agda checks the face, edge, and degree equalities.
 
 \begin{code}
 -- $ Confinement and Area Law (QCD string tension from K₄) — On K₄: the Wilson loop obeys an area law ⟹ confinement.
@@ -6946,7 +7503,39 @@ theorem-gauge-group-record = record
   ; U1-rank-is-1    = refl
   ; rank-sum-is-E   = refl
   ; budget-exhausted = refl }
+
+record ForceGraphInterpretationBoundary : Set where
+  field
+    finite-gauge-coupling : GaugeCoupling5Pillar
+    finite-wilson-ledger : WilsonLoopConfinement
+    finite-curvature-ledger : GaussBonnetRecord
+    finite-rank-ledger : GaugeGroupRecord
+    force-arithmetic-level : ClaimLevel
+    force-name-level : ClaimLevel
+    force-continuum-level : ClaimLevel
+    force-arithmetic-forced : force-arithmetic-level ≡ forced-ledger
+    force-names-physical : force-name-level ≡ physical-identification
+    force-continuum-physical : force-continuum-level ≡ physical-identification
+
+theorem-force-graph-interpretation-boundary : ForceGraphInterpretationBoundary
+theorem-force-graph-interpretation-boundary = record
+  { finite-gauge-coupling = theorem-gauge-coupling
+  ; finite-wilson-ledger = theorem-wilson-loop-confinement
+  ; finite-curvature-ledger = theorem-gauss-bonnet
+  ; finite-rank-ledger = theorem-gauge-group-record
+  ; force-arithmetic-level = forced-ledger
+  ; force-name-level = physical-identification
+  ; force-continuum-level = physical-identification
+  ; force-arithmetic-forced = refl
+  ; force-names-physical = refl
+  ; force-continuum-physical = refl }
 \end{code}
+
+The force chapter now has its own boundary.  The checked side contains face
+counts, one-loop-per-face, deficit totals, self-duality, and rank exhaustion.
+The physical side names those entries as gauge dynamics, gravity, and
+confinement.  The two sides are linked deliberately, but they are not the same
+kind of claim.
 
 % ──────────────────────────────────────────────────────────────────────────────
 \chapter{The Dark Universe}
@@ -8697,14 +9286,52 @@ theorem-weinberg-denom-tree = refl
 
 -- $ Coupling constant hierarchy: α < α_W < α_s (from K₄ structure)
 -- $ α⁻¹ = 137, α_W⁻¹ = 25 (tree), α_s ∝ 1/d = 1/3
+
+record StandardModelGaugeInterpretationBoundary : Set where
+  field
+    U1-rank-ledger          : gauge-rank U1-em ≡ 1
+    SU2-rank-ledger         : gauge-rank SU2-weak ≡ 2
+    SU3-rank-ledger         : gauge-rank SU3-color ≡ 3
+    total-boson-ledger      : total-gauge-bosons ≡ 12
+    boson-factor-ledger     : total-gauge-bosons ≡ K4-V * K4-deg
+    weinberg-tree-numerator : weinberg-numerator-tree ≡ 9
+    weinberg-tree-denom     : weinberg-denominator-tree ≡ 25
+    gauge-arithmetic-level  : ClaimLevel
+    gauge-name-level        : ClaimLevel
+    gauge-running-level     : ClaimLevel
+    gauge-arithmetic-forced : gauge-arithmetic-level ≡ forced-ledger
+    gauge-names-physical    : gauge-name-level ≡ physical-identification
+    gauge-running-physical  : gauge-running-level ≡ physical-identification
+
+theorem-standard-model-gauge-interpretation-boundary : StandardModelGaugeInterpretationBoundary
+theorem-standard-model-gauge-interpretation-boundary = record
+  { U1-rank-ledger          = refl
+  ; SU2-rank-ledger         = refl
+  ; SU3-rank-ledger         = refl
+  ; total-boson-ledger      = refl
+  ; boson-factor-ledger     = refl
+  ; weinberg-tree-numerator = refl
+  ; weinberg-tree-denom     = refl
+  ; gauge-arithmetic-level  = forced-ledger
+  ; gauge-name-level        = physical-identification
+  ; gauge-running-level     = physical-identification
+  ; gauge-arithmetic-forced = refl
+  ; gauge-names-physical    = refl
+  ; gauge-running-physical  = refl }
 \end{code}
+
+This boundary keeps the gauge chapter honest.  The checked ledger is the
+rank pattern $1,2,3$, the boson count $1+3+8=12$, the factorisation
+$12=Vd$, and the tree quotient $9/25$.  The names $U(1)$, $SU(2)$,
+$SU(3)$, photon, weak boson, gluon, and Weinberg running belong to the
+Standard-Model interpretation of that ledger.
 
 % ──────────────────────────────────────────────────────────────────────────────
 \chapter{Fermions and Generations}
 \label{ch:fermions}
 % ──────────────────────────────────────────────────────────────────────────────
 
-Three generations of fermions is the most puzzling pattern in particle physics. Why three copies of the electron/neutrino doublet? Why three colors? Why $2$ isospin states? The answer, once more, is forced by $K_4$.
+Three generations of fermions is the most puzzling pattern in particle physics. Why three copies of the electron/neutrino doublet? Why three colors? Why $2$ isospin states? The ledger offered here is forced by $K_4$ at the counting level; identifying that ledger with the particle content of the Standard Model is the physical step.
 
 \textbf{Generations} come from eigenmode multiplicity: the $K_4$ Laplacian has a degenerate eigenvalue $\lambda_4 = 4$ with multiplicity $d = 3$. Three independent eigenmodes, three generations.
 
@@ -8714,13 +9341,13 @@ Three generations of fermions is the most puzzling pattern in particle physics. 
 
 \textbf{Fermions per generation:} $6 + 2 = 8 = \kappa$. The gravitational coupling constant reappears as the fermion count per generation---a coincidence that is no coincidence, since both are $\chi \times V$.
 
-\textbf{Total fermion types:} $8 \times 3 = 24 = |\mathrm{Aut}(K_4)| = |S_4|$. The total number of fermion species equals the order of the automorphism group of the complete graph on four vertices. The symmetry group of the tetrahedron does not merely constrain the particle zoo---it \emph{is} the particle zoo.
+\textbf{Total fermion types:} $8 \times 3 = 24 = |\mathrm{Aut}(K_4)| = |S_4|$. The total count attached to the fermion reading equals the order of the automorphism group of the complete graph on four vertices. The symmetry group does not prove the particle zoo by itself; it supplies a count and symmetry ledger that \textit{Form} reads as that zoo.
 
 \textbf{Constraint:} Generation count, fermions per generation, and total fermion species must each reduce to a $K_4$ invariant.
 
-\textbf{Construction:} Generations $= d = 3$ (eigenmode multiplicity), fermions per generation $= \kappa = 8$, total $= 24 = |S_4|$. The particle zoo is the automorphism group.
+\textbf{Construction:} Generations $= d = 3$ (eigenmode multiplicity), fermions per generation $= \kappa = 8$, total $= 24 = |S_4|$. The automorphism order supplies the finite count used by the particle-content reading.
 
-\textbf{Consequence:} The CKM mixing dimension is $d^2 = 9$. No generation count other than $3$ is compatible with the eigenvalue structure.
+\textbf{Consequence:} The CKM mixing dimension is $d^2 = 9$ inside this reading. No generation count other than $3$ is compatible with the eigenmode ledger; the particle names remain the Standard-Model interpretation.
 
 \begin{code}
 -- $ Standard Model Particle Content — Quarks, leptons, and bosons as K₄-derived types.
@@ -8806,7 +9433,40 @@ ckm-dimension = generation-count * generation-count
 
 theorem-ckm-is-d-squared : ckm-dimension ≡ degree-K4 * degree-K4
 theorem-ckm-is-d-squared = refl
+
+record FermionGenerationInterpretationBoundary : Set where
+  field
+    quark-count-ledger      : quarks-per-generation ≡ 6
+    lepton-count-ledger     : leptons-per-generation ≡ 2
+    fermion-count-ledger    : fermions-per-generation ≡ κ-discrete
+    total-fermion-ledger    : total-fermion-types ≡ aut-symmetry-count
+    ckm-dimension-ledger    : ckm-dimension ≡ degree-K4 * degree-K4
+    fermion-arithmetic-level : ClaimLevel
+    fermion-name-level       : ClaimLevel
+    ckm-name-level           : ClaimLevel
+    fermion-arithmetic-forced : fermion-arithmetic-level ≡ forced-ledger
+    fermion-names-physical   : fermion-name-level ≡ physical-identification
+    ckm-name-physical        : ckm-name-level ≡ physical-identification
+
+theorem-fermion-generation-interpretation-boundary : FermionGenerationInterpretationBoundary
+theorem-fermion-generation-interpretation-boundary = record
+  { quark-count-ledger       = refl
+  ; lepton-count-ledger      = refl
+  ; fermion-count-ledger     = refl
+  ; total-fermion-ledger     = refl
+  ; ckm-dimension-ledger     = refl
+  ; fermion-arithmetic-level = forced-ledger
+  ; fermion-name-level       = physical-identification
+  ; ckm-name-level           = physical-identification
+  ; fermion-arithmetic-forced = refl
+  ; fermion-names-physical   = refl
+  ; ckm-name-physical        = refl }
 \end{code}
+
+The compiler therefore checks only the finite particle-count skeleton:
+$6$, $2$, $8$, $24$, and $d^2=9$.  It does not check that these slots are
+quarks, leptons, or CKM entries.  Those are the Standard-Model names attached
+to the skeleton.
 
 %───────────────────────────────────────────────────────────────────────────
 \section{CP Violation and Baryogenesis}
@@ -8822,12 +9482,12 @@ pure radiation.  The lower bound from baryogenesis meets the upper bound
 from $K_4$:
 
 \begin{itemize}
-\item \textbf{0 generations}: No matter.  Empty universe.
-\item \textbf{1 generation}: No CKM matrix.  Weak interactions are diagonal.
+\item \textbf{0 generations}: No matter-sector reading.
+\item \textbf{1 generation}: No nontrivial CKM matrix.  Weak interactions are diagonal.
 \item \textbf{2 generations}: CKM matrix is $2 \times 2$ and \emph{real}.
       No CP violation.  No baryogenesis.
 \item \textbf{3 generations}: CKM matrix is $3 \times 3$ with an
-      irreducible complex phase.  CP violation occurs.  We exist.
+  irreducible complex phase.  CP violation becomes available.
 \item \textbf{4+ generations}: Excluded by $K_4$---the eigenmode
       multiplicity is exactly~$3$.
 \end{itemize}
@@ -8843,8 +9503,9 @@ criterion.  Scenarios with $4$ or more generations fail the $K_4$
 eigenmode bound.  Only $3$ generations survive both filters.
 
 \textbf{Consequence:}
-The generation count is squeezed from both sides: physics demands
-$\geq 3$, the graph enforces $\leq 3$.  The unique solution is~$3$.
+The generation count is squeezed from both sides inside this filter: the
+physical CP premise demands $\geq 3$, while the graph ledger supplies only
+three eigenmodes.  The shared survivor is~$3$.
 
 \begin{code}
 -- $ CP Violation — Why exactly 3 generations: the only viable count.
@@ -8933,22 +9594,51 @@ theorem-generation-eigenmode-5pillar = record
   { forced          = refl
   ; exclusive       = refl
   ; cross-validated = theorem-generation-cross }
+
+record GenerationPhysicsInterpretationBoundary : Set where
+  field
+    generation-ledger          : GenerationEigenmode-5Pillar
+    generation-count-is-three  : generation-count ≡ 3
+    ckm-count-is-nine          : ckm-dimension ≡ 9
+    cp-filter-level            : ClaimLevel
+    lep-measurement-level      : ClaimLevel
+    generation-name-level      : ClaimLevel
+    cp-filter-is-physical      : cp-filter-level ≡ physical-identification
+    lep-measurement-is-test    : lep-measurement-level ≡ experimental-test
+    generation-name-is-physical : generation-name-level ≡ physical-identification
+
+theorem-generation-physics-interpretation-boundary : GenerationPhysicsInterpretationBoundary
+theorem-generation-physics-interpretation-boundary = record
+  { generation-ledger           = theorem-generation-eigenmode-5pillar
+  ; generation-count-is-three   = refl
+  ; ckm-count-is-nine           = refl
+  ; cp-filter-level             = physical-identification
+  ; lep-measurement-level       = experimental-test
+  ; generation-name-level       = physical-identification
+  ; cp-filter-is-physical       = refl
+  ; lep-measurement-is-test     = refl
+  ; generation-name-is-physical = refl }
 \end{code}
+
+The CP section now carries its premise openly.  Agda checks the encoded finite
+filter and the three-eigenmode count.  The statement that baryogenesis requires
+an irreducible CKM phase is a physics criterion, and the LEP neutrino count is
+an experimental cross-check.
 
 %───────────────────────────────────────────────────────────────────────────────
 \section{The B-Meson Lepton Universality Anomaly}
 \label{sec:b-meson-anomaly}
 %───────────────────────────────────────────────────────────────────────────────
 
-On 20 April 2026, the LHCb experiment at CERN reported a 4-sigma deviation in rare B-meson decays from the predictions of the Standard Model. An independent confirmation arrived from the CMS experiment the same day. The decay in question is $B \to K^{(*)} \ell^+ \ell^-$---a bottom quark emitting a strange quark and two leptons via a loop-level flavour-changing neutral current. The anomaly is in the ratio
+Rare B-meson decays test whether the three lepton generations really couple with identical strength once the Standard Model loop machinery is pushed into flavour-changing neutral currents. The decay in question is $B \to K^{(*)} \ell^+ \ell^-$---a bottom quark emitting a strange quark and two leptons via a loop-level flavour-changing neutral current. The experimental target is the ratio
 
 \[
   R_K = \frac{\Gamma(B \to K \mu^+\mu^-)}{\Gamma(B \to K e^+e^-)}
 \]
 
-which the Standard Model predicts to be $1$ to high precision (lepton universality), but which the combined LHCb/CMS measurement places significantly below $1$. Muons couple less strongly than electrons to the $b \to s$ current. Something is breaking the symmetry between generations.
+which the Standard Model predicts to be $1$ to high precision under lepton universality.  Any robust measurement below $1$ would say that the muon channel is suppressed relative to the electron channel in the $b \to s$ current.  That is an experimental statement, not a theorem of the $K_4$ ledger.
 
-The $K_4$ framework does not need to reach for a new particle. The structure that forces $R_K < 1$ is already in this book.
+The $K_4$ framework contains a fixed generation-asymmetric correction candidate without adding a new particle.  It does not prove the anomaly.  It supplies a direction and a scale that a rare-decay measurement can test.
 
 \textbf{The generation architecture is forced.} The three generations occupy the three non-zero eigenmodes of the $K_4$ Laplacian. Their indices cannot be chosen, because no $K_4$-derived enumeration of the interval $[1, d]$ admits an alternative. \textit{Void} establishes this as \texttt{law16B-32-generation-exhaustion}: of the six atoms $\{V, E, F, d, \chi, \kappa\}$, only $\chi$ and $d$ lie inside $[1, d]$, and the remaining slot $\{1\}$ is realised by three coincident atomic shortfalls $V \dot{-} d = F \dot{-} d = d \dot{-} \chi = 1$. The strictly monotone triple $(V \dot{-} d, \chi, d) = (1, 2, 3)$ is the unique enumeration, and its three slots are the generation indices.
 
@@ -8968,19 +9658,19 @@ The assignment of the leptonic and quark labels (electron, muon, tau; up, charm,
 
 \textbf{Both transitions span the same invariant: $V \dot{-} d = 1$.} The flavour gap of the FCNC and the leptonic mass gap are the same atomic shortfall---the value that closes the generation interval. Neither is a free parameter; both are the same $K_4$ shortfall.
 
-\textbf{Why universality breaks.} The electron sits at generation index $V \dot{-} d = 1$---the base of the tower. The muon sits at generation index $\chi = 2$---one step up, carrying the Euler characteristic. The muon bridge correction $16/69 = \kappa\chi / (d \cdot (E + F_2))$ is a loop factor that enters \emph{only} for generation-2 processes. No equivalent bridge exists for the electron: its generation index equals the time-dimension count, and the time direction carries no loop mass. The asymmetry is structural, not dynamical.
+\textbf{Why universality can fail in this reading.} The electron sits at generation index $V \dot{-} d = 1$---the base of the tower. The muon sits at generation index $\chi = 2$---one step up, carrying the Euler characteristic. The muon bridge correction $16/69 = \kappa\chi / (d \cdot (E + F_2))$ is the generation-2 correction slot. No corresponding bridge is present for the generation-1 index in this ledger. The asymmetry is therefore a fixed candidate of the generation architecture; whether nature occupies it is an experimental question.
 
-In the language of effective field theory, this corresponds to a shift in the Wilson coefficient $C_9$. Global Wilson-coefficient fits prior to this measurement (Descotes-Genon et al., 2020--2023) placed the fractional deviation at $\Delta C_9 / C_9^{\mathrm{SM}} \approx -0.22$, pointing in the direction forced by the muon bridge: $16/69 \approx 0.232$. The precise numerical value of the new LHCb/CMS result was not available at the time of writing; once the full $R_K$ central value and uncertainty are published, the comparison to $16/69$ is a direct experimental test of this section. If the new measurement shifts $|\Delta C_9 / C_9^{\mathrm{SM}}|$ upward toward $0.23$, the $K_4$ prediction tightens. If it shifts downward, the muon bridge factor requires a supplementary correction from a higher-order $K_4$ term. Either outcome is falsifiable. Neither outcome is adjustable after the fact.
+In the language of effective field theory, this candidate would appear as a shift in the Wilson coefficient $C_9$. Global Wilson-coefficient fits have often placed the preferred fractional deviation near the scale $0.2$, the same order as $16/69 \approx 0.232$. A published $R_K$ central value and uncertainty would therefore test this section directly: agreement would support the muon-bridge reading, while disagreement would falsify that reading or show that this first bridge is not the full rare-decay correction. The formal fraction itself is not adjustable after the fact.
 
-\textbf{The 4-$\sigma$ threshold.} The current combined significance is $4\sigma = V$. This is not, by itself, a $K_4$ prediction---statistical accumulation is what it is. But if the anomaly hardens to $5\sigma$ discovery in the High-Luminosity LHC run, the structure it reveals is already locked in this book. The generation indices, the muon bridge factor, and the time-dimension coincidence are theorems. They were not written after seeing the data.
+\textbf{The significance threshold.} A statistical significance such as $4\sigma$ or $5\sigma$ is not a $K_4$ invariant. It belongs to the experiment. The ledger fixes only the generation indices, the muon bridge factor, and the shared time-depth gap. The anomaly, if it survives, is the empirical occupation of that already-fixed slot.
 
 \medskip
 
-\textbf{Constraint:} Lepton universality in $b \to s \ell^+\ell^-$ requires that generation-$2$ and generation-$1$ leptons couple identically to the $b \to s$ current. \textit{Void}'s \texttt{law16B-32-generation-exhaustion} forces the generation-$2$ index to be $\chi$ and the generation-$1$ index to be $V \dot{-} d$. Since $\chi \neq V \dot{-} d$, the loop architecture is generation-asymmetric, and universality cannot hold.
+\textbf{Constraint:} Lepton universality in $b \to s \ell^+\ell^-$ requires that generation-$2$ and generation-$1$ leptons couple identically to the $b \to s$ current. \textit{Void}'s \texttt{law16B-32-generation-exhaustion} fixes the generation-$2$ index as $\chi$ and the generation-$1$ index as $V \dot{-} d$. Since $\chi \neq V \dot{-} d$, the finite ledger contains a generation-asymmetric correction slot.
 
 \textbf{Construction:} The muon bridge correction $16/69 = \kappa\chi / (d(E + F_2))$ applies to $\ell = \mu$ (gen-$2$) but not to $\ell = e$ (gen-$1$). The generation gap $b \to s$ and the gap $\mu \to e$ are both equal to the unique atomic shortfall $V \dot{-} d = 1$. The record below seals the structural equalities by \texttt{refl}; the indices it consumes originate in \textit{Void}.
 
-\textbf{Consequence:} The $K_4$ ledger forces a generation-asymmetric correction candidate with direction $R_K < 1$. The direction and approximate magnitude follow from the muon bridge factor. Reading the LHCb/CMS anomaly as this one-loop generation architecture is the physical test of the section, not an extra theorem beyond the ledger.
+\textbf{Consequence:} The $K_4$ ledger forces a generation-asymmetric correction candidate. The direction and approximate magnitude are physical readings of the muon bridge factor. Reading a rare-decay anomaly as this one-loop generation architecture is the experimental test of the section, not an extra theorem beyond the ledger.
 
 \begin{code}
 -- $ B-Meson Lepton Universality Anomaly — K₄ derivation of R_K < 1.
@@ -9021,6 +9711,60 @@ theorem-gaps-equal = refl
 theorem-muon-bridge-nonzero : 1 ≤ muon-loop-num
 theorem-muon-bridge-nonzero = s≤s z≤n
 
+theorem-bottom-generation-is-3 : bottom-quark-generation ≡ 3
+theorem-bottom-generation-is-3 = refl
+
+theorem-strange-generation-is-2 : strange-quark-generation ≡ 2
+theorem-strange-generation-is-2 = refl
+
+theorem-muon-generation-is-2 : muon-generation-index ≡ 2
+theorem-muon-generation-is-2 = refl
+
+theorem-electron-generation-is-1 : electron-generation-index ≡ 1
+theorem-electron-generation-is-1 = refl
+
+bottom-strange-distinct : Impossible (bottom-quark-generation ≡ strange-quark-generation)
+bottom-strange-distinct ()
+
+muon-electron-distinct : Impossible (muon-generation-index ≡ electron-generation-index)
+muon-electron-distinct ()
+
+theorem-muon-bridge-num-16 : muon-loop-num ≡ 16
+theorem-muon-bridge-num-16 = refl
+
+theorem-muon-bridge-den-69 : muon-loop-den ≡ 69
+theorem-muon-bridge-den-69 = refl
+
+data LeptonBridgeSlot : Set where
+  electron-bridge-slot : LeptonBridgeSlot
+  muon-bridge-slot     : LeptonBridgeSlot
+
+lepton-bridge-index : LeptonBridgeSlot → ℕ
+lepton-bridge-index electron-bridge-slot = electron-generation-index
+lepton-bridge-index muon-bridge-slot     = muon-generation-index
+
+lepton-bridge-numerator : LeptonBridgeSlot → ℕ
+lepton-bridge-numerator electron-bridge-slot = 0
+lepton-bridge-numerator muon-bridge-slot     = muon-loop-num
+
+lepton-bridge-denominator : LeptonBridgeSlot → ℕ
+lepton-bridge-denominator electron-bridge-slot = 1
+lepton-bridge-denominator muon-bridge-slot     = muon-loop-den
+
+muon-bridge-slot-unique :
+  (s : LeptonBridgeSlot) →
+  lepton-bridge-numerator s ≡ muon-loop-num →
+  s ≡ muon-bridge-slot
+muon-bridge-slot-unique electron-bridge-slot ()
+muon-bridge-slot-unique muon-bridge-slot _ = refl
+
+electron-bridge-slot-unique :
+  (s : LeptonBridgeSlot) →
+  lepton-bridge-numerator s ≡ 0 →
+  s ≡ electron-bridge-slot
+electron-bridge-slot-unique electron-bridge-slot _ = refl
+electron-bridge-slot-unique muon-bridge-slot ()
+
 record BMesonUniversalityRecord : Set where
   field
     -- $ Generation assignments from K₄ invariants
@@ -9028,6 +9772,12 @@ record BMesonUniversalityRecord : Set where
     s-is-chi       : strange-quark-generation ≡ eulerChar-computed
     mu-is-chi      : muon-generation-index ≡ eulerChar-computed
     e-is-time      : electron-generation-index ≡ time-dimensions
+    b-index-is-3   : bottom-quark-generation ≡ 3
+    s-index-is-2   : strange-quark-generation ≡ 2
+    mu-index-is-2  : muon-generation-index ≡ 2
+    e-index-is-1   : electron-generation-index ≡ 1
+    bs-indices-distinct : Impossible (bottom-quark-generation ≡ strange-quark-generation)
+    mue-indices-distinct : Impossible (muon-generation-index ≡ electron-generation-index)
     -- $ FCNC gap = temporal invariant
     bs-gap-is-time : bottom-quark-generation ∸ strange-quark-generation ≡ time-dimensions
     -- $ Lepton gap = same temporal invariant
@@ -9035,8 +9785,12 @@ record BMesonUniversalityRecord : Set where
     -- $ Muon bridge correction is the generation-2 loop factor: κχ / d(E+F₂) = 16/69
     correction-num  : muon-loop-num ≡ κ-discrete * eulerChar-computed
     correction-den  : muon-loop-den ≡ degree-K4 * (edgeCountK4 + F₂)
-    -- $ Correction is nonzero → R_K < 1 (not by choice; by structure)
-    universality-broken : 1 ≤ muon-loop-num
+    correction-num-is-16 : muon-loop-num ≡ 16
+    correction-den-is-69 : muon-loop-den ≡ 69
+    muon-slot-is-unique : (s : LeptonBridgeSlot) → lepton-bridge-numerator s ≡ muon-loop-num → s ≡ muon-bridge-slot
+    electron-slot-is-unique : (s : LeptonBridgeSlot) → lepton-bridge-numerator s ≡ 0 → s ≡ electron-bridge-slot
+    -- $ Correction slot is nonzero; reading it as R_K < 1 is physical.
+    generation-asymmetry-candidate : 1 ≤ muon-loop-num
 
 theorem-b-meson-universality : BMesonUniversalityRecord
 theorem-b-meson-universality = record
@@ -9044,27 +9798,75 @@ theorem-b-meson-universality = record
   ; s-is-chi           = refl
   ; mu-is-chi          = refl
   ; e-is-time          = refl
+  ; b-index-is-3       = theorem-bottom-generation-is-3
+  ; s-index-is-2       = theorem-strange-generation-is-2
+  ; mu-index-is-2      = theorem-muon-generation-is-2
+  ; e-index-is-1       = theorem-electron-generation-is-1
+  ; bs-indices-distinct = bottom-strange-distinct
+  ; mue-indices-distinct = muon-electron-distinct
   ; bs-gap-is-time     = refl
   ; mue-gap-is-time    = refl
   ; correction-num     = refl
   ; correction-den     = refl
-  ; universality-broken = theorem-muon-bridge-nonzero }
+  ; correction-num-is-16 = theorem-muon-bridge-num-16
+  ; correction-den-is-69 = theorem-muon-bridge-den-69
+  ; muon-slot-is-unique = muon-bridge-slot-unique
+  ; electron-slot-is-unique = electron-bridge-slot-unique
+  ; generation-asymmetry-candidate = theorem-muon-bridge-nonzero }
+
+record BMesonUniversalityInterpretationBoundary : Set where
+  field
+    b-meson-ledger          : BMesonUniversalityRecord
+    muon-bridge-scale       : muon-loop-num ≡ κ-discrete * eulerChar-computed
+    muon-bridge-fraction-num : muon-loop-num ≡ 16
+    muon-bridge-fraction-den : muon-loop-den ≡ 69
+    shared-gap-ledger       : (bottom-quark-generation ∸ strange-quark-generation) ≡
+                              (muon-generation-index   ∸ electron-generation-index)
+    generation-indices-distinct : Impossible (muon-generation-index ≡ electron-generation-index)
+    b-meson-arithmetic-level : ClaimLevel
+    b-meson-eft-reading-level : ClaimLevel
+    b-meson-experimental-level : ClaimLevel
+    b-meson-arithmetic-forced : b-meson-arithmetic-level ≡ forced-ledger
+    b-meson-eft-reading-physical : b-meson-eft-reading-level ≡ physical-identification
+    b-meson-experiment-is-test : b-meson-experimental-level ≡ experimental-test
+
+theorem-b-meson-universality-interpretation-boundary : BMesonUniversalityInterpretationBoundary
+theorem-b-meson-universality-interpretation-boundary = record
+  { b-meson-ledger             = theorem-b-meson-universality
+  ; muon-bridge-scale          = refl
+  ; muon-bridge-fraction-num   = theorem-muon-bridge-num-16
+  ; muon-bridge-fraction-den   = theorem-muon-bridge-den-69
+  ; shared-gap-ledger          = theorem-gaps-equal
+  ; generation-indices-distinct = muon-electron-distinct
+  ; b-meson-arithmetic-level   = forced-ledger
+  ; b-meson-eft-reading-level  = physical-identification
+  ; b-meson-experimental-level = experimental-test
+  ; b-meson-arithmetic-forced  = refl
+  ; b-meson-eft-reading-physical = refl
+  ; b-meson-experiment-is-test = refl }
 \end{code}
+
+The boundary record closes the rare-decay claim at the right level.  Agda
+checks the two generation gaps, the distinct generation indices, the nonzero
+muon-bridge numerator, and the finite fact that the generation-2 bridge is the
+unique nonzero lepton bridge slot.  It does not check a Wilson coefficient, an
+$R_K$ central value, or a detector significance.  Those are the physical and
+experimental layers attached to the fixed ledger.
 
 %───────────────────────────────────────────────────────────────────────────────
 \section{The Doubly Charmed Baryon}
 \label{sec:doubly-charmed-baryon}
 %───────────────────────────────────────────────────────────────────────────────
 
-A baryon contains exactly three quarks. Three is $d$---the spatial dimension count of $K_4$, the number of colour charges, the rank of SU(3). These are not three separate coincidences. They are the same count, appearing in different physical guises. The baryon is not a particle that happens to have three quarks; the baryon is the object that exhausts the K$_4$ spatial dimension budget in a single colour-neutral bound state. One quark per spatial direction. Colour confinement and quark number are the same constraint, read from the same graph.
+A baryon contains exactly three quarks. Three is $d$---the spatial dimension count of $K_4$, the color-count slot, and the rank assigned to the $SU(3)$ reading. These are not three separate ledger entries. They are the same integer appearing in different physical guises. The claim that a baryon exhausts the color-neutral three-slot budget is the physical interpretation of that integer, not a separate theorem about bound-state dynamics.
 
 The $K_4$ generation tower assigns each generation a distinct invariant: generation~1 carries the time-dimension count $V \dot{-} d = 1$ (electron, down, up), generation~2 carries the Euler characteristic $\chi = 2$ (muon, strange, charm), generation~3 carries the spatial dimension count $d = 3$ (tau, bottom, top). A baryon that contains \emph{two} charm quarks and \emph{one} down quark is then a baryon whose quark content is exactly $\chi + (V \dot{-} d) = 2 + 1 = 3 = d$---a complete partition of the spatial dimension budget into two generation-2 units and one generation-1 unit.
 
 \textbf{The doublet count is forced.} The Ξcc family has two observed members: Ξcc⁺⁺ (ccu) and Ξcc⁺ (ccd). The two light quarks (up and down) are read as the two isospin eigenstates of SU(2), whose rank is $\chi = 2$. The doublet size is $\chi = 2$. The charge step between partners is $+1 = V \dot{-} d = 1$ --- the U(1) hypercharge step. Both numbers are the same $K_4$ invariants that set the generation indices. The $K_4$ theorem is the two-slot ledger; the physical claim is that the Ξcc pair occupies it.
 
-\textbf{Historical note.} The Ξcc⁺⁺ was discovered by LHCb in 2017. The Ξcc⁺, predicted to be its near-mass partner by isospin symmetry, proved far harder to observe: its decay modes are more complex, its production rate is comparable, and prior searches (FOCUS, BaBar, Belle, earlier LHCb) either found nothing or a spurious signal at the wrong mass (SELEX, 2002). On 17 March 2026, the upgraded LHCb detector --- with Run~3 data from 2024 --- reported the first firm observation: a peak of $\sim 915$ events at $m = 3619.97 \pm 0.83 \pm 0.26\,{}^{+1.90}_{-1.30}\,\text{MeV}/c^2$ with significance exceeding $7\sigma$. The mass is consistent with the Ξcc⁺⁺ partner, as isospin symmetry demands.
+\textbf{Experimental note.} The $\Xi_{cc}^{++}$ was discovered by LHCb in 2017. The $\Xi_{cc}^{+}$ is the expected isospin partner, but its observation belongs to detector physics: decay modes, production rates, backgrounds, and mass reconstruction. A confirmed $\Xi_{cc}^{+}$ signal would test whether the two-slot isospin ledger is physically occupied. The mass value itself is dynamical input, not a topological output of $K_4$.
 
-The $K_4$ framework did not predict the mass value---mass is a dynamical quantity beyond the topological structure of the graph. What the graph predicts is the \emph{existence and uniqueness} of the doublet, the quark count, and the generation assignments. All three are confirmed.
+The $K_4$ framework does not predict the mass value. What the graph supplies is the doublet ledger, the quark-count slot, and the generation assignment. Confirmation of a physical particle in that slot is a Level~4 test.
 
 \medskip
 
@@ -9072,10 +9874,10 @@ The $K_4$ framework did not predict the mass value---mass is a dynamical quantit
 
 \textbf{Construction:} \texttt{charm-quark-count = eulerChar-computed = 2} assigns two generation-2 quarks. \texttt{down-quark-count = time-dimensions = 1} assigns one generation-1 quark. \texttt{charm-quark-count + down-quark-count = degree-K4 = 3} exhausts the spatial dimension budget. \texttt{isospin-doublet-size = eulerChar-computed = 2} gives the doublet count. \texttt{isospin-step = U1-charge = time-dimensions = 1} gives the charge step. All five fields close by \texttt{refl}.
 
-\textbf{Consequence:} The $K_4$ theorem is the doublet ledger: quark count, generation assignment, doublet size, and charge step are all fixed by the same five invariants ($d$, $\chi$, $V \dot{-} d$, SU(2)-rank, U(1)-rank) that appear throughout this book. The LHCb observation at $7\sigma$ (March 2026) is the physical occupation of that ledger. $K_4$ supplies the two-slot structure; the LHC found the pair.
+\textbf{Consequence:} The $K_4$ theorem is the doublet ledger: quark count, generation assignment, doublet size, and charge step are all fixed by the same five invariants ($d$, $\chi$, $V \dot{-} d$, SU(2)-rank, U(1)-rank) that appear throughout this book. A confirmed $\Xi_{cc}$ isospin pair would be the physical occupation of that ledger.
 
 \begin{code}
--- $ Doubly Charmed Baryon Ξcc⁺ — LHCb observation at 7σ, Moriond EW, March 2026.
+-- $ Doubly Charmed Baryon Ξcc⁺ — doublet ledger and experimental occupation test.
 -- $ Quark content ccd: 2 charm (gen-2 = χ = 2) + 1 down (gen-1 = V∸d = 1) = d = 3 spatial dims.
 -- $ Isospin doublet {Ξcc⁺⁺, Ξcc⁺}: size = χ = 2, charge step = U1-charge = V∸d = 1.
 
@@ -9099,6 +9901,40 @@ isospin-step : ℕ
 -- $ V∸d = 1
 isospin-step = U1-charge
 
+data CharmDownPartition : Set where
+  partition-0-3 : CharmDownPartition
+  partition-1-2 : CharmDownPartition
+  partition-2-1 : CharmDownPartition
+  partition-3-0 : CharmDownPartition
+
+partition-charm-count : CharmDownPartition → ℕ
+partition-charm-count partition-0-3 = 0
+partition-charm-count partition-1-2 = 1
+partition-charm-count partition-2-1 = charm-quark-count
+partition-charm-count partition-3-0 = degree-K4
+
+partition-down-count : CharmDownPartition → ℕ
+partition-down-count partition-0-3 = degree-K4
+partition-down-count partition-1-2 = charm-quark-count
+partition-down-count partition-2-1 = down-quark-count
+partition-down-count partition-3-0 = 0
+
+partition-total : CharmDownPartition → ℕ
+partition-total p = partition-charm-count p + partition-down-count p
+
+theorem-partition-2-1-unique :
+  (p : CharmDownPartition) →
+  partition-charm-count p ≡ charm-quark-count →
+  partition-down-count p ≡ down-quark-count →
+  p ≡ partition-2-1
+theorem-partition-2-1-unique partition-0-3 () _
+theorem-partition-2-1-unique partition-1-2 () _
+theorem-partition-2-1-unique partition-2-1 _ _ = refl
+theorem-partition-2-1-unique partition-3-0 () _
+
+theorem-charm-down-counts-distinct : Impossible (charm-quark-count ≡ down-quark-count)
+theorem-charm-down-counts-distinct ()
+
 record DoublyCharmedBaryonRecord : Set where
   field
     -- $ Two charm quarks = Euler characteristic = generation-2 count
@@ -9107,6 +9943,9 @@ record DoublyCharmedBaryonRecord : Set where
     down-is-time          : down-quark-count ≡ time-dimensions
     -- $ Total quark count = spatial dimension count d = SU(3) colour rank
     baryon-quark-count    : charm-quark-count + down-quark-count ≡ degree-K4
+    partition-total-is-d   : partition-total partition-2-1 ≡ degree-K4
+    partition-unique       : (p : CharmDownPartition) → partition-charm-count p ≡ charm-quark-count → partition-down-count p ≡ down-quark-count → p ≡ partition-2-1
+    charm-down-distinct    : Impossible (charm-quark-count ≡ down-quark-count)
     -- $ Isospin doublet size = SU(2) rank = χ
     doublet-is-chi        : isospin-doublet-size ≡ eulerChar-computed
     -- $ Isospin charge step = U(1) rank = time-dimensions
@@ -9117,28 +9956,63 @@ theorem-doubly-charmed-baryon = record
   { charm-is-chi       = refl
   ; down-is-time       = refl
   ; baryon-quark-count = refl
+  ; partition-total-is-d = refl
+  ; partition-unique   = theorem-partition-2-1-unique
+  ; charm-down-distinct = theorem-charm-down-counts-distinct
   ; doublet-is-chi     = refl
   ; step-is-time       = refl }
+
+record DoublyCharmedBaryonInterpretationBoundary : Set where
+  field
+    doublet-ledger             : DoublyCharmedBaryonRecord
+    doublet-count-is-chi       : isospin-doublet-size ≡ eulerChar-computed
+    charge-step-is-time        : isospin-step ≡ time-dimensions
+    partition-is-unique        : (p : CharmDownPartition) → partition-charm-count p ≡ charm-quark-count → partition-down-count p ≡ down-quark-count → p ≡ partition-2-1
+    baryon-arithmetic-level    : ClaimLevel
+    baryon-name-level          : ClaimLevel
+    baryon-observation-level   : ClaimLevel
+    baryon-arithmetic-forced   : baryon-arithmetic-level ≡ forced-ledger
+    baryon-name-is-physical    : baryon-name-level ≡ physical-identification
+    baryon-observation-is-test : baryon-observation-level ≡ experimental-test
+
+theorem-doubly-charmed-baryon-interpretation-boundary : DoublyCharmedBaryonInterpretationBoundary
+theorem-doubly-charmed-baryon-interpretation-boundary = record
+  { doublet-ledger             = theorem-doubly-charmed-baryon
+  ; doublet-count-is-chi       = refl
+  ; charge-step-is-time        = refl
+  ; partition-is-unique        = theorem-partition-2-1-unique
+  ; baryon-arithmetic-level    = forced-ledger
+  ; baryon-name-level          = physical-identification
+  ; baryon-observation-level   = experimental-test
+  ; baryon-arithmetic-forced   = refl
+  ; baryon-name-is-physical    = refl
+  ; baryon-observation-is-test = refl }
 \end{code}
+
+The doublet record proves only the finite partition: the $2+1$ assignment is
+the unique member of the displayed four-partition ledger with two generation-2
+units and one generation-1 unit.  It does not prove a mass, a decay mode, or an
+event yield.  Those quantities enter only when the isospin ledger is read as a
+physical baryon family and compared with data.
 
 % ──────────────────────────────────────────────────────────────────────────────
 \chapter{QFT Loop Structure}
 \label{ch:qft-loops}
 % ──────────────────────────────────────────────────────────────────────────────
 
-Quantum field theory is, at its computational heart, a theory of loops. The path integral reduces to a sum over Feynman diagrams, and each diagram's order is its loop count. On $K_4$, loops are topological cycles in the graph.
+Quantum field theory is, at its computational heart, a theory of loops. The path integral is represented perturbatively by a sum over Feynman diagrams, and each diagram's order is its loop count. On $K_4$, the formal precursor is not a continuum integral but a finite cycle ledger.
 
-$K_4$ has exactly $4$ triangles (the faces of the tetrahedron) and $3$ squares (pairs of opposite edges). That gives $7$ independent cycles. Each triangle maps to a 1-loop Feynman diagram with $d = 3$ propagators; each square maps to a 2-loop diagram with $V = 4$ propagators. The lattice spacing is $1$ Planck length---the natural UV cutoff, eliminating the ultraviolet divergences that plague continuum QFT.
+$K_4$ has exactly $4$ triangles (the faces of the tetrahedron) and $3$ squares (pairs of opposite edges). That gives $7$ cycle slots in the displayed finite classification. Each triangle is read as a 1-loop diagram with $d = 3$ propagators; each square is read as a 2-loop diagram with $V = 4$ propagators. The lattice spacing is the unit propagation step. Reading that finite cutoff as a UV regulator is the physical interpretation, not a proof about the renormalized continuum theory.
 
-This is not a model. Every number---the cycle counts, the propagator counts, the UV cutoff---is forced by the graph. There is no renormalization scheme to choose, no regulator to remove. The discrete structure \emph{is} the regularization.
+Every finite number in this block---the cycle counts, the propagator counts, the unit cutoff---is forced by the graph. The continuum claim is narrower: the discrete structure supplies a regulator candidate with no adjustable lattice spacing.
 
 % \VoidRef{sec:k4-constants:simplex-invariants}{K₄ has exactly 4 triangular faces}
 
-\textbf{Constraint:} Loop structure, propagator counts, and UV regularisation must arise from $K_4$ cycle topology with no free regulator.
+\textbf{Constraint:} The finite loop ledger, propagator counts, and cutoff candidate must arise from $K_4$ cycle topology with no free regulator scale.
 
 \textbf{Construction:} 4 triangles (1-loop, $d = 3$ propagators) $+ 3$ squares (2-loop, $V = 4$ propagators) $= 7$ cycles. Lattice spacing $= 1$ Planck length.
 
-\textbf{Consequence:} No renormalization scheme is chosen. The discrete structure is its own regularisation.
+\textbf{Consequence:} No finite cycle count or cutoff scale is chosen. Reading this finite regulator as QFT regularisation is the physical bridge that remains exposed.
 
 \begin{code}
 -- $ QFT Loop Structure — Topological Cycles in K₄ — 4 triangles + 3 squares = 7 cycles. Wilson loops. UV regularization.
@@ -9235,6 +10109,24 @@ square-to-feynman = record
   ; propagator-count = vertexCountK4
   ; feynman-uv-cutoff = 1 }
 
+record FeynmanLoopProjectionLedger : Set where
+  field
+    triangle-order-is-one : FeynmanLoop.loop-order triangle-to-feynman ≡ 1
+    triangle-propagators  : FeynmanLoop.propagator-count triangle-to-feynman ≡ degree-K4
+    triangle-cutoff       : FeynmanLoop.feynman-uv-cutoff triangle-to-feynman ≡ 1
+    square-order-is-two   : FeynmanLoop.loop-order square-to-feynman ≡ 2
+    square-propagators    : FeynmanLoop.propagator-count square-to-feynman ≡ vertexCountK4
+    square-cutoff         : FeynmanLoop.feynman-uv-cutoff square-to-feynman ≡ 1
+
+theorem-feynman-loop-projections : FeynmanLoopProjectionLedger
+theorem-feynman-loop-projections = record
+  { triangle-order-is-one = refl
+  ; triangle-propagators  = refl
+  ; triangle-cutoff       = refl
+  ; square-order-is-two   = refl
+  ; square-propagators    = refl
+  ; square-cutoff         = refl }
+
 -- $ Full K₄-to-QFT mapping
 record K4TriangleToQFTLoop : Set where
   field
@@ -9257,7 +10149,38 @@ theorem-K4-to-QFT = record
   ; feynman-2-loop        = square-to-feynman
   ; regularization        = theorem-UV-reg
   ; loops-from-K4         = theorem-QFT-loops }
+
+record QFTLoopInterpretationBoundary : Set where
+  field
+    finite-loop-ledger      : QFT-Loop-Structure
+    finite-cutoff-ledger    : UVRegularization
+    loop-map-ledger         : K4TriangleToQFTLoop
+    feynman-projections     : FeynmanLoopProjectionLedger
+    loop-arithmetic-level   : ClaimLevel
+    feynman-reading-level   : ClaimLevel
+    continuum-regulator-level : ClaimLevel
+    loop-arithmetic-forced  : loop-arithmetic-level ≡ forced-ledger
+    feynman-reading-physical : feynman-reading-level ≡ physical-identification
+    continuum-regulator-physical : continuum-regulator-level ≡ physical-identification
+
+theorem-qft-loop-interpretation-boundary : QFTLoopInterpretationBoundary
+theorem-qft-loop-interpretation-boundary = record
+  { finite-loop-ledger          = theorem-QFT-loops
+  ; finite-cutoff-ledger        = theorem-UV-reg
+  ; loop-map-ledger             = theorem-K4-to-QFT
+  ; feynman-projections         = theorem-feynman-loop-projections
+  ; loop-arithmetic-level       = forced-ledger
+  ; feynman-reading-level       = physical-identification
+  ; continuum-regulator-level   = physical-identification
+  ; loop-arithmetic-forced      = refl
+  ; feynman-reading-physical    = refl
+  ; continuum-regulator-physical = refl }
 \end{code}
+
+The QFT boundary record keeps the finite and continuum languages from merging.
+Agda checks $4+3=7$, the loop-order placeholders, the propagator projections,
+and the unit cutoff.  The words Feynman diagram, UV regulator, and continuum
+QFT are the physical reading of that finite ledger.
 
 % ══════════════════════════════════════════════════════════════════════════════
 \part{Forces and Confinement}
@@ -9706,9 +10629,9 @@ The complex numbers $\mathbb{C}$ are the last step. The spinor dimension is $\ch
 
 \textbf{Constraint:} Each number system in the tower $\mathbb{N} \to \mathbb{Z} \to \mathbb{Q} \to \mathbb{R} \to \mathbb{C}$ must be forced by a specific computational demand of $K_4$, not imported from a mathematical catalogue.
 
-\textbf{Construction:} $\mathbb{N}$ from vertex counting, $\mathbb{Z}$ from edge orientation, $\mathbb{Q}$ from eigenvalue ratios, $\mathbb{R}$ from Cauchy closure, $\mathbb{C}$ from the $\chi = 2$ spinor swap involution. Each step is verified as a consequence of $K_4$.
+\textbf{Construction:} $\mathbb{N}$ from vertex counting, $\mathbb{Z}$ from edge orientation, $\mathbb{Q}$ from eigenvalue ratios, $\mathbb{R}$ from Cauchy closure, $\mathbb{C}$ from the $\chi = 2$ spinor swap involution. The record checks the displayed anchors; the familiar number-system names are the mathematical reading of those anchors.
 
-\textbf{Consequence:} The complex unit $i$ is the Pauli involution $\sigma_y$. No number system is postulated.
+\textbf{Consequence:} The complex-unit reading is tied to the Pauli involution $\sigma_y$ on the two-component spinor carrier. No additional physical scalar field is postulated by this step.
 
 \begin{code}
 -- $ Number Tower: from K₄ invariants to physical scaffolding
@@ -9735,6 +10658,30 @@ theorem-number-tower = record
   ; coupling-base         = refl
   ; spinor-is-complex-dim = theorem-spinor-dim
   ; complex-carrier       = refl }
+
+record NumberTowerInterpretationBoundary : Set where
+  field
+    number-tower-ledger       : NumberTowerBridge
+    counting-anchor-level     : ClaimLevel
+    ratio-anchor-level        : ClaimLevel
+    real-completion-level     : ClaimLevel
+    complex-phase-reading-level : ClaimLevel
+    counting-anchor-formal    : counting-anchor-level ≡ formal-ledger
+    ratio-anchor-formal       : ratio-anchor-level ≡ formal-ledger
+    real-completion-formal    : real-completion-level ≡ formal-ledger
+    complex-phase-is-physical : complex-phase-reading-level ≡ physical-identification
+
+theorem-number-tower-interpretation-boundary : NumberTowerInterpretationBoundary
+theorem-number-tower-interpretation-boundary = record
+  { number-tower-ledger       = theorem-number-tower
+  ; counting-anchor-level     = formal-ledger
+  ; ratio-anchor-level        = formal-ledger
+  ; real-completion-level     = formal-ledger
+  ; complex-phase-reading-level = physical-identification
+  ; counting-anchor-formal    = refl
+  ; ratio-anchor-formal       = refl
+  ; real-completion-formal    = refl
+  ; complex-phase-is-physical = refl }
 \end{code}
 
 The continuum does not stand beside $K_4$ as a second foundation. It is the completion forced by the number tower, and Form reaches it only through the closure term already constructed from rational data. The record below marks the boundary: Cauchy closure is formal; reading the resulting real carrier as physical amplitude or field value is an identification.
@@ -9771,11 +10718,11 @@ In lattice field theory, a Laplacian eigenvalue $\lambda$ on a lattice with spac
   \lambda = 4 = V \quad &\Longrightarrow \quad m^2 = 4 \; M_{\text{Planck}}^2 && \text{(Planck-scale excitations)}
 \end{align}
 
-The massless sector has multiplicity $1$: the constant eigenmode, the function that assigns the same value to every vertex. This is the zero mode of the Laplacian, and it corresponds to the single photon-like excitation that propagates without cost---the gauge boson.
+The massless sector has multiplicity $1$: the constant eigenmode, the function that assigns the same value to every vertex. In the physical reading, this is the zero-mode slot associated with a photon-like excitation that propagates without cost.
 
-The massive sector has multiplicity $d = 3$: three linearly independent oscillatory eigenmodes, one for each spatial direction. These are the modes that ``cost energy''---they oscillate across the graph. Their degeneracy is $d = 3$, which is the generation count. At low energies (far below the Planck scale), these modes are integrated out. What survives is the massless sector plus the symmetry structure that the massive modes impose on the low-energy effective theory.
+The massive sector has multiplicity $d = 3$: three linearly independent oscillatory eigenmodes, one for each spatial direction. The generation reading identifies this degeneracy with the three matter generations. Statements about integrating these modes out at low energies belong to the effective-field interpretation of the spectrum.
 
-The Ricci scalar $R = d \cdot \lambda_4 = 3 \times 4 = 12$ is the sum over the massive sector. The UV cutoff is the lattice spacing $a = 1$, which eliminates the ultraviolet divergences that plague continuum QFT. There is no regulator to introduce and no regulator to remove. The graph \emph{is} the regularization.
+The Ricci-scalar ledger $R = d \cdot \lambda_4 = 3 \times 4 = 12$ is the sum over the massive-sector eigenvalue count. The unit lattice spacing supplies a finite cutoff candidate. That finiteness is formal; the statement that it regularizes continuum QFT is a physical bridge.
 
 \begin{code}
 -- $ Spectral Dispersion: eigenvalues → mass spectrum
@@ -9803,6 +10750,30 @@ theorem-spectral-dispersion = record
   ; massive-modes       = refl
   ; uv-cutoff-is-planck = refl
   ; ricci-from-spectrum = refl }
+
+record SpectralDispersionInterpretationBoundary : Set where
+  field
+    spectral-ledger             : SpectralDispersion
+    eigenvalue-arithmetic-level : ClaimLevel
+    mass-reading-level          : ClaimLevel
+    generation-reading-level    : ClaimLevel
+    effective-field-level       : ClaimLevel
+    eigenvalue-arithmetic-forced : eigenvalue-arithmetic-level ≡ forced-ledger
+    mass-reading-is-physical    : mass-reading-level ≡ physical-identification
+    generation-reading-is-physical : generation-reading-level ≡ physical-identification
+    effective-field-is-physical : effective-field-level ≡ physical-identification
+
+theorem-spectral-dispersion-interpretation-boundary : SpectralDispersionInterpretationBoundary
+theorem-spectral-dispersion-interpretation-boundary = record
+  { spectral-ledger              = theorem-spectral-dispersion
+  ; eigenvalue-arithmetic-level  = forced-ledger
+  ; mass-reading-level           = physical-identification
+  ; generation-reading-level     = physical-identification
+  ; effective-field-level        = physical-identification
+  ; eigenvalue-arithmetic-forced = refl
+  ; mass-reading-is-physical     = refl
+  ; generation-reading-is-physical = refl
+  ; effective-field-is-physical  = refl }
 \end{code}
 
 \section{From Holonomy to Field Strength}
@@ -9854,6 +10825,30 @@ theorem-holonomy-field-strength-bridge = record
   ; pure-gauge-faces    = all-triangle-holonomies-vanish
   ; cauchy-real-carrier = ℚtoℝ
   ; carrier-is-Void     = λ q → refl }
+
+record HolonomyFieldStrengthInterpretationBoundary : Set₁ where
+  field
+    holonomy-field-ledger       : HolonomyFieldStrengthBridge
+    face-arithmetic-level       : ClaimLevel
+    pure-gauge-level            : ClaimLevel
+    field-strength-reading-level : ClaimLevel
+    continuum-carrier-level     : ClaimLevel
+    face-arithmetic-forced      : face-arithmetic-level ≡ forced-ledger
+    pure-gauge-formal           : pure-gauge-level ≡ formal-ledger
+    field-strength-is-physical  : field-strength-reading-level ≡ physical-identification
+    continuum-carrier-formal    : continuum-carrier-level ≡ formal-ledger
+
+theorem-holonomy-field-strength-interpretation-boundary : HolonomyFieldStrengthInterpretationBoundary
+theorem-holonomy-field-strength-interpretation-boundary = record
+  { holonomy-field-ledger        = theorem-holonomy-field-strength-bridge
+  ; face-arithmetic-level        = forced-ledger
+  ; pure-gauge-level             = formal-ledger
+  ; field-strength-reading-level = physical-identification
+  ; continuum-carrier-level      = formal-ledger
+  ; face-arithmetic-forced       = refl
+  ; pure-gauge-formal            = refl
+  ; field-strength-is-physical   = refl
+  ; continuum-carrier-formal     = refl }
 \end{code}
 
 \section{The Identity of the Gap}
@@ -9865,9 +10860,9 @@ Now consider the final question: \emph{Is this algebra the Standard Model?}
 
 Before addressing what the formal system can say, consider what the Standard Model itself says.  The ratio $m_p / m_e = 1836.15\ldots$ is not a theorem of the Standard Model.  It is a number extracted from lattice QCD calculations that take measured quark masses as numerical inputs.  Remove those inputs and the calculation cannot run.  The Standard Model does not derive $1836$ from first principles; it absorbs it.  The same is true of $\alpha^{-1} \approx 137.036$: the coupling is measured at the $Z$-pole and renormalisation-group-evolved to lower scales, never derived from combinatorial necessity.  Every constant the Standard Model uses was first measured.  Not one was predicted from a parameter-free framework before measurement.
 
-The $K_4$ computation runs in the opposite direction.  From a single record with five fields---no numerical inputs, no measured parameters, no free choices beyond the logical minimum required to make distinction possible---the compiler returns $137$, $1836$, $207$, and $17$ as closed normal forms.  The derivation of $1836$ does not consult a quark-mass table; it traverses the unique surviving monomial in $\{\,E^2 d\,\}$ and multiplies by the unique nearest coprime neighbor of $2^V$.  The Standard Model \emph{could not have predicted} these numbers before they were measured.  The $K_4$ framework \emph{does not need the measurements} to produce them.
+The $K_4$ computation runs in the opposite direction.  From a closed formal ledger---no numerical inputs, no measured parameters, no fitted coefficients---the compiler returns $137$, $1836$, $207$, and $17$ as normal forms.  The derivation of $1836$ does not consult a quark-mass table; it traverses the displayed monomial in $\{\,E^2 d\,\}$ and multiplies by the nearest coprime neighbor of $2^V$ used in the ledger.  This is a fact about derivation order: the arithmetic comes before the physical comparison.
 
-This asymmetry is not a claim about physics.  It is a fact about derivation order.
+This asymmetry is not a claim that the Standard Model has been replaced.  It is a fact about derivation order.
 
 This question is not a theorem. It cannot be, because it asks about the relationship between a formal object (the \texttt{StandardModelFromK4} record) and the physical world (the universe we measure). The formal system has no access to the physical world. It operates entirely within type theory, where the only objects are types, terms, and identity proofs.
 
@@ -9987,7 +10982,7 @@ theorem-qcd-af-positive = s≤s z≤n
 
 \epigraph{``String theory is a part of 21st-century physics that fell by chance into the 20th century.''}{Edward Witten}
 
-String theory famously predicts its own critical dimensions: $d = 26$ for the bosonic string, $d = 10$ for the superstring, $d = 11$ for M-theory. These numbers have always seemed to come from consistency conditions internal to string theory---cancellation of conformal anomalies, absence of ghosts, supersymmetry constraints. Here the same integers are produced by $K_4$ polynomials.
+String theory famously produces its own critical dimensions: $d = 26$ for the bosonic string, $d = 10$ for the superstring, $d = 11$ for M-theory. In string theory these numbers arise from consistency conditions internal to the theory---cancellation of conformal anomalies, absence of ghosts, supersymmetry constraints. Here the same integers appear as $K_4$ polynomials.
 
 \begin{align}
 d_{\text{bosonic}} &= V \times E + \chi = 4 \times 6 + 2 = 26 \\
@@ -9995,7 +10990,7 @@ d_{\text{super}} &= V + E = 4 + 6 = 10 \\
 d_{\text{M}} &= E + d + \chi = 6 + 3 + 2 = 11
 \end{align}
 
-The compactification dimension is $10 - 4 = 6 = E$. The number of compact dimensions equals the edge count of $K_4$---the very edges that carry the gauge fields. Worldsheets are faces of $K_4$: four triangles, four worldsheets.
+The compactification dimension is $10 - 4 = 6 = E$. The number of compact-dimension slots equals the edge count of $K_4$---the same edge count used by the gauge ledger. The worldsheet reading assigns the four triangular faces to four worldsheet slots.
 
 This identification does not replace string theory calculations; it supplies a discrete source for the same dimension numerals. The string-theoretic presentation is admissible only if it preserves the already sealed ledger: bosonic dimension $26$, superstring dimension $10$, M-theory dimension $11$, compactification count $E = 6$, and worldsheet count $F = 4$.
 
@@ -10090,7 +11085,39 @@ theorem-string-connection = record
   ; compact-is-E          = theorem-compact-is-E
   ; worldsheets           = worldsheet-count
   ; worldsheets-is-F      = refl }
+
+record StringTheoryInterpretationBoundary : Set where
+  field
+    string-ledger              : StringTheoryConnection
+    bosonic-ledger-26          : bosonic-critical-dimension ≡ 26
+    superstring-ledger-10      : superstring-critical-dimension ≡ 10
+    m-theory-ledger-11         : m-theory-dimension ≡ 11
+    string-arithmetic-level    : ClaimLevel
+    string-reading-level       : ClaimLevel
+    string-consistency-level   : ClaimLevel
+    string-arithmetic-forced   : string-arithmetic-level ≡ forced-ledger
+    string-reading-physical    : string-reading-level ≡ physical-identification
+    string-consistency-physical : string-consistency-level ≡ physical-identification
+
+theorem-string-theory-interpretation-boundary : StringTheoryInterpretationBoundary
+theorem-string-theory-interpretation-boundary = record
+  { string-ledger               = theorem-string-connection
+  ; bosonic-ledger-26           = theorem-bosonic-26
+  ; superstring-ledger-10       = theorem-superstring-10
+  ; m-theory-ledger-11          = theorem-m-theory-11
+  ; string-arithmetic-level     = forced-ledger
+  ; string-reading-level        = physical-identification
+  ; string-consistency-level    = physical-identification
+  ; string-arithmetic-forced    = refl
+  ; string-reading-physical     = refl
+  ; string-consistency-physical = refl }
 \end{code}
+
+The string record therefore says less, and more cleanly, than a unification
+claim.  Agda checks the integer coincidences $26$, $10$, $11$, $6$, and $4$.
+Calling them bosonic string dimension, superstring dimension, M-theory
+dimension, compactification count, and worldsheet count is the physical reading
+that must remain compatible with the independent string-theoretic derivations.
 
 % ──────────────────────────────────────────────────────────────────────────────
 \chapter{Unification}
@@ -10099,7 +11126,7 @@ theorem-string-connection = record
 
 \epigraph{``The most incomprehensible thing about the universe is that it is comprehensible.''}{Albert Einstein}
 
-All roads converge. Quantum mechanics, the Standard Model, general relativity, and string theory have been formulated as separate theories for a century. The $K_4$ framework reveals them as projections of the same structure.
+The ledgers begin to overlap. Quantum mechanics, the Standard Model, general relativity, and string theory have been formulated as separate theories for a century. The $K_4$ framework does not erase that separation; it proposes a shared finite scaffold on which several of their counting structures can be read.
 
 \section{The Quantum-Classical Bridge}
 \label{sec:qm-sm-bridge}
@@ -10164,7 +11191,38 @@ theorem-QM-SM-unification = record
   ; basis-is-V    = refl
   ; norm-factor   = vertexCountK4
   ; norm-is-V     = refl }
+
+record QMSMUnificationInterpretationBoundary : Set where
+  field
+    qm-sm-ledger               : QM-SM-Unification
+    hilbert-count-ledger       : hilbert-dim-K4 ≡ K4-V
+    gauge-count-ledger         : total-gauge-bosons ≡ K4-V * K4-deg
+    edge-channel-ledger        : edgeCountK4 ≡ K4-E
+    qm-sm-arithmetic-level     : ClaimLevel
+    hilbert-reading-level      : ClaimLevel
+    gauge-reading-level        : ClaimLevel
+    qm-sm-arithmetic-forced    : qm-sm-arithmetic-level ≡ forced-ledger
+    hilbert-reading-physical   : hilbert-reading-level ≡ physical-identification
+    gauge-reading-physical     : gauge-reading-level ≡ physical-identification
+
+theorem-qm-sm-unification-interpretation-boundary : QMSMUnificationInterpretationBoundary
+theorem-qm-sm-unification-interpretation-boundary = record
+  { qm-sm-ledger              = theorem-QM-SM-unification
+  ; hilbert-count-ledger      = refl
+  ; gauge-count-ledger        = refl
+  ; edge-channel-ledger       = refl
+  ; qm-sm-arithmetic-level    = forced-ledger
+  ; hilbert-reading-level     = physical-identification
+  ; gauge-reading-level       = physical-identification
+  ; qm-sm-arithmetic-forced   = refl
+  ; hilbert-reading-physical  = refl
+  ; gauge-reading-physical    = refl }
 \end{code}
+
+The unification record is therefore a shared-count ledger.  It checks $V$,
+$Vd$, spinor dimension, edge channels, basis states, and the normalization
+slot.  It does not prove Hilbert-space physics or gauge dynamics from graph
+counting alone; those are the readings attached to the checked counts.
 
 \section{Causality from K\texorpdfstring{\textsubscript{4}}{4}}
 \label{sec:causality}
@@ -10311,11 +11369,11 @@ mass operator $M \propto 1/\lambda$.  The seesaw mechanism then composes
 two such couplings: the physical mass ratio is $m_D^2 / M_R \sim
 1/\lambda^2 = 1/25$.
 
-This is not a model-building choice.  The eigenvalue is forced (it is the
-vertex count of the forbidden graph), the propagator weight is $1/\lambda$
-by definition, and the seesaw composition is the unique second-order
-operator on the coupling.  The quantity $1/25$ is therefore a $K_4$
-invariant.
+This is not a model-building choice inside the displayed spectral ledger.  The
+eigenvalue is fixed by the forbidden graph's vertex count, the propagator
+weight is read as $1/\lambda$, and the seesaw composition squares that weight.
+The denominator $25$ is therefore formal; the observer and seesaw names are the
+physical reading of it.
 
 \textbf{Constraint:}
 The observer eigenvalue must belong to the forbidden graph $K_5$ and must
@@ -10328,9 +11386,10 @@ $K_5$-eigenvalue $= 5$.  The propositions $5 \equiv 0$ and $5 \equiv 4$
 are both empty.  The unique observer eigenvalue is~$5$.
 
 \textbf{Consequence:}
-The observer mode is forced: only one eigenvalue lies in $K_5$ but outside
-$K_4$.  No selection is involved.  The spectral ghost of the topological
-brake is the observer.
+The external eigenvalue is forced inside this spectral comparison: $5$ lies in
+the $K_5$ count but outside the $K_4$ spectrum.  Calling this exterior value an
+observer mode is the interpretation placed on the spectral ghost of the
+topological brake.
 
 \begin{code}
 -- $ Observer Eigenvalue — The spectral ghost of K₅.
@@ -10367,9 +11426,9 @@ theorem-observer-mode-unique = record
 \section{The Seesaw Ratio \texorpdfstring{$1/25$}{1/25}}
 
 The seesaw denominator is $\lambda^2 = 5^2 = 25$.  This ratio $1/25$
-reappears as $\delta_{\text{Cabibbo}}$---the suppression factor that
-governs quark mixing in the CKM matrix.  The coincidence is not
-coincidental: both arise from the same spectral ghost.
+is read as $\delta_{\text{Cabibbo}}$---a suppression candidate for quark
+mixing in the CKM matrix.  The shared denominator is formal; the claim that it
+governs quark mixing is the physical interpretation.
 
 \begin{code}
 -- $ Seesaw from observer eigenvalue: 1/λ² = 1/25
@@ -10424,10 +11483,9 @@ $\delta_{\text{Cabibbo}} = 1/25$ from the observer seesaw.  Both
 derivations yield $K_4$-computable quantities.
 
 \textbf{Consequence:}
-The Cabibbo angle has a geometric origin: it is the tetrahedral
-dihedral angle per vertex.  The $5\%$ deviation from experiment
-is the renormalization correction, consistent with the universal
-formula.
+The Cabibbo-angle candidate has a geometric origin: it is the tetrahedral
+angle per vertex.  The deviation from experiment marks the required correction
+layer; it is not itself computed by this geometric record.
 
 \begin{code}
 -- $ Cabibbo angle from tetrahedral geometry
@@ -10451,12 +11509,37 @@ theorem-edge-angle-structure = refl
 cabibbo-experimental-millideg : ℕ
 cabibbo-experimental-millideg = 13040
 
+cabibbo-gap-millideg : ℕ
+cabibbo-gap-millideg = cabibbo-geometric-millideg ∸ cabibbo-experimental-millideg
+
+cabibbo-five-percent-bound : ℕ
+cabibbo-five-percent-bound = cabibbo-experimental-millideg divℕ 20
+
+cabibbo-five-percent-residual : ℕ
+cabibbo-five-percent-residual = cabibbo-five-percent-bound ∸ cabibbo-gap-millideg
+
+theorem-cabibbo-gap-644 : cabibbo-gap-millideg ≡ 644
+theorem-cabibbo-gap-644 = refl
+
+theorem-cabibbo-five-percent-bound-652 : cabibbo-five-percent-bound ≡ 652
+theorem-cabibbo-five-percent-bound-652 = refl
+
+theorem-cabibbo-five-percent-residual-8 : cabibbo-five-percent-residual ≡ 8
+theorem-cabibbo-five-percent-residual-8 = refl
+
+theorem-cabibbo-residual-positive : 1 ≤ cabibbo-five-percent-residual
+theorem-cabibbo-residual-positive = s≤s z≤n
+
 -- $ 5-Pillar record: observer eigenvalue → seesaw → Cabibbo
 record ObserverCabibbo5Pillar : Set where
   field
     observer-forced     : ObserverMode
     seesaw-25           : observer-seesaw-denominator ≡ 25
     geometric-13684     : cabibbo-geometric-millideg ≡ 13684
+    gap-is-644          : cabibbo-gap-millideg ≡ 644
+    five-percent-bound  : cabibbo-five-percent-bound ≡ 652
+    five-percent-residual : cabibbo-five-percent-residual ≡ 8
+    residual-positive   : 1 ≤ cabibbo-five-percent-residual
     edge-angle-from-V   : edge-edge-angle-millideg ≡ K4-V * cabibbo-geometric-millideg
     eigenvalue-is-5     : K5-observer-eigenvalue ≡ 5
 
@@ -10465,9 +11548,59 @@ theorem-observer-cabibbo-5pillar = record
   { observer-forced   = theorem-observer-mode-unique
   ; seesaw-25         = refl
   ; geometric-13684   = refl
+  ; gap-is-644        = theorem-cabibbo-gap-644
+  ; five-percent-bound = theorem-cabibbo-five-percent-bound-652
+  ; five-percent-residual = theorem-cabibbo-five-percent-residual-8
+  ; residual-positive = theorem-cabibbo-residual-positive
   ; edge-angle-from-V = refl
   ; eigenvalue-is-5   = refl }
+
+record ObserverCabibboInterpretationBoundary : Set where
+  field
+    observer-cabibbo-ledger       : ObserverCabibbo5Pillar
+    observer-eigenvalue-ledger    : K5-observer-eigenvalue ≡ 5
+    seesaw-denominator-ledger     : observer-seesaw-denominator ≡ 25
+    cabibbo-geometric-ledger      : cabibbo-geometric-millideg ≡ 13684
+    cabibbo-gap-ledger            : cabibbo-gap-millideg ≡ 644
+    cabibbo-five-percent-ledger   : cabibbo-five-percent-bound ≡ 652
+    cabibbo-margin-ledger         : cabibbo-five-percent-residual ≡ 8
+    cabibbo-margin-positive       : 1 ≤ cabibbo-five-percent-residual
+    observer-arithmetic-level     : ClaimLevel
+    observer-name-level           : ClaimLevel
+    cabibbo-identification-level  : ClaimLevel
+    cabibbo-experiment-level      : ClaimLevel
+    observer-arithmetic-forced    : observer-arithmetic-level ≡ forced-ledger
+    observer-name-physical        : observer-name-level ≡ physical-identification
+    cabibbo-identification-physical : cabibbo-identification-level ≡ physical-identification
+    cabibbo-experiment-is-test    : cabibbo-experiment-level ≡ experimental-test
+
+theorem-observer-cabibbo-interpretation-boundary : ObserverCabibboInterpretationBoundary
+theorem-observer-cabibbo-interpretation-boundary = record
+  { observer-cabibbo-ledger        = theorem-observer-cabibbo-5pillar
+  ; observer-eigenvalue-ledger     = refl
+  ; seesaw-denominator-ledger      = refl
+  ; cabibbo-geometric-ledger       = refl
+  ; cabibbo-gap-ledger             = theorem-cabibbo-gap-644
+  ; cabibbo-five-percent-ledger    = theorem-cabibbo-five-percent-bound-652
+  ; cabibbo-margin-ledger          = theorem-cabibbo-five-percent-residual-8
+  ; cabibbo-margin-positive        = theorem-cabibbo-residual-positive
+  ; observer-arithmetic-level      = forced-ledger
+  ; observer-name-level            = physical-identification
+  ; cabibbo-identification-level   = physical-identification
+  ; cabibbo-experiment-level       = experimental-test
+  ; observer-arithmetic-forced     = refl
+  ; observer-name-physical         = refl
+  ; cabibbo-identification-physical = refl
+  ; cabibbo-experiment-is-test     = refl }
 \end{code}
+
+The Cabibbo boundary prevents the exterior eigenvalue from being overread.
+Agda checks the absence of $5$ from the $K_4$ spectrum, the denominator $25$,
+the geometric angle $13684$ millidegrees, and the arithmetic fact that the
+geometric candidate lies inside a five-percent millidegree window around the
+displayed experimental comparator.  The observer name, the seesaw mechanism,
+and the comparison with the measured Cabibbo angle remain the interpretive and
+experimental layers.
 
 % ──────────────────────────────────────────────────────────────────────────────
 \chapter{Standard Model Structural Candidates}
@@ -10714,6 +11847,19 @@ record FormulaClassificationLedger : Set₁ where
     finite-confinement-checked : Confinement
     qcd-beta-checked          : qcd-beta-b0 ≡ 9
     string-ledger-checked     : StringTheoryConnection
+    standard-model-gauge-boundary : StandardModelGaugeInterpretationBoundary
+    fermion-generation-boundary   : FermionGenerationInterpretationBoundary
+    generation-physics-boundary   : GenerationPhysicsInterpretationBoundary
+    b-meson-boundary              : BMesonUniversalityInterpretationBoundary
+    doubly-charmed-boundary       : DoublyCharmedBaryonInterpretationBoundary
+    qft-loop-boundary             : QFTLoopInterpretationBoundary
+    number-tower-boundary         : NumberTowerInterpretationBoundary
+    continuum-limit-boundary      : ContinuumLimitMarker
+    spectral-dispersion-boundary  : SpectralDispersionInterpretationBoundary
+    holonomy-field-boundary       : HolonomyFieldStrengthInterpretationBoundary
+    string-theory-boundary        : StringTheoryInterpretationBoundary
+    qm-sm-boundary                : QMSMUnificationInterpretationBoundary
+    observer-cabibbo-boundary     : ObserverCabibboInterpretationBoundary
     -- $ Experimental-test layers: observed values enter only as tests.
     higgs-gap-level           : ClaimLevel
     neutrino-absolute-level   : ClaimLevel
@@ -10780,6 +11926,19 @@ theorem-formula-classification-ledger = record
   ; finite-confinement-checked = theorem-confinement
   ; qcd-beta-checked           = refl
   ; string-ledger-checked      = theorem-string-connection
+  ; standard-model-gauge-boundary = theorem-standard-model-gauge-interpretation-boundary
+  ; fermion-generation-boundary = theorem-fermion-generation-interpretation-boundary
+  ; generation-physics-boundary = theorem-generation-physics-interpretation-boundary
+  ; b-meson-boundary            = theorem-b-meson-universality-interpretation-boundary
+  ; doubly-charmed-boundary     = theorem-doubly-charmed-baryon-interpretation-boundary
+  ; qft-loop-boundary           = theorem-qft-loop-interpretation-boundary
+  ; number-tower-boundary       = theorem-number-tower-interpretation-boundary
+  ; continuum-limit-boundary    = theorem-continuum-limit-marker
+  ; spectral-dispersion-boundary = theorem-spectral-dispersion-interpretation-boundary
+  ; holonomy-field-boundary     = theorem-holonomy-field-strength-interpretation-boundary
+  ; string-theory-boundary      = theorem-string-theory-interpretation-boundary
+  ; qm-sm-boundary              = theorem-qm-sm-unification-interpretation-boundary
+  ; observer-cabibbo-boundary   = theorem-observer-cabibbo-interpretation-boundary
   ; higgs-gap-level            = experimental-test
   ; neutrino-absolute-level    = physical-identification
   ; frontier-level             = experimental-test
