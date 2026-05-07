@@ -812,6 +812,111 @@ data _⊎ω_ (A B : Setω) : Setω where
   inj₂ω : B → A ⊎ω B
 \end{code}
 
+\section{Stabilized Contact}
+\label{sec:foundation:stabilized-contact}
+
+Once products, dependent pairs, equality, and tagged alternatives are
+available, contact can be stated without adding a new primitive.  Given
+two evaluations into a common carrier, contact is the dependent witness
+that one origin from the first source and one origin from the second
+source share an image.  It is not a metaphysical bond between completed
+objects; it is synchronized retrievability carried as data.
+
+Self-contact is the decisive test.  An evaluation is stable only if its
+self-contact does not hide a collapse: whenever two origins become equal
+after evaluation, the origins were already equal.  In that case the
+self-contact carries no surplus over the origin.  The diagonal is not
+postulated from outside; it is recovered as the residue of non-collapse.
+
+Agreement zones and stable relations are the first two shapes obtained
+from this discipline.  An agreement zone records the positions at which
+two evaluations cease to differ.  A stable relation is a pair of
+evaluations whose combined imprint does not identify distinct origins.
+These constructions occur after the formal threshold.  They do not prove
+that the pre-formal boundary is itself a type; they show what becomes
+available once a disciplined carrier, equality, and dependent witnesses
+are already in force.
+
+\begin{code}
+-- § Contact of two sources through a common carrier.
+Contact : {A B C : Set} → (A → C) → (B → C) → Set
+Contact {A} {B} f g = Σ A (λ a → Σ B (λ b → f a ≡ g b))
+
+-- § Self-contact: two origins meeting under the same evaluation.
+SelfContact : {A B : Set} → (A → B) → Set
+SelfContact i = Contact i i
+
+-- § Non-collapse: equal images create no new identification.
+NonCollapsing : {A B : Set} → (A → B) → Set
+NonCollapsing {A} i = (x y : A) → i x ≡ i y → x ≡ y
+
+-- § Diagonal: two origins together with their equality.
+Diagonal : Set → Set
+Diagonal A = Σ A (λ x → Σ A (λ y → x ≡ y))
+
+-- § A diagonal witness always induces self-contact.
+diagonal-self-contact : {A B : Set} (i : A → B) → Diagonal A → SelfContact i
+diagonal-self-contact i (x , (y , same)) = x , (y , cong i same)
+
+-- § No-surplus self-contact: self-contact returns to the diagonal.
+SelfContactNoSurplus : {A B : Set} → (A → B) → Set
+SelfContactNoSurplus {A} i = SelfContact i → Diagonal A
+
+-- § A non-collapsing self-contact reduces to equality of origins.
+self-contact-collapses :
+  {A B : Set} (i : A → B) →
+  NonCollapsing i →
+  SelfContact i →
+  Diagonal A
+self-contact-collapses i nc (x , (y , same)) = x , (y , nc x y same)
+
+-- § Non-collapse is exactly the no-surplus discipline for self-contact.
+self-contact-no-surplus :
+  {A B : Set} (i : A → B) →
+  NonCollapsing i →
+  SelfContactNoSurplus i
+self-contact-no-surplus i nc = self-contact-collapses i nc
+
+-- § Agreement zone of two evaluations from one source.
+Agreement : {A B : Set} → (A → B) → (A → B) → Set
+Agreement {A} f g = Σ A (λ x → f x ≡ g x)
+
+-- § Agreement is contact with the same origin read twice.
+agreement-contact :
+  {A B : Set} (f g : A → B) →
+  Agreement f g → Contact f g
+agreement-contact f g (x , same) = x , (x , same)
+
+-- § Explicit constructor for non-dependent pairs.
+pair : {A B : Set} → A → B → A × B
+pair x y = record { fst = x ; snd = y }
+
+-- § Pair equality from component equalities.
+pair-eq :
+  {A B : Set} {x y : A} {u v : B} →
+  x ≡ y → u ≡ v → pair x u ≡ pair y v
+pair-eq refl refl = refl
+
+-- § Joint imprint of two evaluations.
+pairMap : {X Y Z : Set} → (X → Y) → (X → Z) → X → Y × Z
+pairMap f g x = pair (f x) (g x)
+
+-- § Stable relation: the joint imprint is non-collapsing.
+StableRelation : {X Y Z : Set} → (X → Y) → (X → Z) → Set
+StableRelation f g = NonCollapsing (pairMap f g)
+
+-- § Component agreement in a stable relation forces origin equality.
+stable-relation-components :
+  {X Y Z : Set} (f : X → Y) (g : X → Z) →
+  StableRelation f g →
+  (x y : X) →
+  f x ≡ f y →
+  g x ≡ g y →
+  x ≡ y
+stable-relation-components {Y = Y} {Z = Z} f g stable x y same-f same-g =
+  stable x y (pair-eq {A = Y} {B = Z} same-f same-g)
+\end{code}
+
 \section{Ontological Primitives}
 \label{sec:foundation:ontological-primitives}
 
@@ -1598,6 +1703,622 @@ Two-distinction = record
 \end{code}
 
 This supplies the constructive witness whose existence was deferred in Chapter~\ref{ch:non-vacuity}. The object \texttt{Two-distinction} inhabits \texttt{Distinction} without further hypotheses, and it will be used throughout the remainder of the text whenever a concrete distinction is required.
+
+\section{Marked Subcarriers}
+\label{sec:two-normal-form:marked-subcarriers}
+
+Once \texttt{Two} has appeared, a carrier can be read by the two sides
+of the normal form.  Such a reading is only a marking, not a hidden
+principle that classifies every predicate automatically.  A predicate
+becomes a mark only when a constructive decision procedure accompanies
+it; without that decision, no side can be assigned without adding
+information not present in the predicate itself.
+
+The marked subcarriers are therefore fibers of a displayed map into
+\texttt{Two}.  The left fiber contains exactly the points marked
+\texttt{L}; the right fiber contains exactly the points marked
+\texttt{R}.  The cover of \texttt{Two} then gives a two-way reading for
+each marked point, while the predicate construction records the honest
+direction: decidability produces a marker, not arbitrary truth.
+
+\begin{code}
+-- § A constructive decision for a proposition.
+Decidable : Set → Set
+Decidable P = P ⊎ ¬ P
+
+-- § A marker reads a carrier into the two normal-form sides.
+Marker : Set → Set
+Marker A = A → Two
+
+-- § The fiber selected by a marker at a Two side.
+MarkedSubcarrier : {A : Set} → Marker A → Two → Set
+MarkedSubcarrier {A} marker side = Σ A (λ x → marker x ≡ side)
+
+-- § The left selected subcarrier.
+MarkedLeft : {A : Set} → Marker A → Set
+MarkedLeft marker = MarkedSubcarrier marker L
+
+-- § The right selected subcarrier.
+MarkedRight : {A : Set} → Marker A → Set
+MarkedRight marker = MarkedSubcarrier marker R
+
+-- § Every marker classifies each input into one of the two sides.
+marker-cover : {A : Set} (marker : Marker A) → (x : A) → (marker x ≡ L) ⊎ (marker x ≡ R)
+marker-cover marker x = Two-cover (marker x)
+
+-- § A decidable predicate determines a marker.
+predicate-marker : {A : Set} → (P : A → Set) → ((x : A) → Decidable (P x)) → Marker A
+predicate-marker P decide x with decide x
+... | inj₁ _ = L
+... | inj₂ _ = R
+
+-- § Positive evidence sends the predicate marker to L.
+predicate-marker-positive :
+  {A : Set} (P : A → Set) (decide : (x : A) → Decidable (P x)) →
+  (x : A) → P x → predicate-marker P decide x ≡ L
+predicate-marker-positive P decide x px with decide x
+... | inj₁ _     = refl
+... | inj₂ notPx = ⊥-elim (notPx px)
+
+-- § Negative evidence sends the predicate marker to R.
+predicate-marker-negative :
+  {A : Set} (P : A → Set) (decide : (x : A) → Decidable (P x)) →
+  (x : A) → ¬ (P x) → predicate-marker P decide x ≡ R
+predicate-marker-negative P decide x notPx with decide x
+... | inj₁ px = ⊥-elim (notPx px)
+... | inj₂ _  = refl
+
+-- § The left fiber of any marker is decidable.
+marker-left-decision : {A : Set} (marker : Marker A) → (x : A) → Decidable (marker x ≡ L)
+marker-left-decision marker x with marker-cover marker x
+... | inj₁ p = inj₁ p
+... | inj₂ p = inj₂ (λ q → Two-L≠R (trans (sym q) p))
+
+-- § Identity reading on Two for contact with a displayed mark.
+idTwo : Two → Two
+idTwo side = side
+
+-- § Each marked point has contact with its displayed Two side.
+marked-contact : {A : Set} (marker : Marker A) → A → Contact marker idTwo
+marked-contact marker x = x , (marker x , refl)
+\end{code}
+
+\section{Classifier Objects}
+\label{sec:two-normal-form:classifier-objects}
+
+The binary marker is not the last possible form of classification.  A
+richer formal environment may carry a truth carrier with more structure
+than \texttt{Two}.  What cannot change is the skeleton of classification:
+there must be a carrier of marks, an acknowledged truth point, a map from
+the object being read into that carrier, and a selected fiber over the
+truth point.
+
+This does not import a categorical axiom into the development.  The code
+below records the exact data that any such classifier must display before
+it can classify anything at all.  The binary classifier is then recovered
+as the first case: \texttt{Two} with \texttt{L} as the truth point.  Thus
+the richer truth object is not identified with \texttt{Two}; it is a later
+generalization of the same marking discipline.
+
+\begin{code}
+-- § A classifier object: truth carrier with a distinguished truth point.
+record ClassifierObject : Set1 where
+  field
+    truthCarrier : Set
+    truthPoint   : truthCarrier
+
+-- § A marker into an arbitrary classifier object.
+ClassifierMarker : ClassifierObject → Set → Set
+ClassifierMarker classifier A = A → ClassifierObject.truthCarrier classifier
+
+-- § The truth fiber selected by the distinguished truth point.
+TruthFiber : (classifier : ClassifierObject) {A : Set} → ClassifierMarker classifier A → Set
+TruthFiber classifier {A} marker = Σ A (λ x → marker x ≡ ClassifierObject.truthPoint classifier)
+
+-- § A selected carrier classified by a truth fiber.
+record ClassifiedSubcarrier (classifier : ClassifierObject) (A : Set) : Set1 where
+  field
+    characteristic       : ClassifierMarker classifier A
+    selectedCarrier      : Set
+    to-truth-fiber       : selectedCarrier → TruthFiber classifier characteristic
+    from-truth-fiber     : TruthFiber classifier characteristic → selectedCarrier
+    to-from-truth-fiber  : (fiber : TruthFiber classifier characteristic) →
+                           to-truth-fiber (from-truth-fiber fiber) ≡ fiber
+    from-to-truth-fiber  : (selected : selectedCarrier) →
+                           from-truth-fiber (to-truth-fiber selected) ≡ selected
+
+-- § Every marker classifies its own truth fiber.
+truth-fiber-classified :
+  (classifier : ClassifierObject) {A : Set} →
+  (marker : ClassifierMarker classifier A) →
+  ClassifiedSubcarrier classifier A
+truth-fiber-classified classifier marker = record
+  { characteristic      = marker
+  ; selectedCarrier     = TruthFiber classifier marker
+  ; to-truth-fiber      = λ fiber → fiber
+  ; from-truth-fiber    = λ fiber → fiber
+  ; to-from-truth-fiber = λ fiber → refl
+  ; from-to-truth-fiber = λ fiber → refl
+  }
+
+-- § A truth-fiber point contacts the classifier's truth point.
+truth-fiber-contact :
+  (classifier : ClassifierObject) {A : Set} →
+  (marker : ClassifierMarker classifier A) →
+  (fiber : TruthFiber classifier marker) →
+  Contact marker (λ (_ : TruthFiber classifier marker) → ClassifierObject.truthPoint classifier)
+truth-fiber-contact classifier marker (x , proof) = x , ((x , proof) , proof)
+
+-- § The binary classifier: Two with L as truth.
+TwoClassifier : ClassifierObject
+TwoClassifier = record
+  { truthCarrier = Two
+  ; truthPoint   = L
+  }
+
+-- § The binary classifier marker is exactly the earlier Marker.
+two-classifier-marker : {A : Set} → ClassifierMarker TwoClassifier A ≡ Marker A
+two-classifier-marker = refl
+
+-- § The truth fiber of the binary classifier is exactly the left marked subcarrier.
+two-classifier-truth-fiber : {A : Set} (marker : Marker A) → TruthFiber TwoClassifier marker ≡ MarkedLeft marker
+two-classifier-truth-fiber marker = refl
+
+-- § The left marked subcarrier is classified by the binary classifier.
+two-classifier-marked-left : {A : Set} (marker : Marker A) → ClassifiedSubcarrier TwoClassifier A
+two-classifier-marked-left marker = truth-fiber-classified TwoClassifier marker
+
+-- § Binary truth-fiber contact is contact with the L side of Two.
+two-truth-contact : {A : Set} (marker : Marker A) → MarkedLeft marker → Contact marker idTwo
+two-truth-contact marker (x , proof) = x , (L , proof)
+\end{code}
+
+\section{Distinction Cover as Binary Fiber}
+\label{sec:two-normal-form:distinction-cover-binary-fiber}
+
+The cover field of a distinction now has a direct reading in the marking
+language.  It is not a classifier for arbitrary predicates on the
+carrier.  It is the displayed binary reading already present in the
+record: each point of the carrier is read as belonging to the left
+boundary class or to the right boundary class.
+
+Under this marker the two fibers recover exactly the two boundary
+classes.  The left fiber is the class of points equal to $\ell$; the
+right fiber is the class of points equal to $r$.  Thus the cover does
+not hover as an external condition over the carrier.  Once \texttt{Two}
+is available, it is the first fiber presentation of the distinction
+itself.
+
+\begin{code}
+-- § The cover of a distinction determines its boundary marker.
+distinction-marker : (d : Distinction) → Marker (S d)
+distinction-marker d x with cover d x
+... | inj₁ _ = L
+... | inj₂ _ = R
+
+-- § Equality with the left boundary marks a point as L.
+distinction-marker-left :
+  (d : Distinction) (x : S d) →
+  x ≡ ℓ d →
+  distinction-marker d x ≡ L
+distinction-marker-left d x x≡ℓ with cover d x
+... | inj₁ _   = refl
+... | inj₂ x≡r = ⊥-elim (ℓ≠r d (trans (sym x≡ℓ) x≡r))
+
+-- § Equality with the right boundary marks a point as R.
+distinction-marker-right :
+  (d : Distinction) (x : S d) →
+  x ≡ r d →
+  distinction-marker d x ≡ R
+distinction-marker-right d x x≡r with cover d x
+... | inj₁ x≡ℓ = ⊥-elim (ℓ≠r d (trans (sym x≡ℓ) x≡r))
+... | inj₂ _   = refl
+
+-- § The left fiber contains only the left boundary class.
+distinction-left-fiber-to-boundary :
+  (d : Distinction) →
+  MarkedLeft (distinction-marker d) →
+  Σ (S d) (λ x → x ≡ ℓ d)
+distinction-left-fiber-to-boundary d (x , marked-left) with cover d x
+... | inj₁ x≡ℓ = x , x≡ℓ
+... | inj₂ _   = ⊥-elim (Two-L≠R (sym marked-left))
+
+-- § The left boundary class lies in the left fiber.
+distinction-boundary-to-left-fiber :
+  (d : Distinction) →
+  Σ (S d) (λ x → x ≡ ℓ d) →
+  MarkedLeft (distinction-marker d)
+distinction-boundary-to-left-fiber d (x , x≡ℓ) =
+  x , distinction-marker-left d x x≡ℓ
+
+-- § The right fiber contains only the right boundary class.
+distinction-right-fiber-to-boundary :
+  (d : Distinction) →
+  MarkedRight (distinction-marker d) →
+  Σ (S d) (λ x → x ≡ r d)
+distinction-right-fiber-to-boundary d (x , marked-right) with cover d x
+... | inj₁ _   = ⊥-elim (Two-L≠R marked-right)
+... | inj₂ x≡r = x , x≡r
+
+-- § The right boundary class lies in the right fiber.
+distinction-boundary-to-right-fiber :
+  (d : Distinction) →
+  Σ (S d) (λ x → x ≡ r d) →
+  MarkedRight (distinction-marker d)
+distinction-boundary-to-right-fiber d (x , x≡r) =
+  x , distinction-marker-right d x x≡r
+
+-- § The original cover appears as a cover by marked fibers.
+distinction-fiber-cover :
+  (d : Distinction) →
+  (x : S d) →
+  MarkedLeft (distinction-marker d) ⊎ MarkedRight (distinction-marker d)
+distinction-fiber-cover d x with marker-cover (distinction-marker d) x
+... | inj₁ marked-left  = inj₁ (x , marked-left)
+... | inj₂ marked-right = inj₂ (x , marked-right)
+
+-- § The left boundary fiber is classified by the binary classifier.
+distinction-classified-left :
+  (d : Distinction) →
+  ClassifiedSubcarrier TwoClassifier (S d)
+distinction-classified-left d = two-classifier-marked-left (distinction-marker d)
+
+-- § The cover packaged as the binary fiber reading of a distinction.
+record DistinctionFiberReading (d : Distinction) : Set1 where
+  field
+    boundary-marker        : Marker (S d)
+    left-boundary-marked   : boundary-marker (ℓ d) ≡ L
+    right-boundary-marked  : boundary-marker (r d) ≡ R
+    left-fiber-to-boundary : MarkedLeft boundary-marker → Σ (S d) (λ x → x ≡ ℓ d)
+    boundary-to-left-fiber : Σ (S d) (λ x → x ≡ ℓ d) → MarkedLeft boundary-marker
+    right-fiber-to-boundary : MarkedRight boundary-marker → Σ (S d) (λ x → x ≡ r d)
+    boundary-to-right-fiber : Σ (S d) (λ x → x ≡ r d) → MarkedRight boundary-marker
+    fiber-cover            : (x : S d) → MarkedLeft boundary-marker ⊎ MarkedRight boundary-marker
+    classified-left-fiber  : ClassifiedSubcarrier TwoClassifier (S d)
+
+-- § Every distinction carries its own binary fiber reading.
+distinction-fiber-reading :
+  (d : Distinction) →
+  DistinctionFiberReading d
+distinction-fiber-reading d = record
+  { boundary-marker         = distinction-marker d
+  ; left-boundary-marked    = distinction-marker-left d (ℓ d) refl
+  ; right-boundary-marked   = distinction-marker-right d (r d) refl
+  ; left-fiber-to-boundary  = distinction-left-fiber-to-boundary d
+  ; boundary-to-left-fiber  = distinction-boundary-to-left-fiber d
+  ; right-fiber-to-boundary = distinction-right-fiber-to-boundary d
+  ; boundary-to-right-fiber = distinction-boundary-to-right-fiber d
+  ; fiber-cover             = distinction-fiber-cover d
+  ; classified-left-fiber   = distinction-classified-left d
+  }
+\end{code}
+
+\section{Stable Classified Contact}
+\label{sec:two-normal-form:stable-classified-contact}
+
+The point of contact with richer mathematical languages is now visible.
+A later theory may speak of relations, characteristic maps, truth values,
+or classified subobjects.  Those names are harmless when their data are
+displayed.  What matters is that relation, stability, and classification
+arrive together: a joint imprint must not collapse origins, and the
+selected part of the origin carrier must be the truth fiber of a
+displayed marker.
+
+This is an interface of union, not rivalry.  It does not deny later
+languages their own constructions.  It asks them to expose the contact
+data by which those constructions become readable: two evaluations, a
+non-collapsing joint imprint, a classifier object, and a characteristic
+map into that classifier.  Once those are present, the selected
+subcarrier is no longer a free predicate hovering over the system; it is
+the fiber forced by the truth anchor.
+
+\begin{code}
+-- § Stable classified contact: relation, stability, and classification together.
+record StableClassifiedContact (classifier : ClassifierObject) (X Y Z : Set) : Set1 where
+  field
+    scc-leftEval       : X → Y
+    scc-rightEval      : X → Z
+    scc-stableRelation : StableRelation scc-leftEval scc-rightEval
+    scc-marker         : ClassifierMarker classifier X
+
+-- § The selected truth fiber forced by a stable classified contact.
+scc-classified-subcarrier :
+  (classifier : ClassifierObject) {X Y Z : Set} →
+  StableClassifiedContact classifier X Y Z →
+  ClassifiedSubcarrier classifier X
+scc-classified-subcarrier classifier contact =
+  truth-fiber-classified classifier (StableClassifiedContact.scc-marker contact)
+
+-- § Stability still forces component agreement back to origin equality.
+scc-stable-components :
+  (classifier : ClassifierObject) {X Y Z : Set} →
+  (contact : StableClassifiedContact classifier X Y Z) →
+  (x y : X) →
+  StableClassifiedContact.scc-leftEval contact x ≡ StableClassifiedContact.scc-leftEval contact y →
+  StableClassifiedContact.scc-rightEval contact x ≡ StableClassifiedContact.scc-rightEval contact y →
+  x ≡ y
+scc-stable-components classifier contact x y same-left same-right =
+  stable-relation-components
+    (StableClassifiedContact.scc-leftEval contact)
+    (StableClassifiedContact.scc-rightEval contact)
+    (StableClassifiedContact.scc-stableRelation contact)
+    x y same-left same-right
+
+-- § The classifier marker of a stable contact selects a truth-fiber point by contact.
+scc-truth-fiber-contact :
+  (classifier : ClassifierObject) {X Y Z : Set} →
+  (contact : StableClassifiedContact classifier X Y Z) →
+  (fiber : TruthFiber classifier (StableClassifiedContact.scc-marker contact)) →
+  Contact (StableClassifiedContact.scc-marker contact)
+          (λ (_ : TruthFiber classifier (StableClassifiedContact.scc-marker contact)) →
+             ClassifierObject.truthPoint classifier)
+scc-truth-fiber-contact classifier contact =
+  truth-fiber-contact classifier (StableClassifiedContact.scc-marker contact)
+\end{code}
+
+The interface is now closed in the modest sense appropriate here.  A
+stable classified contact is not recovered from a selected fiber alone:
+the fiber remembers classification, not the two evaluations whose joint
+imprint was stable.  But once those evaluations, their stability witness,
+and the marker are displayed, no further datum is needed to assemble the
+interface.  The binary classifier is also not a metaphor for the general
+case; it is the definitional first case of the same pattern.  Finally,
+stability may be transported only through maps that do not collapse
+information.  This last condition is essential: arbitrary
+postcomposition can identify values and destroy stability.
+
+\begin{code}
+-- § A stable classified contact is assembled from exactly its displayed data.
+scc-from-data :
+  (classifier : ClassifierObject) {X Y Z : Set} →
+  (leftEval : X → Y) →
+  (rightEval : X → Z) →
+  StableRelation leftEval rightEval →
+  ClassifierMarker classifier X →
+  StableClassifiedContact classifier X Y Z
+scc-from-data classifier leftEval rightEval stable marker = record
+  { scc-leftEval       = leftEval
+  ; scc-rightEval      = rightEval
+  ; scc-stableRelation = stable
+  ; scc-marker         = marker
+  }
+
+-- § Reassembling a contact from its displayed fields returns the same interface.
+scc-fields-reconstruct :
+  (classifier : ClassifierObject) {X Y Z : Set} →
+  (contact : StableClassifiedContact classifier X Y Z) →
+  scc-from-data classifier
+    (StableClassifiedContact.scc-leftEval contact)
+    (StableClassifiedContact.scc-rightEval contact)
+    (StableClassifiedContact.scc-stableRelation contact)
+    (StableClassifiedContact.scc-marker contact)
+  ≡ contact
+scc-fields-reconstruct classifier contact = refl
+
+-- § The binary classifier reconstruction bundles the definitional first case.
+record BinaryClassifierReconstruction (A : Set) (marker : Marker A) : Set1 where
+  field
+    marker-is-binary      : ClassifierMarker TwoClassifier A ≡ Marker A
+    truth-fiber-is-left   : TruthFiber TwoClassifier marker ≡ MarkedLeft marker
+    classified-left       : ClassifiedSubcarrier TwoClassifier A
+    truth-contact-is-left : MarkedLeft marker → Contact marker idTwo
+
+-- § Two is the first classifier interface, with the left fiber as truth fiber.
+binary-classifier-reconstruction :
+  {A : Set} (marker : Marker A) →
+  BinaryClassifierReconstruction A marker
+binary-classifier-reconstruction marker = record
+  { marker-is-binary      = two-classifier-marker
+  ; truth-fiber-is-left   = two-classifier-truth-fiber marker
+  ; classified-left       = two-classifier-marked-left marker
+  ; truth-contact-is-left = two-truth-contact marker
+  }
+
+-- § Product equality projects to equality of first components.
+product-fst-eq :
+  {A B : Set} {p q : A × B} →
+  p ≡ q → fst p ≡ fst q
+product-fst-eq refl = refl
+
+-- § Product equality projects to equality of second components.
+product-snd-eq :
+  {A B : Set} {p q : A × B} →
+  p ≡ q → snd p ≡ snd q
+product-snd-eq refl = refl
+
+-- § Stable relations survive postcomposition by non-collapsing maps.
+stable-relation-postcompose :
+  {X Y Z Y' Z' : Set} →
+  (leftEval : X → Y) →
+  (rightEval : X → Z) →
+  (leftMap : Y → Y') →
+  (rightMap : Z → Z') →
+  NonCollapsing leftMap →
+  NonCollapsing rightMap →
+  StableRelation leftEval rightEval →
+  StableRelation (λ x → leftMap (leftEval x)) (λ x → rightMap (rightEval x))
+stable-relation-postcompose leftEval rightEval leftMap rightMap leftNC rightNC stable x y same =
+  stable x y
+    (pair-eq
+      (leftNC (leftEval x) (leftEval y) (product-fst-eq same))
+      (rightNC (rightEval x) (rightEval y) (product-snd-eq same)))
+
+-- § Stable classified contact survives such non-collapsing postcomposition.
+scc-postcompose :
+  (classifier : ClassifierObject) {X Y Z Y' Z' : Set} →
+  StableClassifiedContact classifier X Y Z →
+  (leftMap : Y → Y') →
+  (rightMap : Z → Z') →
+  NonCollapsing leftMap →
+  NonCollapsing rightMap →
+  StableClassifiedContact classifier X Y' Z'
+scc-postcompose classifier contact leftMap rightMap leftNC rightNC = record
+  { scc-leftEval       = λ x → leftMap (StableClassifiedContact.scc-leftEval contact x)
+  ; scc-rightEval      = λ x → rightMap (StableClassifiedContact.scc-rightEval contact x)
+  ; scc-stableRelation =
+      stable-relation-postcompose
+        (StableClassifiedContact.scc-leftEval contact)
+        (StableClassifiedContact.scc-rightEval contact)
+        leftMap rightMap leftNC rightNC
+        (StableClassifiedContact.scc-stableRelation contact)
+  ; scc-marker         = StableClassifiedContact.scc-marker contact
+  }
+\end{code}
+
+\section{Stable Reading Interface}
+\label{sec:two-normal-form:stable-reading-interface}
+
+The previous constructions can now be collected without naming any
+later language.  The interface records only the roles that have already
+appeared: a carrier being read, two displayed readings of it, a
+non-collapsing joint imprint, and a marker into a classifier object.
+It is the stable reading surface on which richer structures can later
+display their data.
+
+The point of the record is architectural.  It makes the translation
+surface explicit while keeping the level fixed.  From a stable reading
+one obtains a stable classified contact, a classified truth fiber, and
+contact with the truth point.  Conversely, the first binary instance is
+already present in a distinction: the cover determines a marker, and the
+separation of the two boundary classes makes that marker non-collapsing.
+
+\begin{code}
+-- § Stable reading interface: carrier, two readings, stability, marker.
+record StableReadingInterface (classifier : ClassifierObject) : Set1 where
+  field
+    sri-carrier       : Set
+    sri-leftCarrier   : Set
+    sri-rightCarrier  : Set
+    sri-leftReading   : sri-carrier → sri-leftCarrier
+    sri-rightReading  : sri-carrier → sri-rightCarrier
+    sri-stableReading : StableRelation sri-leftReading sri-rightReading
+    sri-marker        : ClassifierMarker classifier sri-carrier
+
+-- § A stable reading is a stable classified contact in displayed form.
+sri-to-stable-classified-contact :
+  (classifier : ClassifierObject) →
+  (reading : StableReadingInterface classifier) →
+  StableClassifiedContact classifier
+    (StableReadingInterface.sri-carrier reading)
+    (StableReadingInterface.sri-leftCarrier reading)
+    (StableReadingInterface.sri-rightCarrier reading)
+sri-to-stable-classified-contact classifier reading = record
+  { scc-leftEval       = StableReadingInterface.sri-leftReading reading
+  ; scc-rightEval      = StableReadingInterface.sri-rightReading reading
+  ; scc-stableRelation = StableReadingInterface.sri-stableReading reading
+  ; scc-marker         = StableReadingInterface.sri-marker reading
+  }
+
+-- § The marker of a stable reading classifies its truth fiber.
+sri-classified-subcarrier :
+  (classifier : ClassifierObject) →
+  (reading : StableReadingInterface classifier) →
+  ClassifiedSubcarrier classifier (StableReadingInterface.sri-carrier reading)
+sri-classified-subcarrier classifier reading =
+  scc-classified-subcarrier classifier (sri-to-stable-classified-contact classifier reading)
+
+-- § A truth-fiber point of a stable reading contacts the truth point.
+sri-truth-fiber-contact :
+  (classifier : ClassifierObject) →
+  (reading : StableReadingInterface classifier) →
+  (fiber : TruthFiber classifier (StableReadingInterface.sri-marker reading)) →
+  Contact (StableReadingInterface.sri-marker reading)
+          (λ (_ : TruthFiber classifier (StableReadingInterface.sri-marker reading)) →
+             ClassifierObject.truthPoint classifier)
+sri-truth-fiber-contact classifier reading =
+  truth-fiber-contact classifier (StableReadingInterface.sri-marker reading)
+
+-- § Stability of a stable reading returns component agreement to origin equality.
+sri-stable-components :
+  (classifier : ClassifierObject) →
+  (reading : StableReadingInterface classifier) →
+  (x y : StableReadingInterface.sri-carrier reading) →
+  StableReadingInterface.sri-leftReading reading x ≡ StableReadingInterface.sri-leftReading reading y →
+  StableReadingInterface.sri-rightReading reading x ≡ StableReadingInterface.sri-rightReading reading y →
+  x ≡ y
+sri-stable-components classifier reading x y same-left same-right =
+  stable-relation-components
+    (StableReadingInterface.sri-leftReading reading)
+    (StableReadingInterface.sri-rightReading reading)
+    (StableReadingInterface.sri-stableReading reading)
+    x y same-left same-right
+
+-- § Stable readings survive postcomposition by non-collapsing maps.
+sri-postcompose :
+  (classifier : ClassifierObject) →
+  (reading : StableReadingInterface classifier) →
+  {Y' Z' : Set} →
+  (leftMap : StableReadingInterface.sri-leftCarrier reading → Y') →
+  (rightMap : StableReadingInterface.sri-rightCarrier reading → Z') →
+  NonCollapsing leftMap →
+  NonCollapsing rightMap →
+  StableReadingInterface classifier
+sri-postcompose classifier reading {Y' = Y'} {Z' = Z'} leftMap rightMap leftNC rightNC = record
+  { sri-carrier       = StableReadingInterface.sri-carrier reading
+  ; sri-leftCarrier   = Y'
+  ; sri-rightCarrier  = Z'
+  ; sri-leftReading   = λ x → leftMap (StableReadingInterface.sri-leftReading reading x)
+  ; sri-rightReading  = λ x → rightMap (StableReadingInterface.sri-rightReading reading x)
+  ; sri-stableReading =
+      stable-relation-postcompose
+        (StableReadingInterface.sri-leftReading reading)
+        (StableReadingInterface.sri-rightReading reading)
+        leftMap rightMap leftNC rightNC
+        (StableReadingInterface.sri-stableReading reading)
+  ; sri-marker        = StableReadingInterface.sri-marker reading
+  }
+
+-- § The distinction marker is non-collapsing.
+distinction-marker-noncollapsing :
+  (d : Distinction) →
+  NonCollapsing (distinction-marker d)
+distinction-marker-noncollapsing d x y same with cover d x | cover d y
+... | inj₁ x≡ℓ | inj₁ y≡ℓ = trans x≡ℓ (sym y≡ℓ)
+... | inj₁ _   | inj₂ _   = ⊥-elim (Two-L≠R same)
+... | inj₂ _   | inj₁ _   = ⊥-elim (Two-L≠R (sym same))
+... | inj₂ x≡r | inj₂ y≡r = trans x≡r (sym y≡r)
+
+-- § The distinction marker read twice is a stable relation.
+distinction-marker-stable-relation :
+  (d : Distinction) →
+  StableRelation (distinction-marker d) (distinction-marker d)
+distinction-marker-stable-relation d x y same =
+  distinction-marker-noncollapsing d x y (product-fst-eq same)
+
+-- § Every distinction gives the first binary stable reading.
+distinction-stable-reading :
+  (d : Distinction) →
+  StableReadingInterface TwoClassifier
+distinction-stable-reading d = record
+  { sri-carrier       = S d
+  ; sri-leftCarrier   = Two
+  ; sri-rightCarrier  = Two
+  ; sri-leftReading   = distinction-marker d
+  ; sri-rightReading  = distinction-marker d
+  ; sri-stableReading = distinction-marker-stable-relation d
+  ; sri-marker        = distinction-marker d
+  }
+
+-- § Reading closure: the fiber and stable-reading layers return to Distinction.
+record ReadingClosure (d : Distinction) : Set1 where
+  field
+    rc-fiber-reading         : DistinctionFiberReading d
+    rc-stable-reading        : StableReadingInterface TwoClassifier
+    rc-classified-subcarrier : ClassifiedSubcarrier TwoClassifier (S d)
+    rc-stable-contact        : StableClassifiedContact TwoClassifier (S d) Two Two
+
+-- § Every distinction closes its reading branch without further data.
+reading-closure :
+  (d : Distinction) →
+  ReadingClosure d
+reading-closure d = record
+  { rc-fiber-reading         = distinction-fiber-reading d
+  ; rc-stable-reading        = distinction-stable-reading d
+  ; rc-classified-subcarrier = distinction-classified-left d
+  ; rc-stable-contact        =
+      sri-to-stable-classified-contact TwoClassifier (distinction-stable-reading d)
+  }
+\end{code}
 
 \section{Distinction Isomorphism}
 \label{sec:two-normal-form:distinction-isomorphism}
@@ -2687,11 +3408,29 @@ Distinctionℓ-determined d f g fℓ≡gℓ fr≡gr =
 
 The base-level normal-form theorem of Chapter~\ref{ch:two-normal-form} stated that every \texttt{Distinction} is isomorphic to \texttt{Two}. Once classification data themselves are lifted into higher universes, the same statement must hold there too, or the hierarchy would generate distinctions that escape the very normal form on which the base-level result rests. The structural force is uniformity: a distinction at level $\ell$ that admitted a wider classification than at level $0$ would let the hierarchy add information by mere relabelling, and the entire drift construction would lose its meaning.
 
-\textbf{Constraint:} the proof of \texttt{two-normal-form} consumed nothing about its carrier beyond the four fields of a \texttt{Distinction}. Those fields exist verbatim in \texttt{Distinctionℓ}. Any normal-form claim that held at level $0$ must therefore hold at every level $\ell$, by the very same construction.
+The proof of \texttt{two-normal-form} consumed nothing about its carrier
+beyond the four fields of a \texttt{Distinction}. Those fields exist
+verbatim in \texttt{Distinctionℓ}. Any normal-form claim that held at
+level $0$ can therefore be repeated at level $\ell$ by the same
+construction.
 
-\textbf{Construction:} a level-polymorphic two-element type \texttt{Twoℓ}, a level-polymorphic distinction \texttt{Two-distinctionℓ}, and a level-polymorphic boundary-preserving isomorphism record \texttt{DistinctionIsoℓ} are introduced. The maps \texttt{toTwoℓ}, \texttt{fromTwoℓ}, and the round-trip identities mirror their base-level counterparts. The theorem \texttt{two-normal-formℓ} then exhibits the isomorphism for every level $\ell$ uniformly.
+The code introduces a level-polymorphic two-element type
+\texttt{Twoℓ}, a level-polymorphic distinction
+\texttt{Two-distinctionℓ}, and a level-polymorphic
+boundary-preserving isomorphism record \texttt{DistinctionIsoℓ}. The
+maps \texttt{toTwoℓ}, \texttt{fromTwoℓ}, and the round-trip identities
+mirror their base-level counterparts. The theorem
+\texttt{two-normal-formℓ} then exhibits the isomorphism uniformly for
+each level $\ell$.
 
-\textbf{Consequence:} the normal-form result is closed under the universe hierarchy. The base case is no longer an isolated theorem at level $0$; it is the level-$0$ instance of a single statement that holds at every level. The reach of the universal claim is sharpened: Tier 1 (level $0$) was already proved; Tier 2 (every level $\ell$) is now proved by the same construction. The remaining outer boundary -- a single quantifier ranging over the entire universe hierarchy at once -- is not an artefact of this development but the Girard limit of any consistent type theory; no internal proof can cross it.
+Thus the normal-form result is closed under the universe hierarchy. The
+base case is no longer an isolated theorem at level $0$; it is the
+level-$0$ instance of a statement that has the same construction at
+every level. Tier 1 (level $0$) was already proved, and Tier 2 (each
+level $\ell$) is proved here. The remaining outer boundary -- a single
+quantifier ranging over the entire universe hierarchy at once -- is not
+an artefact of this development but the Girard limit of any consistent
+type theory; no internal proof can cross it.
 
 \begin{code}
 -- § Level-polymorphic two-element type.
@@ -5156,19 +5895,16 @@ Read together, they constrain a single object whose name is not
 optional. The remainder of this chapter unfolds the constraint to its
 unique fixed point.
 
-\textbf{Constraint:} the survivor must be compatible with non-collapse,
-with drift non-triviality, and with full $\mathrm{Aut}(K_4)$-symmetry,
-simultaneously and at every successor step.
-
-\textbf{Elimination:} a passive set of $V^d$ tuples is eliminated by
-non-collapse iterated through time; a one-dimensional or tree-like
-extension is eliminated by drift non-triviality; an extension with a
-preferred direction is eliminated by symmetry.
-
-\textbf{Consequence:} what survives is an object equipped with $d$
-independent monotone directions in which extension is permitted, with
-no direction marked. The remaining sections of this chapter prove each
-elimination explicitly.
+The survivor must be compatible with non-collapse, with drift
+non-triviality, and with full $\mathrm{Aut}(K_4)$-symmetry,
+simultaneously and at every successor step. A passive set of $V^d$
+tuples is excluded by non-collapse iterated through time; a
+one-dimensional or tree-like extension is excluded by drift
+non-triviality; an extension with a preferred direction is excluded by
+symmetry. What remains is an object equipped with $d$ independent
+monotone directions in which extension is permitted, with no direction
+marked. The remaining sections of this chapter prove each elimination
+explicitly.
 
 \section{Irreversibility from Non-Collapse}
 \label{sec:spatial-extension:irreversibility}
@@ -5192,18 +5928,15 @@ type theory that records its negations propositionally. The set of
 distinctions made is monotone in any successor relation the system
 admits.
 
-\textbf{Constraint:} non-collapse must hold uniformly over all
-successor steps, not only at the moment of distinction.
-
-\textbf{Elimination:} the reading ``non-collapse holds in the moment of
-distinction but may be revoked later'' is eliminated by the propositional
-character of $\mathrm{Dec}(x \equiv y)$ already proved. A revocable
-inequality is not an inequality at all.
-
-\textbf{Consequence:} the configuration set $\mathcal{C}$ of
-distinguishable states is monotone under any successor relation; it
-may grow, it cannot shrink. This monotonicity is recorded in what
-follows as a partial order on $\mathcal{C}$.
+Non-collapse must hold uniformly over all successor steps, not only at
+the moment of distinction. The reading ``non-collapse holds in the
+moment of distinction but may be revoked later'' is excluded by the
+propositional character of $\mathrm{Dec}(x \equiv y)$ already proved.
+A revocable inequality is not an inequality at all. The configuration
+set $\mathcal{C}$ of distinguishable states is therefore monotone under
+any successor relation; it may grow, it cannot shrink. This
+monotonicity is recorded in what follows as a partial order on
+$\mathcal{C}$.
 
 \section{Symmetry Forbids a Preferred Direction}
 \label{sec:spatial-extension:isotropy}
@@ -5232,17 +5965,14 @@ The first horn is forbidden by the orbit theorems. Only the second
 survives. Isotropy of extension is therefore a derived consequence of
 the symmetry already proved, not a separate postulate.
 
-\textbf{Constraint:} no direction of drift may be marked by a feature
-that survives $\mathrm{Aut}(K_4)$-symmetry.
-
-\textbf{Elimination:} a structure with a distinguished extension axis
-is eliminated by transitivity of the orbit action on directions. The
-candidate ``preferred direction'' would have to be either a structural
-invariant (forbidden) or a labelling (not a structural fact at all).
-
-\textbf{Consequence:} extension is permitted equally along each of the
-$d$ independent directions. No direction may be silently distinguished
-in any later construction.
+No direction of drift may be marked by a feature that survives
+$\mathrm{Aut}(K_4)$-symmetry. A structure with a distinguished
+extension axis is excluded by transitivity of the orbit action on
+directions. The candidate ``preferred direction'' would have to be
+either a structural invariant, which the orbit theorem forbids, or a
+labelling, which is not a structural fact at all. Extension is therefore
+permitted equally along each of the $d$ independent directions. No
+direction may be silently distinguished in any later construction.
 
 \section{The Surviving Object}
 \label{sec:spatial-extension:surviving-object}
@@ -5276,20 +6006,18 @@ the extension is well-defined ($\chi$), and the cross-direction
 correction term that the extension itself carries on its boundary
 ($d^2$).
 
-\textbf{Constraint:} the object that survives non-collapse, drift
-non-triviality, and isotropy must simultaneously be a finite graph
-and a $d$-dimensional extension structure with $\mathrm{Aut} = S_4$.
-
-\textbf{Construction:} no separate construction is needed. The graph
-$K_4$ already proven in
+The object that survives non-collapse, drift non-triviality, and
+isotropy is simultaneously a finite graph and a $d$-dimensional
+extension structure with $\mathrm{Aut} = S_4$. No separate construction
+is needed. The graph $K_4$ already proven in
 \hyperref[ch:graph-presentation]{Chapter~\ref*{ch:graph-presentation}}
 admits the extension reading because its three ingredients ---
 non-collapse, drift non-triviality, isotropy --- are precisely the
 ingredients used to characterise it as a graph.
 
-\textbf{Consequence:} the four invariants of the ledger are not four
-independent numbers but the count, the connectivity, the dimensionality,
-and the closure condition of one structure. The arithmetic that follows
+The four invariants of the ledger are therefore not four independent
+numbers but the count, the connectivity, the dimensionality, and the
+closure condition of one structure. The arithmetic that follows
 operates on this structure, not on a tuple.
 
 \section{What This Reading Does Not Smuggle In}
@@ -5324,17 +6052,14 @@ than another arithmetic combination is fixed inside the kind/formula framework -
 that question --- but the closure occurs after the arithmetic
 infrastructure is in place.
 
-\textbf{Constraint:} the extension reading must not silently confer
-metric, topological, or interpretive physical structure on the survivor.
-
-\textbf{Elimination:} four temptations are eliminated explicitly: a
-distance function, a continuum, a physical reading, and a numerical
-target. Each would require an independent derivation that is not
-present at this stage.
-
-\textbf{Consequence:} every later use of the extension reading rests
-exactly on what has been proved here --- monotonicity, isotropy,
-$d$-dimensional extension --- and on nothing else.
+The extension reading must not silently confer metric, topological, or
+interpretive physical structure on the survivor. Four temptations are
+excluded explicitly: a distance function, a continuum, a physical
+reading, and a numerical target. Each would require an independent
+derivation that is not present at this stage. Every later use of the
+extension reading rests exactly on what has been proved here ---
+monotonicity, isotropy, $d$-dimensional extension --- and on nothing
+else.
 
 %═══════════════════════════════════════════════════════════════════════════
 \part{Derived Arithmetic}
@@ -5360,23 +6085,23 @@ the very distinction the file began with: \texttt{L} marks termination
 child to count). Counting is not granted alongside the distinction; it
 is the wellfounded closure of one-fold branching over it.
 
-\textbf{Constraint:} The minimal foundation admits exactly one
-generating type, \texttt{Two}. A second independent inductive type for
-the naturals would break that minimality and turn counting into a
-parallel axiom rather than a consequence. \textbf{Construction:} The
-W-type over \texttt{Two} with branching shape
-$\texttt{L} \mapsto \bot$, $\texttt{R} \mapsto \mathbf{1}$ is
+The minimal foundation admits exactly one generating type,
+\texttt{Two}. A second independent inductive type for the naturals
+would break that minimality and turn counting into a parallel axiom
+rather than a consequence. The W-type over \texttt{Two} with branching
+shape $\texttt{L} \mapsto \bot$, $\texttt{R} \mapsto \mathbf{1}$ is
 well-defined inside MLTT. Its zero/successor encoding produces a
 forward map from the Peano naturals introduced in
 Chapter~\ref{ch:indexed-ledger} into this W-encoding; the inverse is
 structural recursion on \texttt{W}; the round-trip on the Peano side
 holds by \texttt{refl} after a single \texttt{cong\,suc}; the
-round-trip on the W-side holds up to a structural equivalence that
-does not require function extensionality. \textbf{Consequence:} The
-naturals are recovered from \texttt{Two} alone, by W-recursion, with
-no further inductive type added to the foundation. Every later use of
-\texttt{ℕ} in the file may be read through this isomorphism, as a use
-of the W-encoding it stands for.
+round-trip on the W-side holds up to a structural equivalence that does
+not require function extensionality.
+
+The naturals are recovered from \texttt{Two} alone, by W-recursion,
+with no further inductive type added to the foundation. Every later use
+of \texttt{ℕ} in the file may be read through this isomorphism, as a
+use of the W-encoding it stands for.
 
 \begin{code}
 -- § Local unit type: ⊤ is introduced in the next chapter; we name the
@@ -9399,16 +10124,12 @@ between values, not identifications between constructors. The
 constructors stay disjoint at the type level. This disjointness is the
 content of the next section.
 
-\textbf{Constraint:} the four invariants of the closed record must be
-classified by what they count, not by what they evaluate to.
-
-\textbf{Construction:} a four-element data type whose constructors
-correspond to the four kinds, and an assignment of each invariant to
-its constructor.
-
-\textbf{Consequence:} the four invariants can no longer be treated as a
-homogeneous tuple. Any later expression in them carries a kind label
-on every factor.
+The four invariants of the closed record must be classified by what
+they count, not by what they evaluate to. The code below introduces a
+four-element data type whose constructors correspond to the four kinds,
+and it assigns each invariant to its constructor. From that point on the
+four invariants can no longer be treated as a homogeneous tuple: every
+later expression in them carries a kind label on each factor.
 
 \begin{code}
 -- § The four kinds of invariant attached to the closed K₄ record.
@@ -9466,15 +10187,11 @@ naturals, the first reading turns into multiplication of the values
 (the categorical product reduces to numerical product), and the second
 into addition (the coproduct reduces to numerical sum).
 
-\textbf{Constraint:} the four kinds must be pairwise distinguishable
-inside the type theory.
-
-\textbf{Elimination:} every candidate identification between two
-distinct constructors is eliminated by the absurd pattern. Six
-identifications would be needed; six are eliminated.
-
-\textbf{Consequence:} no kind collapses into another. The
-classification is rigid.
+The four kinds must be pairwise distinguishable inside the type theory.
+Every candidate identification between two distinct constructors is
+excluded by the absurd pattern. Six identifications would be needed;
+six are discharged. No kind collapses into another, so the
+classification remains separated at the constructor level.
 
 \begin{code}
 -- § The six pairwise disjointness lemmas.
@@ -9517,24 +10234,20 @@ level, and the underlying value is the sum of the values. The
 forgetful reductions are not asserted; they are computed by
 \texttt{refl}.
 
-\textbf{Constraint:} the kind labels must be discharged by a map into
-$\mathbb{N}$ that respects the categorical operations on tagged
-values --- product within a shared kind, coproduct across disjoint
-kinds.
+The kind labels must be discharged by a map into $\mathbb{N}$ that
+respects the categorical operations on tagged values: product within a
+shared kind, coproduct across disjoint kinds. The indexed record
+\texttt{Tagged} below carries a value at a given kind. The combinators
+$\_\otimes\_$ and $\_\oplus[\_]\_$ implement the product and the
+coproduct; the disjointness witness is an obligation in the type of the
+coproduct combinator and cannot be supplied for two values of the same
+kind. The forgetful reductions hold definitionally.
 
-\textbf{Construction:} the indexed record \texttt{Tagged} below carries
-a value at a given kind. The combinators $\_\otimes\_$ and
-$\_\oplus[\_]\_$ implement the product and the coproduct; the
-disjointness witness is an obligation in the type of the coproduct
-combinator and cannot be supplied for two values of the same kind.
-The forgetful reductions hold definitionally.
-
-\textbf{Consequence:} the verbal claim ``shared kind $\to$ product
-$\to$ multiplication; disjoint kinds $\to$ coproduct $\to$ addition''
-is now a definitional reduction inside the type theory. The
-forgetful map is unique up to definitional equality, and the
-arithmetic shape of the simplex evaluation is forced by the type of
-its tagged operands.
+The verbal claim ``shared kind $\to$ product $\to$ multiplication;
+disjoint kinds $\to$ coproduct $\to$ addition'' is thereby a
+definitional reduction inside the type theory. The forgetful map is
+unique up to definitional equality, and the arithmetic shape of the
+simplex evaluation is determined by the type of its tagged operands.
 
 \begin{code}
 -- § A natural number carrying its kind as a type index.
@@ -9594,16 +10307,13 @@ absurd patterns of the previous section forbid that identification. The
 remaining categorical operation between disjoint kinds is the coproduct,
 which the forgetful functor sends to numerical addition.
 
-\textbf{Constraint:} the bulk term and the boundary term draw on kinds
-related by the disjointness lemmas of the previous section.
-
-\textbf{Construction:} the record below witnesses the kind assignments
-of both terms and exhibits the disjointness needed for the additive
-combination.
-
-\textbf{Consequence:} inside the displayed kind discipline, the form $V^d \cdot \chi + d^2$ is no longer a
-choice. It is the only combination of these four invariants whose
-inner factors share their kind and whose outer factors do not.
+The bulk term and the boundary term draw on kinds related by the
+disjointness lemmas of the previous section. The record below witnesses
+the kind assignments of both terms and exhibits the disjointness needed
+for the additive combination. Inside the displayed kind discipline, the
+form $V^d \cdot \chi + d^2$ is no longer a choice: it is the only
+combination of these four invariants whose inner factors share their
+kind and whose outer factors do not.
 
 \begin{code}
 -- § Bulk and boundary draw on disjoint kinds → forced additive combination.
@@ -9669,22 +10379,20 @@ strata $\{0,1,2\}$ exhaust the cell dimensions present in the closed
 $3$-simplex; the direction count exhausts the non-cell data the
 record carries. No fifth slot exists.
 
-\textbf{Constraint:} every $\mathrm{Aut}(K_4)$-invariant numerical
-extract of the closed record must factor through one of the record's
-primitive cardinality sources.
+Every $\mathrm{Aut}(K_4)$-invariant numerical extract of the closed
+record must factor through one of the record's primitive cardinality
+sources. A fifth kind is excluded by the structural exhaustion of the
+record's slots: no cell stratum beyond $\{0,1,2\}$ exists in the closed
+$3$-simplex, and no non-cell datum beyond direction is carried by the
+record.
 
-\textbf{Elimination:} a fifth kind is eliminated by the structural
-exhaustion of the record's slots: no cell stratum beyond $\{0,1,2\}$
-exists in the closed $3$-simplex, and no non-cell datum beyond
-direction is carried by the record.
-
-\textbf{Consequence:} the four-element data type \texttt{InvariantKind}
-is not a choice of categorisation. It is the unique enumeration of
-the record's primitive sources, and the four invariants are the
-unique refinement-stable readings of those sources. The disjointness
-lemmas of \S\ref{sec:invariant-kinds:disjointness} are then not the
-rigidity of an external classification, but the rigidity of the
-record's own slot structure.
+The four-element data type \texttt{InvariantKind} is therefore not a
+choice of categorisation. It is the unique enumeration of the record's
+primitive sources, and the four invariants are the unique
+refinement-stable readings of those sources. The disjointness lemmas of
+\S\ref{sec:invariant-kinds:disjointness} are then not the rigidity of
+an external classification, but the separation carried by the record's
+own slot structure.
 
 The absorption of $F$ into $\chi$ on $K_4$ is not a refinement step
 but the conjunction of two computations already performed in
@@ -9696,15 +10404,11 @@ alternating sum (\texttt{law14C-3-chi}). The face count carries no
 degree of freedom on $K_4$ beyond what $V$ and $\chi$ already
 record.
 
-\textbf{Constraint:} the closure reading must not introduce any
-datum on $K_4$ beyond what the simplex constants already fix.
-
-\textbf{Construction:} the record below collects the two relevant
-refl-equalities. Its inhabitant is built from the existing laws.
-
-\textbf{Consequence:} on $K_4$, the absorption of $F$ into $\chi$ is
-mechanical: self-duality and the Euler reduction together leave no
-residue.
+The closure reading must not introduce any datum on $K_4$ beyond what
+the simplex constants already fix. The record below collects the two
+relevant refl-equalities, and its inhabitant is built from the existing
+laws. On $K_4$, the absorption of $F$ into $\chi$ is mechanical:
+self-duality and the Euler reduction together leave no residue.
 
 \begin{code}
 record SelfDualClosureWitness : Set where
@@ -9774,19 +10478,17 @@ $\chi$. \emph{Every} extract --- every reading of the closed record
 that respects the binary distinction's lack of internal labels ---
 factors through these four. There is no reading outside of them.
 
-\textbf{Constraint:} the binary distinction provides no internal
-labels. A reading that depends on a labelling reads structure the
-distinction did not supply.
+The binary distinction provides no internal labels. A reading that
+depends on a labelling reads structure the distinction did not supply.
+An extract is therefore a function on the cardinalities of the orbits
+of $\mathrm{Aut}(K_4)$ on the closed record's strata. The type below
+records the four cardinality sources; an extract is a function from
+this type into $\mathbb{N}$.
 
-\textbf{Construction:} an extract is a function on the cardinalities
-of the orbits of $\mathrm{Aut}(K_4)$ on the closed record's strata.
-The type below records the four cardinality sources; an extract is a
-function from this type into $\mathbb{N}$.
-
-\textbf{Consequence:} the verbal claim ``every $\mathrm{Aut}(K_4)$-invariant
-numerical extract factors through the four slots'' is now a
-type-level fact: an extract is, by the only definition the binary
-distinction admits, a function of $V$, $E$, $d$, $\chi$.
+The verbal claim ``every $\mathrm{Aut}(K_4)$-invariant numerical extract
+factors through the four slots'' is thereby a type-level fact: an
+extract is, by the only definition the binary distinction admits, a
+function of $V$, $E$, $d$, $\chi$.
 
 \begin{code}
 -- § The four refinement-stable cardinality sources of the closed
@@ -9887,30 +10589,29 @@ cubic $d^3$ would record cross-direction structure of arity $3$,
 which a codimension-$1$ boundary does not carry. Both are eliminated
 by the codimension structure, not by enumeration.
 
-\textbf{Constraint:} every binary connector in the simplex evaluation
-must be the categorical operation respecting the kinds of its
-operands; the bulk exponent must be the isotropic one across all
-$d$ extension directions; and the boundary exponent must be the
-along--transverse arity of a codimension-$1$ surface.
-
-\textbf{Elimination:} every binary form other than $V^d \cdot \chi + d^2$
-that combines exactly these four invariants either identifies kinds
-the disjointness lemmas keep apart, fails to multiply factors of the
-shared bulk kind, breaks isotropy across the $d$ directions of the
-bulk, or violates the binary along--transverse arity of the boundary.
-The first two failures are eliminated by the lemmas of
-\S\ref{sec:invariant-kinds:disjointness} and the bulk witness of
-\S\ref{sec:invariant-kinds:bulk-boundary}; the third by the isotropy
-result of \hyperref[sec:spatial-extension:isotropy]{\S\ref*{sec:spatial-extension:isotropy}};
+Every binary connector in the simplex evaluation must be the
+categorical operation respecting the kinds of its operands; the bulk
+exponent must be the isotropic one across all $d$ extension directions;
+and the boundary exponent must be the along--transverse arity of a
+codimension-$1$ surface. Any binary form other than
+$V^d \cdot \chi + d^2$ that combines exactly these four invariants
+either identifies kinds the disjointness lemmas keep apart, fails to
+multiply factors of the shared bulk kind, breaks isotropy across the
+$d$ directions of the bulk, or violates the binary along--transverse
+arity of the boundary. The first two failures are excluded by the
+lemmas of \S\ref{sec:invariant-kinds:disjointness} and the bulk
+witness of \S\ref{sec:invariant-kinds:bulk-boundary}; the third by the
+isotropy result of
+\hyperref[sec:spatial-extension:isotropy]{\S\ref*{sec:spatial-extension:isotropy}};
 the fourth by the codimension structure of the present section.
 
-\textbf{Consequence:} the simplex evaluation defined in the next
-section is the unique combination of $V$, $E$, $d$, $\chi$ whose form
-respects the kind classification, the bulk--boundary split, and the
-codimension structure. The integer it produces is therefore not the
-value of one definition among many; it is the value of the only
-structurally admissible combination of the four refinement-stable
-invariants of the closed record.
+The simplex evaluation defined in the next section is therefore the
+unique combination of $V$, $E$, $d$, $\chi$ whose form respects the kind
+classification, the bulk--boundary split, and the codimension
+structure. The integer it produces is not the value of one definition
+among many; it is the value of the only structurally admissible
+combination of the four refinement-stable invariants of the closed
+record.
 
 The structural argument above closes a uniqueness theorem inside the
 type theory. The argument is sharper than a parameter sweep over a
@@ -9928,20 +10629,17 @@ shape are then constrained by the four kind obligations, each a
 singleton, and uniqueness of the surviving inhabitant reduces to
 \texttt{refl} after four rewrites.
 
-\textbf{Constraint:} every candidate combination of the four atoms is
-an inhabitant of a free term grammar with syntactic power, product,
-and sum. The shape predicate that names the canonical bulk-plus-boundary
-form must be derived from existing structural lemmas, not postulated
-as a record schema. The four atomic positions inside the resulting
-shape must be pinned by the kind obligations.
+Every candidate combination of the four atoms is an inhabitant of a
+free term grammar with syntactic power, product, and sum. The shape
+predicate that names the canonical bulk-plus-boundary form is derived
+from existing structural lemmas, not postulated as a record schema. The
+four atomic positions inside the resulting shape are then pinned by the
+kind obligations.
 
-\textbf{Elimination:} the structural equation of the shape predicate
-collapses every candidate tree to the bulk-plus-boundary form; the
-four singleton lemmas then collapse the four atomic positions to a
-single inhabitant. The combination kills the entire candidate tree
-space outside the canonical inhabitant.
-
-\textbf{Consequence:} the canonical form
+The structural equation of the shape predicate collapses every
+candidate tree to the bulk-plus-boundary form; the four singleton
+lemmas then collapse the four atomic positions to a single inhabitant.
+The canonical form
 $\mathit{base}^{\mathit{exp}} \cdot \mathit{mult} + \mathit{bdy}^2$
 with $(\mathit{base}, \mathit{exp}, \mathit{mult}, \mathit{bdy})
 = (V, d, \chi, d)$ is the unique inhabitant of the free term grammar
@@ -10124,20 +10822,19 @@ forced equal to the canonical form, or it does not carry the
 predicate at all. There is no third compartment, because the
 predicate is decidable and the equation it forces is unique.
 
-\textbf{Constraint:} \texttt{Expr} is generated by four
-constructors and \texttt{Atom} by four nullary constructors; both
-are finite syntactic types whose equality reduces to a finite
-decision tree.
-\textbf{Construction:} decidable equality on \texttt{Atom} and
-\texttt{Expr} compares one constructor pair at a time; the
-classification then case-splits the equality
-$e \equiv \mathit{canonicalExpr}$. The positive branch is its own
-witness; the negative branch composes \texttt{unique-canonical-expr}
-with the inequality to refute the shape predicate.
-\textbf{Consequence:} no \texttt{Expr} escapes the dichotomy. The
-phrase ``the canonical form is the unique admissible inhabitant''
-is now a single closed term, not a stitched conjunction of local
-eliminations.
+\texttt{Expr} is generated by four constructors and \texttt{Atom} by
+four nullary constructors; both are finite syntactic types whose
+equality reduces to a finite decision tree. Decidable equality on
+\texttt{Atom} and \texttt{Expr} compares one constructor pair at a
+time. The classification then case-splits the equality
+$e \equiv \mathit{canonicalExpr}$: the positive branch is its own
+witness, while the negative branch composes
+\texttt{unique-canonical-expr} with the inequality to refute the shape
+predicate.
+
+No \texttt{Expr} escapes the dichotomy. The phrase ``the canonical form
+is the unique admissible inhabitant'' is now a single closed term, not a
+stitched conjunction of local eliminations.
 
 \begin{code}
 -- § Decidable equality on the four atoms.
@@ -10254,25 +10951,22 @@ that no theorem about \texttt{canonicalExpr} can detect, hence
 not a parameter at all. The record \texttt{NoTowerParameter}
 bundles this collapse.
 
-\textbf{Constraint:} every operator in the grammar must be either
-the primitive $\mathbb{N}$-operation \texttt{suc} or its iteration.
-Anything outside that chain is unreachable from the successor
-structure alone.
+Every operator in the grammar must be either the primitive
+$\mathbb{N}$-operation \texttt{suc} or its iteration. Anything outside
+that chain is unreachable from the successor structure alone. Two
+computational equalities, both \texttt{refl}, exhibit the chain:
+\texttt{prod-is-iter-sum} reads multiplication as repeated addition,
+and \texttt{pow-is-iter-prod} reads exponentiation as repeated
+multiplication. A third witness, \texttt{canonical-bulk-exp-is-atom},
+exhibits the absence of a fourth rung in the canonical form: the bulk
+exponent slot is an atom, not a nested power.
 
-\textbf{Construction:} two computational equalities, both
-\texttt{refl}, exhibit the chain. \texttt{prod-is-iter-sum} reads
-multiplication as repeated addition; \texttt{pow-is-iter-prod}
-reads exponentiation as repeated multiplication. A third witness,
-\texttt{canonical-bulk-exp-is-atom}, exhibits the absence of a
-fourth rung in the canonical form: the bulk exponent slot is an
-atom, not a nested power.
-
-\textbf{Consequence:} the operator signature
+The operator signature
 $\{\mathtt{++\varepsilon}, \mathtt{**}, \mathtt{\char`\^\char`\^}\}$
-is not three independent operators glued together by taste. It
-is the iteration ladder of $\mathbb{N}$ truncated at the height
-that the canonical form actually uses. \texttt{SignatureClosure}
-bundles the three witnesses.
+is not three independent operators glued together by taste. It is the
+iteration ladder of $\mathbb{N}$ truncated at the height that the
+canonical form actually uses. \texttt{SignatureClosure} bundles the
+three witnesses.
 
 \begin{code}
 -- § Multiplication on ℕ is iterated addition (refl).
@@ -10392,20 +11086,17 @@ closed by enumeration; each is closed by a single structural witness.
     reading of the closure.
 \end{enumerate}
 
-\textbf{Constraint:} the simplex evaluation carries six structural
-choices, each tied to a degree of freedom that a generic combination
-of four invariants admits.
+The simplex evaluation carries six structural choices, each tied to a
+degree of freedom that a generic combination of four invariants admits.
+Every one of the six choices is fixed by a single structural witness
+named above. None remains free, and none is closed by enumeration.
 
-\textbf{Elimination:} every one of the six choices is forced by a
-single structural witness named above. None remains free, and none is
-closed by enumeration.
-
-\textbf{Consequence:} within the displayed expression grammar and its obligations, the form $V^d \cdot \chi + d^2$ is the unique
-combination of the four refinement-stable invariants of the closed
-$K_4$ record that respects every structural fact carried by the
-record. The integer it produces on $K_4$ is therefore not the value
-of one candidate among that grammar. It is the value of the only structurally
-admissible candidate there.
+Within the displayed expression grammar and its obligations, the form
+$V^d \cdot \chi + d^2$ is the unique combination of the four
+refinement-stable invariants of the closed $K_4$ record that respects
+every structural fact carried by the record. The integer it produces on
+$K_4$ is therefore not the value of one candidate among that grammar. It
+is the value of the only structurally admissible candidate there.
 
 Each of the six structural witnesses listed above is mechanically
 discharged by a record built from existing book lemmas: the
@@ -10660,16 +11351,12 @@ structurally in
 is therefore the value of \texttt{p-dd} inside \texttt{simplex-eval},
 fixed by computation.
 
-\textbf{Constraint:} the boundary term must be a directional
-self-product whose value coincides with the boundary contribution
-inside \texttt{simplex-eval}.
-
-\textbf{Construction:} the record below collects $d = 3$, $d^2 = 9$,
-and the position of $d^2$ inside \texttt{simplex-eval}. Each field
-reduces by \texttt{refl}.
-
-\textbf{Consequence:} the codimension reading of $d^2$ stops being a
-structural argument and becomes a refl-equality.
+The boundary term must be a directional self-product whose value
+coincides with the boundary contribution inside \texttt{simplex-eval}.
+The record below collects $d = 3$, $d^2 = 9$, and the position of
+$d^2$ inside \texttt{simplex-eval}. Each field reduces by
+\texttt{refl}. The codimension reading of $d^2$ thereby becomes a
+refl-equality inside the displayed evaluation.
 
 \begin{code}
 record BoundaryArityWitness : Set where
@@ -24075,17 +24762,16 @@ resulting diagonal lives in~$\mathbb{Q}$ by construction; whether it is
 Cauchy in~$\mathbb{Q}$ and whether the original sequence converges to
 it, are the two propositions to be discharged.
 
-\textbf{Constraint:} A real number is, by definition, a Cauchy
-sequence of rationals. A sequence of reals is therefore a
-two-parameter array of rationals, and ``convergence'' must be phrased
-without invoking a metric on~$\mathbb{R}$ that has not yet been
-constructed. The only tool available is the rational metric on each
-column. \textbf{Construction:} The Cauchy condition demands eventual
-$\varepsilon$-closeness coordinatewise; the candidate limit is the
-diagonal sequence assembled from each row's own stabilisation index.
-\textbf{Consequence:} No new metric structure on~$\mathbb{R}$ is
-required to state completeness, and the limit is computed by the same
-finite recipe that underlies the Cauchy data.
+A real number is, by definition, a Cauchy sequence of rationals. A
+sequence of reals is therefore a two-parameter array of rationals, and
+``convergence'' must be phrased without invoking a metric
+on~$\mathbb{R}$ that has not yet been constructed. The only tool
+available is the rational metric on each column. The Cauchy condition
+demands eventual $\varepsilon$-closeness coordinatewise; the candidate
+limit is the diagonal sequence assembled from each row's own
+stabilisation index. No new metric structure on~$\mathbb{R}$ is needed
+to state completeness, and the limit is computed by the same finite
+recipe that underlies the Cauchy data.
 
 \begin{code}
 -- § Cauchy condition for a sequence of reals (eventual ε-closeness on a tail).
@@ -24133,15 +24819,14 @@ distances coming from the stabilising indices, while the middle
 distance is bounded by~$\delta = \mathtt{εQuarter}\,\varepsilon$
 through the Cauchy property of the source sequence of reals.
 
-\textbf{Constraint:} The diagonal must converge in~$\mathbb{Q}$;
-otherwise it cannot serve as a representative of a real limit.
-\textbf{Construction:} Two triangle inequalities decompose the
-distance between two diagonal terms into one stabilising error per
-row plus one middle error; a single $\varepsilon/4$ budget closes
-all three contributions. \textbf{Consequence:} Every Cauchy sequence
-of reals produces a canonical rational Cauchy sequence, hence a
-candidate real limit; nothing further than the Cauchy data is
-required to construct that limit.
+The diagonal must converge in~$\mathbb{Q}$; otherwise it cannot serve
+as a representative of a real limit. Two triangle inequalities
+decompose the distance between two diagonal terms into one stabilising
+error per row plus one middle error; a single $\varepsilon/4$ budget
+closes all three contributions. Every Cauchy sequence of reals
+therefore produces a canonical rational Cauchy sequence, hence a
+candidate real limit; nothing further than the Cauchy data is required
+to construct that limit.
 
 \begin{code}
 -- § Diagonal of a Cauchy sequence of reals is itself Cauchy in ℚ.
@@ -24363,17 +25048,15 @@ Two further rounds of the same triangle bookkeeping then show that the
 original sequence of reals converges to it, where convergence is
 again read coordinatewise on the rational tails.
 
-\textbf{Constraint:} The candidate limit must be inhabited by a real
-number, and the original sequence must approach it in the only sense
-available---rational closeness on a tail. \textbf{Construction:} The
-limit is the record built from the diagonal sequence and its Cauchy
-proof; convergence is obtained by inserting the diagonal as the middle
-point of a single triangle, where one side is bounded by
-\texttt{diagSeq-stable} and the other by the diagonal's own Cauchy
-modulus. \textbf{Consequence:} $\mathbb{R}$, defined as Cauchy
+The candidate limit must be inhabited by a real number, and the
+original sequence must approach it in the only sense available:
+rational closeness on a tail. The limit is the record built from the
+diagonal sequence and its Cauchy proof. Convergence is obtained by
+inserting the diagonal as the middle point of a single triangle, where
+one side is bounded by \texttt{diagSeq-stable} and the other by the
+diagonal's own Cauchy modulus. Thus $\mathbb{R}$, defined as Cauchy
 sequences of rationals modulo eventual closeness, is itself
-sequentially complete: every Cauchy sequence of reals has a real
-limit.
+sequentially complete: every Cauchy sequence of reals has a real limit.
 
 \begin{code}
 -- § The diagonal packaged as a real number: the limit candidate.
@@ -28526,7 +29209,7 @@ unit-action-admissible = record
 \end{code}
 
 %───────────────────────────────────────────────────────────────────────────
-\section{Construction: invariance and the sandwich pin a single value}
+\section{Invariance and the Sandwich Pin a Single Value}
 \label{sec:forced-action:elimination}
 %───────────────────────────────────────────────────────────────────────────
 
@@ -28749,7 +29432,7 @@ unit-curvature-admissible = record
 \end{code}
 
 %───────────────────────────────────────────────────────────────────────────
-\section{Construction: invariance and the sandwich pin a single value}
+\section{Invariance and the Sandwich Pin a Single Value}
 \label{sec:forced-coupling:elimination}
 %───────────────────────────────────────────────────────────────────────────
 
@@ -29745,14 +30428,23 @@ the self-duality $F = V$ of the tetrahedron;
 the handshaking identity $E \cdot \chi = V \cdot d$ (i.e.\ $6 \cdot 2 = 4 \cdot 3 = 12$), which rewrites to the exact ratio $E / V = d / 2 = 3/2$;
 and the orbit-quotient ledger that records vertices, edges, and perfect matchings as single Aut$(K_4)$-orbits.
 
-\textbf{Constraint:}
-Any spherical-cell invariant on $K_4$ must be a single object that bundles (i)~the topological identity with $\chi(S^2)$, (ii)~the edge count $E$, (iii)~the vertex count $V$, and (iv)~the proof that Aut$(K_4)$ has the relevant orbit transport. Without all four, the ratio $E/V$ would be a loose number rather than a symmetry-controlled invariant.
+Any spherical-cell invariant on $K_4$ must be a single object that
+bundles (i)~the topological identity with $\chi(S^2)$, (ii)~the edge
+count $E$, (iii)~the vertex count $V$, and (iv)~the proof that
+Aut$(K_4)$ has the relevant orbit transport. Without all four, the
+ratio $E/V$ would be a loose number rather than a symmetry-controlled
+invariant.
 
-\textbf{Construction:}
-The record \texttt{K4SphericalCellLaw} packages exactly these four facts. Each field reduces to \texttt{refl} on $K_4$-invariants, except \texttt{aut-orbit-ledger}, which is \texttt{theorem-aut-k4-orbits}. No further data is needed; the cell law is forced by the same combinatorics that already produced $V$, $E$, $F$, $d$, $\chi$.
+The record \texttt{K4SphericalCellLaw} packages exactly these four
+facts. Each field reduces to \texttt{refl} on $K_4$-invariants, except
+\texttt{aut-orbit-ledger}, which is \texttt{theorem-aut-k4-orbits}. No
+further data is needed; the cell law is obtained from the same
+combinatorics that already produced $V$, $E$, $F$, $d$, $\chi$.
 
-\textbf{Consequence:}
-Every later projection out of \emph{Void} must factor through this record if it uses the spherical $K_4$ cell. The ratio $E / V = 3 / 2$ is exact and Aut-invariant here; any extra meaning attached to that ratio belongs outside the eliminative chain.
+Every later projection out of \emph{Void} must factor through this
+record if it uses the spherical $K_4$ cell. The ratio $E / V = 3 / 2$
+is exact and Aut-invariant here; any extra meaning attached to that
+ratio belongs outside the eliminative chain.
 
 \begin{code}
 record K4SphericalCellLaw : Set where
@@ -32545,16 +33237,12 @@ therefore all single $\mathrm{Aut}(K_4)$-orbits, and the cardinality
 reading defining \texttt{Extract} is the only
 $\mathrm{Aut}(K_4)$-invariant numerical reading possible.
 
-\textbf{Constraint:} the Extract Concept consumes a transitivity
-witness on each cell stratum.
-
-\textbf{Construction:} the record \texttt{ExtractAutWitness} below
-gathers the orbit theorems as the type-level discharge. Its
-inhabitant is \texttt{theorem-aut-k4-orbits}; nothing further is
-constructed.
-
-\textbf{Consequence:} the Extract Concept is no longer a structural
-claim. It is the type-level reading of \texttt{theorem-aut-k4-orbits}.
+The Extract Concept consumes a transitivity witness on each cell
+stratum. The record \texttt{ExtractAutWitness} below gathers the orbit
+theorems as the type-level discharge. Its inhabitant is
+\texttt{theorem-aut-k4-orbits}; nothing further is constructed. The
+Extract Concept is thereby the type-level reading of
+\texttt{theorem-aut-k4-orbits}.
 
 \begin{code}
 record ExtractAutWitness : Set where
@@ -32581,18 +33269,14 @@ equal to $128$ by computation. Combined with the boundary term
 \texttt{p-dd}, recorded earlier as
 \texttt{boundary-arity-witness}, it yields the simplex evaluation.
 
-\textbf{Constraint:} the bulk exponent must be the
-$\mathrm{Aut}(K_4)$-invariant exponent, and the bulk term must
-combine with the boundary term to yield \texttt{simplex-eval}.
-
-\textbf{Construction:} the record \texttt{BulkExponentWitness}
-below collects the orbit-record (the structural source of
-isotropy) and the value of the bulk term. Its inhabitant is
-constructed from existing laws.
-
-\textbf{Consequence:} the bulk exponent $d$ is the unique exponent
-the orbit record permits, and the bulk term it produces is the one
-the simplex evaluation realises.
+The bulk exponent must be the $\mathrm{Aut}(K_4)$-invariant exponent,
+and the bulk term must combine with the boundary term to yield
+\texttt{simplex-eval}. The record \texttt{BulkExponentWitness} below
+collects the orbit record, which is the structural source of isotropy,
+and the value of the bulk term. Its inhabitant is constructed from
+existing laws. The bulk exponent $d$ is the unique exponent the orbit
+record permits, and the bulk term it produces is the one the simplex
+evaluation realises.
 
 \begin{code}
 record BulkExponentWitness : Set where
@@ -32615,20 +33299,19 @@ The five identifications --- closure reading, boundary arity,
 form uniqueness, extract source, bulk exponent --- are now all
 inhabited as Agda records. A single closing record collects them.
 
-\textbf{Constraint:} the chain of structural identifications must,
-at the end, inhabit a single record collecting all five.
+The chain of structural identifications must, at the end, inhabit a
+single record collecting all five. \texttt{ForcedFormulaWitness} below
+assembles \texttt{SelfDualClosureWitness} and
+\texttt{BoundaryArityWitness} (both built earlier with the simplex
+constants), \texttt{FormUniquenessWitness} (built with the kind
+classification), \texttt{ExtractAutWitness} and
+\texttt{BulkExponentWitness} (the two records of this chapter), and the
+simplex evaluation itself.
 
-\textbf{Construction:} \texttt{ForcedFormulaWitness} below assembles
-\texttt{SelfDualClosureWitness} and \texttt{BoundaryArityWitness}
-(both built earlier with the simplex constants),
-\texttt{FormUniquenessWitness} (built with the kind classification),
-\texttt{ExtractAutWitness} and \texttt{BulkExponentWitness} (the
-two records of this chapter), and the simplex evaluation itself.
-
-\textbf{Consequence:} every structural attribute attached to
-$(V, E, d, \chi)$ in this volume is a field of one record. The
-canonical form $V^d \cdot \chi + d^2$ is its unique inhabitant, and
-its numerical value is the simplex evaluation.
+Every structural attribute attached to $(V, E, d, \chi)$ in this volume
+is a field of one record. The canonical form $V^d \cdot \chi + d^2$ is
+its unique inhabitant, and its numerical value is the simplex
+evaluation.
 
 \begin{code}
 record ForcedFormulaWitness : Set where
