@@ -32,6 +32,9 @@ jobs:
         uses: wenkokke/setup-agda@v2
         with:
           agda-version: '2.7.0.1'
+          agda-stdlib-version: 'recommended'
+          agda-defaults: |
+            standard-library
 
       - name: Verify Agda (--safe --without-K)
         shell: bash
