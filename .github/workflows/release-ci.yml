@@ -5,8 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'Void.lagda.tex'
-      - 'Form.lagda.tex'
+      - '**/*.lagda.tex'
       - '.github/workflows/release-ci.yml'
 
 permissions:
@@ -38,9 +37,44 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          agda --safe --without-K Void.lagda.tex 2>&1 | tee    agda-compile.log
-          agda --safe --without-K Form.lagda.tex 2>&1 | tee -a agda-compile.log
-          echo "Agda verification passed"
+          : > agda-compile.log
+          : > agda-exit-codes.log
+
+          find . -type f -name '*.lagda.tex' -not -path './latex/*' | sort > agda-files.txt
+          if [ ! -s agda-files.txt ]; then
+            echo "No .lagda.tex files found" | tee -a agda-compile.log
+            exit 1
+          fi
+
+          status=0
+          while IFS= read -r file; do
+            display_file="${file#./}"
+            safe_log_name="agda-${display_file//\//__}.log"
+
+            echo "=== agda --safe --without-K ${display_file} ===" | tee -a agda-compile.log
+            set +e
+            agda --safe --without-K "$file" > "$safe_log_name" 2>&1
+            exit_code=$?
+            set -e
+
+            cat "$safe_log_name" >> agda-compile.log
+            echo "${display_file}: ${exit_code}" | tee -a agda-exit-codes.log
+            echo "exit code: ${exit_code}" | tee -a agda-compile.log
+            echo "" | tee -a agda-compile.log
+
+            if [ "$exit_code" -ne 0 ]; then
+              status="$exit_code"
+              echo "::error file=${display_file}::Agda failed with exit code ${exit_code}"
+              tail -n 120 "$safe_log_name"
+            fi
+          done < agda-files.txt
+
+          if [ "$status" -ne 0 ]; then
+            echo "Agda verification failed" | tee -a agda-compile.log
+            exit "$status"
+          fi
+
+          echo "Agda verification passed for all .lagda.tex files" | tee -a agda-compile.log
 
 
 
@@ -53,14 +87,20 @@ jobs:
             echo "Agda Version: 2.7.0.1"
             echo "Flags: --safe --without-K"
             echo ""
+            echo "=== CHECKED SOURCES ==="
+            sed 's#^./##' agda-files.txt
+            echo ""
+            echo "=== AGDA EXIT CODES ==="
+            cat agda-exit-codes.log
+            echo ""
             echo "=== AGDA OUTPUT ==="
             cat agda-compile.log
             echo ""
             echo "=== CHECKSUMS ==="
-            sha256sum Void.lagda.tex
-            sha256sum Form.lagda.tex
-            sha256sum Void.agdai 2>/dev/null || true
-            sha256sum Form.agdai 2>/dev/null || true
+            find . -type f \( -name '*.lagda.tex' -o -name '*.agdai' \) -not -path './latex/*' | sort |
+              while IFS= read -r file; do
+                sha256sum "$file"
+              done
           } > verification-manifest.txt
 
       - name: Upload artifacts
@@ -68,8 +108,9 @@ jobs:
         with:
           name: release-artifacts
           path: |
-            Void.agdai
-            Form.agdai
+            *.agdai
+            agda-files.txt
+            agda-exit-codes.log
             verification-manifest.txt
             agda-compile.log
 
@@ -109,7 +150,7 @@ jobs:
             echo "compiled under \`--safe --without-K\`."
             echo ""
             echo "### Included"
-            echo "- **Void.agdai** / **Form.agdai** — compiled Agda interfaces"
+            echo "- **\*.agdai** — compiled Agda interfaces for every checked literate source"
             echo "- **verification-manifest.txt** — build provenance"
             echo ""
             if [ -n "$PREV_TAG" ]; then
@@ -122,7 +163,7 @@ jobs:
             echo ""
             echo "**Verify locally:**"
             echo "\`\`\`"
-            echo "agda --safe --without-K Void.lagda.tex && agda --safe --without-K Form.lagda.tex"
+            echo "find . -type f -name '*.lagda.tex' -not -path './latex/*' | sort | while IFS= read -r f; do log=\"agda-\$(printf '%s' \"\${f#./}\" | tr '/' '_').log\"; agda --safe --without-K \"\$f\" > \"\$log\" 2>&1; code=\$?; echo \"\${f#./}: \$code\"; [ \"\$code\" -eq 0 ] || { tail -n 120 \"\$log\"; exit \"\$code\"; }; done"
             echo "\`\`\`"
           } > CHANGELOG.md
 
@@ -134,8 +175,7 @@ jobs:
         with:
           subject-path: |
             vaf-${{ steps.sha.outputs.short }}.zip
-            artifacts/Void.agdai
-            artifacts/Form.agdai
+            artifacts/*.agdai
             artifacts/verification-manifest.txt
 
       - name: Create Release
@@ -148,6 +188,5 @@ jobs:
           prerelease: false
           files: |
             vaf-${{ steps.sha.outputs.short }}.zip
-            artifacts/Void.agdai
-            artifacts/Form.agdai
+            artifacts/*.agdai
             artifacts/verification-manifest.txt
