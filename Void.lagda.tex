@@ -2320,6 +2320,1056 @@ reading-closure d = record
   }
 \end{code}
 
+\section{From Stable Reading to Morphism}
+\label{sec:two-normal-form:stable-reading-morphism}
+
+A stable reading presents one object of the classifier interface.  The
+categorical layer begins by comparing such presentations through maps
+that preserve the displayed readings, the classifier marker, and the
+non-collapsing origin data.
+
+A structure-preserving map carries origins, left readings, and right
+readings forward; it makes the two reading squares commute; it preserves
+the classifier marker; and its origin map is non-collapsing.  The last
+condition prevents transport from identifying origins that were separated
+before transport.  Such an identification would not preserve the reading;
+it would collapse the presentation being read.
+
+These maps supply the first category data for stable readings: objects,
+homs, identities, composition, and the corresponding laws.  The laws are
+stated up to visible equality of the three displayed maps rather than
+equality of all proof fields.  This keeps the construction inside the
+same intensional discipline used from the beginning and avoids assuming
+function extensionality.
+
+\begin{code}
+-- § Morphism of stable readings: maps preserving readings and marker.
+record StableReadingMorphism
+  (classifier : ClassifierObject)
+  (source target : StableReadingInterface classifier) : Set1 where
+  field
+    srm-carrier-map          : StableReadingInterface.sri-carrier source →
+                               StableReadingInterface.sri-carrier target
+    srm-left-map             : StableReadingInterface.sri-leftCarrier source →
+                               StableReadingInterface.sri-leftCarrier target
+    srm-right-map            : StableReadingInterface.sri-rightCarrier source →
+                               StableReadingInterface.sri-rightCarrier target
+    srm-carrier-noncollapse  : NonCollapsing srm-carrier-map
+    srm-left-commutes        : (x : StableReadingInterface.sri-carrier source) →
+                               StableReadingInterface.sri-leftReading target (srm-carrier-map x) ≡
+                               srm-left-map (StableReadingInterface.sri-leftReading source x)
+    srm-right-commutes       : (x : StableReadingInterface.sri-carrier source) →
+                               StableReadingInterface.sri-rightReading target (srm-carrier-map x) ≡
+                               srm-right-map (StableReadingInterface.sri-rightReading source x)
+    srm-marker-commutes      : (x : StableReadingInterface.sri-carrier source) →
+                               StableReadingInterface.sri-marker target (srm-carrier-map x) ≡
+                               StableReadingInterface.sri-marker source x
+
+open StableReadingMorphism public
+
+-- § StructureMap is the local name for a stable-reading morphism.
+StructureMap :
+  (classifier : ClassifierObject) →
+  StableReadingInterface classifier →
+  StableReadingInterface classifier →
+  Set1
+StructureMap classifier source target =
+  StableReadingMorphism classifier source target
+
+-- § A structure map transports the selected truth fiber forward.
+srm-truth-fiber-map :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  StructureMap classifier source target →
+  TruthFiber classifier (StableReadingInterface.sri-marker source) →
+  TruthFiber classifier (StableReadingInterface.sri-marker target)
+srm-truth-fiber-map classifier morphism (x , proof) =
+  srm-carrier-map morphism x ,
+  trans (srm-marker-commutes morphism x) proof
+
+-- § In the binary case, transported markers remain two-covered.
+srm-binary-marker-cover :
+  {source target : StableReadingInterface TwoClassifier} →
+  (morphism : StructureMap TwoClassifier source target) →
+  (x : StableReadingInterface.sri-carrier source) →
+  (StableReadingInterface.sri-marker target (srm-carrier-map morphism x) ≡ L) ⊎
+  (StableReadingInterface.sri-marker target (srm-carrier-map morphism x) ≡ R)
+srm-binary-marker-cover {target = target} morphism x =
+  marker-cover (StableReadingInterface.sri-marker target) (srm-carrier-map morphism x)
+
+-- § Target-side agreement reflects back to origin equality through a structure map.
+srm-target-agreement-to-origin :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  (x y : StableReadingInterface.sri-carrier source) →
+  StableReadingInterface.sri-leftReading target (srm-carrier-map morphism x) ≡
+  StableReadingInterface.sri-leftReading target (srm-carrier-map morphism y) →
+  StableReadingInterface.sri-rightReading target (srm-carrier-map morphism x) ≡
+  StableReadingInterface.sri-rightReading target (srm-carrier-map morphism y) →
+  x ≡ y
+srm-target-agreement-to-origin classifier {target = target} morphism x y same-left same-right =
+  srm-carrier-noncollapse morphism x y
+    (sri-stable-components classifier target
+      (srm-carrier-map morphism x)
+      (srm-carrier-map morphism y)
+      same-left same-right)
+
+-- § Identity structure map.
+stable-reading-id-morphism :
+  (classifier : ClassifierObject) →
+  (reading : StableReadingInterface classifier) →
+  StructureMap classifier reading reading
+stable-reading-id-morphism classifier reading = record
+  { srm-carrier-map         = id
+  ; srm-left-map            = id
+  ; srm-right-map           = id
+  ; srm-carrier-noncollapse = λ x y same → same
+  ; srm-left-commutes       = λ x → refl
+  ; srm-right-commutes      = λ x → refl
+  ; srm-marker-commutes     = λ x → refl
+  }
+
+-- § Composition of structure maps.
+stable-reading-morphism-compose :
+  (classifier : ClassifierObject) →
+  {first middle last : StableReadingInterface classifier} →
+  StructureMap classifier middle last →
+  StructureMap classifier first middle →
+  StructureMap classifier first last
+stable-reading-morphism-compose classifier right left = record
+  { srm-carrier-map = λ x → srm-carrier-map right (srm-carrier-map left x)
+  ; srm-left-map = λ y → srm-left-map right (srm-left-map left y)
+  ; srm-right-map = λ z → srm-right-map right (srm-right-map left z)
+  ; srm-carrier-noncollapse =
+      λ x y same →
+        srm-carrier-noncollapse left x y
+          (srm-carrier-noncollapse right
+            (srm-carrier-map left x)
+            (srm-carrier-map left y)
+            same)
+  ; srm-left-commutes =
+      λ x →
+        trans
+          (srm-left-commutes right (srm-carrier-map left x))
+          (cong (srm-left-map right) (srm-left-commutes left x))
+  ; srm-right-commutes =
+      λ x →
+        trans
+          (srm-right-commutes right (srm-carrier-map left x))
+          (cong (srm-right-map right) (srm-right-commutes left x))
+  ; srm-marker-commutes =
+      λ x →
+        trans
+          (srm-marker-commutes right (srm-carrier-map left x))
+          (srm-marker-commutes left x)
+  }
+
+-- § Visible equality of structure maps, ignoring proof-field bureaucracy.
+record StableReadingMorphismEq
+  (classifier : ClassifierObject)
+  {source target : StableReadingInterface classifier}
+  (f g : StructureMap classifier source target) : Set where
+  field
+    srm-carrier-eq : (x : StableReadingInterface.sri-carrier source) →
+                     srm-carrier-map f x ≡ srm-carrier-map g x
+    srm-left-eq    : (y : StableReadingInterface.sri-leftCarrier source) →
+                     srm-left-map f y ≡ srm-left-map g y
+    srm-right-eq   : (z : StableReadingInterface.sri-rightCarrier source) →
+                     srm-right-map f z ≡ srm-right-map g z
+
+open StableReadingMorphismEq public
+
+-- § Visible equality is reflexive.
+stable-reading-morphism-eq-refl :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (f : StructureMap classifier source target) →
+  StableReadingMorphismEq classifier f f
+stable-reading-morphism-eq-refl classifier f = record
+  { srm-carrier-eq = λ x → refl
+  ; srm-left-eq    = λ y → refl
+  ; srm-right-eq   = λ z → refl
+  }
+
+-- § Visible equality is symmetric.
+stable-reading-morphism-eq-sym :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  {f g : StructureMap classifier source target} →
+  StableReadingMorphismEq classifier f g →
+  StableReadingMorphismEq classifier g f
+stable-reading-morphism-eq-sym classifier eq = record
+  { srm-carrier-eq = λ x → sym (srm-carrier-eq eq x)
+  ; srm-left-eq    = λ y → sym (srm-left-eq eq y)
+  ; srm-right-eq   = λ z → sym (srm-right-eq eq z)
+  }
+
+-- § Visible equality is transitive.
+stable-reading-morphism-eq-trans :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  {f g h : StructureMap classifier source target} →
+  StableReadingMorphismEq classifier f g →
+  StableReadingMorphismEq classifier g h →
+  StableReadingMorphismEq classifier f h
+stable-reading-morphism-eq-trans classifier eq₁ eq₂ = record
+  { srm-carrier-eq = λ x → trans (srm-carrier-eq eq₁ x) (srm-carrier-eq eq₂ x)
+  ; srm-left-eq    = λ y → trans (srm-left-eq eq₁ y) (srm-left-eq eq₂ y)
+  ; srm-right-eq   = λ z → trans (srm-right-eq eq₁ z) (srm-right-eq eq₂ z)
+  }
+
+-- § Left identity law for structure maps.
+stable-reading-id-left :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (f : StructureMap classifier source target) →
+  StableReadingMorphismEq classifier
+    (stable-reading-morphism-compose classifier (stable-reading-id-morphism classifier target) f)
+    f
+stable-reading-id-left classifier f = record
+  { srm-carrier-eq = λ x → refl
+  ; srm-left-eq    = λ y → refl
+  ; srm-right-eq   = λ z → refl
+  }
+
+-- § Right identity law for structure maps.
+stable-reading-id-right :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (f : StructureMap classifier source target) →
+  StableReadingMorphismEq classifier
+    (stable-reading-morphism-compose classifier f (stable-reading-id-morphism classifier source))
+    f
+stable-reading-id-right classifier f = record
+  { srm-carrier-eq = λ x → refl
+  ; srm-left-eq    = λ y → refl
+  ; srm-right-eq   = λ z → refl
+  }
+
+-- § Associativity law for structure maps.
+stable-reading-assoc :
+  (classifier : ClassifierObject) →
+  {a b c d : StableReadingInterface classifier} →
+  (h : StructureMap classifier c d) →
+  (g : StructureMap classifier b c) →
+  (f : StructureMap classifier a b) →
+  StableReadingMorphismEq classifier
+    (stable-reading-morphism-compose classifier h
+      (stable-reading-morphism-compose classifier g f))
+    (stable-reading-morphism-compose classifier
+      (stable-reading-morphism-compose classifier h g) f)
+stable-reading-assoc classifier h g f = record
+  { srm-carrier-eq = λ x → refl
+  ; srm-left-eq    = λ y → refl
+  ; srm-right-eq   = λ z → refl
+  }
+
+-- § Minimal category data, with equality supplied on homs.
+record CategoryData : Setω where
+  field
+    Obj         : Set1
+    Hom         : Obj → Obj → Set1
+    HomEq       : {A B : Obj} → Hom A B → Hom A B → Set
+    HomEq-refl  : {A B : Obj} → (f : Hom A B) → HomEq f f
+    HomEq-sym   : {A B : Obj} → {f g : Hom A B} → HomEq f g → HomEq g f
+    HomEq-trans : {A B : Obj} → {f g h : Hom A B} → HomEq f g → HomEq g h → HomEq f h
+    idC         : (A : Obj) → Hom A A
+    compC       : {A B C : Obj} → Hom B C → Hom A B → Hom A C
+    id-leftC    : {A B : Obj} → (f : Hom A B) → HomEq (compC (idC B) f) f
+    id-rightC   : {A B : Obj} → (f : Hom A B) → HomEq (compC f (idC A)) f
+    assocC      : {A B C D : Obj} →
+                  (h : Hom C D) → (g : Hom B C) → (f : Hom A B) →
+                  HomEq (compC h (compC g f)) (compC (compC h g) f)
+
+open CategoryData public
+
+-- § Stable readings over a classifier form category data.
+stable-reading-category-data :
+  (classifier : ClassifierObject) →
+  CategoryData
+stable-reading-category-data classifier = record
+  { Obj         = StableReadingInterface classifier
+  ; Hom         = StructureMap classifier
+  ; HomEq       = λ {source} {target} f g →
+                    StableReadingMorphismEq classifier {source = source} {target = target} f g
+  ; HomEq-refl  = stable-reading-morphism-eq-refl classifier
+  ; HomEq-sym   = stable-reading-morphism-eq-sym classifier
+  ; HomEq-trans = stable-reading-morphism-eq-trans classifier
+  ; idC         = stable-reading-id-morphism classifier
+  ; compC       = stable-reading-morphism-compose classifier
+  ; id-leftC    = stable-reading-id-left classifier
+  ; id-rightC   = stable-reading-id-right classifier
+  ; assocC      = stable-reading-assoc classifier
+  }
+\end{code}
+
+\section{Reindexing and Pullback Shape}
+\label{sec:two-normal-form:reindexing-pullback-shape}
+
+With structure maps in place, reindexing becomes the first categorical
+test.  A marker visible at the target of a structure map has a controlled
+preimage at the source.  In ordinary categorical language this is the
+beginning of pullback behaviour: the target marker is pulled back along
+the origin map, compared with the source marker, and carried together
+with its truth fiber and contact with the truth point.
+
+The statement is local.  It records the pullback-shaped square carried by
+a single stable reading morphism, not a global supply of pullbacks in the
+ambient category.  The comparison part is isolated below through
+mono-like subcarrier data and cone comparison maps.  Here the point is
+that classified visibility at the target has a stable preimage at the
+source, obtained by composing with the structure map already displayed.
+
+\begin{code}
+-- § Pull back the target marker along a structure map.
+srm-pullback-marker :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  StructureMap classifier source target →
+  ClassifierMarker classifier (StableReadingInterface.sri-carrier source)
+srm-pullback-marker classifier {target = target} morphism x =
+  StableReadingInterface.sri-marker target (srm-carrier-map morphism x)
+
+-- § The pulled-back marker is the displayed target marker after transport.
+srm-pullback-marker-is-target :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  (x : StableReadingInterface.sri-carrier source) →
+  srm-pullback-marker classifier morphism x ≡
+  StableReadingInterface.sri-marker target (srm-carrier-map morphism x)
+srm-pullback-marker-is-target classifier morphism x = refl
+
+-- § The pulled-back marker returns to the source marker.
+srm-pullback-marker-returns-source :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  (x : StableReadingInterface.sri-carrier source) →
+  srm-pullback-marker classifier morphism x ≡
+  StableReadingInterface.sri-marker source x
+srm-pullback-marker-returns-source classifier morphism x =
+  srm-marker-commutes morphism x
+
+-- § A source truth-fiber point induces a pulled-back truth-fiber point.
+srm-source-fiber-to-pullback :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  TruthFiber classifier (StableReadingInterface.sri-marker source) →
+  TruthFiber classifier (srm-pullback-marker classifier morphism)
+srm-source-fiber-to-pullback classifier morphism (x , proof) =
+  x , trans (srm-marker-commutes morphism x) proof
+
+-- § A pulled-back truth-fiber point returns to the source truth fiber.
+srm-pullback-fiber-to-source :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  TruthFiber classifier (srm-pullback-marker classifier morphism) →
+  TruthFiber classifier (StableReadingInterface.sri-marker source)
+srm-pullback-fiber-to-source classifier morphism (x , proof) =
+  x , trans (sym (srm-marker-commutes morphism x)) proof
+
+-- § A pulled-back truth-fiber point displays a target truth-fiber point.
+srm-pullback-fiber-to-target :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  TruthFiber classifier (srm-pullback-marker classifier morphism) →
+  TruthFiber classifier (StableReadingInterface.sri-marker target)
+srm-pullback-fiber-to-target classifier morphism (x , proof) =
+  srm-carrier-map morphism x , proof
+
+-- § The pulled-back marker classifies its truth fiber.
+srm-pullback-classified :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  ClassifiedSubcarrier classifier (StableReadingInterface.sri-carrier source)
+srm-pullback-classified classifier morphism =
+  truth-fiber-classified classifier (srm-pullback-marker classifier morphism)
+
+-- § A pulled-back truth-fiber point contacts the truth point.
+srm-pullback-contact :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  (fiber : TruthFiber classifier (srm-pullback-marker classifier morphism)) →
+  Contact (srm-pullback-marker classifier morphism)
+          (λ (_ : TruthFiber classifier (srm-pullback-marker classifier morphism)) →
+             ClassifierObject.truthPoint classifier)
+srm-pullback-contact classifier morphism =
+  truth-fiber-contact classifier (srm-pullback-marker classifier morphism)
+
+-- § Stable reindexing packages marker, fiber, and contact pullback.
+record StableReindexing
+  (classifier : ClassifierObject)
+  {source target : StableReadingInterface classifier}
+  (morphism : StructureMap classifier source target) : Set1 where
+  field
+    sr-pulled-marker          : ClassifierMarker classifier (StableReadingInterface.sri-carrier source)
+    sr-marker-is-pullback     : (x : StableReadingInterface.sri-carrier source) →
+                                sr-pulled-marker x ≡
+                                StableReadingInterface.sri-marker target (srm-carrier-map morphism x)
+    sr-marker-returns-source : (x : StableReadingInterface.sri-carrier source) →
+                                sr-pulled-marker x ≡
+                                StableReadingInterface.sri-marker source x
+    sr-pulled-classified      : ClassifiedSubcarrier classifier (StableReadingInterface.sri-carrier source)
+    sr-source-to-pullback     : TruthFiber classifier (StableReadingInterface.sri-marker source) →
+                                TruthFiber classifier sr-pulled-marker
+    sr-pullback-to-source     : TruthFiber classifier sr-pulled-marker →
+                                TruthFiber classifier (StableReadingInterface.sri-marker source)
+    sr-pullback-contact       : (fiber : TruthFiber classifier sr-pulled-marker) →
+                                Contact sr-pulled-marker
+                                        (λ (_ : TruthFiber classifier sr-pulled-marker) →
+                                           ClassifierObject.truthPoint classifier)
+
+open StableReindexing public
+
+-- § Every structure map supplies stable reindexing.
+stable-reindexing :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  StableReindexing classifier morphism
+stable-reindexing classifier morphism = record
+  { sr-pulled-marker         = srm-pullback-marker classifier morphism
+  ; sr-marker-is-pullback    = λ x → refl
+  ; sr-marker-returns-source = srm-marker-commutes morphism
+  ; sr-pulled-classified     = srm-pullback-classified classifier morphism
+  ; sr-source-to-pullback    = srm-source-fiber-to-pullback classifier morphism
+  ; sr-pullback-to-source    = srm-pullback-fiber-to-source classifier morphism
+  ; sr-pullback-contact      = srm-pullback-contact classifier morphism
+  }
+
+-- § Pullback-shaped square for the target truth fiber along a structure map.
+record PullbackShape
+  (classifier : ClassifierObject)
+  {source target : StableReadingInterface classifier}
+  (morphism : StructureMap classifier source target) : Set1 where
+  field
+    pb-carrier      : Set
+    pb-source       : pb-carrier → StableReadingInterface.sri-carrier source
+    pb-target-fiber : pb-carrier → TruthFiber classifier (StableReadingInterface.sri-marker target)
+    pb-square       : (p : pb-carrier) →
+                      srm-carrier-map morphism (pb-source p) ≡ fst (pb-target-fiber p)
+    pb-source-fiber : pb-carrier → TruthFiber classifier (StableReadingInterface.sri-marker source)
+
+open PullbackShape public
+
+-- § The canonical pullback shape carried by a structure map.
+stable-reading-pullback-shape :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  PullbackShape classifier morphism
+stable-reading-pullback-shape classifier morphism = record
+  { pb-carrier      = TruthFiber classifier (srm-pullback-marker classifier morphism)
+  ; pb-source       = λ fiber → fst fiber
+  ; pb-target-fiber = srm-pullback-fiber-to-target classifier morphism
+  ; pb-square       = λ fiber → refl
+  ; pb-source-fiber = srm-pullback-fiber-to-source classifier morphism
+  }
+\end{code}
+
+\section{Mono-Like Subcarrier Data}
+\label{sec:two-normal-form:mono-like-subcarrier-data}
+
+The previous section isolated the square-shaped behaviour of a pulled
+fiber.  The next ingredient is the selected carrier itself.  A classified
+subcarrier is already equivalent to a truth fiber, but its inclusion into
+the ambient carrier must be displayed before any later categorical
+language can speak honestly about monic behaviour.
+
+There is a small intensional point here.  The selected carrier may carry
+proof data, and equality of proof data is not assumed.  The record below
+is therefore not a categorical monomorphism.  It records the visible
+inclusion into the ambient carrier and equips it with a visible equality:
+two selected points agree when their displayed ambient points agree.  This
+is the amount of monic behaviour used by the constructions below.
+
+\begin{code}
+-- § A classified subcarrier displayed by its truth-fiber inclusion.
+record SubcarrierInclusion (classifier : ClassifierObject) (A : Set) : Set1 where
+  field
+    si-characteristic         : ClassifierMarker classifier A
+    si-carrier                : Set
+    si-to-truth-fiber         : si-carrier → TruthFiber classifier si-characteristic
+    si-from-truth-fiber       : TruthFiber classifier si-characteristic → si-carrier
+    si-to-from-truth-fiber    : (fiber : TruthFiber classifier si-characteristic) →
+                                si-to-truth-fiber (si-from-truth-fiber fiber) ≡ fiber
+    si-from-to-truth-fiber    : (selected : si-carrier) →
+                                si-from-truth-fiber (si-to-truth-fiber selected) ≡ selected
+
+open SubcarrierInclusion public
+
+-- § The visible inclusion forgets only the classifier proof component.
+subcarrier-include :
+  (classifier : ClassifierObject) {A : Set} →
+  (inclusion : SubcarrierInclusion classifier A) →
+  si-carrier inclusion → A
+subcarrier-include classifier inclusion selected =
+  fst (si-to-truth-fiber inclusion selected)
+
+-- § A selected point carries its displayed truth proof.
+subcarrier-truth-proof :
+  (classifier : ClassifierObject) {A : Set} →
+  (inclusion : SubcarrierInclusion classifier A) →
+  (selected : si-carrier inclusion) →
+  si-characteristic inclusion (subcarrier-include classifier inclusion selected) ≡
+  ClassifierObject.truthPoint classifier
+subcarrier-truth-proof classifier inclusion selected =
+  snd (si-to-truth-fiber inclusion selected)
+
+-- § Every classified subcarrier displays an inclusion into its ambient carrier.
+classified-subcarrier-inclusion :
+  (classifier : ClassifierObject) {A : Set} →
+  ClassifiedSubcarrier classifier A →
+  SubcarrierInclusion classifier A
+classified-subcarrier-inclusion classifier classified = record
+  { si-characteristic      = ClassifiedSubcarrier.characteristic classified
+  ; si-carrier             = ClassifiedSubcarrier.selectedCarrier classified
+  ; si-to-truth-fiber      = ClassifiedSubcarrier.to-truth-fiber classified
+  ; si-from-truth-fiber    = ClassifiedSubcarrier.from-truth-fiber classified
+  ; si-to-from-truth-fiber = ClassifiedSubcarrier.to-from-truth-fiber classified
+  ; si-from-to-truth-fiber = ClassifiedSubcarrier.from-to-truth-fiber classified
+  }
+
+-- § The truth fiber has the canonical displayed inclusion.
+truth-fiber-subcarrier-inclusion :
+  (classifier : ClassifierObject) {A : Set} →
+  (marker : ClassifierMarker classifier A) →
+  SubcarrierInclusion classifier A
+truth-fiber-subcarrier-inclusion classifier marker = record
+  { si-characteristic      = marker
+  ; si-carrier             = TruthFiber classifier marker
+  ; si-to-truth-fiber      = λ fiber → fiber
+  ; si-from-truth-fiber    = λ fiber → fiber
+  ; si-to-from-truth-fiber = λ fiber → refl
+  ; si-from-to-truth-fiber = λ selected → refl
+  }
+
+-- § Mono-like data means reflection into a chosen visible equality.
+record MonoLikeSubcarrier (classifier : ClassifierObject) (A : Set) : Set1 where
+  field
+    ml-inclusion        : SubcarrierInclusion classifier A
+    ml-visible-eq       : si-carrier ml-inclusion → si-carrier ml-inclusion → Set
+    ml-visible-refl     : (selected : si-carrier ml-inclusion) →
+                          ml-visible-eq selected selected
+    ml-visible-sym      : {left right : si-carrier ml-inclusion} →
+                          ml-visible-eq left right → ml-visible-eq right left
+    ml-visible-trans    : {left middle right : si-carrier ml-inclusion} →
+                          ml-visible-eq left middle →
+                          ml-visible-eq middle right →
+                          ml-visible-eq left right
+    ml-include-reflects : {left right : si-carrier ml-inclusion} →
+                          subcarrier-include classifier ml-inclusion left ≡
+                          subcarrier-include classifier ml-inclusion right →
+                          ml-visible-eq left right
+
+open MonoLikeSubcarrier public
+
+-- § Any displayed inclusion is mono-like for equality visible in the ambient carrier.
+mono-like-from-inclusion :
+  (classifier : ClassifierObject) {A : Set} →
+  SubcarrierInclusion classifier A →
+  MonoLikeSubcarrier classifier A
+mono-like-from-inclusion classifier inclusion = record
+  { ml-inclusion        = inclusion
+  ; ml-visible-eq       = λ left right →
+                            subcarrier-include classifier inclusion left ≡
+                            subcarrier-include classifier inclusion right
+  ; ml-visible-refl     = λ selected → refl
+  ; ml-visible-sym      = λ eq → sym eq
+  ; ml-visible-trans    = λ eq₁ eq₂ → trans eq₁ eq₂
+  ; ml-include-reflects = λ eq → eq
+  }
+
+-- § A classified subcarrier therefore has canonical mono-like data.
+classified-subcarrier-mono-like :
+  (classifier : ClassifierObject) {A : Set} →
+  ClassifiedSubcarrier classifier A →
+  MonoLikeSubcarrier classifier A
+classified-subcarrier-mono-like classifier classified =
+  mono-like-from-inclusion classifier
+    (classified-subcarrier-inclusion classifier classified)
+
+-- § Truth fibers are the canonical mono-like subcarriers selected by markers.
+truth-fiber-mono-like :
+  (classifier : ClassifierObject) {A : Set} →
+  (marker : ClassifierMarker classifier A) →
+  MonoLikeSubcarrier classifier A
+truth-fiber-mono-like classifier marker =
+  mono-like-from-inclusion classifier
+    (truth-fiber-subcarrier-inclusion classifier marker)
+
+-- § The selected fiber of a stable reading is mono-like in this visible sense.
+sri-mono-like-subcarrier :
+  (classifier : ClassifierObject) →
+  (reading : StableReadingInterface classifier) →
+  MonoLikeSubcarrier classifier (StableReadingInterface.sri-carrier reading)
+sri-mono-like-subcarrier classifier reading =
+  truth-fiber-mono-like classifier (StableReadingInterface.sri-marker reading)
+
+-- § The pulled-back fiber of a structure map is mono-like over the source.
+srm-pullback-mono-like :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  MonoLikeSubcarrier classifier (StableReadingInterface.sri-carrier source)
+srm-pullback-mono-like classifier morphism =
+  truth-fiber-mono-like classifier (srm-pullback-marker classifier morphism)
+
+-- § Reindexing compares the source fiber with the pulled-back target fiber.
+record ReindexedMonoLikeComparison
+  (classifier : ClassifierObject)
+  {source target : StableReadingInterface classifier}
+  (morphism : StructureMap classifier source target) : Set1 where
+  field
+    rmc-source-mono       : MonoLikeSubcarrier classifier (StableReadingInterface.sri-carrier source)
+    rmc-pullback-mono     : MonoLikeSubcarrier classifier (StableReadingInterface.sri-carrier source)
+    rmc-source-to-pullback : si-carrier (ml-inclusion rmc-source-mono) →
+                             si-carrier (ml-inclusion rmc-pullback-mono)
+    rmc-pullback-to-source : si-carrier (ml-inclusion rmc-pullback-mono) →
+                             si-carrier (ml-inclusion rmc-source-mono)
+    rmc-source-include-stable :
+      (selected : si-carrier (ml-inclusion rmc-source-mono)) →
+      subcarrier-include classifier (ml-inclusion rmc-pullback-mono)
+        (rmc-source-to-pullback selected) ≡
+      subcarrier-include classifier (ml-inclusion rmc-source-mono) selected
+    rmc-pullback-include-stable :
+      (selected : si-carrier (ml-inclusion rmc-pullback-mono)) →
+      subcarrier-include classifier (ml-inclusion rmc-source-mono)
+        (rmc-pullback-to-source selected) ≡
+      subcarrier-include classifier (ml-inclusion rmc-pullback-mono) selected
+    rmc-source-roundtrip-visible :
+      (selected : si-carrier (ml-inclusion rmc-source-mono)) →
+      ml-visible-eq rmc-source-mono
+        (rmc-pullback-to-source (rmc-source-to-pullback selected))
+        selected
+    rmc-pullback-roundtrip-visible :
+      (selected : si-carrier (ml-inclusion rmc-pullback-mono)) →
+      ml-visible-eq rmc-pullback-mono
+        (rmc-source-to-pullback (rmc-pullback-to-source selected))
+        selected
+
+open ReindexedMonoLikeComparison public
+
+-- § Every structure map supplies the canonical mono-like reindexing comparison.
+stable-reindexed-mono-like-comparison :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  ReindexedMonoLikeComparison classifier morphism
+stable-reindexed-mono-like-comparison classifier {source = source} morphism = record
+  { rmc-source-mono                = sri-mono-like-subcarrier classifier source
+  ; rmc-pullback-mono              = srm-pullback-mono-like classifier morphism
+  ; rmc-source-to-pullback         = srm-source-fiber-to-pullback classifier morphism
+  ; rmc-pullback-to-source         = srm-pullback-fiber-to-source classifier morphism
+  ; rmc-source-include-stable      = λ selected → refl
+  ; rmc-pullback-include-stable    = λ selected → refl
+  ; rmc-source-roundtrip-visible   = λ selected → refl
+  ; rmc-pullback-roundtrip-visible = λ selected → refl
+  }
+\end{code}
+
+\section{Visible Pullback Comparison}
+\label{sec:two-normal-form:visible-pullback-comparison}
+
+The pullback shape can now be tested against arbitrary comparison data.
+Suppose a carrier maps to the source reading and also displays a point of
+the target truth fiber.  If those two displays agree after applying the
+structure map, then it already determines a point of the canonical
+pulled-back truth fiber.  This is the comparison map that an ordinary
+pullback universal property would demand.
+
+The comparison is stated at the visible projection level.  The target
+fiber carries proof data, and no proof irrelevance is assumed.  Therefore
+the comparison below commutes with the target fiber after projecting to
+the displayed target point, and its uniqueness is uniqueness over the
+visible source projection.  Every compatible square factors through the
+canonical pulled-back fiber, and any other such factorization is visibly
+the same at the ambient carrier.
+
+\begin{code}
+-- § A cone into the target truth fiber over a structure map.
+record PullbackCone
+  (classifier : ClassifierObject)
+  {source target : StableReadingInterface classifier}
+  (morphism : StructureMap classifier source target) : Set1 where
+  field
+    pc-carrier      : Set
+    pc-source       : pc-carrier → StableReadingInterface.sri-carrier source
+    pc-target-fiber : pc-carrier → TruthFiber classifier (StableReadingInterface.sri-marker target)
+    pc-square       : (point : pc-carrier) →
+                      srm-carrier-map morphism (pc-source point) ≡
+                      fst (pc-target-fiber point)
+
+open PullbackCone public
+
+-- § The canonical pullback shape is itself a cone.
+stable-pullback-shape-cone :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  PullbackCone classifier morphism
+stable-pullback-shape-cone classifier morphism = record
+  { pc-carrier      = pb-carrier (stable-reading-pullback-shape classifier morphism)
+  ; pc-source       = pb-source (stable-reading-pullback-shape classifier morphism)
+  ; pc-target-fiber = pb-target-fiber (stable-reading-pullback-shape classifier morphism)
+  ; pc-square       = pb-square (stable-reading-pullback-shape classifier morphism)
+  }
+
+-- § A compatible cone factors through the canonical pulled-back fiber.
+pullback-cone-compare :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  (cone : PullbackCone classifier morphism) →
+  pc-carrier cone →
+  TruthFiber classifier (srm-pullback-marker classifier morphism)
+pullback-cone-compare classifier {target = target} morphism cone point =
+  pc-source cone point ,
+  trans
+    (cong (StableReadingInterface.sri-marker target) (pc-square cone point))
+    (snd (pc-target-fiber cone point))
+
+-- § The canonical comparison commutes with the source projection.
+pullback-cone-compare-source :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  (cone : PullbackCone classifier morphism) →
+  (point : pc-carrier cone) →
+  fst (pullback-cone-compare classifier morphism cone point) ≡ pc-source cone point
+pullback-cone-compare-source classifier morphism cone point = refl
+
+-- § The canonical comparison commutes visibly with the target-fiber point.
+pullback-cone-compare-target :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  (cone : PullbackCone classifier morphism) →
+  (point : pc-carrier cone) →
+  fst (srm-pullback-fiber-to-target classifier morphism
+         (pullback-cone-compare classifier morphism cone point)) ≡
+  fst (pc-target-fiber cone point)
+pullback-cone-compare-target classifier morphism cone point =
+  pc-square cone point
+
+-- § A comparison into the canonical pullback fiber.
+record PullbackComparison
+  (classifier : ClassifierObject)
+  {source target : StableReadingInterface classifier}
+  (morphism : StructureMap classifier source target)
+  (cone : PullbackCone classifier morphism) : Set1 where
+  field
+    pbc-map                     : pc-carrier cone →
+                                  TruthFiber classifier (srm-pullback-marker classifier morphism)
+    pbc-source-commutes         : (point : pc-carrier cone) →
+                                  fst (pbc-map point) ≡ pc-source cone point
+    pbc-target-commutes-visible : (point : pc-carrier cone) →
+                                  fst (srm-pullback-fiber-to-target classifier morphism
+                                         (pbc-map point)) ≡
+                                  fst (pc-target-fiber cone point)
+
+open PullbackComparison public
+
+-- § The canonical comparison supplied by the pullback-shaped fiber.
+stable-pullback-comparison :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  (cone : PullbackCone classifier morphism) →
+  PullbackComparison classifier morphism cone
+stable-pullback-comparison classifier morphism cone = record
+  { pbc-map                     = pullback-cone-compare classifier morphism cone
+  ; pbc-source-commutes         = pullback-cone-compare-source classifier morphism cone
+  ; pbc-target-commutes-visible = pullback-cone-compare-target classifier morphism cone
+  }
+
+-- § Visible equality of pullback comparisons, over the source projection.
+record PullbackComparisonEq
+  (classifier : ClassifierObject)
+  {source target : StableReadingInterface classifier}
+  (morphism : StructureMap classifier source target)
+  (cone : PullbackCone classifier morphism)
+  (left right : PullbackComparison classifier morphism cone) : Set where
+  field
+    pbc-visible-map-eq : (point : pc-carrier cone) →
+                         fst (pbc-map left point) ≡ fst (pbc-map right point)
+
+open PullbackComparisonEq public
+
+-- § Any comparison is visibly equal to the canonical one over the source.
+stable-pullback-comparison-unique :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  (cone : PullbackCone classifier morphism) →
+  (comparison : PullbackComparison classifier morphism cone) →
+  PullbackComparisonEq classifier morphism cone comparison
+    (stable-pullback-comparison classifier morphism cone)
+stable-pullback-comparison-unique classifier morphism cone comparison = record
+  { pbc-visible-map-eq = pbc-source-commutes comparison
+  }
+
+-- § The visible universal comparison carried by a single structure map.
+record VisiblePullbackComparison
+  (classifier : ClassifierObject)
+  {source target : StableReadingInterface classifier}
+  (morphism : StructureMap classifier source target) : Set1 where
+  field
+    vpc-shape             : PullbackShape classifier morphism
+    vpc-cone-comparison   : (cone : PullbackCone classifier morphism) →
+                            PullbackComparison classifier morphism cone
+    vpc-comparison-unique : (cone : PullbackCone classifier morphism) →
+                            (comparison : PullbackComparison classifier morphism cone) →
+                            PullbackComparisonEq classifier morphism cone comparison
+                              (vpc-cone-comparison cone)
+
+open VisiblePullbackComparison public
+
+-- § Every structure map carries the visible pullback comparison data.
+stable-visible-pullback-comparison :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  (morphism : StructureMap classifier source target) →
+  VisiblePullbackComparison classifier morphism
+stable-visible-pullback-comparison classifier morphism = record
+  { vpc-shape             = stable-reading-pullback-shape classifier morphism
+  ; vpc-cone-comparison   = stable-pullback-comparison classifier morphism
+  ; vpc-comparison-unique = stable-pullback-comparison-unique classifier morphism
+  }
+\end{code}
+
+\section{Univalence Boundary}
+\label{sec:two-normal-form:univalence-boundary}
+
+Univalence marks the boundary between isomorphism and identity.  In a
+univalent setting, equivalent structures can be read as identical along a
+path in the universe.  The formal development here does not assume that
+principle.  It is checked under \AgdaFlag{safe} and
+\AgdaFlag{without-K}; no axiom is postulated, and equality of records is
+not enlarged by an external identification principle.
+
+The available direction is identity-to-isomorphism.  An actual identity
+of stable readings gives an isomorphism of stable readings: transport
+along \texttt{refl} yields identity structure maps in both directions.
+The converse direction, from isomorphism back to identity, is the
+univalent bridge.  It is displayed below as a record type naming the
+additional principle, not as an inhabitant used by the construction.
+
+The orientation data already show why the distinction theorem lands at
+isomorphism before identity.  A distinction contains displayed left and
+right boundary points.  The two-element carrier can therefore be
+presented with those boundaries exchanged.  That swapped presentation is
+still a distinction and is isomorphic to \texttt{Two-distinction}; but on
+the fixed carrier \texttt{Two}, its displayed left boundary differs from
+the canonical displayed left boundary.  A literal record identity would
+therefore have to identify presentation data that the theorem itself only
+relates by boundary-preserving isomorphism.  Any later identity reading
+must quotient or identify presentations beyond the intensional record
+equality used here.
+
+\begin{code}
+-- § The swapped presentation of the two-element distinction.
+Two-distinction-swapped : Distinction
+Two-distinction-swapped = record
+  { S     = Two
+  ; ℓ     = R
+  ; r     = L
+  ; ℓ≠r   = λ R≡L → Two-L≠R (sym R≡L)
+  ; cover = λ { L → inj₂ refl ; R → inj₁ refl }
+  }
+
+-- § On the fixed carrier Two, the displayed left boundary is different.
+two-distinction-swapped-left-different :
+  ℓ Two-distinction-swapped ≠ ℓ Two-distinction
+two-distinction-swapped-left-different R≡L = Two-L≠R (sym R≡L)
+
+-- § Isomorphism of stable readings, stated through structure maps.
+record StableReadingIso
+  (classifier : ClassifierObject)
+  (source target : StableReadingInterface classifier) : Set1 where
+  field
+    sri-forward  : StructureMap classifier source target
+    sri-backward : StructureMap classifier target source
+    sri-to-from  : StableReadingMorphismEq classifier
+                     (stable-reading-morphism-compose classifier sri-forward sri-backward)
+                     (stable-reading-id-morphism classifier target)
+    sri-from-to  : StableReadingMorphismEq classifier
+                     (stable-reading-morphism-compose classifier sri-backward sri-forward)
+                     (stable-reading-id-morphism classifier source)
+
+open StableReadingIso public
+
+-- § Every stable reading is isomorphic to itself.
+stable-reading-iso-refl :
+  (classifier : ClassifierObject) →
+  (reading : StableReadingInterface classifier) →
+  StableReadingIso classifier reading reading
+stable-reading-iso-refl classifier reading = record
+  { sri-forward  = stable-reading-id-morphism classifier reading
+  ; sri-backward = stable-reading-id-morphism classifier reading
+  ; sri-to-from  = stable-reading-id-left classifier
+                     (stable-reading-id-morphism classifier reading)
+  ; sri-from-to  = stable-reading-id-left classifier
+                     (stable-reading-id-morphism classifier reading)
+  }
+
+-- § Stable-reading isomorphism is symmetric.
+stable-reading-iso-sym :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  StableReadingIso classifier source target →
+  StableReadingIso classifier target source
+stable-reading-iso-sym classifier iso = record
+  { sri-forward  = sri-backward iso
+  ; sri-backward = sri-forward iso
+  ; sri-to-from  = sri-from-to iso
+  ; sri-from-to  = sri-to-from iso
+  }
+
+-- § Stable-reading isomorphism is transitive.
+stable-reading-iso-trans :
+  (classifier : ClassifierObject) →
+  {first middle last : StableReadingInterface classifier} →
+  StableReadingIso classifier first middle →
+  StableReadingIso classifier middle last →
+  StableReadingIso classifier first last
+stable-reading-iso-trans classifier left right = record
+  { sri-forward = stable-reading-morphism-compose classifier
+                    (sri-forward right) (sri-forward left)
+  ; sri-backward = stable-reading-morphism-compose classifier
+                    (sri-backward left) (sri-backward right)
+  ; sri-to-from = record
+      { srm-carrier-eq = λ x →
+          trans
+            (cong (srm-carrier-map (sri-forward right))
+              (srm-carrier-eq (sri-to-from left)
+                (srm-carrier-map (sri-backward right) x)))
+            (srm-carrier-eq (sri-to-from right) x)
+      ; srm-left-eq = λ y →
+          trans
+            (cong (srm-left-map (sri-forward right))
+              (srm-left-eq (sri-to-from left)
+                (srm-left-map (sri-backward right) y)))
+            (srm-left-eq (sri-to-from right) y)
+      ; srm-right-eq = λ z →
+          trans
+            (cong (srm-right-map (sri-forward right))
+              (srm-right-eq (sri-to-from left)
+                (srm-right-map (sri-backward right) z)))
+            (srm-right-eq (sri-to-from right) z)
+      }
+  ; sri-from-to = record
+      { srm-carrier-eq = λ x →
+          trans
+            (cong (srm-carrier-map (sri-backward left))
+              (srm-carrier-eq (sri-from-to right)
+                (srm-carrier-map (sri-forward left) x)))
+            (srm-carrier-eq (sri-from-to left) x)
+      ; srm-left-eq = λ y →
+          trans
+            (cong (srm-left-map (sri-backward left))
+              (srm-left-eq (sri-from-to right)
+                (srm-left-map (sri-forward left) y)))
+            (srm-left-eq (sri-from-to left) y)
+      ; srm-right-eq = λ z →
+          trans
+            (cong (srm-right-map (sri-backward left))
+              (srm-right-eq (sri-from-to right)
+                (srm-right-map (sri-forward left) z)))
+            (srm-right-eq (sri-from-to left) z)
+      }
+  }
+
+-- § Stable-reading isomorphism is the presentation equality.
+StableReadingPresentationEq :
+  (classifier : ClassifierObject) →
+  StableReadingInterface classifier →
+  StableReadingInterface classifier →
+  Set1
+StableReadingPresentationEq classifier = StableReadingIso classifier
+
+-- § The category-side relation is an equivalence relation on objects.
+record StableReadingPresentationEquivalence
+  (classifier : ClassifierObject) : Set2 where
+  field
+    srpe-same  : StableReadingInterface classifier →
+                 StableReadingInterface classifier → Set1
+    srpe-refl  : (reading : StableReadingInterface classifier) →
+                 srpe-same reading reading
+    srpe-sym   : {source target : StableReadingInterface classifier} →
+                 srpe-same source target → srpe-same target source
+    srpe-trans : {first middle last : StableReadingInterface classifier} →
+                 srpe-same first middle →
+                 srpe-same middle last →
+                 srpe-same first last
+
+open StableReadingPresentationEquivalence public
+
+-- § Stable-reading isomorphism supplies the presentation equivalence relation.
+stable-reading-presentation-equivalence :
+  (classifier : ClassifierObject) →
+  StableReadingPresentationEquivalence classifier
+stable-reading-presentation-equivalence classifier = record
+  { srpe-same  = StableReadingPresentationEq classifier
+  ; srpe-refl  = stable-reading-iso-refl classifier
+  ; srpe-sym   = stable-reading-iso-sym classifier
+  ; srpe-trans = stable-reading-iso-trans classifier
+  }
+
+-- § Identity of stable readings gives isomorphism of stable readings.
+stable-reading-identity-to-iso :
+  (classifier : ClassifierObject) →
+  {source target : StableReadingInterface classifier} →
+  source ≡ target →
+  StableReadingIso classifier source target
+stable-reading-identity-to-iso classifier {source = source} refl =
+  stable-reading-iso-refl classifier source
+
+-- § The univalent bridge would turn stable-reading isomorphism into identity.
+record StableReadingUnivalencePrinciple
+  (classifier : ClassifierObject) : Set1 where
+  field
+    stable-reading-iso-to-identity :
+      {source target : StableReadingInterface classifier} →
+      StableReadingIso classifier source target →
+      source ≡ target
+    stable-reading-identity-roundtrip :
+      {source target : StableReadingInterface classifier} →
+      (path : source ≡ target) →
+      stable-reading-iso-to-identity
+        (stable-reading-identity-to-iso classifier path) ≡ path
+
+open StableReadingUnivalencePrinciple public
+
+-- § The formal layer records only the safe direction.
+record UnivalenceBoundary
+  (classifier : ClassifierObject) : Set2 where
+  field
+    ub-identity-to-iso :
+      {source target : StableReadingInterface classifier} →
+      source ≡ target →
+      StableReadingIso classifier source target
+    ub-univalent-extension : Set1
+
+open UnivalenceBoundary public
+
+-- § The boundary object names the missing principle without assuming it.
+stable-reading-univalence-boundary :
+  (classifier : ClassifierObject) →
+  UnivalenceBoundary classifier
+stable-reading-univalence-boundary classifier = record
+  { ub-identity-to-iso = stable-reading-identity-to-iso classifier
+  ; ub-univalent-extension = StableReadingUnivalencePrinciple classifier
+  }
+\end{code}
+
 \section{Distinction Isomorphism}
 \label{sec:two-normal-form:distinction-isomorphism}
 
@@ -2357,6 +3407,124 @@ forgetIso i = record
   ; from    = DistinctionIso.from i
   ; to-from = DistinctionIso.to-from i
   ; from-to = DistinctionIso.from-to i
+  }
+
+-- § Boundary-preserving isomorphism is reflexive.
+distinction-iso-refl : (d : Distinction) → DistinctionIso d d
+distinction-iso-refl d = record
+  { to      = id
+  ; from    = id
+  ; to-from = λ y → refl
+  ; from-to = λ x → refl
+  ; to-ℓ    = refl
+  ; to-r    = refl
+  }
+
+-- § Boundary-preserving isomorphism is symmetric.
+distinction-iso-sym : {d₁ d₂ : Distinction} →
+  DistinctionIso d₁ d₂ → DistinctionIso d₂ d₁
+distinction-iso-sym {d₁} {d₂} iso = record
+  { to      = from iso
+  ; from    = to iso
+  ; to-from = from-to iso
+  ; from-to = to-from iso
+  ; to-ℓ    = trans (cong (from iso) (sym (to-ℓ iso))) (from-to iso (ℓ d₁))
+  ; to-r    = trans (cong (from iso) (sym (to-r iso))) (from-to iso (r d₁))
+  }
+
+-- § Boundary-preserving isomorphism is transitive.
+distinction-iso-trans : {d₁ d₂ d₃ : Distinction} →
+  DistinctionIso d₁ d₂ →
+  DistinctionIso d₂ d₃ →
+  DistinctionIso d₁ d₃
+distinction-iso-trans left right = record
+  { to      = λ x → to right (to left x)
+  ; from    = λ z → from left (from right z)
+  ; to-from = λ z →
+      trans (cong (to right) (to-from left (from right z))) (to-from right z)
+  ; from-to = λ x →
+      trans (cong (from left) (from-to right (to left x))) (from-to left x)
+  ; to-ℓ    = trans (cong (to right) (to-ℓ left)) (to-ℓ right)
+  ; to-r    = trans (cong (to right) (to-r left)) (to-r right)
+  }
+
+-- § Boundary-preserving isomorphism is the presentation equality for distinctions.
+DistinctionPresentationEq : Distinction → Distinction → Set1
+DistinctionPresentationEq = DistinctionIso
+
+-- § The raw presentation relation is an equivalence relation.
+record DistinctionPresentationEquivalence : Set2 where
+  field
+    dpe-same  : Distinction → Distinction → Set1
+    dpe-refl  : (d : Distinction) → dpe-same d d
+    dpe-sym   : {d₁ d₂ : Distinction} → dpe-same d₁ d₂ → dpe-same d₂ d₁
+    dpe-trans : {d₁ d₂ d₃ : Distinction} →
+                dpe-same d₁ d₂ → dpe-same d₂ d₃ → dpe-same d₁ d₃
+
+open DistinctionPresentationEquivalence public
+
+-- § Distinction isomorphism supplies the presentation equivalence relation.
+distinction-presentation-equivalence : DistinctionPresentationEquivalence
+distinction-presentation-equivalence = record
+  { dpe-same  = DistinctionPresentationEq
+  ; dpe-refl  = distinction-iso-refl
+  ; dpe-sym   = distinction-iso-sym
+  ; dpe-trans = distinction-iso-trans
+  }
+
+-- § Boundary-preserving isomorphisms preserve the displayed marker.
+distinction-iso-marker-commutes : {d₁ d₂ : Distinction} →
+  (iso : DistinctionIso d₁ d₂) →
+  (x : S d₁) →
+  distinction-marker d₂ (DistinctionIso.to iso x) ≡ distinction-marker d₁ x
+distinction-iso-marker-commutes {d₁} {d₂} iso x with cover d₁ x
+... | inj₁ x≡ℓ =
+  trans
+    (distinction-marker-left d₂ (DistinctionIso.to iso x)
+      (trans (cong (DistinctionIso.to iso) x≡ℓ) (DistinctionIso.to-ℓ iso)))
+    refl
+... | inj₂ x≡r =
+  trans
+    (distinction-marker-right d₂ (DistinctionIso.to iso x)
+      (trans (cong (DistinctionIso.to iso) x≡r) (DistinctionIso.to-r iso)))
+    refl
+
+-- § A distinction isomorphism induces a structure map of stable readings.
+distinction-iso-stable-reading-morphism : {d₁ d₂ : Distinction} →
+  DistinctionIso d₁ d₂ →
+  StructureMap TwoClassifier (distinction-stable-reading d₁) (distinction-stable-reading d₂)
+distinction-iso-stable-reading-morphism iso = record
+  { srm-carrier-map = DistinctionIso.to iso
+  ; srm-left-map = id
+  ; srm-right-map = id
+  ; srm-carrier-noncollapse =
+      λ x y same →
+        trans
+          (sym (DistinctionIso.from-to iso x))
+          (trans (cong (DistinctionIso.from iso) same)
+                 (DistinctionIso.from-to iso y))
+  ; srm-left-commutes = distinction-iso-marker-commutes iso
+  ; srm-right-commutes = distinction-iso-marker-commutes iso
+  ; srm-marker-commutes = distinction-iso-marker-commutes iso
+  }
+
+-- § A distinction isomorphism induces an isomorphism of stable readings.
+distinction-iso-stable-reading-iso : {d₁ d₂ : Distinction} →
+  DistinctionIso d₁ d₂ →
+  StableReadingIso TwoClassifier (distinction-stable-reading d₁) (distinction-stable-reading d₂)
+distinction-iso-stable-reading-iso iso = record
+  { sri-forward  = distinction-iso-stable-reading-morphism iso
+  ; sri-backward = distinction-iso-stable-reading-morphism (distinction-iso-sym iso)
+  ; sri-to-from  = record
+      { srm-carrier-eq = DistinctionIso.to-from iso
+      ; srm-left-eq    = λ y → refl
+      ; srm-right-eq   = λ z → refl
+      }
+  ; sri-from-to  = record
+      { srm-carrier-eq = DistinctionIso.from-to iso
+      ; srm-left-eq    = λ y → refl
+      ; srm-right-eq   = λ z → refl
+      }
   }
 \end{code}
 
@@ -2423,6 +3591,362 @@ two-normal-form d = record
 
 law1-8-two-normal-form : (d : Distinction) → DistinctionIso d Two-distinction
 law1-8-two-normal-form = two-normal-form
+\end{code}
+
+\section{Presentation Quotient Shape}
+\label{sec:two-normal-form:presentation-quotient-shape}
+
+The normal-form theorem supplies the data needed before a quotient can be
+taken.  The raw objects are distinctions.  The admissible presentation
+relation is boundary-preserving isomorphism, and that relation is
+reflexive, symmetric, and transitive.  Every raw distinction also has a
+displayed route, not by record identity but by presentation equivalence,
+to the canonical representative \texttt{Two-distinction}.
+
+This is not a quotient type.  It is the quotient shape: the object class,
+the admissible equivalence relation, the canonical representative, and
+the checked normalization map into that representative.  A quotient,
+skeleton, or univalent completion can use this data to turn presentation
+equivalence into equality of representatives.
+
+\begin{code}
+-- § A quotient shape gives the data needed before taking any quotient.
+record DistinctionPresentationQuotientShape : Set2 where
+  field
+    dpqs-raw       : Set1
+    dpqs-same      : dpqs-raw → dpqs-raw → Set1
+    dpqs-same-refl : (d : dpqs-raw) → dpqs-same d d
+    dpqs-same-sym  : {d₁ d₂ : dpqs-raw} →
+                     dpqs-same d₁ d₂ → dpqs-same d₂ d₁
+    dpqs-same-trans : {d₁ d₂ d₃ : dpqs-raw} →
+                      dpqs-same d₁ d₂ →
+                      dpqs-same d₂ d₃ →
+                      dpqs-same d₁ d₃
+    dpqs-canonical : dpqs-raw
+    dpqs-normalize : (d : dpqs-raw) → dpqs-same d dpqs-canonical
+
+open DistinctionPresentationQuotientShape public
+
+-- § Distinctions have a quotient shape with Two as canonical representative.
+distinction-presentation-quotient-shape : DistinctionPresentationQuotientShape
+distinction-presentation-quotient-shape = record
+  { dpqs-raw        = Distinction
+  ; dpqs-same       = DistinctionPresentationEq
+  ; dpqs-same-refl  = distinction-iso-refl
+  ; dpqs-same-sym   = distinction-iso-sym
+  ; dpqs-same-trans = distinction-iso-trans
+  ; dpqs-canonical  = Two-distinction
+  ; dpqs-normalize  = two-normal-form
+  }
+
+-- § The swapped Two presentation normalizes to the same canonical representative.
+two-distinction-swapped-normalizes :
+  DistinctionPresentationEq Two-distinction-swapped Two-distinction
+two-distinction-swapped-normalizes = two-normal-form Two-distinction-swapped
+\end{code}
+
+\section{Canonical Skeleton Representative}
+\label{sec:two-normal-form:canonical-skeleton-representative}
+
+The quotient shape can be sharpened into a skeleton layer without
+constructing a quotient type.  The skeleton has one displayed object: the
+canonical two-element distinction.  Normalization sends every raw
+distinction to that skeleton object, and the soundness proof is exactly
+the normal-form isomorphism already established.
+
+This skeleton is not record identity for raw presentations.  It is a
+choice of canonical representative together with a checked route from
+each raw presentation to that representative through presentation
+equivalence.
+
+\begin{code}
+-- § The skeleton of distinctions has one displayed object.
+data DistinctionSkeletonObject : Set where
+  distinction-skeleton-two : DistinctionSkeletonObject
+
+-- § The skeleton object is represented by the canonical Two distinction.
+distinction-skeleton-representative : DistinctionSkeletonObject → Distinction
+distinction-skeleton-representative distinction-skeleton-two = Two-distinction
+
+-- § Every distinction normalizes to the displayed skeleton object.
+distinction-skeleton-normalize : Distinction → DistinctionSkeletonObject
+distinction-skeleton-normalize d = distinction-skeleton-two
+
+-- § Normalization is sound in presentation equivalence.
+distinction-skeleton-normalization :
+  (d : Distinction) →
+  DistinctionPresentationEq d
+    (distinction-skeleton-representative (distinction-skeleton-normalize d))
+distinction-skeleton-normalization d = two-normal-form d
+
+-- § The skeleton object is unique by constructor equality.
+distinction-skeleton-unique :
+  (skeleton : DistinctionSkeletonObject) → skeleton ≡ distinction-skeleton-two
+distinction-skeleton-unique distinction-skeleton-two = refl
+
+-- § The skeleton layer packages representative and normalization data.
+record DistinctionSkeletonLayer : Set2 where
+  field
+    dsl-object              : Set
+    dsl-representative      : dsl-object → Distinction
+    dsl-normalize           : Distinction → dsl-object
+    dsl-normalization-sound : (d : Distinction) →
+                              DistinctionPresentationEq d
+                                (dsl-representative (dsl-normalize d))
+    dsl-object-unique       : (object : dsl-object) →
+                              object ≡ dsl-normalize Two-distinction
+
+open DistinctionSkeletonLayer public
+
+-- § The canonical skeleton layer for distinctions.
+distinction-skeleton-layer : DistinctionSkeletonLayer
+distinction-skeleton-layer = record
+  { dsl-object              = DistinctionSkeletonObject
+  ; dsl-representative      = distinction-skeleton-representative
+  ; dsl-normalize           = distinction-skeleton-normalize
+  ; dsl-normalization-sound = distinction-skeleton-normalization
+  ; dsl-object-unique       = distinction-skeleton-unique
+  }
+\end{code}
+
+\section{Stable Reading Skeleton}
+\label{sec:two-normal-form:stable-reading-skeleton}
+
+The skeleton also lifts to the stable readings that arise from
+distinctions.  This is not a statement about arbitrary stable readings;
+it concerns the readings produced by the distinction marker.  A
+boundary-preserving isomorphism of distinctions induces an isomorphism of
+their displayed stable readings, so the normal-form isomorphism carries
+each distinction-induced reading to the canonical reading of
+\texttt{Two-distinction}.
+
+\begin{code}
+-- § Distinction-induced stable readings normalize to the canonical reading.
+distinction-stable-reading-normalizes :
+  (d : Distinction) →
+  StableReadingPresentationEq TwoClassifier
+    (distinction-stable-reading d)
+    (distinction-stable-reading Two-distinction)
+distinction-stable-reading-normalizes d =
+  distinction-iso-stable-reading-iso (two-normal-form d)
+
+-- § The skeleton of distinction-induced stable readings.
+record DistinctionReadingSkeletonLayer : Set2 where
+  field
+    drsl-object              : Set
+    drsl-representative      : drsl-object → StableReadingInterface TwoClassifier
+    drsl-reading             : Distinction → StableReadingInterface TwoClassifier
+    drsl-normalize           : Distinction → drsl-object
+    drsl-normalization-sound : (d : Distinction) →
+                               StableReadingPresentationEq TwoClassifier
+                                 (drsl-reading d)
+                                 (drsl-representative (drsl-normalize d))
+    drsl-object-unique       : (object : drsl-object) →
+                               object ≡ drsl-normalize Two-distinction
+
+open DistinctionReadingSkeletonLayer public
+
+-- § Canonical skeleton layer for distinction-induced stable readings.
+distinction-reading-skeleton-layer : DistinctionReadingSkeletonLayer
+distinction-reading-skeleton-layer = record
+  { drsl-object              = DistinctionSkeletonObject
+  ; drsl-representative      = λ skeleton →
+                                distinction-stable-reading
+                                  (distinction-skeleton-representative skeleton)
+  ; drsl-reading             = distinction-stable-reading
+  ; drsl-normalize           = distinction-skeleton-normalize
+  ; drsl-normalization-sound = distinction-stable-reading-normalizes
+  ; drsl-object-unique       = distinction-skeleton-unique
+  }
+\end{code}
+
+\section{Quotient Boundary}
+\label{sec:two-normal-form:quotient-boundary}
+
+The skeleton layer identifies a canonical representative, but it still
+does not replace presentation equivalence by record identity.  The
+additional step would be an identity principle saying that
+boundary-preserving presentation equivalence may be read as equality of
+raw distinction records.  The present construction names that principle
+without assuming it.
+
+\begin{code}
+-- § The identity principle that a quotient or univalent completion would add.
+DistinctionPresentationIdentityPrinciple : Set1
+DistinctionPresentationIdentityPrinciple =
+  (d₁ d₂ : Distinction) → DistinctionPresentationEq d₁ d₂ → d₁ ≡ d₂
+
+-- § Boundary data available before any quotient identity is assumed.
+record DistinctionQuotientBoundary : Setω where
+  field
+    dqb-quotient-shape     : DistinctionPresentationQuotientShape
+    dqb-skeleton-layer     : DistinctionSkeletonLayer
+    dqb-reading-layer      : DistinctionReadingSkeletonLayer
+    dqb-identity-extension : Set1
+
+open DistinctionQuotientBoundary public
+
+-- § The distinction quotient boundary names the missing identity extension.
+distinction-quotient-boundary : DistinctionQuotientBoundary
+distinction-quotient-boundary = record
+  { dqb-quotient-shape     = distinction-presentation-quotient-shape
+  ; dqb-skeleton-layer     = distinction-skeleton-layer
+  ; dqb-reading-layer      = distinction-reading-skeleton-layer
+  ; dqb-identity-extension = DistinctionPresentationIdentityPrinciple
+  }
+\end{code}
+
+\section{Subobject Classifier Test}
+\label{sec:two-normal-form:subobject-classifier-test}
+
+The classifier interface already classifies its own truth fibers.  Every
+marker determines a selected carrier, that selected carrier has a visible
+inclusion into the ambient carrier, and the characteristic map is the
+marker with which the fiber was formed.  This is the classifier-shaped
+part of the construction.
+
+The full subobject-classifier strength is stronger.  It would require a
+universal comparison saying that every admissible subobject is classified
+uniquely by such a characteristic map, in the chosen equality of
+subobjects.  The record below separates the truth-fiber data from that
+stronger universal extension.
+
+\begin{code}
+-- § A named form of the universal extension beyond truth-fiber classification.
+SubobjectClassifierUniversalExtension : ClassifierObject → Set1
+SubobjectClassifierUniversalExtension classifier =
+  {A : Set} → MonoLikeSubcarrier classifier A → ClassifierMarker classifier A
+
+-- § The classifier-shaped data supplied by truth fibers.
+record SubobjectClassifierCandidate (classifier : ClassifierObject) : Set2 where
+  field
+    soc-truth-fiber-classified : {A : Set} →
+                                 (marker : ClassifierMarker classifier A) →
+                                 ClassifiedSubcarrier classifier A
+    soc-truth-fiber-mono-like  : {A : Set} →
+                                 (marker : ClassifierMarker classifier A) →
+                                 MonoLikeSubcarrier classifier A
+    soc-characteristic-visible : {A : Set} →
+                                 (marker : ClassifierMarker classifier A) →
+                                 ClassifiedSubcarrier.characteristic
+                                   (soc-truth-fiber-classified marker) ≡ marker
+    soc-universal-extension    : Set1
+
+open SubobjectClassifierCandidate public
+
+-- § Every classifier object supplies its truth-fiber classifier candidate.
+classifier-subobject-candidate :
+  (classifier : ClassifierObject) → SubobjectClassifierCandidate classifier
+classifier-subobject-candidate classifier = record
+  { soc-truth-fiber-classified = truth-fiber-classified classifier
+  ; soc-truth-fiber-mono-like  = truth-fiber-mono-like classifier
+  ; soc-characteristic-visible = λ marker → refl
+  ; soc-universal-extension    = SubobjectClassifierUniversalExtension classifier
+  }
+\end{code}
+
+\section{Topos Boundary Map}
+\label{sec:two-normal-form:topos-boundary-map}
+
+The categorical surface contains several checked components: category data
+for stable readings, local reindexing, visible pullback comparison,
+classifier-shaped truth fibers, and skeleton data for
+distinction-induced presentations.  These components are enough to show
+where a topos-oriented continuation would attach.  They are not enough to
+assert that the stable-reading category is a topos.
+
+The missing strength is also visible: global pullbacks for arbitrary
+spans, a universal subobject classifier in the selected equality of
+subobjects, exponentials, and an identity or quotient principle turning
+presentation equivalence into equality of representatives.
+
+\begin{code}
+-- § A global pullback principle would supply pullbacks for arbitrary spans.
+StableReadingGlobalPullbacks : Set2
+StableReadingGlobalPullbacks =
+  (classifier : ClassifierObject) →
+  (left right apex : StableReadingInterface classifier) →
+  StructureMap classifier left apex →
+  StructureMap classifier right apex →
+  Set1
+
+-- § A universal subobject classifier principle is stronger than truth fibers.
+StableReadingSubobjectClassifierUniversality : Set1
+StableReadingSubobjectClassifierUniversality =
+  (classifier : ClassifierObject) → SubobjectClassifierUniversalExtension classifier
+
+-- § Exponentials would add function objects to the stable-reading category.
+StableReadingExponentials : Set2
+StableReadingExponentials =
+  (classifier : ClassifierObject) →
+  StableReadingInterface classifier →
+  StableReadingInterface classifier →
+  Set1
+
+-- § The boundary map separates established data from missing strength.
+record ToposBoundaryMap : Setω where
+  field
+    tb-category-data              : (classifier : ClassifierObject) → CategoryData
+    tb-visible-pullback           : (classifier : ClassifierObject) →
+                                    {source target : StableReadingInterface classifier} →
+                                    (morphism : StructureMap classifier source target) →
+                                    VisiblePullbackComparison classifier morphism
+    tb-subobject-candidate        : (classifier : ClassifierObject) →
+                                    SubobjectClassifierCandidate classifier
+    tb-quotient-boundary          : DistinctionQuotientBoundary
+    tb-required-global-pullbacks  : Set2
+    tb-required-subobject-universal : Set1
+    tb-required-exponentials      : Set2
+    tb-required-identity-extension : Set1
+
+open ToposBoundaryMap public
+
+-- § The established data form a boundary map, not a topos theorem.
+topos-boundary-map : ToposBoundaryMap
+topos-boundary-map = record
+  { tb-category-data                = stable-reading-category-data
+  ; tb-visible-pullback             = stable-visible-pullback-comparison
+  ; tb-subobject-candidate          = classifier-subobject-candidate
+  ; tb-quotient-boundary            = distinction-quotient-boundary
+  ; tb-required-global-pullbacks    = StableReadingGlobalPullbacks
+  ; tb-required-subobject-universal = StableReadingSubobjectClassifierUniversality
+  ; tb-required-exponentials        = StableReadingExponentials
+  ; tb-required-identity-extension  = DistinctionPresentationIdentityPrinciple
+  }
+\end{code}
+
+\section{Categorical Closure Overview}
+\label{sec:two-normal-form:categorical-closure-overview}
+
+The route through this chapter can be summarized without upgrading
+any claim beyond its proof.  The distinction data yield stable readings;
+stable readings carry category data; structure maps reindex markers and
+truth fibers; mono-like inclusions make selected subcarriers visible;
+compatible cones factor through the pulled-back truth fiber at the
+visible projection level; distinction presentations normalize to the
+canonical skeleton representative; and the quotient and topos boundaries
+name the additional principles that would be needed for stronger
+identity and topos claims.
+
+\begin{code}
+-- § Checked closure data collected at the categorical boundary.
+record CategoricalClosureOverview : Setω where
+  field
+    cco-skeleton-layer       : DistinctionSkeletonLayer
+    cco-reading-skeleton     : DistinctionReadingSkeletonLayer
+    cco-quotient-boundary    : DistinctionQuotientBoundary
+    cco-topos-boundary       : ToposBoundaryMap
+
+open CategoricalClosureOverview public
+
+-- § The categorical closure overview.
+categorical-closure-overview : CategoricalClosureOverview
+categorical-closure-overview = record
+  { cco-skeleton-layer    = distinction-skeleton-layer
+  ; cco-reading-skeleton  = distinction-reading-skeleton-layer
+  ; cco-quotient-boundary = distinction-quotient-boundary
+  ; cco-topos-boundary    = topos-boundary-map
+  }
 \end{code}
 
 \section{Orientation}
@@ -3253,6 +4777,1709 @@ canonical-two-distinction = Two-distinction
 \end{code}
 
 At this point the primitive distinction has been fixed concretely as \texttt{Two-distinction}. The basic logical infrastructure, the distinction record, the four endomorphism cases, and the associated presentation results are now all available in explicit, machine-checked form.
+
+\chapter{The Topos Route Boundary}
+\label{ch:topos-route-boundary}
+
+The preceding chapter already reached the categorical boundary: stable
+readings have category data, truth fibers supply classifier-shaped
+subcarriers, and distinction-induced readings normalize to the canonical
+skeleton.  What is still missing for the later Topos route is not a new
+start, but a sharper interface over the reading layer already present in
+the book.
+
+The stable reading interface deliberately names only a truth point.  It
+does not assume a separate false point, nor does it assume that a reading
+has distinguished left and right boundary positions.  The Topos route
+needs exactly those additional marks in order to state the raw obstruction
+honestly.  The record below therefore adds them as route data.  It does
+not replace \texttt{StableReadingInterface}; it refines it for the binary
+route that begins with \texttt{Distinction}.
+
+\section{Boundary-Marked Classifiers}
+\label{sec:topos-route-boundary:classifiers}
+
+A boundary-marked classifier is a classifier object together with a
+displayed false point separated from the distinguished truth point.  The
+binary classifier supplies the first instance: \texttt{L} is truth and
+\texttt{R} is the separated false point.
+
+\begin{code}
+-- § A route classifier adds a separated false point to the book classifier.
+record BoundaryMarkedClassifier (classifier : ClassifierObject) : Set1 where
+  field
+    falsePoint            : ClassifierObject.truthCarrier classifier
+    truth-false-separated : ClassifierObject.truthPoint classifier ≠ falsePoint
+
+open BoundaryMarkedClassifier public
+
+-- § The binary classifier has R as its separated false point.
+two-boundary-marked-classifier : BoundaryMarkedClassifier TwoClassifier
+two-boundary-marked-classifier = record
+  { falsePoint            = R
+  ; truth-false-separated = Two-L≠R
+  }
+\end{code}
+
+\section{Boundary-Marked Readings}
+\label{sec:topos-route-boundary:readings}
+
+A boundary-marked reading is a stable reading together with two displayed
+boundary positions.  The left boundary is marked by truth; the right
+boundary is marked by the displayed false point.  This is the exact
+extra information the raw Topos obstruction will later consume.
+
+\begin{code}
+-- § A stable reading equipped with route-specific left/right boundary marks.
+record BoundaryMarkedReading
+  (classifier : ClassifierObject)
+  (boundary : BoundaryMarkedClassifier classifier) : Set1 where
+  field
+    bmr-reading        : StableReadingInterface classifier
+    bmr-left-boundary  : StableReadingInterface.sri-carrier bmr-reading
+    bmr-right-boundary : StableReadingInterface.sri-carrier bmr-reading
+    bmr-left-truth     :
+      StableReadingInterface.sri-marker bmr-reading bmr-left-boundary ≡
+      ClassifierObject.truthPoint classifier
+    bmr-right-false    :
+      StableReadingInterface.sri-marker bmr-reading bmr-right-boundary ≡
+      falsePoint boundary
+
+open BoundaryMarkedReading public
+
+-- § The two displayed boundary positions cannot collapse.
+boundary-marked-reading-separated :
+  (classifier : ClassifierObject) →
+  (boundary : BoundaryMarkedClassifier classifier) →
+  (reading : BoundaryMarkedReading classifier boundary) →
+  bmr-left-boundary reading ≠ bmr-right-boundary reading
+boundary-marked-reading-separated classifier boundary reading left≡right =
+  truth-false-separated boundary
+    (trans
+      (sym (bmr-left-truth reading))
+      (trans
+        (cong (StableReadingInterface.sri-marker (bmr-reading reading)) left≡right)
+        (bmr-right-false reading)))
+\end{code}
+
+\section{The Distinction Route Entry}
+\label{sec:topos-route-boundary:distinction-entry}
+
+Every distinction already supplies the required marked route.  Its
+existing stable reading is the one defined earlier from the distinction
+marker; the left boundary is \texttt{ℓ}; the right boundary is \texttt{r};
+and the marker laws are exactly the left and right boundary lemmas of the
+binary fiber reading.
+
+\begin{code}
+-- § Any distinction induces the boundary-marked binary reading needed by the Topos route.
+distinction-boundary-marked-reading :
+  (d : Distinction) →
+  BoundaryMarkedReading TwoClassifier two-boundary-marked-classifier
+distinction-boundary-marked-reading d = record
+  { bmr-reading        = distinction-stable-reading d
+  ; bmr-left-boundary  = ℓ d
+  ; bmr-right-boundary = r d
+  ; bmr-left-truth     = distinction-marker-left d (ℓ d) refl
+  ; bmr-right-false    = distinction-marker-right d (r d) refl
+  }
+
+-- § The route-specific boundary separation agrees with the distinction separation.
+distinction-boundary-marked-separated :
+  (d : Distinction) →
+  bmr-left-boundary (distinction-boundary-marked-reading d) ≠
+  bmr-right-boundary (distinction-boundary-marked-reading d)
+distinction-boundary-marked-separated d = ℓ≠r d
+
+-- § Package: the existing stable reading and its route refinement from a distinction.
+record ToposRouteEntry (d : Distinction) : Set1 where
+  field
+    tre-stable-reading   : StableReadingInterface TwoClassifier
+    tre-boundary-reading : BoundaryMarkedReading TwoClassifier two-boundary-marked-classifier
+    tre-reading-is-book-reading : tre-stable-reading ≡ distinction-stable-reading d
+    tre-boundary-separated :
+      bmr-left-boundary tre-boundary-reading ≠
+      bmr-right-boundary tre-boundary-reading
+
+open ToposRouteEntry public
+
+-- § The Topos route starts from the book's own distinction-induced reading.
+topos-route-entry : (d : Distinction) → ToposRouteEntry d
+topos-route-entry d = record
+  { tre-stable-reading         = distinction-stable-reading d
+  ; tre-boundary-reading       = distinction-boundary-marked-reading d
+  ; tre-reading-is-book-reading = refl
+  ; tre-boundary-separated     = distinction-boundary-marked-separated d
+  }
+\end{code}
+
+\section{Raw Pullback Obstruction}
+\label{sec:topos-route-boundary:raw-pullback-obstruction}
+
+The raw reading category already has morphisms and visible categorical
+data.  The Topos route now asks for the first genuinely global demand:
+pullbacks for every cospan.  The following cospan is enough to block that
+demand.  It splits the truth value into two distinct truth-copies.  Both
+copies are still marked as truth, but they remain different points of the
+apex.  Any pullback cone over the cospan would have to identify them.
+
+The construction uses the boundary-marked interface above, because the
+contradiction is read at a displayed truth boundary of the cone object.
+
+\begin{code}
+-- § A stable reading of the binary classifier itself.
+topos-route-two-classifier-reading : StableReadingInterface TwoClassifier
+topos-route-two-classifier-reading = record
+  { sri-carrier       = Two
+  ; sri-leftCarrier   = Two
+  ; sri-rightCarrier  = Two
+  ; sri-leftReading   = id
+  ; sri-rightReading  = id
+  ; sri-stableReading = λ x y same → product-fst-eq same
+  ; sri-marker        = id
+  }
+
+-- § The binary classifier reading with its two displayed boundaries.
+topos-route-two-boundary-reading :
+  BoundaryMarkedReading TwoClassifier two-boundary-marked-classifier
+topos-route-two-boundary-reading = record
+  { bmr-reading        = topos-route-two-classifier-reading
+  ; bmr-left-boundary  = L
+  ; bmr-right-boundary = R
+  ; bmr-left-truth     = refl
+  ; bmr-right-false    = refl
+  }
+
+-- § Split apex: two truth-points and two false-points.
+data ToposRouteSplitApexPoint : Set where
+  route-truth-left-point  : ToposRouteSplitApexPoint
+  route-truth-right-point : ToposRouteSplitApexPoint
+  route-false-left-point  : ToposRouteSplitApexPoint
+  route-false-right-point : ToposRouteSplitApexPoint
+
+-- § The two truth-points are distinct constructors.
+route-truth-left≠route-truth-right :
+  route-truth-left-point ≠ route-truth-right-point
+route-truth-left≠route-truth-right ()
+
+-- § The split marker identifies both truth-copies as truth and both false-copies as false.
+topos-route-split-apex-marker : ToposRouteSplitApexPoint → Two
+topos-route-split-apex-marker route-truth-left-point  = L
+topos-route-split-apex-marker route-truth-right-point = L
+topos-route-split-apex-marker route-false-left-point  = R
+topos-route-split-apex-marker route-false-right-point = R
+
+-- § The apex remains a stable reading by reading its carrier identically.
+topos-route-split-truth-apex-reading : StableReadingInterface TwoClassifier
+topos-route-split-truth-apex-reading = record
+  { sri-carrier       = ToposRouteSplitApexPoint
+  ; sri-leftCarrier   = ToposRouteSplitApexPoint
+  ; sri-rightCarrier  = ToposRouteSplitApexPoint
+  ; sri-leftReading   = id
+  ; sri-rightReading  = id
+  ; sri-stableReading = λ x y same → product-fst-eq same
+  ; sri-marker        = topos-route-split-apex-marker
+  }
+
+-- § The split apex has a displayed truth boundary and a displayed false boundary.
+topos-route-split-truth-apex :
+  BoundaryMarkedReading TwoClassifier two-boundary-marked-classifier
+topos-route-split-truth-apex = record
+  { bmr-reading        = topos-route-split-truth-apex-reading
+  ; bmr-left-boundary  = route-truth-left-point
+  ; bmr-right-boundary = route-false-left-point
+  ; bmr-left-truth     = refl
+  ; bmr-right-false    = refl
+  }
+
+-- § Left leg of the cospan chooses the left truth/false copies.
+topos-route-split-left-carrier-map : Two → ToposRouteSplitApexPoint
+topos-route-split-left-carrier-map L = route-truth-left-point
+topos-route-split-left-carrier-map R = route-false-left-point
+
+-- § Right leg of the cospan chooses the right truth/false copies.
+topos-route-split-right-carrier-map : Two → ToposRouteSplitApexPoint
+topos-route-split-right-carrier-map L = route-truth-right-point
+topos-route-split-right-carrier-map R = route-false-right-point
+
+-- § The left split leg is non-collapsing.
+topos-route-split-left-noncollapsing :
+  NonCollapsing topos-route-split-left-carrier-map
+topos-route-split-left-noncollapsing L L same = refl
+topos-route-split-left-noncollapsing L R ()
+topos-route-split-left-noncollapsing R L ()
+topos-route-split-left-noncollapsing R R same = refl
+
+-- § The right split leg is non-collapsing.
+topos-route-split-right-noncollapsing :
+  NonCollapsing topos-route-split-right-carrier-map
+topos-route-split-right-noncollapsing L L same = refl
+topos-route-split-right-noncollapsing L R ()
+topos-route-split-right-noncollapsing R L ()
+topos-route-split-right-noncollapsing R R same = refl
+
+-- § Left cospan leg from the classifier reading into the split apex.
+topos-route-split-left-map :
+  StructureMap TwoClassifier
+    topos-route-two-classifier-reading
+    topos-route-split-truth-apex-reading
+topos-route-split-left-map = record
+  { srm-carrier-map         = topos-route-split-left-carrier-map
+  ; srm-left-map            = topos-route-split-left-carrier-map
+  ; srm-right-map           = topos-route-split-left-carrier-map
+  ; srm-carrier-noncollapse = topos-route-split-left-noncollapsing
+  ; srm-left-commutes       = λ x → refl
+  ; srm-right-commutes      = λ x → refl
+  ; srm-marker-commutes     = λ { L → refl ; R → refl }
+  }
+
+-- § Right cospan leg from the classifier reading into the split apex.
+topos-route-split-right-map :
+  StructureMap TwoClassifier
+    topos-route-two-classifier-reading
+    topos-route-split-truth-apex-reading
+topos-route-split-right-map = record
+  { srm-carrier-map         = topos-route-split-right-carrier-map
+  ; srm-left-map            = topos-route-split-right-carrier-map
+  ; srm-right-map           = topos-route-split-right-carrier-map
+  ; srm-carrier-noncollapse = topos-route-split-right-noncollapsing
+  ; srm-left-commutes       = λ x → refl
+  ; srm-right-commutes      = λ x → refl
+  ; srm-marker-commutes     = λ { L → refl ; R → refl }
+  }
+
+-- § Route pullback cone for boundary-marked readings.
+record ToposRoutePullbackCone
+  (classifier : ClassifierObject)
+  (boundary : BoundaryMarkedClassifier classifier)
+  {left right apex : BoundaryMarkedReading classifier boundary}
+  (f : StructureMap classifier (bmr-reading left) (bmr-reading apex))
+  (g : StructureMap classifier (bmr-reading right) (bmr-reading apex)) : Set1 where
+  field
+    trpc-object : BoundaryMarkedReading classifier boundary
+    trpc-left   : StructureMap classifier (bmr-reading trpc-object) (bmr-reading left)
+    trpc-right  : StructureMap classifier (bmr-reading trpc-object) (bmr-reading right)
+    trpc-square : StableReadingMorphismEq classifier
+      (stable-reading-morphism-compose classifier f trpc-left)
+      (stable-reading-morphism-compose classifier g trpc-right)
+
+open ToposRoutePullbackCone public
+
+-- § If the left leg sees L, it lands at the left truth-point.
+topos-route-split-left-map-at :
+  (x : Two) → x ≡ L →
+  srm-carrier-map topos-route-split-left-map x ≡ route-truth-left-point
+topos-route-split-left-map-at L refl = refl
+topos-route-split-left-map-at R ()
+
+-- § If the right leg sees L, it lands at the right truth-point.
+topos-route-split-right-map-at :
+  (x : Two) → x ≡ L →
+  srm-carrier-map topos-route-split-right-map x ≡ route-truth-right-point
+topos-route-split-right-map-at L refl = refl
+topos-route-split-right-map-at R ()
+
+-- § A cone's left projection sends its displayed truth boundary to L.
+topos-route-cone-left-projection-left :
+  (cone : ToposRoutePullbackCone TwoClassifier two-boundary-marked-classifier
+            {left = topos-route-two-boundary-reading}
+            {right = topos-route-two-boundary-reading}
+            {apex = topos-route-split-truth-apex}
+            topos-route-split-left-map
+            topos-route-split-right-map) →
+  srm-carrier-map (trpc-left cone) (bmr-left-boundary (trpc-object cone)) ≡ L
+topos-route-cone-left-projection-left cone =
+  trans
+    (srm-marker-commutes
+      (trpc-left cone)
+      (bmr-left-boundary (trpc-object cone)))
+    (bmr-left-truth (trpc-object cone))
+
+-- § A cone's right projection also sends its displayed truth boundary to L.
+topos-route-cone-right-projection-left :
+  (cone : ToposRoutePullbackCone TwoClassifier two-boundary-marked-classifier
+            {left = topos-route-two-boundary-reading}
+            {right = topos-route-two-boundary-reading}
+            {apex = topos-route-split-truth-apex}
+            topos-route-split-left-map
+            topos-route-split-right-map) →
+  srm-carrier-map (trpc-right cone) (bmr-left-boundary (trpc-object cone)) ≡ L
+topos-route-cone-right-projection-left cone =
+  trans
+    (srm-marker-commutes
+      (trpc-right cone)
+      (bmr-left-boundary (trpc-object cone)))
+    (bmr-left-truth (trpc-object cone))
+
+-- § No route pullback cone exists for the split-truth cospan.
+topos-route-split-truth-cospan-has-no-cone :
+  ToposRoutePullbackCone TwoClassifier two-boundary-marked-classifier
+    {left = topos-route-two-boundary-reading}
+    {right = topos-route-two-boundary-reading}
+    {apex = topos-route-split-truth-apex}
+    topos-route-split-left-map
+    topos-route-split-right-map → ⊥
+topos-route-split-truth-cospan-has-no-cone cone =
+  route-truth-left≠route-truth-right
+    (trans
+      (sym
+        (topos-route-split-left-map-at
+          (srm-carrier-map (trpc-left cone) (bmr-left-boundary (trpc-object cone)))
+          (topos-route-cone-left-projection-left cone)))
+      (trans
+        (srm-carrier-eq (trpc-square cone) (bmr-left-boundary (trpc-object cone)))
+        (topos-route-split-right-map-at
+          (srm-carrier-map (trpc-right cone) (bmr-left-boundary (trpc-object cone)))
+          (topos-route-cone-right-projection-left cone))))
+
+-- § Global route pullback cones would assign a cone to every boundary-marked cospan.
+ToposRouteGlobalPullbackCones : Set1
+ToposRouteGlobalPullbackCones =
+  (classifier : ClassifierObject) →
+  (boundary : BoundaryMarkedClassifier classifier) →
+  (left right apex : BoundaryMarkedReading classifier boundary) →
+  (f : StructureMap classifier (bmr-reading left) (bmr-reading apex)) →
+  (g : StructureMap classifier (bmr-reading right) (bmr-reading apex)) →
+  ToposRoutePullbackCone classifier boundary {left} {right} {apex} f g
+
+-- § The split-truth cospan blocks global route pullback cones.
+topos-route-global-pullback-cones-impossible :
+  ToposRouteGlobalPullbackCones → ⊥
+topos-route-global-pullback-cones-impossible global-cones =
+  topos-route-split-truth-cospan-has-no-cone
+    (global-cones
+      TwoClassifier
+      two-boundary-marked-classifier
+      topos-route-two-boundary-reading
+      topos-route-two-boundary-reading
+      topos-route-split-truth-apex
+      topos-route-split-left-map
+      topos-route-split-right-map)
+
+-- § The raw obstruction package: the route has an entry, but not global raw pullback cones.
+record ToposRouteRawObstruction : Set1 where
+  field
+    trro-entry : (d : Distinction) → ToposRouteEntry d
+    trro-split-cospan-no-cone :
+      ToposRoutePullbackCone TwoClassifier two-boundary-marked-classifier
+        {left = topos-route-two-boundary-reading}
+        {right = topos-route-two-boundary-reading}
+        {apex = topos-route-split-truth-apex}
+        topos-route-split-left-map
+        topos-route-split-right-map → ⊥
+    trro-global-cones-impossible : ToposRouteGlobalPullbackCones → ⊥
+
+open ToposRouteRawObstruction public
+
+-- § Checked raw obstruction for the Topos route.
+topos-route-raw-obstruction : ToposRouteRawObstruction
+topos-route-raw-obstruction = record
+  { trro-entry                   = topos-route-entry
+  ; trro-split-cospan-no-cone    = topos-route-split-truth-cospan-has-no-cone
+  ; trro-global-cones-impossible = topos-route-global-pullback-cones-impossible
+  }
+\end{code}
+
+The obstruction is therefore not a stylistic warning.  The raw route has
+a concrete cospan for which even a boundary-marked pullback cone is
+impossible.  The Topos package can only appear after a completion step
+that changes the stage on which the categorical structure is being read.
+
+\section{The Completed Skeleton Topos}
+\label{sec:topos-route-boundary:completed-skeleton-topos}
+
+The completion step is the skeleton already constructed for distinction
+presentations.  It does not assert that raw presentations have become
+definitionally equal.  It changes the carrier: after normalization there
+is one completed object and one completed arrow between any two completed
+objects.  On that completed stage the elementary-Topos data can be
+constructed directly.
+
+The category interface below uses prefixed field names, because the book
+already has a separate 	exttt{CategoryData} record for raw stable
+readings.  The new record is only the small-category surface used by the
+completed endpoint.
+
+\begin{code}
+-- § The unique arrow type of the completed skeleton category.
+data SkeletonCategoryArrow : Set where
+  skeleton-category-arrow : SkeletonCategoryArrow
+
+-- § Small category interface used for the completed endpoint.
+record SmallCategory : Set1 where
+  field
+    sc-Obj       : Set
+    sc-Hom       : sc-Obj → sc-Obj → Set
+    sc-id        : {A : sc-Obj} → sc-Hom A A
+    sc-comp      : {A B C : sc-Obj} → sc-Hom B C → sc-Hom A B → sc-Hom A C
+    sc-id-left   : {A B : sc-Obj} → (f : sc-Hom A B) → sc-comp sc-id f ≡ f
+    sc-id-right  : {A B : sc-Obj} → (f : sc-Hom A B) → sc-comp f sc-id ≡ f
+    sc-assoc     : {A B C D : sc-Obj} →
+                   (h : sc-Hom C D) →
+                   (g : sc-Hom B C) →
+                   (f : sc-Hom A B) →
+                   sc-comp h (sc-comp g f) ≡ sc-comp (sc-comp h g) f
+
+open SmallCategory public
+
+-- § The skeleton category has one completed object and one arrow everywhere.
+skeleton-category : SmallCategory
+skeleton-category = record
+  { sc-Obj      = DistinctionSkeletonObject
+  ; sc-Hom      = λ A B → SkeletonCategoryArrow
+  ; sc-id       = skeleton-category-arrow
+  ; sc-comp     = λ g f → skeleton-category-arrow
+  ; sc-id-left  = λ { skeleton-category-arrow → refl }
+  ; sc-id-right = λ { skeleton-category-arrow → refl }
+  ; sc-assoc    = λ { skeleton-category-arrow skeleton-category-arrow skeleton-category-arrow → refl }
+  }
+
+-- § Embedding of a raw distinction into the completed category object.
+distinction-to-completed-object : Distinction → sc-Obj skeleton-category
+distinction-to-completed-object = distinction-skeleton-normalize
+
+-- § Every raw distinction lands at the canonical completed object.
+distinction-to-completed-object-normalizes :
+  (d : Distinction) →
+  distinction-to-completed-object d ≡ distinction-skeleton-two
+distinction-to-completed-object-normalizes d = refl
+
+-- § Terminal object in an arbitrary small category.
+record TerminalObject (category : SmallCategory) : Set1 where
+  field
+    terminal-object : sc-Obj category
+    terminal-arrow  : (A : sc-Obj category) → sc-Hom category A terminal-object
+    terminal-unique : {A : sc-Obj category} →
+                      (f : sc-Hom category A terminal-object) →
+                      f ≡ terminal-arrow A
+
+open TerminalObject public
+
+-- § Binary product in an arbitrary small category.
+record BinaryProduct
+  (category : SmallCategory)
+  (A B : sc-Obj category) : Set1 where
+  field
+    product-object : sc-Obj category
+    product-pr1    : sc-Hom category product-object A
+    product-pr2    : sc-Hom category product-object B
+    product-pair   : {X : sc-Obj category} →
+                     sc-Hom category X A →
+                     sc-Hom category X B →
+                     sc-Hom category X product-object
+    product-left   : {X : sc-Obj category} →
+                     (f : sc-Hom category X A) →
+                     (g : sc-Hom category X B) →
+                     sc-comp category product-pr1 (product-pair f g) ≡ f
+    product-right  : {X : sc-Obj category} →
+                     (f : sc-Hom category X A) →
+                     (g : sc-Hom category X B) →
+                     sc-comp category product-pr2 (product-pair f g) ≡ g
+    product-unique : {X : sc-Obj category} →
+                     (f : sc-Hom category X A) →
+                     (g : sc-Hom category X B) →
+                     (h : sc-Hom category X product-object) →
+                     sc-comp category product-pr1 h ≡ f →
+                     sc-comp category product-pr2 h ≡ g →
+                     h ≡ product-pair f g
+
+open BinaryProduct public
+
+-- § Binary products for all pairs of objects.
+record HasBinaryProducts (category : SmallCategory) : Set1 where
+  field
+    product-of : (A B : sc-Obj category) → BinaryProduct category A B
+
+open HasBinaryProducts public
+
+-- § Pullback of a cospan in an arbitrary small category.
+record Pullback
+  (category : SmallCategory)
+  {A B Z : sc-Obj category}
+  (f : sc-Hom category A Z)
+  (g : sc-Hom category B Z) : Set1 where
+  field
+    pullback-object : sc-Obj category
+    pullback-left   : sc-Hom category pullback-object A
+    pullback-right  : sc-Hom category pullback-object B
+    pullback-square : sc-comp category f pullback-left ≡ sc-comp category g pullback-right
+    pullback-lift   : {X : sc-Obj category} →
+                      (u : sc-Hom category X A) →
+                      (v : sc-Hom category X B) →
+                      sc-comp category f u ≡ sc-comp category g v →
+                      sc-Hom category X pullback-object
+    pullback-lift-left : {X : sc-Obj category} →
+                         (u : sc-Hom category X A) →
+                         (v : sc-Hom category X B) →
+                         (p : sc-comp category f u ≡ sc-comp category g v) →
+                         sc-comp category pullback-left (pullback-lift u v p) ≡ u
+    pullback-lift-right : {X : sc-Obj category} →
+                          (u : sc-Hom category X A) →
+                          (v : sc-Hom category X B) →
+                          (p : sc-comp category f u ≡ sc-comp category g v) →
+                          sc-comp category pullback-right (pullback-lift u v p) ≡ v
+    pullback-lift-unique : {X : sc-Obj category} →
+                           (u : sc-Hom category X A) →
+                           (v : sc-Hom category X B) →
+                           (p : sc-comp category f u ≡ sc-comp category g v) →
+                           (h : sc-Hom category X pullback-object) →
+                           sc-comp category pullback-left h ≡ u →
+                           sc-comp category pullback-right h ≡ v →
+                           h ≡ pullback-lift u v p
+
+open Pullback public
+
+-- § Pullbacks for all cospans in a small category.
+record HasPullbacks (category : SmallCategory) : Set1 where
+  field
+    pullback-of : {A B Z : sc-Obj category} →
+                  (f : sc-Hom category A Z) →
+                  (g : sc-Hom category B Z) →
+                  Pullback category f g
+
+open HasPullbacks public
+
+-- § The one-object skeleton has a terminal object.
+skeleton-terminal : TerminalObject skeleton-category
+skeleton-terminal = record
+  { terminal-object = distinction-skeleton-two
+  ; terminal-arrow  = λ A → skeleton-category-arrow
+  ; terminal-unique = λ { skeleton-category-arrow → refl }
+  }
+
+-- § Any two skeleton objects have the unique binary product.
+skeleton-product :
+  (A B : sc-Obj skeleton-category) → BinaryProduct skeleton-category A B
+skeleton-product A B = record
+  { product-object = distinction-skeleton-two
+  ; product-pr1    = skeleton-category-arrow
+  ; product-pr2    = skeleton-category-arrow
+  ; product-pair   = λ f g → skeleton-category-arrow
+  ; product-left   = λ { skeleton-category-arrow skeleton-category-arrow → refl }
+  ; product-right  = λ { skeleton-category-arrow skeleton-category-arrow → refl }
+  ; product-unique = λ
+      { skeleton-category-arrow skeleton-category-arrow skeleton-category-arrow left-proof right-proof → refl }
+  }
+
+-- § Hence the skeleton category has binary products.
+skeleton-products : HasBinaryProducts skeleton-category
+skeleton-products = record
+  { product-of = skeleton-product
+  }
+
+-- § Any skeleton cospan has the unique pullback.
+skeleton-pullback :
+  {A B Z : sc-Obj skeleton-category} →
+  (f : sc-Hom skeleton-category A Z) →
+  (g : sc-Hom skeleton-category B Z) →
+  Pullback skeleton-category {A} {B} {Z} f g
+skeleton-pullback {A} {B} {Z} f g = record
+  { pullback-object      = distinction-skeleton-two
+  ; pullback-left        = skeleton-category-arrow
+  ; pullback-right       = skeleton-category-arrow
+  ; pullback-square      = refl
+  ; pullback-lift        = λ u v p → skeleton-category-arrow
+  ; pullback-lift-left   = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+  ; pullback-lift-right  = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+  ; pullback-lift-unique = λ
+      { skeleton-category-arrow skeleton-category-arrow p skeleton-category-arrow left-proof right-proof → refl }
+  }
+
+-- § Hence the skeleton category has all pullbacks.
+skeleton-pullbacks : HasPullbacks skeleton-category
+skeleton-pullbacks = record
+  { pullback-of = λ {A} {B} {Z} f g → skeleton-pullback {A} {B} {Z} f g
+  }
+
+-- § Mono predicate for morphisms in a small category.
+record IsMono
+  (category : SmallCategory)
+  {A B : sc-Obj category}
+  (morphism : sc-Hom category A B) : Set1 where
+  field
+    mono-cancel : {X : sc-Obj category} →
+                  (f g : sc-Hom category X A) →
+                  sc-comp category morphism f ≡ sc-comp category morphism g →
+                  f ≡ g
+
+open IsMono public
+
+-- § Pullback square used by the categorical subobject classifier.
+record PullbackSquare
+  (category : SmallCategory)
+  {S A B Z : sc-Obj category}
+  (left-map : sc-Hom category S A)
+  (right-map : sc-Hom category S B)
+  (top-map : sc-Hom category A Z)
+  (bottom-map : sc-Hom category B Z) : Set1 where
+  field
+    square-commutes :
+      sc-comp category top-map left-map ≡ sc-comp category bottom-map right-map
+    square-lift     : {X : sc-Obj category} →
+                      (u : sc-Hom category X A) →
+                      (v : sc-Hom category X B) →
+                      sc-comp category top-map u ≡ sc-comp category bottom-map v →
+                      sc-Hom category X S
+    square-lift-left : {X : sc-Obj category} →
+                       (u : sc-Hom category X A) →
+                       (v : sc-Hom category X B) →
+                       (p : sc-comp category top-map u ≡ sc-comp category bottom-map v) →
+                       sc-comp category left-map (square-lift u v p) ≡ u
+    square-lift-right : {X : sc-Obj category} →
+                        (u : sc-Hom category X A) →
+                        (v : sc-Hom category X B) →
+                        (p : sc-comp category top-map u ≡ sc-comp category bottom-map v) →
+                        sc-comp category right-map (square-lift u v p) ≡ v
+    square-lift-unique : {X : sc-Obj category} →
+                         (u : sc-Hom category X A) →
+                         (v : sc-Hom category X B) →
+                         (p : sc-comp category top-map u ≡ sc-comp category bottom-map v) →
+                         (h : sc-Hom category X S) →
+                         sc-comp category left-map h ≡ u →
+                         sc-comp category right-map h ≡ v →
+                         h ≡ square-lift u v p
+
+open PullbackSquare public
+
+-- § Subobject classifier interface in a small category.
+record SubobjectClassifierC
+  (category : SmallCategory)
+  (terminal : TerminalObject category) : Set1 where
+  field
+    classifier-object : sc-Obj category
+    true-map          : sc-Hom category (terminal-object terminal) classifier-object
+    characteristic    : {Sub Base : sc-Obj category} →
+                        (morphism : sc-Hom category Sub Base) →
+                        IsMono category morphism →
+                        sc-Hom category Base classifier-object
+    characteristic-square : {Sub Base : sc-Obj category} →
+                            (morphism : sc-Hom category Sub Base) →
+                            (mono : IsMono category morphism) →
+                            PullbackSquare category
+                              morphism
+                              (terminal-arrow terminal Sub)
+                              (characteristic morphism mono)
+                              true-map
+
+open SubobjectClassifierC public
+
+-- § Exponential object interface in a small category.
+record Exponential
+  (category : SmallCategory)
+  (products : HasBinaryProducts category)
+  (A B : sc-Obj category) : Set1 where
+  field
+    exp-object    : sc-Obj category
+    exp-eval      : sc-Hom category
+                      (product-object (product-of products exp-object A))
+                      B
+    exp-transpose : {X : sc-Obj category} →
+                    sc-Hom category (product-object (product-of products X A)) B →
+                    sc-Hom category X exp-object
+    exp-beta      : {X : sc-Obj category} →
+                    (h : sc-Hom category (product-object (product-of products X A)) B) →
+                    sc-comp category exp-eval
+                      (product-pair (product-of products exp-object A)
+                        (sc-comp category (exp-transpose h)
+                          (product-pr1 (product-of products X A)))
+                        (product-pr2 (product-of products X A))) ≡ h
+    exp-eta       : {X : sc-Obj category} →
+                    (h : sc-Hom category (product-object (product-of products X A)) B) →
+                    (k : sc-Hom category X exp-object) →
+                    sc-comp category exp-eval
+                      (product-pair (product-of products exp-object A)
+                        (sc-comp category k (product-pr1 (product-of products X A)))
+                        (product-pr2 (product-of products X A))) ≡ h →
+                    k ≡ exp-transpose h
+
+open Exponential public
+
+-- § Exponentials for all pairs of objects.
+record HasExponentials
+  (category : SmallCategory)
+  (products : HasBinaryProducts category) : Set1 where
+  field
+    exponential-of : (A B : sc-Obj category) → Exponential category products A B
+
+open HasExponentials public
+
+-- § Every skeleton morphism is mono because all hom-sets are singleton.
+skeleton-mono :
+  {A B : sc-Obj skeleton-category} →
+  (morphism : sc-Hom skeleton-category A B) →
+  IsMono skeleton-category {A} {B} morphism
+skeleton-mono {A} {B} morphism = record
+  { mono-cancel = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+  }
+
+-- § The one-object skeleton carries its subobject classifier directly.
+skeleton-subobject-classifier :
+  SubobjectClassifierC skeleton-category skeleton-terminal
+skeleton-subobject-classifier = record
+  { classifier-object = distinction-skeleton-two
+  ; true-map          = skeleton-category-arrow
+  ; characteristic    = λ morphism mono → skeleton-category-arrow
+  ; characteristic-square = λ morphism mono → record
+      { square-commutes    = refl
+      ; square-lift        = λ u v p → skeleton-category-arrow
+      ; square-lift-left   = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+      ; square-lift-right  = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+      ; square-lift-unique = λ
+        { skeleton-category-arrow skeleton-category-arrow p skeleton-category-arrow left-proof right-proof → refl }
+      }
+  }
+
+-- § The skeleton exponential is the unique object with the unique evaluator.
+skeleton-exponential :
+  (A B : sc-Obj skeleton-category) →
+  Exponential skeleton-category skeleton-products A B
+skeleton-exponential A B = record
+  { exp-object    = distinction-skeleton-two
+  ; exp-eval      = skeleton-category-arrow
+  ; exp-transpose = λ h → skeleton-category-arrow
+  ; exp-beta      = λ { skeleton-category-arrow → refl }
+  ; exp-eta       = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+  }
+
+-- § Hence the skeleton category has exponentials.
+skeleton-exponentials : HasExponentials skeleton-category skeleton-products
+skeleton-exponentials = record
+  { exponential-of = skeleton-exponential
+  }
+
+-- § Elementary-topos package used for the completed endpoint.
+record ElementaryTopos (category : SmallCategory) : Set1 where
+  field
+    et-terminal             : TerminalObject category
+    et-products             : HasBinaryProducts category
+    et-pullbacks            : HasPullbacks category
+    et-exponentials         : HasExponentials category et-products
+    et-subobject-classifier : SubobjectClassifierC category et-terminal
+
+open ElementaryTopos public
+
+-- § The completed skeleton category satisfies the elementary-topos data.
+skeleton-elementary-topos : ElementaryTopos skeleton-category
+skeleton-elementary-topos = record
+  { et-terminal             = skeleton-terminal
+  ; et-products             = skeleton-products
+  ; et-pullbacks            = skeleton-pullbacks
+  ; et-exponentials         = skeleton-exponentials
+  ; et-subobject-classifier = skeleton-subobject-classifier
+  }
+
+-- § Explicit completion stage: skeleton data, obstruction, category, and topos proof.
+record CompletionToposStage : Setω where
+  field
+    cts-distinction-skeleton : DistinctionSkeletonLayer
+    cts-reading-skeleton     : DistinctionReadingSkeletonLayer
+    cts-raw-obstruction      : ToposRouteRawObstruction
+    cts-category             : SmallCategory
+    cts-terminal             : TerminalObject cts-category
+    cts-products             : HasBinaryProducts cts-category
+    cts-pullbacks            : HasPullbacks cts-category
+    cts-exponentials         : HasExponentials cts-category cts-products
+    cts-subobject-classifier : SubobjectClassifierC cts-category cts-terminal
+    cts-topos                : ElementaryTopos cts-category
+
+open CompletionToposStage public
+
+-- § The quotient/skeleton completion is the Topos endpoint.
+completion-topos-stage : CompletionToposStage
+completion-topos-stage = record
+  { cts-distinction-skeleton = distinction-skeleton-layer
+  ; cts-reading-skeleton     = distinction-reading-skeleton-layer
+  ; cts-raw-obstruction      = topos-route-raw-obstruction
+  ; cts-category             = skeleton-category
+  ; cts-terminal             = skeleton-terminal
+  ; cts-products             = skeleton-products
+  ; cts-pullbacks            = skeleton-pullbacks
+  ; cts-exponentials         = skeleton-exponentials
+  ; cts-subobject-classifier = skeleton-subobject-classifier
+  ; cts-topos                = skeleton-elementary-topos
+  }
+\end{code}
+
+This is the exact sense in which the Topos appears.  It is not the
+starting arena of the book's route.  It is the completed skeleton stage:
+the raw obstruction is recorded, the quotient/skeleton data are recorded,
+and the elementary-Topos structure is then constructed over the completed
+one-object category.
+
+\section{Scope And Set-Like Burden}
+\label{sec:topos-route-boundary:scope-set-like-burden}
+
+The skeleton endpoint is a Topos stage, but it is not a set-like universe
+of formulation.  It has one completed object.  Any richer set-like stage
+must therefore add nonterminal structure and carry the distinctional
+burden introduced by its own object diversity.  The records in this
+section do not assert such a richer completion; they classify the burden
+under which one could be admitted by this route.
+
+\begin{code}
+-- § The completed skeleton package used by later classification records.
+record VoidSkeletonToposCompletion : Setω where
+  field
+    vst-topos-stage           : CompletionToposStage
+    vst-distinction-skeleton  : DistinctionSkeletonLayer
+    vst-reading-skeleton      : DistinctionReadingSkeletonLayer
+    vst-category              : SmallCategory
+    vst-topos                 : ElementaryTopos vst-category
+
+open VoidSkeletonToposCompletion public
+
+-- § The completed skeleton carries the elementary-Topos structure.
+void-skeleton-topos-completion : VoidSkeletonToposCompletion
+void-skeleton-topos-completion = record
+  { vst-topos-stage          = completion-topos-stage
+  ; vst-distinction-skeleton = distinction-skeleton-layer
+  ; vst-reading-skeleton     = distinction-reading-skeleton-layer
+  ; vst-category             = skeleton-category
+  ; vst-topos                = skeleton-elementary-topos
+  }
+
+-- § Semantic adequacy is named as an external problem, not proved here.
+StableReadingSemanticAdequacy : Set2
+StableReadingSemanticAdequacy =
+  (classifier : ClassifierObject) →
+  StableReadingInterface classifier →
+  Set1
+
+-- § A generic richer-completion problem is named, not taken as primitive.
+record RicherCompletionCandidate : Set2 where
+  field
+    rcc-object-carrier : Set
+    rcc-reading-embed  : StableReadingInterface TwoClassifier → rcc-object-carrier
+    rcc-category       : SmallCategory
+    rcc-topos          : ElementaryTopos rcc-category
+
+open RicherCompletionCandidate public
+
+-- § Scope conditions state exactly what the theorem does and does not close.
+record ToposRouteScopeConditions : Setω where
+  field
+    vtsc-semantic-adequacy-problem : Set2
+    vtsc-minimal-completion-stage  : CompletionToposStage
+    vtsc-richer-completion-problem : Set2
+
+open ToposRouteScopeConditions public
+
+-- § The scope record names the burden carried by richer completions.
+void-topos-scope-conditions : ToposRouteScopeConditions
+void-topos-scope-conditions = record
+  { vtsc-semantic-adequacy-problem = StableReadingSemanticAdequacy
+  ; vtsc-minimal-completion-stage  = completion-topos-stage
+  ; vtsc-richer-completion-problem = RicherCompletionCandidate
+  }
+
+-- § Object diversity: the category has two distinct objects.
+record HasDistinctObjects (category : SmallCategory) : Set1 where
+  field
+    first-object      : sc-Obj category
+    second-object     : sc-Obj category
+    objects-separated : first-object ≠ second-object
+
+open HasDistinctObjects public
+
+-- § The skeleton completion has no pair of distinct objects.
+skeleton-has-no-distinct-objects :
+  HasDistinctObjects skeleton-category → ⊥
+skeleton-has-no-distinct-objects record
+  { first-object = distinction-skeleton-two
+  ; second-object = distinction-skeleton-two
+  ; objects-separated = separated
+  } = separated refl
+
+-- § The minimal completion stage is therefore not set-like by object diversity.
+minimal-completion-not-set-like :
+  HasDistinctObjects (cts-category completion-topos-stage) → ⊥
+minimal-completion-not-set-like = skeleton-has-no-distinct-objects
+
+-- § Point-separation principle for morphisms.
+record PointsSeparateMorphisms
+  (category : SmallCategory)
+  (terminal : TerminalObject category) : Set1 where
+  field
+    points-separate :
+      {A B : sc-Obj category} →
+      (f g : sc-Hom category A B) →
+      ((point : sc-Hom category (terminal-object terminal) A) →
+        sc-comp category f point ≡ sc-comp category g point) →
+      f ≡ g
+
+open PointsSeparateMorphisms public
+
+-- § Natural-numbers-object obligation for a set-like completion.
+record NaturalNumbersObject
+  (category : SmallCategory)
+  (terminal : TerminalObject category) : Set1 where
+  field
+    nno-object : sc-Obj category
+    nno-zero   : sc-Hom category (terminal-object terminal) nno-object
+    nno-succ   : sc-Hom category nno-object nno-object
+    nno-rec    : {X : sc-Obj category} →
+                 sc-Hom category (terminal-object terminal) X →
+                 sc-Hom category X X →
+                 sc-Hom category nno-object X
+    nno-zero-law :
+      {X : sc-Obj category} →
+      (zeroX : sc-Hom category (terminal-object terminal) X) →
+      (succX : sc-Hom category X X) →
+      sc-comp category (nno-rec zeroX succX) nno-zero ≡ zeroX
+    nno-succ-law :
+      {X : sc-Obj category} →
+      (zeroX : sc-Hom category (terminal-object terminal) X) →
+      (succX : sc-Hom category X X) →
+      sc-comp category (nno-rec zeroX succX) nno-succ ≡
+      sc-comp category succX (nno-rec zeroX succX)
+    nno-unique :
+      {X : sc-Obj category} →
+      (zeroX : sc-Hom category (terminal-object terminal) X) →
+      (succX : sc-Hom category X X) →
+      (h : sc-Hom category nno-object X) →
+      sc-comp category h nno-zero ≡ zeroX →
+      sc-comp category h nno-succ ≡ sc-comp category succX h →
+      h ≡ nno-rec zeroX succX
+
+open NaturalNumbersObject public
+
+-- § Epimorphism predicate in a small category.
+record IsEpi
+  (category : SmallCategory)
+  {A B : sc-Obj category}
+  (morphism : sc-Hom category A B) : Set1 where
+  field
+    epi-cancel :
+      {X : sc-Obj category} →
+      (f g : sc-Hom category B X) →
+      sc-comp category f morphism ≡ sc-comp category g morphism →
+      f ≡ g
+
+open IsEpi public
+
+-- § Choice-like section principle for cover-like maps.
+record ChoiceLikeSections (category : SmallCategory) : Set1 where
+  field
+    choose-section :
+      {A B : sc-Obj category} →
+      (cover : sc-Hom category A B) →
+      IsEpi category cover →
+      Σ (sc-Hom category B A)
+        (λ section → sc-comp category cover section ≡ sc-id category)
+
+open ChoiceLikeSections public
+
+-- § Candidate for a nonterminal set-like completion above the Topos boundary.
+record SetLikeCompletionCandidate : Setω where
+  field
+    slc-category           : SmallCategory
+    slc-topos              : ElementaryTopos slc-category
+    slc-object-diversity   : HasDistinctObjects slc-category
+    slc-reading-object     : StableReadingInterface TwoClassifier → sc-Obj slc-category
+    slc-distinction-object : Distinction → sc-Obj slc-category
+    slc-distinction-object-law :
+      (d : Distinction) →
+      slc-distinction-object d ≡
+      slc-reading-object (distinction-stable-reading d)
+    slc-points-separate    :
+      PointsSeparateMorphisms slc-category (et-terminal slc-topos)
+    slc-arithmetic         :
+      NaturalNumbersObject slc-category (et-terminal slc-topos)
+    slc-choice-like        : ChoiceLikeSections slc-category
+    slc-semantic-adequacy  : StableReadingSemanticAdequacy
+
+open SetLikeCompletionCandidate public
+\end{code}
+
+\section{Formulability Burden}
+\label{sec:topos-route-boundary:formulability-burden}
+
+Any proposed universe of formulation that supplies two distinguishable
+positions already carries a binary distinction.  This is the exact sense
+in which a set-like candidate cannot be prior to distinction in this
+route: its own object diversity gives the two positions from which the
+binary distinction embeds.
+
+\begin{code}
+-- § Nontrivial formulation positions: two distinguishable formal places.
+record NontrivialFormulationInterface : Set1 where
+  field
+    nfi-position-carrier : Set
+    nfi-left-position    : nfi-position-carrier
+    nfi-right-position   : nfi-position-carrier
+    nfi-separated        : nfi-left-position ≠ nfi-right-position
+
+open NontrivialFormulationInterface public
+
+-- § Distinctional positions are the extracted left/right data.
+record DistinctionalPositions : Set1 where
+  field
+    dp-carrier   : Set
+    dp-left      : dp-carrier
+    dp-right     : dp-carrier
+    dp-separated : dp-left ≠ dp-right
+
+open DistinctionalPositions public
+
+-- § A formulation interface exposes distinctional positions.
+formulation-positions : NontrivialFormulationInterface → DistinctionalPositions
+formulation-positions interface = record
+  { dp-carrier   = nfi-position-carrier interface
+  ; dp-left      = nfi-left-position interface
+  ; dp-right     = nfi-right-position interface
+  ; dp-separated = nfi-separated interface
+  }
+
+-- § Embedded binary distinction inside a carrier of positions.
+record EmbeddedBinaryDistinction (positions : DistinctionalPositions) : Set1 where
+  field
+    ebd-distinction      : Distinction
+    ebd-embed            : S ebd-distinction → dp-carrier positions
+    ebd-embed-left       : ebd-embed (ℓ ebd-distinction) ≡ dp-left positions
+    ebd-embed-right      : ebd-embed (r ebd-distinction) ≡ dp-right positions
+    ebd-embed-separated  :
+      ebd-embed (ℓ ebd-distinction) ≠ ebd-embed (r ebd-distinction)
+
+open EmbeddedBinaryDistinction public
+
+-- § Two distinguishable positions carry an embedded copy of binary distinction.
+embedded-distinction-from-positions :
+  (positions : DistinctionalPositions) → EmbeddedBinaryDistinction positions
+embedded-distinction-from-positions positions = record
+  { ebd-distinction     = Two-distinction
+  ; ebd-embed           = λ { L → dp-left positions ; R → dp-right positions }
+  ; ebd-embed-left      = refl
+  ; ebd-embed-right     = refl
+  ; ebd-embed-separated = dp-separated positions
+  }
+
+-- § Any nontrivial formulation interface therefore carries binary distinction.
+formulation-interface-presupposes-distinction :
+  (interface : NontrivialFormulationInterface) →
+  EmbeddedBinaryDistinction (formulation-positions interface)
+formulation-interface-presupposes-distinction interface =
+  embedded-distinction-from-positions (formulation-positions interface)
+
+-- § Object diversity in a category gives nontrivial formulation positions.
+category-formulation-interface :
+  (category : SmallCategory) →
+  HasDistinctObjects category → NontrivialFormulationInterface
+category-formulation-interface category distinct = record
+  { nfi-position-carrier = sc-Obj category
+  ; nfi-left-position    = first-object distinct
+  ; nfi-right-position   = second-object distinct
+  ; nfi-separated        = objects-separated distinct
+  }
+
+-- § Object-diverse categories carry an embedded binary distinction.
+category-diversity-presupposes-distinction :
+  (category : SmallCategory) →
+  (distinct : HasDistinctObjects category) →
+  EmbeddedBinaryDistinction
+    (formulation-positions (category-formulation-interface category distinct))
+category-diversity-presupposes-distinction category distinct =
+  formulation-interface-presupposes-distinction
+    (category-formulation-interface category distinct)
+
+-- § A set-like completion candidate carries distinction through object diversity.
+set-like-candidate-presupposes-distinction :
+  (candidate : SetLikeCompletionCandidate) →
+  EmbeddedBinaryDistinction
+    (formulation-positions
+      (category-formulation-interface
+        (slc-category candidate)
+        (slc-object-diversity candidate)))
+set-like-candidate-presupposes-distinction candidate =
+  category-diversity-presupposes-distinction
+    (slc-category candidate)
+    (slc-object-diversity candidate)
+
+-- § The minimal completed Topos cannot itself be such a set-like candidate.
+minimal-completion-not-set-like-candidate :
+  (candidate : SetLikeCompletionCandidate) →
+  slc-category candidate ≡ cts-category completion-topos-stage → ⊥
+minimal-completion-not-set-like-candidate candidate refl =
+  minimal-completion-not-set-like (slc-object-diversity candidate)
+
+-- § Package of the checked distinctional burden for formulation interfaces.
+record FormulabilityBurden : Setω where
+  field
+    fb-interface-to-distinction :
+      (interface : NontrivialFormulationInterface) →
+      EmbeddedBinaryDistinction (formulation-positions interface)
+    fb-category-to-distinction :
+      (category : SmallCategory) →
+      (distinct : HasDistinctObjects category) →
+      EmbeddedBinaryDistinction
+        (formulation-positions (category-formulation-interface category distinct))
+    fb-set-like-candidate-to-distinction :
+      (candidate : SetLikeCompletionCandidate) →
+      EmbeddedBinaryDistinction
+        (formulation-positions
+          (category-formulation-interface
+            (slc-category candidate)
+            (slc-object-diversity candidate)))
+    fb-minimal-not-set-like-candidate :
+      (candidate : SetLikeCompletionCandidate) →
+      slc-category candidate ≡ cts-category completion-topos-stage → ⊥
+
+open FormulabilityBurden public
+
+-- § The checked burden package: nontrivial formulation positions imply distinction.
+formulability-burden : FormulabilityBurden
+formulability-burden = record
+  { fb-interface-to-distinction = formulation-interface-presupposes-distinction
+  ; fb-category-to-distinction = category-diversity-presupposes-distinction
+  ; fb-set-like-candidate-to-distinction = set-like-candidate-presupposes-distinction
+  ; fb-minimal-not-set-like-candidate = minimal-completion-not-set-like-candidate
+  }
+
+-- § Burden package for the set-like completion problem.
+record SetLikeCompletionBurden : Setω where
+  field
+    slb-topos-boundary        : ToposBoundaryMap
+    slb-route-obstruction     : ToposRouteRawObstruction
+    slb-raw-cones-blocked     : ToposRouteGlobalPullbackCones → ⊥
+    slb-minimal-topos-stage   : CompletionToposStage
+    slb-minimal-not-set-like  :
+      HasDistinctObjects (cts-category slb-minimal-topos-stage) → ⊥
+
+open SetLikeCompletionBurden public
+
+-- § The current theorem burden: raw boundary closed, set-like candidate accountable.
+set-like-completion-burden : SetLikeCompletionBurden
+set-like-completion-burden = record
+  { slb-topos-boundary       = topos-boundary-map
+  ; slb-route-obstruction    = topos-route-raw-obstruction
+  ; slb-raw-cones-blocked    = topos-route-global-pullback-cones-impossible
+  ; slb-minimal-topos-stage  = completion-topos-stage
+  ; slb-minimal-not-set-like = minimal-completion-not-set-like
+  }
+\end{code}
+
+\section{Canonical Closure}
+\label{sec:topos-route-boundary:canonical-closure}
+
+At the completed skeleton endpoint there is no internal freedom left to
+choose.  Presentations normalize to the canonical completed object;
+objects, morphisms, products, pullbacks, the classifier, and exponentials
+all collapse to their unique completed witnesses.  The remaining
+questions are not free gaps: they are classified as raw obstruction,
+set-like burden, formulability extraction, or semantic adequacy burden.
+
+\begin{code}
+-- § Every skeleton object is the canonical completed object.
+skeleton-object-canonical :
+  (A : sc-Obj skeleton-category) → A ≡ distinction-skeleton-two
+skeleton-object-canonical distinction-skeleton-two = refl
+
+-- § Hence any two skeleton objects are equal.
+skeleton-all-objects-equal :
+  (A B : sc-Obj skeleton-category) → A ≡ B
+skeleton-all-objects-equal distinction-skeleton-two distinction-skeleton-two = refl
+
+-- § Every skeleton morphism is the canonical unique morphism.
+skeleton-morphism-canonical :
+  {A B : sc-Obj skeleton-category} →
+  (f : sc-Hom skeleton-category A B) → f ≡ skeleton-category-arrow
+skeleton-morphism-canonical skeleton-category-arrow = refl
+
+-- § Hence any two skeleton morphisms are equal.
+skeleton-all-morphisms-equal :
+  {A B : sc-Obj skeleton-category} →
+  (f g : sc-Hom skeleton-category A B) → f ≡ g
+skeleton-all-morphisms-equal skeleton-category-arrow skeleton-category-arrow = refl
+
+-- § Product witnesses have the canonical completed object as product object.
+skeleton-product-object-canonical :
+  (A B : sc-Obj skeleton-category) →
+  product-object (product-of skeleton-products A B) ≡ distinction-skeleton-two
+skeleton-product-object-canonical A B = refl
+
+-- § Pullback witnesses have the canonical completed object as pullback object.
+skeleton-pullback-object-canonical :
+  {A B Z : sc-Obj skeleton-category} →
+  (f : sc-Hom skeleton-category A Z) →
+  (g : sc-Hom skeleton-category B Z) →
+  pullback-object (pullback-of skeleton-pullbacks {A} {B} {Z} f g) ≡
+  distinction-skeleton-two
+skeleton-pullback-object-canonical f g = refl
+
+-- § The subobject classifier object is the canonical completed object.
+skeleton-subobject-classifier-object-canonical :
+  classifier-object skeleton-subobject-classifier ≡ distinction-skeleton-two
+skeleton-subobject-classifier-object-canonical = refl
+
+-- § Exponential witnesses have the canonical completed object as exponential object.
+skeleton-exponential-object-canonical :
+  (A B : sc-Obj skeleton-category) →
+  exp-object (exponential-of skeleton-exponentials A B) ≡ distinction-skeleton-two
+skeleton-exponential-object-canonical A B = refl
+
+-- § The canonical endpoint: no internal skeleton choices remain open.
+record CanonicalClosedEndpoint : Setω where
+  field
+    cce-completion              : VoidSkeletonToposCompletion
+    cce-topos                   : ElementaryTopos skeleton-category
+    cce-distinction-normalizes  :
+      (d : Distinction) → distinction-to-completed-object d ≡ distinction-skeleton-two
+    cce-reading-normalizes      :
+      (d : Distinction) →
+      drsl-normalize distinction-reading-skeleton-layer d ≡ distinction-skeleton-two
+    cce-object-canonical        :
+      (A : sc-Obj skeleton-category) → A ≡ distinction-skeleton-two
+    cce-all-objects-equal       :
+      (A B : sc-Obj skeleton-category) → A ≡ B
+    cce-morphism-canonical      :
+      {A B : sc-Obj skeleton-category} →
+      (f : sc-Hom skeleton-category A B) → f ≡ skeleton-category-arrow
+    cce-all-morphisms-equal     :
+      {A B : sc-Obj skeleton-category} →
+      (f g : sc-Hom skeleton-category A B) → f ≡ g
+    cce-product-classified      :
+      (A B : sc-Obj skeleton-category) →
+      product-object (product-of skeleton-products A B) ≡ distinction-skeleton-two
+    cce-pullback-classified     :
+      {A B Z : sc-Obj skeleton-category} →
+      (f : sc-Hom skeleton-category A Z) →
+      (g : sc-Hom skeleton-category B Z) →
+      pullback-object (pullback-of skeleton-pullbacks {A} {B} {Z} f g) ≡
+      distinction-skeleton-two
+    cce-classifier-classified   :
+      classifier-object skeleton-subobject-classifier ≡ distinction-skeleton-two
+    cce-exponential-classified  :
+      (A B : sc-Obj skeleton-category) →
+      exp-object (exponential-of skeleton-exponentials A B) ≡ distinction-skeleton-two
+    cce-no-distinct-objects     : HasDistinctObjects skeleton-category → ⊥
+
+open CanonicalClosedEndpoint public
+
+-- § The canonical endpoint witness closes all internal skeleton choices.
+canonical-closed-endpoint : CanonicalClosedEndpoint
+canonical-closed-endpoint = record
+  { cce-completion             = void-skeleton-topos-completion
+  ; cce-topos                  = skeleton-elementary-topos
+  ; cce-distinction-normalizes = distinction-to-completed-object-normalizes
+  ; cce-reading-normalizes     = λ d → refl
+  ; cce-object-canonical       = skeleton-object-canonical
+  ; cce-all-objects-equal      = skeleton-all-objects-equal
+    ; cce-morphism-canonical     = λ {A} {B} f →
+      skeleton-morphism-canonical {A} {B} f
+    ; cce-all-morphisms-equal    = λ {A} {B} f g →
+      skeleton-all-morphisms-equal {A} {B} f g
+  ; cce-product-classified     = skeleton-product-object-canonical
+  ; cce-pullback-classified    = λ {A} {B} {Z} f g →
+      skeleton-pullback-object-canonical {A} {B} {Z} f g
+  ; cce-classifier-classified  = skeleton-subobject-classifier-object-canonical
+  ; cce-exponential-classified = skeleton-exponential-object-canonical
+  ; cce-no-distinct-objects    = skeleton-has-no-distinct-objects
+  }
+
+-- § Finite ledger of residual questions at the closure boundary.
+data CanonicalResidualQuestion : Set where
+  distinction-presentation-question : CanonicalResidualQuestion
+  reading-presentation-question     : CanonicalResidualQuestion
+  object-choice-question            : CanonicalResidualQuestion
+  morphism-choice-question          : CanonicalResidualQuestion
+  product-choice-question           : CanonicalResidualQuestion
+  pullback-choice-question          : CanonicalResidualQuestion
+  classifier-choice-question        : CanonicalResidualQuestion
+  exponential-choice-question       : CanonicalResidualQuestion
+  raw-topos-question                : CanonicalResidualQuestion
+  set-like-question                 : CanonicalResidualQuestion
+  formulation-position-question     : CanonicalResidualQuestion
+  semantic-adequacy-question        : CanonicalResidualQuestion
+
+-- § Classification classes for the closure ledger.
+data CanonicalQuestionClass : Set where
+  closed-by-canonical-skeleton     : CanonicalQuestionClass
+  blocked-at-raw-stage             : CanonicalQuestionClass
+  set-like-burden-class            : CanonicalQuestionClass
+  formulability-extraction-class   : CanonicalQuestionClass
+  semantic-adequacy-burden-class   : CanonicalQuestionClass
+
+-- § Evidence that a residual question has the assigned closure class.
+data ClassifiedCanonicalQuestion :
+  CanonicalResidualQuestion → CanonicalQuestionClass → Set where
+  distinction-presentation-classified :
+    ClassifiedCanonicalQuestion distinction-presentation-question closed-by-canonical-skeleton
+  reading-presentation-classified :
+    ClassifiedCanonicalQuestion reading-presentation-question closed-by-canonical-skeleton
+  object-choice-classified :
+    ClassifiedCanonicalQuestion object-choice-question closed-by-canonical-skeleton
+  morphism-choice-classified :
+    ClassifiedCanonicalQuestion morphism-choice-question closed-by-canonical-skeleton
+  product-choice-classified :
+    ClassifiedCanonicalQuestion product-choice-question closed-by-canonical-skeleton
+  pullback-choice-classified :
+    ClassifiedCanonicalQuestion pullback-choice-question closed-by-canonical-skeleton
+  classifier-choice-classified :
+    ClassifiedCanonicalQuestion classifier-choice-question closed-by-canonical-skeleton
+  exponential-choice-classified :
+    ClassifiedCanonicalQuestion exponential-choice-question closed-by-canonical-skeleton
+  raw-topos-classified :
+    ClassifiedCanonicalQuestion raw-topos-question blocked-at-raw-stage
+  set-like-classified :
+    ClassifiedCanonicalQuestion set-like-question set-like-burden-class
+  formulation-position-classified :
+    ClassifiedCanonicalQuestion formulation-position-question formulability-extraction-class
+  semantic-adequacy-classified :
+    ClassifiedCanonicalQuestion semantic-adequacy-question semantic-adequacy-burden-class
+
+-- § The classifier assigning every residual question to its closure class.
+canonical-question-class : CanonicalResidualQuestion → CanonicalQuestionClass
+canonical-question-class distinction-presentation-question = closed-by-canonical-skeleton
+canonical-question-class reading-presentation-question = closed-by-canonical-skeleton
+canonical-question-class object-choice-question = closed-by-canonical-skeleton
+canonical-question-class morphism-choice-question = closed-by-canonical-skeleton
+canonical-question-class product-choice-question = closed-by-canonical-skeleton
+canonical-question-class pullback-choice-question = closed-by-canonical-skeleton
+canonical-question-class classifier-choice-question = closed-by-canonical-skeleton
+canonical-question-class exponential-choice-question = closed-by-canonical-skeleton
+canonical-question-class raw-topos-question = blocked-at-raw-stage
+canonical-question-class set-like-question = set-like-burden-class
+canonical-question-class formulation-position-question = formulability-extraction-class
+canonical-question-class semantic-adequacy-question = semantic-adequacy-burden-class
+
+-- § Exhaustiveness: every listed residual question is classified.
+canonical-question-classified :
+  (question : CanonicalResidualQuestion) →
+  ClassifiedCanonicalQuestion question (canonical-question-class question)
+canonical-question-classified distinction-presentation-question =
+  distinction-presentation-classified
+canonical-question-classified reading-presentation-question =
+  reading-presentation-classified
+canonical-question-classified object-choice-question = object-choice-classified
+canonical-question-classified morphism-choice-question = morphism-choice-classified
+canonical-question-classified product-choice-question = product-choice-classified
+canonical-question-classified pullback-choice-question = pullback-choice-classified
+canonical-question-classified classifier-choice-question = classifier-choice-classified
+canonical-question-classified exponential-choice-question = exponential-choice-classified
+canonical-question-classified raw-topos-question = raw-topos-classified
+canonical-question-classified set-like-question = set-like-classified
+canonical-question-classified formulation-position-question = formulation-position-classified
+canonical-question-classified semantic-adequacy-question = semantic-adequacy-classified
+
+-- § There is no constructor for an unclassified canonical question.
+data UnclassifiedCanonicalQuestion : Set where
+
+-- § Therefore an alleged unclassified canonical question is impossible.
+no-unclassified-canonical-question : UnclassifiedCanonicalQuestion → ⊥
+no-unclassified-canonical-question ()
+
+-- § Package of the finite closure ledger.
+record CanonicalClosureLedger : Set1 where
+  field
+    ccl-class           : CanonicalResidualQuestion → CanonicalQuestionClass
+    ccl-classified      :
+      (question : CanonicalResidualQuestion) →
+      ClassifiedCanonicalQuestion question (ccl-class question)
+    ccl-no-unclassified : UnclassifiedCanonicalQuestion → ⊥
+
+open CanonicalClosureLedger public
+
+-- § The checked closure ledger classifies every listed residual question.
+canonical-closure-ledger : CanonicalClosureLedger
+canonical-closure-ledger = record
+  { ccl-class           = canonical-question-class
+  ; ccl-classified      = canonical-question-classified
+  ; ccl-no-unclassified = no-unclassified-canonical-question
+  }
+
+-- § Canonical closure: endpoint closed, remaining questions classified.
+record CanonicalClosure : Setω where
+  field
+    cc-endpoint             : CanonicalClosedEndpoint
+    cc-ledger               : CanonicalClosureLedger
+    cc-set-like-burden      : SetLikeCompletionBurden
+    cc-formulability-burden : FormulabilityBurden
+
+open CanonicalClosure public
+
+-- § The canonical closure of the checked route.
+canonical-closure : CanonicalClosure
+canonical-closure = record
+  { cc-endpoint             = canonical-closed-endpoint
+  ; cc-ledger               = canonical-closure-ledger
+  ; cc-set-like-burden      = set-like-completion-burden
+  ; cc-formulability-burden = formulability-burden
+  }
+\end{code}
+
+\section{Route And Foundation Classification}
+\label{sec:topos-route-boundary:route-foundation-classification}
+
+The final classification is exhaustive only after admission has been made
+explicit.  A route completion claim is admitted when it is one of the
+displayed cases below: the canonical skeleton, a raw attempt to supply
+global route pullback cones, a set-like candidate, or a semantic-adequacy
+claim.  A foundation claim is admitted when it either supplies nontrivial
+formulation positions or appears as one of those route completions.
+
+\begin{code}
+-- § Finite admission interface for completion claims handled by this route.
+data RouteCompletionExtension : Setω where
+  route-canonical-skeleton : RouteCompletionExtension
+  route-raw-pullback-cones-attempt :
+    ToposRouteGlobalPullbackCones → RouteCompletionExtension
+  route-set-like-candidate :
+    SetLikeCompletionCandidate → RouteCompletionExtension
+  route-semantic-adequacy :
+    StableReadingSemanticAdequacy → RouteCompletionExtension
+
+-- § Classification classes for the route-admitted completion interface.
+data RouteCompletionClass : Set where
+  route-canonical-skeleton-class       : RouteCompletionClass
+  route-raw-topos-blocked-class        : RouteCompletionClass
+  route-set-like-burden-class          : RouteCompletionClass
+  route-semantic-adequacy-burden-class : RouteCompletionClass
+
+-- § Evidence assigned to each classified route-admitted completion claim.
+data ClassifiedRouteCompletion :
+  RouteCompletionExtension → RouteCompletionClass → Setω where
+  route-canonical-skeleton-classified :
+    CanonicalClosure →
+    ClassifiedRouteCompletion route-canonical-skeleton route-canonical-skeleton-class
+  route-raw-topos-blocked-classified :
+    (global-cones : ToposRouteGlobalPullbackCones) →
+    (ToposRouteGlobalPullbackCones → ⊥) →
+    ClassifiedRouteCompletion
+      (route-raw-pullback-cones-attempt global-cones)
+      route-raw-topos-blocked-class
+  route-set-like-candidate-classified :
+    (candidate : SetLikeCompletionCandidate) →
+    EmbeddedBinaryDistinction
+      (formulation-positions
+        (category-formulation-interface
+          (slc-category candidate)
+          (slc-object-diversity candidate))) →
+    ClassifiedRouteCompletion
+      (route-set-like-candidate candidate)
+      route-set-like-burden-class
+  route-semantic-adequacy-classified :
+    (adequacy : StableReadingSemanticAdequacy) →
+    ClassifiedRouteCompletion
+      (route-semantic-adequacy adequacy)
+      route-semantic-adequacy-burden-class
+
+-- § Classifier for the route-admitted completion interface.
+route-completion-class : RouteCompletionExtension → RouteCompletionClass
+route-completion-class route-canonical-skeleton = route-canonical-skeleton-class
+route-completion-class (route-raw-pullback-cones-attempt global-cones) =
+  route-raw-topos-blocked-class
+route-completion-class (route-set-like-candidate candidate) =
+  route-set-like-burden-class
+route-completion-class (route-semantic-adequacy adequacy) =
+  route-semantic-adequacy-burden-class
+
+-- § The raw full-pullback-cone attempt cannot be inhabited on this route.
+route-raw-pullback-cones-attempt-impossible :
+  ToposRouteGlobalPullbackCones → ⊥
+route-raw-pullback-cones-attempt-impossible =
+  topos-route-global-pullback-cones-impossible
+
+-- § Exhaustiveness: every route-admitted completion claim is classified.
+route-completion-classified :
+  (extension : RouteCompletionExtension) →
+  ClassifiedRouteCompletion extension (route-completion-class extension)
+route-completion-classified route-canonical-skeleton =
+  route-canonical-skeleton-classified canonical-closure
+route-completion-classified (route-raw-pullback-cones-attempt global-cones) =
+  route-raw-topos-blocked-classified
+    global-cones
+    route-raw-pullback-cones-attempt-impossible
+route-completion-classified (route-set-like-candidate candidate) =
+  route-set-like-candidate-classified
+    candidate
+    (set-like-candidate-presupposes-distinction candidate)
+route-completion-classified (route-semantic-adequacy adequacy) =
+  route-semantic-adequacy-classified adequacy
+
+-- § Package of the exhaustive route-admitted completion classification.
+record ExhaustiveRouteCompletionClassification : Setω where
+  field
+    ercc-class : RouteCompletionExtension → RouteCompletionClass
+    ercc-classified :
+      (extension : RouteCompletionExtension) →
+      ClassifiedRouteCompletion extension (ercc-class extension)
+    ercc-raw-attempt-impossible : ToposRouteGlobalPullbackCones → ⊥
+    ercc-set-like-to-distinction :
+      (candidate : SetLikeCompletionCandidate) →
+      EmbeddedBinaryDistinction
+        (formulation-positions
+          (category-formulation-interface
+            (slc-category candidate)
+            (slc-object-diversity candidate)))
+    ercc-canonical-closure : CanonicalClosure
+
+open ExhaustiveRouteCompletionClassification public
+
+-- § The final classification theorem for completions admitted by this route.
+route-completion-classification : ExhaustiveRouteCompletionClassification
+route-completion-classification = record
+  { ercc-class                  = route-completion-class
+  ; ercc-classified             = route-completion-classified
+  ; ercc-raw-attempt-impossible = route-raw-pullback-cones-attempt-impossible
+  ; ercc-set-like-to-distinction = set-like-candidate-presupposes-distinction
+  ; ercc-canonical-closure      = canonical-closure
+  }
+
+-- § A nontrivial formulable foundation supplies formulation positions.
+record FormulableFoundationCandidate : Set1 where
+  field
+    ffc-interface : NontrivialFormulationInterface
+
+open FormulableFoundationCandidate public
+
+-- § Admitted foundation claims: entry-level foundations or route completions.
+data AdmittedFoundationClaim : Setω where
+  admitted-formulable-foundation :
+    FormulableFoundationCandidate → AdmittedFoundationClaim
+  admitted-route-completion :
+    RouteCompletionExtension → AdmittedFoundationClaim
+
+-- § Classification classes for admitted foundation claims.
+data AdmittedFoundationClass : Set where
+  foundation-distinctional-entry-class : AdmittedFoundationClass
+  foundation-canonical-skeleton-class  : AdmittedFoundationClass
+  foundation-raw-topos-blocked-class   : AdmittedFoundationClass
+  foundation-set-like-burden-class     : AdmittedFoundationClass
+  foundation-semantic-adequacy-burden-class : AdmittedFoundationClass
+
+-- § Route-completion classes become foundation classes at completion level.
+foundation-route-class : RouteCompletionClass → AdmittedFoundationClass
+foundation-route-class route-canonical-skeleton-class =
+  foundation-canonical-skeleton-class
+foundation-route-class route-raw-topos-blocked-class =
+  foundation-raw-topos-blocked-class
+foundation-route-class route-set-like-burden-class =
+  foundation-set-like-burden-class
+foundation-route-class route-semantic-adequacy-burden-class =
+  foundation-semantic-adequacy-burden-class
+
+-- § Evidence that an admitted foundation claim has its assigned class.
+data ClassifiedAdmittedFoundation :
+  AdmittedFoundationClaim → AdmittedFoundationClass → Setω where
+  admitted-formulable-foundation-classified :
+    (foundation : FormulableFoundationCandidate) →
+    EmbeddedBinaryDistinction
+      (formulation-positions (ffc-interface foundation)) →
+    ClassifiedAdmittedFoundation
+      (admitted-formulable-foundation foundation)
+      foundation-distinctional-entry-class
+  admitted-route-completion-classified :
+    (extension : RouteCompletionExtension) →
+    ClassifiedRouteCompletion extension (route-completion-class extension) →
+    ClassifiedAdmittedFoundation
+      (admitted-route-completion extension)
+      (foundation-route-class (route-completion-class extension))
+
+-- § Classifier for admitted foundation claims.
+admitted-foundation-class : AdmittedFoundationClaim → AdmittedFoundationClass
+admitted-foundation-class (admitted-formulable-foundation foundation) =
+  foundation-distinctional-entry-class
+admitted-foundation-class (admitted-route-completion extension) =
+  foundation-route-class (route-completion-class extension)
+
+-- § Every admitted nontrivial formulable foundation carries distinction.
+formulable-foundation-presupposes-distinction :
+  (foundation : FormulableFoundationCandidate) →
+  EmbeddedBinaryDistinction
+    (formulation-positions (ffc-interface foundation))
+formulable-foundation-presupposes-distinction foundation =
+  formulation-interface-presupposes-distinction (ffc-interface foundation)
+
+-- § Exhaustiveness: every admitted foundation claim is classified.
+admitted-foundation-classified :
+  (claim : AdmittedFoundationClaim) →
+  ClassifiedAdmittedFoundation claim (admitted-foundation-class claim)
+admitted-foundation-classified (admitted-formulable-foundation foundation) =
+  admitted-formulable-foundation-classified
+    foundation
+    (formulable-foundation-presupposes-distinction foundation)
+admitted-foundation-classified (admitted-route-completion extension) =
+  admitted-route-completion-classified
+    extension
+    (route-completion-classified extension)
+
+-- § Package of the exhaustive admitted-foundation classification.
+record ExhaustiveAdmittedFoundationClassification : Setω where
+  field
+    eafc-class : AdmittedFoundationClaim → AdmittedFoundationClass
+    eafc-classified :
+      (claim : AdmittedFoundationClaim) →
+      ClassifiedAdmittedFoundation claim (eafc-class claim)
+    eafc-formulable-foundation-to-distinction :
+      (foundation : FormulableFoundationCandidate) →
+      EmbeddedBinaryDistinction
+        (formulation-positions (ffc-interface foundation))
+    eafc-route-completion-classification :
+      ExhaustiveRouteCompletionClassification
+
+open ExhaustiveAdmittedFoundationClassification public
+
+-- § The admitted-foundation classification theorem.
+admitted-foundation-classification : ExhaustiveAdmittedFoundationClassification
+admitted-foundation-classification = record
+  { eafc-class = admitted-foundation-class
+  ; eafc-classified = admitted-foundation-classified
+  ; eafc-formulable-foundation-to-distinction =
+      formulable-foundation-presupposes-distinction
+  ; eafc-route-completion-classification = route-completion-classification
+  }
+
+-- § Final theorem: raw obstruction, completed Topos, burdens, and classifications.
+record ToposRouteFinalTheorem : Setω where
+  field
+    vtf-boundary-map        : ToposBoundaryMap
+    vtf-route-entry         : (d : Distinction) → ToposRouteEntry d
+    vtf-raw-obstruction     : ToposRouteRawObstruction
+    vtf-raw-cones-blocked   : ToposRouteGlobalPullbackCones → ⊥
+    vtf-scope-conditions    : ToposRouteScopeConditions
+    vtf-completion-stage    : CompletionToposStage
+    vtf-skeleton-completion : VoidSkeletonToposCompletion
+    vtf-completed-topos     : ElementaryTopos (vst-category vtf-skeleton-completion)
+    vtf-set-like-burden     : SetLikeCompletionBurden
+    vtf-formulability-burden : FormulabilityBurden
+    vtf-canonical-closure   : CanonicalClosure
+    vtf-route-completion-classification :
+      ExhaustiveRouteCompletionClassification
+    vtf-admitted-foundation-classification :
+      ExhaustiveAdmittedFoundationClassification
+
+open ToposRouteFinalTheorem public
+
+-- § The final witness packages the checked theorem and burden records.
+void-topos-final-theorem : ToposRouteFinalTheorem
+void-topos-final-theorem = record
+  { vtf-boundary-map        = topos-boundary-map
+  ; vtf-route-entry         = topos-route-entry
+  ; vtf-raw-obstruction     = topos-route-raw-obstruction
+  ; vtf-raw-cones-blocked   = topos-route-global-pullback-cones-impossible
+  ; vtf-scope-conditions    = void-topos-scope-conditions
+  ; vtf-completion-stage    = completion-topos-stage
+  ; vtf-skeleton-completion = void-skeleton-topos-completion
+  ; vtf-completed-topos     = skeleton-elementary-topos
+  ; vtf-set-like-burden     = set-like-completion-burden
+  ; vtf-formulability-burden = formulability-burden
+  ; vtf-canonical-closure   = canonical-closure
+  ; vtf-route-completion-classification = route-completion-classification
+  ; vtf-admitted-foundation-classification = admitted-foundation-classification
+  }
+\end{code}
+
+The result is now fully internal to the book.  The Topos route starts at
+the book's stable-reading interface, adds the boundary marks needed for
+the raw obstruction, proves that the split-truth cospan blocks global raw
+pullback cones, constructs the completed skeleton as an elementary
+Topos, and classifies the admitted completion and foundation claims of
+this route.
+
+This closes the Topos route boundary.  The route does not begin from a
+second theory of classifiers.  It begins from the book's stable-reading
+surface, adds only the boundary marks needed to state the obstruction,
+passes through the explicit skeleton completion, and ends with a finite
+classification of the admitted completion and foundation claims.
 
 The next step is to examine what happens when the same classification process is applied one level higher. This leads to the hierarchy called \emph{drift}.
 

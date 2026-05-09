@@ -366,6 +366,8 @@ separation alone, not on any prior reading of the two points as
 truth or falsity, and the renaming makes this independence explicit.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Safe\ fragment:\ no\ postulates\ and\ no\ Axiom\ K.}\<%
+\\
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
 \AgdaKeyword{OPTIONS}\AgdaSpace{}%
 \AgdaPragma{--safe}\AgdaSpace{}%
@@ -374,12 +376,16 @@ truth or falsity, and the renaming makes this independence explicit.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Self-contained\ kernel\ companion\ module.}\<%
+\\
 \>[0]\AgdaKeyword{module}\AgdaSpace{}%
 \AgdaModule{VoidCompanion}\AgdaSpace{}%
 \AgdaKeyword{where}\<%
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Standard\ infrastructure:\ equality,\ absurdity,\ sums,\ pairs,\ and\ negation.}\<%
+\\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{Relation.Binary.PropositionalEquality}\AgdaSpace{}%
@@ -422,6 +428,8 @@ truth or falsity, and the renaming makes this independence explicit.
 The two-point normal form is the following type.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ The\ two-point\ normal\ form\ has\ exactly\ two\ constructors.}\<%
+\\
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{Two}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -436,6 +444,8 @@ The two-point normal form is the following type.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ The\ two\ boundary\ names\ of\ Two\ do\ not\ collapse.}\<%
+\\
 \>[0]\AgdaFunction{L≠R}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{¬}}\AgdaSpace{}%
@@ -448,6 +458,8 @@ The two-point normal form is the following type.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ The\ opposite\ inequality\ is\ obtained\ by\ symmetry\ of\ equality.}\<%
+\\
 \>[0]\AgdaFunction{R≠L}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaOperator{\AgdaFunction{¬}}\AgdaSpace{}%
@@ -471,6 +483,8 @@ of them.  This is the exact hypothesis that makes the normal-form
 theorem true.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Binary\ distinction:\ carrier,\ left/right\ boundaries,\ separation,\ coverage.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{Distinction}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -522,6 +536,8 @@ theorem true.
 The canonical inhabitant is obtained from \AgdaDatatype{Two} itself.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ The\ canonical\ cover\ of\ Two\ is\ exhaustive\ by\ case\ analysis.}\<%
+\\
 \>[0]\AgdaFunction{Two-cover}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{x}\AgdaSpace{}%
@@ -550,6 +566,8 @@ The canonical inhabitant is obtained from \AgdaDatatype{Two} itself.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ The\ canonical\ two-point\ distinction.}\<%
+\\
 \>[0]\AgdaFunction{Two-distinction}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Distinction}\<%
@@ -608,6 +626,8 @@ exhaustive cover that is structurally a nested binary disjunction.
 No primitive ternary or higher-arity operator is required.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Finite\ arities\ and\ finite\ positions.}\<%
+\\
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
 \AgdaKeyword{import}\AgdaSpace{}%
 \AgdaModule{Data.Nat}\AgdaSpace{}%
@@ -631,6 +651,8 @@ No primitive ternary or higher-arity operator is required.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ N-ary\ distinction\ template:\ labelled\ points,\ pairwise\ separation,\ coverage.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{Distinction-n}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{n}\AgdaSpace{}%
@@ -702,6 +724,8 @@ equal, the boundary points are equal and \AgdaField{separated} is
 falsified.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ A\ carrier\ whose\ elements\ all\ coincide\ cannot\ host\ a\ binary\ distinction.}\<%
+\\
 \>[0]\AgdaFunction{singleton-no-distinction}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -746,6 +770,8 @@ elements of its carrier are forced equal, so no separation between
 distinct positions can be inhabited.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ A\ unary\ n-ary\ distinction\ carrier\ collapses\ every\ two\ elements.}\<%
+\\
 \>[0]\AgdaFunction{distinction-n-1-collapses}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -830,6 +856,8 @@ carrier, a single checked term and not a verbal combination of two
 lemmas.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ No\ binary\ distinction\ injects\ into\ a\ unary\ n-ary\ carrier.}\<%
+\\
 \>[0]\AgdaFunction{no-distinction-on-Dn1}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -919,6 +947,8 @@ equality of the conversions; instead it states the recoverable carrier
 and boundary fields explicitly.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Convert\ a\ binary\ distinction\ into\ the\ n-ary\ template\ at\ n=2.}\<%
+\\
 \>[0]\AgdaFunction{distinction-to-Dn2}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Distinction}\AgdaSpace{}%
@@ -1106,6 +1136,9 @@ and boundary fields explicitly.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaComment{--\ §\ Convert\ the\ n=2\ template\ back\ into\ the\ binary\ distinction\ record.}\<%
+\\
 \>[0]\AgdaFunction{Dn2-to-distinction}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Distinction-n}\AgdaSpace{}%
@@ -1219,6 +1252,8 @@ and boundary fields explicitly.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Recoverable\ carrier\ and\ boundary\ fields\ for\ the\ n=2\ roundtrips.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{DistinctionDn2Equivalence}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1341,6 +1376,9 @@ and boundary fields explicitly.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaComment{--\ §\ The\ n=2\ conversions\ preserve\ the\ displayed\ carrier\ and\ boundary\ fields.}\<%
+\\
 \>[0]\AgdaFunction{theorem-distinction-Dn2-equivalence}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{DistinctionDn2Equivalence}\<%
@@ -1414,6 +1452,8 @@ positions.  This witness is the \AgdaField{distinct} field itself; no
 further structure is needed to extract it.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Every\ n-ary\ distinction\ supplies\ binary\ separation\ for\ every\ distinct\ pair.}\<%
+\\
 \>[0]\AgdaFunction{pairwise-binary}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -1461,6 +1501,8 @@ records that an element equals position $i$.  No primitive ternary
 disjunction is invoked; the three-case split is two binary splits.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ The\ three-point\ cover\ is\ a\ nested\ binary\ disjunction.}\<%
+\\
 \>[0]\AgdaFunction{cover-3-nested}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -1552,6 +1594,8 @@ extractable from a ternary distinction, and the two conversions below
 show the reduction in both directions.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Binary\ data\ package\ sufficient\ to\ reconstruct\ a\ ternary\ distinction.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{Dn3-binary-data}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -1626,6 +1670,9 @@ show the reduction in both directions.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaComment{--\ §\ Extract\ pairwise\ binary\ data\ from\ a\ ternary\ distinction.}\<%
+\\
 \>[0]\AgdaFunction{Dn3-to-binary}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Distinction-n}\AgdaSpace{}%
@@ -1723,6 +1770,8 @@ show the reduction in both directions.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Reconstruct\ a\ ternary\ distinction\ from\ pairwise\ binary\ data.}\<%
+\\
 \>[0]\AgdaFunction{binary-to-Dn3}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Dn3-binary-data}\AgdaSpace{}%
@@ -1997,6 +2046,8 @@ show the reduction in both directions.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Recoverable\ carrier\ and\ boundary\ fields\ for\ the\ ternary\ reconstruction.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{Dn3BinaryReconstruction}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2152,6 +2203,9 @@ show the reduction in both directions.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+%
+\>[4]\AgdaComment{--\ §\ The\ ternary\ record\ is\ recoverable\ from\ pairwise\ binary\ data\ at\ displayed\ fields.}\<%
+\\
 \>[0]\AgdaFunction{theorem-Dn3-binary-reconstruction}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{Dn3BinaryReconstruction}\<%
@@ -2280,6 +2334,8 @@ distinction is isomorphic, in this sense, to the canonical distinction
 on \AgdaDatatype{Two}.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Boundary-preserving\ isomorphism\ of\ distinction\ presentations.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{DistinctionIso}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
@@ -2388,6 +2444,8 @@ to \AgdaInductiveConstructor{L} if it is the left boundary and to
 \AgdaInductiveConstructor{R} if it is the right boundary.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ The\ cover\ forces\ each\ carrier\ point\ into\ the\ normal\ left/right\ code.}\<%
+\\
 \>[0]\AgdaFunction{toTwo}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
@@ -2423,6 +2481,8 @@ to \AgdaInductiveConstructor{L} if it is the left boundary and to
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ The\ inverse\ candidate\ sends\ normal\ points\ back\ to\ the\ boundary\ points.}\<%
+\\
 \>[0]\AgdaFunction{fromTwo}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
@@ -2450,6 +2510,8 @@ to \AgdaInductiveConstructor{L} if it is the left boundary and to
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Left\ boundary\ maps\ to\ L;\ the\ wrong\ branch\ contradicts\ separation.}\<%
+\\
 \>[0]\AgdaFunction{toTwo-left}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
@@ -2490,6 +2552,8 @@ to \AgdaInductiveConstructor{L} if it is the left boundary and to
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Right\ boundary\ maps\ to\ R;\ the\ wrong\ branch\ contradicts\ separation.}\<%
+\\
 \>[0]\AgdaFunction{toTwo-right}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
@@ -2531,6 +2595,8 @@ to \AgdaInductiveConstructor{L} if it is the left boundary and to
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Roundtrip\ from\ Two\ back\ through\ the\ boundary\ map.}\<%
+\\
 \>[0]\AgdaFunction{toTwo-fromTwo}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
@@ -2565,6 +2631,8 @@ to \AgdaInductiveConstructor{L} if it is the left boundary and to
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Roundtrip\ from\ an\ arbitrary\ carrier\ point\ through\ Two.}\<%
+\\
 \>[0]\AgdaFunction{fromTwo-toTwo}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
@@ -2610,6 +2678,8 @@ to \AgdaInductiveConstructor{L} if it is the left boundary and to
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Normal\ form:\ every\ distinction\ is\ isomorphic\ to\ canonical\ Two.}\<%
+\\
 \>[0]\AgdaFunction{two-normal-form}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
@@ -2684,6 +2754,8 @@ to \AgdaInductiveConstructor{L} if it is the left boundary and to
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Equality\ discipline\ separating\ definitional\ and\ propositional\ equations.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{NormalFormEqualityDiscipline}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
@@ -2769,6 +2841,8 @@ to \AgdaInductiveConstructor{L} if it is the left boundary and to
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Normal-form\ equality\ discipline\ is\ witnessed\ by\ the\ roundtrip\ lemmas.}\<%
+\\
 \>[0]\AgdaFunction{theorem-normal-form-equality-discipline}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -2845,6 +2919,8 @@ are therefore four cases: constant left, constant right, identity, and
 swap.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ The\ four\ possible\ endomorphism\ cases\ of\ Two.}\<%
+\\
 \>[0]\AgdaKeyword{data}\AgdaSpace{}%
 \AgdaDatatype{EndoCase}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -2873,6 +2949,8 @@ swap.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Interpret\ a\ case\ label\ as\ an\ actual\ endofunction\ on\ Two.}\<%
+\\
 \>[0]\AgdaFunction{interpret}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{EndoCase}\AgdaSpace{}%
@@ -2913,6 +2991,8 @@ swap.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Pointwise\ equality\ of\ endofunctions\ on\ Two.}\<%
+\\
 \>[0]\AgdaFunction{Pointwise}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDatatype{Two}\AgdaSpace{}%
@@ -2943,6 +3023,8 @@ swap.
 The classifier simply inspects the two values of a function.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Classify\ an\ endofunction\ by\ its\ values\ at\ L\ and\ R.}\<%
+\\
 \>[0]\AgdaFunction{classify}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDatatype{Two}\AgdaSpace{}%
@@ -2994,6 +3076,8 @@ The classifier simply inspects the two values of a function.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Soundness:\ interpretation\ of\ the\ classified\ case\ recovers\ the\ function\ pointwise.}\<%
+\\
 \>[0]\AgdaFunction{classify-sound}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{f}\AgdaSpace{}%
@@ -3099,6 +3183,8 @@ different cases forces either \AgdaInductiveConstructor{L} to equal
 \AgdaInductiveConstructor{R}, or conversely.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Distinct\ case\ labels\ cannot\ have\ the\ same\ interpreted\ behavior.}\<%
+\\
 \>[0]\AgdaFunction{case-unique}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{c}\AgdaSpace{}%
@@ -3266,6 +3352,8 @@ different cases forces either \AgdaInductiveConstructor{L} to equal
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Classification\ is\ unique\ among\ all\ pointwise-correct\ case\ labels.}\<%
+\\
 \>[0]\AgdaFunction{classify-unique}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -3322,6 +3410,8 @@ their composite is again an endomorphism of \AgdaDatatype{Two}, hence
 is one of the four cases just classified.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Composition\ of\ endofunctions\ on\ Two.}\<%
+\\
 \>[0]\AgdaOperator{\AgdaFunction{\AgdaUnderscore{}∘₂\AgdaUnderscore{}}}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaDatatype{Two}\AgdaSpace{}%
@@ -3347,6 +3437,8 @@ is one of the four cases just classified.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Compose\ two\ case\ labels\ by\ classifying\ the\ composite\ function.}\<%
+\\
 \>[0]\AgdaFunction{composeCase}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaDatatype{EndoCase}\AgdaSpace{}%
@@ -3368,6 +3460,8 @@ is one of the four cases just classified.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Endomorphisms\ are\ closed\ under\ composition.}\<%
+\\
 \>[0]\AgdaFunction{endomorphisms-closed}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -3468,6 +3562,8 @@ These conditions are therefore not independent choices once this notion
 of representation has been fixed; they unpack that notion.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Representation\ with\ realisation,\ reflection,\ and\ separation\ of\ cases.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{FaithfulClosure}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -3511,6 +3607,8 @@ of representation has been fixed; they unpack that notion.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Minimal\ closure\ adds\ no\ surplus\ vertices\ beyond\ represented\ cases.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{MinimalClosure}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -3548,6 +3646,9 @@ of representation has been fixed; they unpack that notion.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaComment{--\ §\ The\ canonical\ vertex\ carrier\ is\ the\ four-case\ type\ itself.}\<%
+\\
 \>[0]\AgdaFunction{K4Vertex}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaPrimitive{Set}\<%
@@ -3558,6 +3659,9 @@ of representation has been fixed; they unpack that notion.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaComment{--\ §\ Edges\ connect\ distinct\ cases\ in\ the\ induced\ simple\ graph.}\<%
+\\
 \>[0]\AgdaFunction{K4Edge}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaFunction{K4Vertex}\AgdaSpace{}%
@@ -3577,6 +3681,9 @@ of representation has been fixed; they unpack that notion.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0][@{}l@{\AgdaIndent{0}}]%
+\>[2]\AgdaComment{--\ §\ Canonical\ minimal\ closure\ of\ the\ four\ endomorphism\ cases.}\<%
+\\
 \>[0]\AgdaFunction{canonicalK4}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{MinimalClosure}\<%
@@ -3643,6 +3750,8 @@ of representation has been fixed; they unpack that notion.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ No-surplus\ gives\ the\ other\ roundtrip:\ realize\ after\ reflect\ returns\ the\ vertex.}\<%
+\\
 \>[0]\AgdaFunction{realize-reflect}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -3753,6 +3862,8 @@ edges connect vertices whose reflected cases are distinct, and the two
 roundtrips certify that no case is lost and no vertex is surplus.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Compact\ graph-level\ presentation\ of\ the\ minimal\ four-case\ closure.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{K4Presentation}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
@@ -3842,6 +3953,9 @@ roundtrips certify that no case is lost and no vertex is surplus.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+%
+\>[2]\AgdaComment{--\ §\ Any\ minimal\ closure\ yields\ a\ K4\ presentation.}\<%
+\\
 \>[0]\AgdaFunction{minimal-closure-presentation}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{m}\AgdaSpace{}%
@@ -3937,6 +4051,8 @@ roundtrips certify that no case is lost and no vertex is surplus.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ The\ canonical\ K4\ presentation\ is\ induced\ by\ canonicalK4.}\<%
+\\
 \>[0]\AgdaFunction{canonicalK4Presentation}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{K4Presentation}\<%
@@ -3961,6 +4077,8 @@ themselves, contradicting the four-case enumeration of
 \AgdaDatatype{EndoCase}.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Separation\ is\ load-bearing:\ realize\ is\ injective.}\<%
+\\
 \>[0]\AgdaFunction{realize-injective}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -4033,6 +4151,8 @@ some case has no representative and the carrier fails to support the
 composition table at all.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Realisation\ is\ load-bearing:\ every\ case\ has\ a\ vertex.}\<%
+\\
 \>[0]\AgdaFunction{case-has-vertex}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -4085,6 +4205,8 @@ it, the carrier may host data that is not forced by the endomorphism
 set, breaking the claim that the closure adds nothing to its datum.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ No\ surplus\ is\ load-bearing:\ every\ vertex\ comes\ from\ a\ case.}\<%
+\\
 \>[0]\AgdaFunction{vertex-from-case}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -4186,6 +4308,8 @@ elements satisfy exactly the same predicates, they are propositionally
 equal.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Leibniz\ collapse:\ indistinguishable\ elements\ are\ propositionally\ equal.}\<%
+\\
 \>[0]\AgdaFunction{leibniz-collapse}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -4260,6 +4384,8 @@ is one round-trip, \AgdaFunction{realize-reflect} is the other.  This
 is the load-bearing structural map.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Bijection\ record:\ two\ maps\ and\ two\ inverse\ laws.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{Bijection}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{A}\AgdaSpace{}%
@@ -4315,6 +4441,8 @@ is the load-bearing structural map.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Every\ minimal\ closure\ carrier\ is\ in\ bijection\ with\ EndoCase.}\<%
+\\
 \>[0]\AgdaFunction{closure-bijection-EndoCase}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -4390,6 +4518,8 @@ is readable only through the binary normal form whose endomorphisms it
 represents.
 
 \begin{code}%
+\>[0]\AgdaComment{--\ §\ Reproject\ a\ minimal\ closure\ to\ the\ canonical\ distinction\ it\ presupposes.}\<%
+\\
 \>[0]\AgdaFunction{k4-presupposes-distinction}\AgdaSpace{}%
 \AgdaSymbol{:}\AgdaSpace{}%
 \AgdaRecord{MinimalClosure}\AgdaSpace{}%
@@ -4403,6 +4533,8 @@ represents.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Full\ checked\ chain\ from\ a\ distinction\ to\ normal\ form,\ K4\ closure,\ and\ return.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{FormalClosureChain}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
@@ -4533,6 +4665,8 @@ represents.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ The\ formal\ closure\ chain\ is\ witnessed\ for\ every\ binary\ distinction.}\<%
+\\
 \>[0]\AgdaFunction{theorem-formal-closure-chain}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
@@ -4618,6 +4752,8 @@ represents.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ Same\ closure\ chain,\ starting\ from\ the\ n=2\ distinction\ template.}\<%
+\\
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
 \AgdaRecord{Dn2FormalClosureChain}\AgdaSpace{}%
 \AgdaSymbol{(}\AgdaBound{d}\AgdaSpace{}%
@@ -4668,6 +4804,8 @@ represents.
 \\
 %
 \\[\AgdaEmptyExtraSkip]%
+\>[0]\AgdaComment{--\ §\ The\ n=2\ template\ closes\ through\ the\ same\ normal-form\ and\ K4\ route.}\<%
+\\
 \>[0]\AgdaFunction{theorem-Dn2-formal-closure-chain}\AgdaSpace{}%
 \AgdaSymbol{:}\<%
 \\
