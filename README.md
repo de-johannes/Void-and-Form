@@ -7,9 +7,7 @@ Start with the compact companion: [VoidCompanion.lagda.tex](VoidCompanion.lagda.
 
 ## What This Is
 
-`Void and Form` is proposed as a theory of formulability: an account of
-the conditions under which mathematical, logical, and physical
-description can become stable enough to be stated at all.
+`Void and Form` is a foundations project in intensional Martin-Löf type theory concerning the formal threshold of distinguishability and formulability: an account of the conditions under which mathematical and logical description can become stable enough to be stated at all. All checked developments are verified in Agda under `--safe --without-K` and without postulates.
 
 The guiding thought is large, but the formal threshold is narrow. Formal
 description does not begin before distinguishable positions are
