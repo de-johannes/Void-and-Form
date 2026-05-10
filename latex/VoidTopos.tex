@@ -39,124 +39,98 @@
 \maketitle
 
 \begin{abstract}
-Can topos-like structure stand first in a formal account, or does a
-machine-checked construction route show that it already presupposes a
-prior construction?  This paper asks that question from the starting
-point of binary distinction.  It gives a checked route from binary
-distinction to an elementary-topos stage, while the elementary-topos
-level is not taken as primitive.
-
-The checked construction builds the raw category of stable readings,
-proves that the full raw topos package cannot be jointly supplied at the
-raw level, and obtains an elementary topos only after an explicit
-quotient/skeleton completion.  In this formal route, the topos is a
-completed endpoint, not the original setting.
+This paper gives a machine-checked route from binary distinction to an
+elementary-topos stage.  The point is one of priority.  In this route,
+the language of toposes is not used as the ambient beginning; it is
+recovered only after distinction-induced readings have been constructed,
+tested, and quotient-completed.
 
 The development is self-contained relative to the Agda standard library:
 it imports only the infrastructure needed for universes, identity types,
 coproducts, dependent pairs, the empty type, and negation.  No result
 from the main \texttt{Void} development is used.
 
-The core construction has five stages.  First, every binary distinction is
-shown to have a normal form up to boundary-preserving isomorphism.
-Second, distinction-induced stable readings inherit this presentation
-equality.  Third, the raw category of stable readings is constructed;
-it has identities, composition, a terminal reading, weak binary products,
-and a displayed classifier extension for the mono-like subcarriers
-defined here.  Fourth, the raw category is shown not to admit global
-pullbacks for all marker-preserving cospans, by an explicit split-truth
-cospan with no pullback cone.  Fifth, a skeleton quotient is constructed
-and identified as the minimal completed topos stage: its category is the
-terminal category, which carries the elementary topos structure by direct
-construction.
+The checked route has three main movements.  First, every binary
+distinction is shown to have a normal form up to boundary-preserving
+isomorphism, and this normal form is lifted to distinction-induced stable
+readings.  Second, the raw category of stable readings is built.  It has
+identities, composition, a terminal reading, weak binary products, and a
+displayed classifier extension for the mono-like subcarriers defined
+here.  It also has a formal obstruction: an explicit split-truth cospan
+has no pullback cone, so the full raw elementary-topos package cannot be
+jointly supplied.  Third, a quotient/skeleton completion identifies
+presentation-equivalent readings in a new carrier.  At that completed
+stage the category is terminal, and therefore carries the elementary
+topos structure by direct construction.
 
-Thus the elementary-topos result is not a property of the full raw
-stable-reading category.  It is a property of the quotient-completed
-skeleton stage.  The obstruction is part of the theorem: the raw layer
-has genuine categorical structure, but the full topos claim becomes
-valid only after completion.
+The elementary topos is therefore a certified endpoint of the route, not
+its starting language.  The raw layer is not discarded; it is the place
+where categorical structure is generated and where the obstruction is
+proved.  The completed skeleton is the first topos threshold.
 
-The final section records the minimal set-like boundary of the result and
-then performs the corresponding classification above it.  The minimal
-completed topos has no pair of distinct objects and therefore fails the
-displayed object-diversity condition for a set-like category.  The paper
-then classifies the nontrivial set-like endpoint by building the
-canonical free syntactic completion and proving that no additional
-choice remains at the displayed level: the reading structure embeds fully
-and faithfully, the completion is initial in the displayed
-completion-certificate category, and it is unique up to equivalence among
-initial completions.  The paper then makes the model notion explicit and
-proves that this free completion is the classifying topos for all
-displayed models over the generated reading skeleton.  It also proves a conditional
-formulability-burden lemma: any interface with two distinguishable
-formulation positions carries an embedded binary distinction, and any
-set-like candidate defined here carries such positions by object
-diversity.  The closing sections make the final goal explicit.  First,
-a canonical closure ledger proves that inside the
-completed skeleton all remaining presentation, object, morphism,
-finite-limit, classifier, and exponential choices have collapsed to the
-unique canonical witness.  Then a route-admitted completion interface is
-defined, and every completion claim admitted by that interface is
-classified as canonical skeleton, impossible raw topos attempt, set-like
-burden, or semantic-adequacy burden.  Finally, a foundation-admission
-interface is defined: every nontrivial formulable foundation admitted by
-that interface is classified by the distinctional entry burden, and every
-route-completion claim is classified by the route theorem.  This is the
-formal reading of the maximal claim: all admitted nontrivial formulable
-foundations and all admitted route completions are classified.
+The remaining parts locate what lies above that threshold.  The minimal
+completed topos is not set-like in the displayed sense, because it has no
+pair of distinct objects.  A richer set-like stage is treated as an
+additional burden: the paper constructs the canonical free syntactic
+completion with well-pointed structure and NNO, proves its initiality,
+and shows uniqueness up to equivalence among initial completions.  It
+then makes the model notion explicit and proves that this free completion
+classifies the displayed models over the generated reading skeleton.
+
+Finally, the paper records the exact strength of the foundational claim.
+Any admitted interface with two distinguishable formulation positions
+carries an embedded binary distinction.  Any set-like candidate defined
+here carries such positions by object diversity.  Route-admitted
+completion claims are classified as canonical skeleton, impossible raw
+topos attempt, set-like burden, or semantic-adequacy burden; admitted
+foundation claims are classified by the same route, after their admission
+interface has made nontrivial formulability explicit.  The classification
+is exhaustive for these displayed interfaces; wider semantic totalities
+require further admission data.
 \end{abstract}
 
 \section*{How to read this paper}
 
-The development begins with binary distinction and asks whether topos
-structure can be placed at the beginning of the formal account.  The
-construction establishes that it is not needed at the starting point and
-appears only after completion.  The order of construction is essential:
-a topos is not used as the ambient starting point.  The raw reading
-category is first constructed and tested.  Its obstruction is then
-proved.  Only after an explicit quotient/skeleton completion does an
-elementary topos stage appear.
+The paper is best read as a translation route.  Standard categorical
+words do appear: classifier, product, pullback, exponential, topos,
+well-pointed, set-like, model, foundation.  They do not all enter at the
+same level.  The route fixes their order.
 
-The development has ten layers.  First, it establishes the normal-form
-and presentation-equality facts for binary distinctions.  Second, it defines
-stable readings and their marker-preserving maps.  Third, it identifies
-the positive raw categorical structure.  Fourth, it proves the raw
-pullback obstruction and constructs the minimal completed topos.  Fifth,
-it separates this minimal topos threshold from the stronger set-like
-completion problem.  Sixth, it constructs the free syntactic set-like
-well-pointed elementary topos with NNO over the distinction-induced
-reading skeleton and proves its initiality in the displayed completion
-interface.  This is stronger than merely producing an example: the
-remaining degrees of freedom are eliminated by the universal property,
-and all displayed models over the generated reading skeleton are
-classified by the unique interpretation of the free syntax.
-Seventh, it proves that any nontrivial formulation interface
-with two distinguishable positions carries an embedded binary
-distinction.  Eighth, it records the canonical closure: all internal
-degrees of freedom of the completed skeleton are classified by the
-unique canonical witnesses.  Ninth, it defines the completion claims
-admitted by this route and proves that every such claim has one of the
-displayed classes.  Tenth, it defines admitted foundation claims and
-proves that every such claim is classified.
+First comes binary distinction: a carrier with two separated exhaustive
+points.  Its normal form supplies the two-valued reading carrier.  Next
+comes the raw stable-reading category.  This layer already has genuine
+categorical structure, but it is still raw: product uniqueness is named
+as a boundary, global pullbacks fail, and the classifier data is only the
+displayed extension for the mono-like subcarriers defined here.  The
+split-truth cospan is the decisive test of this layer.
 
-The formal results are conditional in the exact mathematical sense: once
-the data of binary distinction and the reading interface are supplied,
-the displayed constructions and obstructions follow.  The theorem does
-not claim semantic exhaustiveness of the reading interface, and it does
-not rule out richer completions.  Its central formal claim is different:
-the raw topos package is blocked, while the elementary-topos structure
-appears at the completed skeleton stage; above that stage, the free
-well-pointed syntactic completion supplies the nontrivial set-like NNO
-endpoint requested by the displayed interface and classifies the
-displayed models over the generated reading skeleton; after that, the
-route-admitted completion interface and the admitted-foundation interface
-are exhaustively classified.
+The quotient/skeleton completion is the first topos stage.  It does not
+pretend that old presentations were definitionally equal; it constructs a
+new completed carrier in which presentation equality is represented
+lawfully.  At that endpoint the category is terminal, so the elementary
+topos data close by direct construction.  This is the minimal topos
+threshold of the paper.
+
+Above that threshold the vocabulary changes again.  A set-like topos is
+not the minimal endpoint; it is an additional nonterminal completion
+burden.  The free well-pointed completion with NNO is the canonical
+syntactic inhabitant of that burden, and its universal property gives the
+model classification over the generated reading skeleton.  Finally, the
+foundation language is admitted only through a formal interface: either a
+claim supplies nontrivial formulation positions, or it appears as one of
+the route-completion claims already classified.
+
+The results are conditional in the exact mathematical sense.  Once the
+displayed distinction and reading data are supplied, the constructions,
+obstructions, completions, and classifications follow.  Claims outside
+these admission interfaces require further data; inside the interfaces,
+the route assigns a formal class.
 
 \section*{Map of the construction and classification}
 
-The map below fixes the status of each layer.  It is not a second proof.
-It tells the reader what each part contributes and where the checked
-terms begin and end.
+The map below is a dictionary for the route.  It tells the reader what
+each layer means in the paper's vocabulary, what has been checked there,
+and what burden is carried forward.
 
 \begin{description}
 \item[Distinction.] A binary distinction is a carrier with two separated
@@ -218,12 +192,10 @@ route-admitted completion claims.  Every admitted foundation claim is
 classified: entry-level foundations by embedded binary distinction,
 completion-level claims by the route-completion classification.
 
-\item[Scope.] The theorem does not prove semantic exhaustiveness of the
-reading interface and does not exclude richer quotient systems.  It
-proves the minimal skeleton route, records its exact endpoint, and
-classifies the foundation and extension positions admitted by this route
-for set-like or semantically adequate completions that are meant to serve
-as a universe of formulation.
+\item[Scope.] The theorem classifies this route's formal admission
+interfaces.  Richer semantics may be formulated, but they enter as
+additional structures with their own adequacy data; they are not silently
+counted as already present at the raw or skeleton stages.
 \end{description}
 
 \part*{Part I.\quad Distinction and completion pressure}
@@ -9251,19 +9223,20 @@ it names that stage directly.
 
 \section{Scope Conditions}
 
-The theorem has three precise scope conditions.  First, the development defines a
-formal stability interface; it does not prove that these marker and
-reading structures exhaust every intended semantics of stability.
-Second, the completion used here is the skeleton completion, and its
-topos stage is terminal.  This is a formal endpoint, not a claim of rich
-internal content.  Third, the result does not exclude richer quotient
-systems.  It proves the minimal skeleton route and changes the role of
-any richer system in this route: such a system may extend the
-construction, but it comes after the distinctional and quotient structure
-already displayed here.  The exhaustive classifications proved later are
-therefore interface-bound: they classify the nontrivial formulable
-foundation claims and completion claims admitted by the displayed
-interfaces, not every possible use of the phrase richer completion.
+The theorem is precise in three ways.  First, it defines a formal
+stability interface and proves results about the marker and reading
+structures that inhabit that interface.  Second, it proves the minimal
+skeleton completion route; the topos stage obtained there is terminal and
+serves as the first certified endpoint.  Third, it turns richer
+quotients and semantic adequacy into explicit extension burdens.  Such
+systems may extend the construction, but in this route they come after
+the distinctional and quotient structure already displayed here.
+
+The exhaustive classifications proved later are therefore
+interface-bound.  They classify the nontrivial formulable foundation
+claims and completion claims admitted by the displayed interfaces.  A
+richer semantic account can enter the discussion only by supplying the
+additional data named by those interfaces.
 
 \begin{code}%
 \>[0]\AgdaComment{--\ §\ Semantic\ adequacy\ is\ named\ as\ an\ external\ problem,\ not\ proved\ here.}\<%
@@ -9400,16 +9373,15 @@ interfaces, not every possible use of the phrase richer completion.
 \>[2]\AgdaSymbol{\}}\<%
 \end{code}
 
-These scope conditions are part of the force of the statement.  The
-result is not inflated into a claim that all semantics of stability have
-been exhausted, nor into a claim that every possible quotient must be
-terminal.  The theorem proves the displayed minimal completion route and
-places the stronger question in the right position.  The later
+These scope conditions are part of the force of the statement.  They
+make the theorem a route theorem rather than an informal survey of every
+possible semantics.  The displayed route closes the minimal completion
+stage and names the stronger questions as structured burdens.  The later
 admitted-foundation and route-completion classifications make that
-position formal: a foundation claim first has to enter as nontrivial and
+position formal: a foundation claim first enters as nontrivial and
 formulable, and a richer set-like quotient extending this route is
-assessed by the classified burdens under which it carries the
-distinctional structure it uses.
+assessed by the burdens under which it carries the distinctional
+structure it uses.
 
 \part*{Part IV.\quad Set-like completion burden}
 
@@ -9422,10 +9394,10 @@ In the displayed set-like sense used here, object diversity is required:
 there must be at least two distinguishable objects, otherwise
 object-level distinction has already collapsed.
 
-This sharpens the location of the Topos theorem.  The
+This locates the standard set-like expectation inside the route.  The
 terminal skeleton is the first certified topos threshold.  A set-like
-stage may be added only as a further structured completion, not as the
-unquestioned beginning of formulation.
+stage is a further structured completion above that threshold, where
+object diversity and semantic adequacy have to be supplied explicitly.
 
 \begin{code}%
 \>[0]\AgdaComment{--\ §\ Object\ diversity:\ the\ category\ has\ two\ distinct\ objects.}\<%
@@ -10156,12 +10128,11 @@ unique generated arrow between any two generated objects.  Because every
 hom-type is generated by one arrow, the elementary-topos, well-pointed,
 choice-like, and NNO clauses are checked by reflexivity.
 
-This does not contradict the raw obstruction above.  The obstruction
-blocks the full raw stable-reading category.  The free completion below
-is a new syntactic stage over the completed distinction-reading route.
-It is nontrivial by object diversity, set-like in the displayed sense,
-well-pointed by point separation of morphisms, and arithmetic by its
-generated NNO object.
+This is a new syntactic stage over the completed distinction-reading
+route.  The raw obstruction remains where it belongs: it blocks the full
+raw stable-reading category.  The free completion is nontrivial by object
+diversity, set-like in the displayed sense, well-pointed by point
+separation of morphisms, and arithmetic by its generated NNO object.
 
 \begin{code}%
 \>[0]\AgdaComment{--\ §\ A\ marker\ fiber\ equal\ to\ L\ is\ the\ left\ boundary\ of\ a\ distinction.}\<%
@@ -13229,11 +13200,10 @@ classified by their unique interpretation of the free syntax.
 The free completion above constructs one syntactic inhabitant of the
 set-like candidate interface.  A separate burden also closes formally:
 whenever a proposed universe of formulation supplies two distinguishable
-positions, it already carries an embedded binary distinction.  This is a
-conditional theorem, not a claim that all possible semantics of
-formulation have been exhausted.  It states the exact threshold:
-nontrivial formulation positions are enough to recover the binary
-distinction used at the start of the construction.
+positions, it already carries an embedded binary distinction.  This is
+the exact threshold proved here.  Nontrivial formulation positions are
+enough to recover the binary distinction used at the start of the
+construction.
 
 For a set-like completion candidate, the two positions are supplied by
 object diversity.  Thus such a candidate is not prior to distinction in
@@ -13965,12 +13935,11 @@ every completed morphism is unique.  The finite-limit data, the
 subobject classifier, and exponentials all have their classified witness
 at the same completed object.
 
-This does not assert that every richer semantics has been constructed.
-It says that, relative to the route checked here, the canonical endpoint
-has no unclassified internal degree of freedom.  Anything beyond it is
-no longer an unnamed option: it is classified as raw obstruction,
-set-like completion burden, formulability extraction, or semantic
-adequacy burden.
+This is an endpoint theorem for the displayed route.  Relative to the
+route checked here, the canonical endpoint has no unclassified internal
+degree of freedom.  Anything beyond it enters through a named extension
+interface: raw obstruction, set-like completion burden, formulability
+extraction, or semantic adequacy burden.
 
 \begin{code}%
 \>[0]\AgdaComment{--\ §\ Every\ skeleton\ object\ is\ the\ canonical\ completed\ object.}\<%
@@ -15227,14 +15196,14 @@ adequacy burden.
 \section{Route-Admitted Completion Classification}
 
 The final closure theorem is not hidden in the prose.  The paper now
-names the universe of completion claims that this route admits.  A
-route-admitted completion claim is one of four things: the canonical
+turns completion claims into a typed admission interface for this route.
+A route-admitted completion claim is one of four things: the canonical
 skeleton endpoint, an attempted full raw topos package, a set-like
 candidate above the endpoint, or a semantic-adequacy claim for the
-reading interface.  This is the point at which the word exhaustive is
-used for completion claims: it is exhaustive for this displayed route
-interface.  The wider foundation-admission classification is introduced
-in the next section.
+reading interface.  Exhaustiveness is used here in that precise sense:
+every claim admitted by this route interface has one of the displayed
+classes.  The wider foundation-admission classification is introduced in
+the next section.
 
 The classification is then total by case analysis on that interface.
 The canonical skeleton is closed by the canonical-closure theorem.  The
@@ -15692,25 +15661,23 @@ rather than an unclassified remainder.
 
 \section{Admitted Foundation Classification}
 
-The stronger sentence can be made exact only by making admission exact.
-In this paper, a foundation claim is admitted when it either supplies a
+The stronger sentence becomes exact by making admission exact.  In this
+paper, a foundation claim is admitted when it either supplies a
 nontrivial interface of formulation or appears as one of the completion
-claims handled by the route above.  This does not leave the word
-``foundation'' as an untyped external totality.  It turns it into a
-formal interface: if a foundation can enter the discussion as a
-nontrivial formulable foundation, it has already supplied two
-distinguishable positions; if it enters as a completion of the route, it
-is one of the route-admitted completion claims already classified.
+claims handled by the route above.  The word ``foundation'' is therefore
+used through a formal interface: if a foundation enters as a nontrivial
+formulable foundation, it has already supplied two distinguishable
+positions; if it enters as a completion of the route, it is one of the
+route-admitted completion claims already classified.
 
 With that admission boundary explicit, the classification theorem is
 total.  Every admitted nontrivial formulable foundation is classified by
 the embedded binary distinction extracted from its own formulation
 positions.  Every admitted completion claim is classified by the
-route-completion theorem.  Thus the maximally strong claim carried by
-this paper is not an informal inventory of all possible doctrines; it is
-the formal classification of every foundation claim admitted as
-nontrivial and formulable, together with every completion claim admitted
-by this route.
+route-completion theorem.  The maximally strong claim carried by this
+paper is therefore the formal classification of every foundation claim
+admitted as nontrivial and formulable, together with every completion
+claim admitted by this route.
 
 \begin{code}%
 \>[0]\AgdaComment{--\ §\ A\ nontrivial\ formulable\ foundation\ supplies\ formulation\ positions.}\<%
@@ -16147,30 +16114,38 @@ that classified position.
 
 \section{Final Result}
 
-The final statement records the checked theorem and its burden of
-extension.  The raw stable-reading category has real categorical
-structure, but its full elementary-topos completion requirements cannot
-be jointly supplied because global pullbacks fail.  The completion
-topos stage carries the elementary topos structure.  The set-like burden
-record shows why this minimal topos is not a nonterminal category of
-formulable sets; the free completion record then constructs the
-canonical nontrivial set-like well-pointed elementary topos with NNO over
-the distinction-induced reading skeleton, with a full and faithful
-reading embedding and an initiality witness that gives uniqueness up to
-equivalence among initial completions.  The formulability-burden record
-proves that any interface with two distinguishable formulation positions
-carries an embedded binary distinction.  The canonical closure record proves that the completed
-skeleton itself has no unclassified internal degrees of freedom: its
-presentations, objects, morphisms, finite-limit witnesses, classifier,
-and exponentials are all classified by the unique canonical endpoint.
-The admitted-foundation classification theorem then states the new final
-goal explicitly: every nontrivial formulable foundation admitted by this
-paper's interface is classified by the distinctional entry burden, and
-every completion claim admitted by this paper's route interface is
-classified as canonical skeleton, impossible raw topos attempt, set-like
-burden, or semantic-adequacy burden.  The scope conditions keep the
-theorem precise without softening its conclusion: the topos level is not
-first in this construction.
+The final statement packages three levels of the route.
+
+At the raw level, stable readings carry real categorical structure:
+identities, composition, a terminal reading, weak binary products, and a
+displayed classifier extension.  The same raw level also carries the
+formal obstruction.  Global pullbacks cannot be supplied for all
+marker-preserving cospans, so the full raw elementary-topos requirements
+are blocked.
+
+At the completion level, the quotient/skeleton carrier is the first
+certified topos stage.  Its category is terminal, and the elementary
+topos data are supplied by direct construction.  The canonical closure
+record then shows that the completed skeleton has no residual internal
+choice: presentations, objects, morphisms, finite-limit witnesses,
+classifier, and exponentials all reduce to the unique canonical witness.
+
+Above the minimal topos threshold, the set-like and foundational claims
+enter through explicit admission interfaces.  The set-like burden record
+shows why the terminal skeleton is not a nonterminal universe of
+formulable sets.  The free completion record constructs the canonical
+well-pointed elementary topos with NNO over the generated reading
+skeleton and proves its initiality, uniqueness up to equivalence, and
+model classification.  The formulability-burden record proves that any
+interface with two distinguishable formulation positions carries an
+embedded binary distinction.  The route-completion and
+admitted-foundation classifications assign every admitted claim to its
+formal class.
+
+This is the final theorem's force: in this construction, topos structure
+is generated after distinction and certified at completion; set-like and
+foundation-level extensions are then classified by the burdens through
+which they enter the route.
 
 \begin{code}%
 \>[0]\AgdaComment{--\ §\ Maximal\ raw\ structure\ established\ before\ quotient\ completion.}\<%
@@ -16561,69 +16536,54 @@ first in this construction.
 
 \section{Foundational Reading}
 
-The construction proves the main chain directly.  Distinctions
-normalize to \AgdaDatatype{Two} up to boundary-preserving isomorphism.
-The swapped presentation shows why that isomorphism must not be confused
-with naive fieldwise equality of the old records.  The skeleton quotient
-supplies a new carrier in which presentations are identified lawfully.
-Stable readings inherit the normal form.  At the raw reading level, the
-category has a terminal object, canonical weak binary products, and the
-characteristic map extension for mono-like subcarriers.  It cannot have
-global pullbacks for all marker-preserving cospans: the split-truth
-cospan has no pullback cone.  Thus the raw elementary-topos requirements
-are not just absent; the displayed full raw package cannot be supplied.
-At the completed skeleton level, the quotient has one object and one
-morphism, so it forms the terminal category and therefore carries the
-elementary topos structure by direct construction.  This completion is
-the explicit topos stage.  The final theorem packages the maximal raw
-structure, the raw obstruction, the completed topos, the burden on
-set-like extensions of this route, and the conditional extraction of
-binary distinction from nontrivial formulation positions.  It also
-packages the canonical closure and the admitted-foundation
-classification: all internal choices of the completed skeleton are
-collapsed to unique classified witnesses, and every admitted foundation
-claim is assigned a formal class.
+\subsection*{The route}
 
-This is the precise formal claim made here.  The construction does not
-assert that the raw stable-reading category satisfies the
-elementary-topos axioms.  It proves the opposite for the full raw
-category: the pullback requirement fails.  The route starts before an
-ambient topos is assumed.  The primitive data is a binary distinction.
-Categorical structure is generated, checked, blocked at the raw level,
-and recovered only after quotient/skeleton completion.  The additional
-formulability-burden record closes the conditional bridge: any interface
-with two distinguishable formulation positions carries an embedded binary
-distinction, and object-diverse set-like candidates are instances of
-that condition.  The canonical-closure record closes the internal
-endpoint: once quotient/skeleton completion is reached, presentation,
-object, morphism, finite-limit, classifier, and exponential freedom no
-longer remain as choices.  The admitted-foundation classification closes
-the external ledger for this paper's own admission interfaces:
-nontrivial formulable foundations are classified by their distinctional
-entry burden, and route-completion claims are classified as canonical
-skeleton, raw topos attempt, set-like candidate, or semantic adequacy.
-In this route, the topos stage appears only after distinction has already
-generated structure and after quotient completion has already been
-performed.
+The checked route begins before an ambient topos is assumed.  Its
+primitive data is a binary distinction.  Distinctions normalize to
+\AgdaDatatype{Two} up to boundary-preserving isomorphism, and the swapped
+presentation shows why that isomorphism must not be confused with raw
+fieldwise equality.  The skeleton quotient supplies the lawful completed
+carrier for identifying presentations.
 
-As an interpretive reading of the checked route, categorical and set-like
-foundations are displaced, not invalidated.  A set-like categorical
-foundation may still be introduced, but under this reading it cannot take
-its own vocabulary of objects, morphisms, equalities, truth values, and
-pullbacks as the first account of formulability.  Those notions already
-operate with distinctional positions.  On this reading, the theorem
-shifts the burden: to serve as a universe of formulation within this
-route, a richer set-like topos would need to account for the distinctional
-conditions under which its own language is formulable.  It is not the
-origin of the account; it is a completed stage within it.
+Stable readings inherit the normal form.  At the raw reading level,
+categorical structure is generated and checked, but the split-truth
+cospan blocks global pullbacks.  The raw layer is therefore not the
+topos stage.  The topos stage appears when the distinction and reading
+presentations have been quotient-completed to the skeleton carrier.  At
+that endpoint there is one object and one morphism, so the elementary
+topos structure closes by reflexivity.
 
-The scope is part of the rigor of the result, not a softening of the
-claim.  The marker interface is a formal stability interface, not a
-proof of semantic exhaustiveness.  The completion constructed here is
-minimal and terminal.  Richer quotients remain possible only as further
-constructions; inside the admitted-foundation and route-completion
-interfaces of this paper, their positions are now exhaustively
-classified.  Such a construction would extend the account only after the
-priority of distinction and completion has already been fixed.
+The set-like question belongs above this threshold.  A nonterminal
+set-like completion must supply object diversity and the further
+structure recorded in the candidate interface.  Once such positions are
+supplied, the formulability-burden theorem extracts an embedded binary
+distinction.  Thus, inside this route, set-like categorical structure is
+not the first account of formulability; it is an extension that carries
+the distinctional data under which its own language can be used.
+
+\subsection*{Reading the theorem}
+
+The theorem shifts the burden of justification.  If one proposes a
+categorical universe as the first account of formulation, with objects,
+morphisms, equality, truth values, pullbacks, and classifiers already in
+place, this route asks where the distinguishable formulation positions
+enter.  When they are supplied, the route extracts binary distinction;
+when they are not supplied, the proposal has not yet entered the paper's
+admission interface.
+
+Categorical and set-like foundations are therefore repositioned rather
+than dismissed.  They can appear as completed stages, and the free
+well-pointed completion shows one canonical syntactic way to inhabit the
+set-like burden.  What they cannot do inside this route is erase the
+priority of the distinctional and quotient structures by which the route
+gets to the topos level.
+
+The scope is part of the rigor of the result.  The marker interface is a
+formal stability interface.  The completion constructed here is minimal
+and terminal.  Richer quotients and semantic adequacy remain possible as
+further constructions, but inside the route-completion and
+admitted-foundation interfaces of this paper, their positions are
+classified.  The result is the checked classification of the doctrines
+that enter through this route's formal gates.
 
 \end{document}

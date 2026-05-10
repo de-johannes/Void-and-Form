@@ -206,6 +206,7 @@ The main checks are:
 agda --safe --without-K VoidCompanion.lagda.tex
 agda --safe --without-K VoidTopos.lagda.tex
 agda --safe --without-K Void.lagda.tex
+agda --safe --without-K Form.lagda.tex
 ```
 
 The compact companion uses standard-library imports for readability.

@@ -165,8 +165,11 @@ jobs:
             echo "---"
             echo ""
             echo "**Verify locally:**"
-            echo "\`\`\`"
-            echo "find . -type f -name '*.lagda.tex' -not -path './latex/*' | sort | while IFS= read -r f; do log=\"agda-\$(printf '%s' \"\${f#./}\" | tr '/' '_').log\"; agda --safe --without-K \"\$f\" > \"\$log\" 2>&1; code=\$?; echo \"\${f#./}: \$code\"; [ \"\$code\" -eq 0 ] || { tail -n 120 \"\$log\"; exit \"\$code\"; }; done"
+            echo "\`\`\`sh"
+            echo "agda --safe --without-K VoidCompanion.lagda.tex"
+            echo "agda --safe --without-K VoidTopos.lagda.tex"
+            echo "agda --safe --without-K Void.lagda.tex"
+            echo "agda --safe --without-K Form.lagda.tex"
             echo "\`\`\`"
           } > CHANGELOG.md
 
