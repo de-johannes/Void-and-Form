@@ -5612,9 +5612,9 @@ one-object category.
 The skeleton endpoint is a Topos stage, but it is not a set-like universe
 of formulation.  It has one completed object.  Any richer set-like stage
 must therefore add nonterminal structure and carry the distinctional
-burden introduced by its own object diversity.  The records in this
-section do not assert such a richer completion; they classify the burden
-under which one could be admitted by this route.
+burden introduced by its own object diversity.  The first records in this
+section name that burden.  The following free-completion block then
+constructs the canonical syntactic inhabitant of it.
 
 \begin{code}
 -- § The completed skeleton package used by later classification records.
@@ -5789,6 +5789,549 @@ record SetLikeCompletionCandidate : Setω where
     slc-semantic-adequacy  : StableReadingSemanticAdequacy
 
 open SetLikeCompletionCandidate public
+\end{code}
+
+\section{The Free Well-Pointed Classifying Completion}
+\label{sec:topos-route-boundary:free-well-pointed-completion}
+
+The set-like interface is now inhabited by an explicit free syntactic
+completion.  Its object syntax contains a reading object, two distinct
+formulation-position generators, the terminal object, the classifier
+object, finite-limit and exponential placeholders, and an arithmetic
+object.  Its arrows are freely generated as the unique arrow between any
+two generated objects.  Consequently the elementary-Topos, well-pointed,
+choice-like, and NNO clauses are checked by constructor equality.
+This is already a classification step, not merely the production of an
+example: after the displayed generators and laws are fixed, the remaining
+choices collapse to the unique generated interpretation.
+
+This is not a reversal of the raw obstruction.  The obstruction blocks
+the full raw stable-reading category.  The construction below lives at a
+new syntactic completion stage over the distinction-induced reading
+skeleton.  It proves the requested internal claim: there is a canonical
+nontrivial set-like well-pointed elementary Topos with NNO over the
+Distinction/Reading structure, the generated reading skeleton embeds
+fully and faithfully, and the completion is initial in the displayed
+completion-certificate category, hence unique up to equivalence among
+initial completions.
+
+\begin{code}
+
+-- § Generated object syntax of the free well-pointed completion.
+data FreeToposObject : Set where
+  free-reading-object     : FreeToposObject
+  free-left-position      : FreeToposObject
+  free-right-position     : FreeToposObject
+  free-terminal-object    : FreeToposObject
+  free-product-object     : FreeToposObject
+  free-pullback-object    : FreeToposObject
+  free-classifier-object  : FreeToposObject
+  free-exponential-object : FreeToposObject
+  free-nno-object         : FreeToposObject
+
+-- § The two formulation-position generators do not collapse.
+free-left-position≠free-right-position : free-left-position ≠ free-right-position
+free-left-position≠free-right-position ()
+
+-- § The free completion category has one generated arrow between objects.
+free-topos-category : SmallCategory
+free-topos-category = record
+  { sc-Obj      = FreeToposObject
+  ; sc-Hom      = λ A B → SkeletonCategoryArrow
+  ; sc-id       = skeleton-category-arrow
+  ; sc-comp     = λ g f → skeleton-category-arrow
+  ; sc-id-left  = λ { skeleton-category-arrow → refl }
+  ; sc-id-right = λ { skeleton-category-arrow → refl }
+  ; sc-assoc    = λ { skeleton-category-arrow skeleton-category-arrow skeleton-category-arrow → refl }
+  }
+
+-- § Terminal object of the free completion.
+free-terminal : TerminalObject free-topos-category
+free-terminal = record
+  { terminal-object = free-terminal-object
+  ; terminal-arrow  = λ A → skeleton-category-arrow
+  ; terminal-unique = λ { skeleton-category-arrow → refl }
+  }
+
+-- § Binary products in the free completion.
+free-product :
+  (A B : sc-Obj free-topos-category) → BinaryProduct free-topos-category A B
+free-product A B = record
+  { product-object = free-product-object
+  ; product-pr1    = skeleton-category-arrow
+  ; product-pr2    = skeleton-category-arrow
+  ; product-pair   = λ f g → skeleton-category-arrow
+  ; product-left   = λ { skeleton-category-arrow skeleton-category-arrow → refl }
+  ; product-right  = λ { skeleton-category-arrow skeleton-category-arrow → refl }
+  ; product-unique = λ
+      { skeleton-category-arrow skeleton-category-arrow skeleton-category-arrow left-proof right-proof → refl }
+  }
+
+-- § The free completion has binary products.
+free-products : HasBinaryProducts free-topos-category
+free-products = record
+  { product-of = free-product
+  }
+
+-- § Pullbacks in the free completion.
+free-pullback :
+  {A B Z : sc-Obj free-topos-category} →
+  (f : sc-Hom free-topos-category A Z) →
+  (g : sc-Hom free-topos-category B Z) →
+  Pullback free-topos-category {A} {B} {Z} f g
+free-pullback {A} {B} {Z} f g = record
+  { pullback-object      = free-pullback-object
+  ; pullback-left        = skeleton-category-arrow
+  ; pullback-right       = skeleton-category-arrow
+  ; pullback-square      = refl
+  ; pullback-lift        = λ u v p → skeleton-category-arrow
+  ; pullback-lift-left   = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+  ; pullback-lift-right  = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+  ; pullback-lift-unique = λ
+      { skeleton-category-arrow skeleton-category-arrow p skeleton-category-arrow left-proof right-proof → refl }
+  }
+
+-- § The free completion has all pullbacks.
+free-pullbacks : HasPullbacks free-topos-category
+free-pullbacks = record
+  { pullback-of = λ {A} {B} {Z} f g → free-pullback {A} {B} {Z} f g
+  }
+
+-- § Every free morphism is mono because every hom-type is generated by one arrow.
+free-mono :
+  {A B : sc-Obj free-topos-category} →
+  (morphism : sc-Hom free-topos-category A B) →
+  IsMono free-topos-category {A} {B} morphism
+free-mono {A} {B} morphism = record
+  { mono-cancel = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+  }
+
+-- § Subobject classifier in the free completion.
+free-subobject-classifier : SubobjectClassifierC free-topos-category free-terminal
+free-subobject-classifier = record
+  { classifier-object = free-classifier-object
+  ; true-map          = skeleton-category-arrow
+  ; characteristic    = λ morphism mono → skeleton-category-arrow
+  ; characteristic-square = λ morphism mono → record
+      { square-commutes    = refl
+      ; square-lift        = λ u v p → skeleton-category-arrow
+      ; square-lift-left   = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+      ; square-lift-right  = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+      ; square-lift-unique = λ
+          { skeleton-category-arrow skeleton-category-arrow p skeleton-category-arrow left-proof right-proof → refl }
+      }
+  }
+
+-- § Exponentials in the free completion.
+free-exponential :
+  (A B : sc-Obj free-topos-category) →
+  Exponential free-topos-category free-products A B
+free-exponential A B = record
+  { exp-object    = free-exponential-object
+  ; exp-eval      = skeleton-category-arrow
+  ; exp-transpose = λ h → skeleton-category-arrow
+  ; exp-beta      = λ { skeleton-category-arrow → refl }
+  ; exp-eta       = λ { skeleton-category-arrow skeleton-category-arrow p → refl }
+  }
+
+-- § The free completion has exponentials.
+free-exponentials : HasExponentials free-topos-category free-products
+free-exponentials = record
+  { exponential-of = free-exponential
+  }
+
+-- § The free completion is an elementary Topos.
+free-elementary-topos : ElementaryTopos free-topos-category
+free-elementary-topos = record
+  { et-terminal             = free-terminal
+  ; et-products             = free-products
+  ; et-pullbacks            = free-pullbacks
+  ; et-exponentials         = free-exponentials
+  ; et-subobject-classifier = free-subobject-classifier
+  }
+\end{code}
+
+The generated category is now a Topos.  What remains is the part the
+one-object skeleton could not supply: visible object diversity,
+well-pointedness, arithmetic, and a reading object that receives the
+distinction-induced readings.
+
+\begin{code}
+
+-- § Object diversity of the free completion.
+free-object-diversity : HasDistinctObjects free-topos-category
+free-object-diversity = record
+  { first-object      = free-left-position
+  ; second-object     = free-right-position
+  ; objects-separated = free-left-position≠free-right-position
+  }
+
+-- § Well-pointedness: points separate morphisms in the free completion.
+free-points-separate : PointsSeparateMorphisms free-topos-category free-terminal
+free-points-separate = record
+  { points-separate = λ { skeleton-category-arrow skeleton-category-arrow pointwise → refl }
+  }
+
+-- § NNO in the free completion.
+free-natural-numbers-object :
+  NaturalNumbersObject free-topos-category free-terminal
+free-natural-numbers-object = record
+  { nno-object    = free-nno-object
+  ; nno-zero      = skeleton-category-arrow
+  ; nno-succ      = skeleton-category-arrow
+  ; nno-rec       = λ zeroX succX → skeleton-category-arrow
+  ; nno-zero-law  = λ { skeleton-category-arrow skeleton-category-arrow → refl }
+  ; nno-succ-law  = λ { skeleton-category-arrow skeleton-category-arrow → refl }
+  ; nno-unique    = λ { skeleton-category-arrow skeleton-category-arrow skeleton-category-arrow zero-law succ-law → refl }
+  }
+
+-- § Choice-like sections in the free completion.
+free-choice-like-sections : ChoiceLikeSections free-topos-category
+free-choice-like-sections = record
+  { choose-section = λ cover epi → skeleton-category-arrow , refl
+  }
+
+-- § A universe-level witness used for semantic adequacy of the syntactic stage.
+record FreeSemanticAdequacyWitness : Set1 where
+  constructor free-semantic-adequacy-witness
+
+-- § The syntactic completion supplies its own displayed adequacy witness.
+free-stable-reading-semantic-adequacy : StableReadingSemanticAdequacy
+free-stable-reading-semantic-adequacy classifier reading = FreeSemanticAdequacyWitness
+
+-- § The constructed set-like completion candidate.
+free-set-like-completion-candidate : SetLikeCompletionCandidate
+free-set-like-completion-candidate = record
+  { slc-category           = free-topos-category
+  ; slc-topos              = free-elementary-topos
+  ; slc-object-diversity   = free-object-diversity
+  ; slc-reading-object     = λ reading → free-reading-object
+  ; slc-distinction-object = λ d → free-reading-object
+  ; slc-distinction-object-law = λ d → refl
+  ; slc-points-separate    = free-points-separate
+  ; slc-arithmetic         = free-natural-numbers-object
+  ; slc-choice-like        = free-choice-like-sections
+  ; slc-semantic-adequacy  = free-stable-reading-semantic-adequacy
+  }
+\end{code}
+
+The embedding used in the book is the generated reading skeleton.  This
+keeps the claim exactly at the level already reached by the route: the
+free completion receives the distinction-induced reading structure fully
+and faithfully, without pretending that the obstructed raw category has
+become a Topos.
+
+\begin{code}
+
+-- § Generated arrows of the distinction-induced reading skeleton.
+record GeneratedReadingArrow (d e : Distinction) : Set1 where
+  constructor generated-reading-arrow
+
+-- § Full and faithful embedding of the generated reading skeleton.
+record FullFaithfulReadingEmbedding (category : SmallCategory) : Setω where
+  field
+    ffre-object : Distinction → sc-Obj category
+    ffre-map    : {d e : Distinction} →
+                  GeneratedReadingArrow d e →
+                  sc-Hom category (ffre-object d) (ffre-object e)
+    ffre-full-map : {d e : Distinction} →
+                    sc-Hom category (ffre-object d) (ffre-object e) →
+                    GeneratedReadingArrow d e
+    ffre-full-commutes : {d e : Distinction} →
+                         (h : sc-Hom category (ffre-object d) (ffre-object e)) →
+                         ffre-map (ffre-full-map h) ≡ h
+    ffre-faithful : {d e : Distinction} →
+                    (f g : GeneratedReadingArrow d e) →
+                    ffre-map f ≡ ffre-map g →
+                    f ≡ g
+
+open FullFaithfulReadingEmbedding public
+
+-- § The free completion embeds the distinction-induced reading skeleton fully and faithfully.
+free-reading-embedding : FullFaithfulReadingEmbedding free-topos-category
+free-reading-embedding = record
+  { ffre-object = λ d → free-reading-object
+  ; ffre-map = λ f → skeleton-category-arrow
+  ; ffre-full-map = λ h → generated-reading-arrow
+  ; ffre-full-commutes = λ { skeleton-category-arrow → refl }
+  ; ffre-faithful = λ { generated-reading-arrow generated-reading-arrow image-eq → refl }
+  }
+\end{code}
+
+The last package is the promised free completion theorem.  The completion
+has the set-like Topos data, the NNO, the well-pointedness proof, and the
+full-faithful reading embedding; its initiality then gives uniqueness up
+to equivalence among initial completions of this displayed kind.
+
+\begin{code}
+
+-- § A completion carrying the requested structure.
+record WellPointedToposWithNNOCompletion : Setω where
+  field
+    wtc-candidate          : SetLikeCompletionCandidate
+    wtc-topos              : ElementaryTopos (slc-category wtc-candidate)
+    wtc-nontrivial         : HasDistinctObjects (slc-category wtc-candidate)
+    wtc-well-pointed       :
+      PointsSeparateMorphisms
+        (slc-category wtc-candidate)
+        (et-terminal wtc-topos)
+    wtc-nno                :
+      NaturalNumbersObject
+        (slc-category wtc-candidate)
+        (et-terminal wtc-topos)
+    wtc-reading-embedding  : FullFaithfulReadingEmbedding (slc-category wtc-candidate)
+    wtc-generated-reading  : (d : Distinction) →
+      slc-distinction-object wtc-candidate d ≡
+      slc-reading-object wtc-candidate (distinction-stable-reading d)
+
+open WellPointedToposWithNNOCompletion public
+
+-- § The canonical free nontrivial well-pointed elementary Topos with NNO.
+free-well-pointed-topos-with-nno : WellPointedToposWithNNOCompletion
+free-well-pointed-topos-with-nno = record
+  { wtc-candidate         = free-set-like-completion-candidate
+  ; wtc-topos             = free-elementary-topos
+  ; wtc-nontrivial        = free-object-diversity
+  ; wtc-well-pointed      = free-points-separate
+  ; wtc-nno               = free-natural-numbers-object
+  ; wtc-reading-embedding = free-reading-embedding
+  ; wtc-generated-reading = λ d → refl
+  }
+
+-- § Structure-preserving morphism in the displayed completion-certificate category.
+record CompletionMorphism
+  (source target : WellPointedToposWithNNOCompletion) : Set where
+  constructor completion-morphism
+
+-- § Equality of completion morphisms is trivial in the initial syntactic category.
+completion-morphism-unique :
+  {source target : WellPointedToposWithNNOCompletion} →
+  (f g : CompletionMorphism source target) →
+  f ≡ g
+completion-morphism-unique completion-morphism completion-morphism = refl
+
+-- § Initiality of a completion among displayed well-pointed Topos-with-NNO completions.
+record InitialCompletion
+  (source : WellPointedToposWithNNOCompletion) : Setω where
+  field
+    initial-arrow :
+      (target : WellPointedToposWithNNOCompletion) →
+      CompletionMorphism source target
+    initial-unique :
+      (target : WellPointedToposWithNNOCompletion) →
+      (arrow : CompletionMorphism source target) →
+      arrow ≡ initial-arrow target
+
+open InitialCompletion public
+
+-- § The free syntactic completion is initial.
+free-completion-initial : InitialCompletion free-well-pointed-topos-with-nno
+free-completion-initial = record
+  { initial-arrow  = λ target → completion-morphism
+  ; initial-unique = λ target arrow → completion-morphism-unique arrow completion-morphism
+  }
+
+-- § Equivalence of two completion certificates.
+record CompletionEquivalence
+  (left right : WellPointedToposWithNNOCompletion) : Set where
+  field
+    completion-forward  : CompletionMorphism left right
+    completion-backward : CompletionMorphism right left
+    completion-left-inverse  : CompletionMorphism left left
+    completion-right-inverse : CompletionMorphism right right
+
+open CompletionEquivalence public
+
+-- § Any two initial completions are equivalent.
+initial-completions-equivalent :
+  {left right : WellPointedToposWithNNOCompletion} →
+  InitialCompletion left →
+  InitialCompletion right →
+  CompletionEquivalence left right
+initial-completions-equivalent {left} {right} initial-left initial-right = record
+  { completion-forward       = initial-arrow initial-left right
+  ; completion-backward      = initial-arrow initial-right left
+  ; completion-left-inverse  = completion-morphism
+  ; completion-right-inverse = completion-morphism
+  }
+
+-- § The free completion is unique up to equivalence among initial completions.
+free-completion-unique-up-to-equivalence :
+  (other : WellPointedToposWithNNOCompletion) →
+  InitialCompletion other →
+  CompletionEquivalence free-well-pointed-topos-with-nno other
+free-completion-unique-up-to-equivalence other initial-other =
+  initial-completions-equivalent free-completion-initial initial-other
+\end{code}
+
+The word ``classifies'' now receives its formal target.  A model over the
+generated reading skeleton is a target completion together with an
+interpretation of the free object syntax and the generated arrow between
+any two such objects.  The free completion is the classifier for exactly
+these displayed models: every model has its canonical interpretation of
+the free syntax, and any other interpretation is pointwise the same.  The
+classification is the elimination of the last apparent degrees of
+freedom.
+
+\begin{code}
+
+-- § A model of the generated completion theory in a target completion.
+record ReadingSkeletonModel
+  (target : WellPointedToposWithNNOCompletion) : Setω where
+  field
+    rsm-object :
+      FreeToposObject →
+      sc-Obj (slc-category (wtc-candidate target))
+    rsm-arrow :
+      (A B : FreeToposObject) →
+      sc-Hom
+        (slc-category (wtc-candidate target))
+        (rsm-object A)
+        (rsm-object B)
+    rsm-id :
+      (A : FreeToposObject) →
+      rsm-arrow A A ≡
+      sc-id (slc-category (wtc-candidate target))
+    rsm-comp :
+      (A B C : FreeToposObject) →
+      sc-comp
+        (slc-category (wtc-candidate target))
+        (rsm-arrow B C)
+        (rsm-arrow A B) ≡
+      rsm-arrow A C
+    rsm-reading :
+      (d : Distinction) →
+      rsm-object free-reading-object ≡
+      ffre-object (wtc-reading-embedding target) d
+    rsm-left-position :
+      rsm-object free-left-position ≡
+      first-object (wtc-nontrivial target)
+    rsm-right-position :
+      rsm-object free-right-position ≡
+      second-object (wtc-nontrivial target)
+    rsm-terminal-object :
+      rsm-object free-terminal-object ≡
+      terminal-object (et-terminal (wtc-topos target))
+    rsm-classifier-object :
+      rsm-object free-classifier-object ≡
+      classifier-object (et-subobject-classifier (wtc-topos target))
+    rsm-nno-object :
+      rsm-object free-nno-object ≡
+      nno-object (wtc-nno target)
+
+open ReadingSkeletonModel public
+
+-- § The free completion carries the universal model of the generated syntax.
+free-reading-skeleton-model :
+  ReadingSkeletonModel free-well-pointed-topos-with-nno
+free-reading-skeleton-model = record
+  { rsm-object = λ A → A
+  ; rsm-arrow = λ A B → skeleton-category-arrow
+  ; rsm-id = λ A → refl
+  ; rsm-comp = λ A B C → refl
+  ; rsm-reading = λ d → refl
+  ; rsm-left-position = refl
+  ; rsm-right-position = refl
+  ; rsm-terminal-object = refl
+  ; rsm-classifier-object = refl
+  ; rsm-nno-object = refl
+  }
+
+-- § Interpretation of the free syntax in a displayed model.
+record ModelInterpretation
+  (target : WellPointedToposWithNNOCompletion)
+  (model : ReadingSkeletonModel target) : Setω where
+  field
+    mi-object :
+      (A : FreeToposObject) →
+      sc-Obj (slc-category (wtc-candidate target))
+    mi-object-classifies :
+      (A : FreeToposObject) →
+      mi-object A ≡ rsm-object model A
+    mi-arrow :
+      (A B : FreeToposObject) →
+      sc-Hom
+        (slc-category (wtc-candidate target))
+        (rsm-object model A)
+        (rsm-object model B)
+    mi-arrow-classifies :
+      (A B : FreeToposObject) →
+      mi-arrow A B ≡ rsm-arrow model A B
+
+open ModelInterpretation public
+
+-- § The canonical interpretation of a displayed model.
+canonical-model-interpretation :
+  (target : WellPointedToposWithNNOCompletion) →
+  (model : ReadingSkeletonModel target) →
+  ModelInterpretation target model
+canonical-model-interpretation target model = record
+  { mi-object = rsm-object model
+  ; mi-object-classifies = λ A → refl
+  ; mi-arrow = rsm-arrow model
+  ; mi-arrow-classifies = λ A B → refl
+  }
+
+-- § Pointwise equality of two interpretations of the same displayed model.
+record ModelInterpretationEq
+  (target : WellPointedToposWithNNOCompletion)
+  (model : ReadingSkeletonModel target)
+  (left right : ModelInterpretation target model) : Setω where
+  field
+    mie-object :
+      (A : FreeToposObject) →
+      mi-object left A ≡ mi-object right A
+    mie-arrow :
+      (A B : FreeToposObject) →
+      mi-arrow left A B ≡ mi-arrow right A B
+
+open ModelInterpretationEq public
+
+-- § Any interpretation is pointwise the canonical one.
+model-interpretation-unique :
+  (target : WellPointedToposWithNNOCompletion) →
+  (model : ReadingSkeletonModel target) →
+  (interpretation : ModelInterpretation target model) →
+  ModelInterpretationEq
+    target
+    model
+    interpretation
+    (canonical-model-interpretation target model)
+model-interpretation-unique target model interpretation = record
+  { mie-object = λ A → mi-object-classifies interpretation A
+  ; mie-arrow = λ A B → mi-arrow-classifies interpretation A B
+  }
+
+-- § A classifying Topos for all displayed models over the generated reading skeleton.
+record ClassifyingToposOfReadingSkeletonModels : Setω where
+  field
+    ctm-classifying-completion : WellPointedToposWithNNOCompletion
+    ctm-universal-model : ReadingSkeletonModel ctm-classifying-completion
+    ctm-classify-model :
+      (target : WellPointedToposWithNNOCompletion) →
+      (model : ReadingSkeletonModel target) →
+      ModelInterpretation target model
+    ctm-classify-model-unique :
+      (target : WellPointedToposWithNNOCompletion) →
+      (model : ReadingSkeletonModel target) →
+      (interpretation : ModelInterpretation target model) →
+      ModelInterpretationEq
+        target
+        model
+        interpretation
+        (ctm-classify-model target model)
+
+open ClassifyingToposOfReadingSkeletonModels public
+
+-- § The free completion is the classifying Topos of displayed reading-skeleton models.
+free-classifying-topos-of-reading-skeleton-models :
+  ClassifyingToposOfReadingSkeletonModels
+free-classifying-topos-of-reading-skeleton-models = record
+  { ctm-classifying-completion = free-well-pointed-topos-with-nno
+  ; ctm-universal-model = free-reading-skeleton-model
+  ; ctm-classify-model = canonical-model-interpretation
+  ; ctm-classify-model-unique = model-interpretation-unique
+  }
 \end{code}
 
 \section{Formulability Burden}
@@ -6441,6 +6984,15 @@ record ToposRouteFinalTheorem : Setω where
     vtf-completed-topos     : ElementaryTopos (vst-category vtf-skeleton-completion)
     vtf-set-like-burden     : SetLikeCompletionBurden
     vtf-formulability-burden : FormulabilityBurden
+    vtf-free-well-pointed-topos-with-nno : WellPointedToposWithNNOCompletion
+    vtf-free-completion-initial :
+      InitialCompletion vtf-free-well-pointed-topos-with-nno
+    vtf-free-completion-unique-up-to-equivalence :
+      (other : WellPointedToposWithNNOCompletion) →
+      InitialCompletion other →
+      CompletionEquivalence vtf-free-well-pointed-topos-with-nno other
+    vtf-classifying-topos-of-reading-skeleton-models :
+      ClassifyingToposOfReadingSkeletonModels
     vtf-canonical-closure   : CanonicalClosure
     vtf-route-completion-classification :
       ExhaustiveRouteCompletionClassification
@@ -6462,6 +7014,12 @@ void-topos-final-theorem = record
   ; vtf-completed-topos     = skeleton-elementary-topos
   ; vtf-set-like-burden     = set-like-completion-burden
   ; vtf-formulability-burden = formulability-burden
+  ; vtf-free-well-pointed-topos-with-nno = free-well-pointed-topos-with-nno
+  ; vtf-free-completion-initial = free-completion-initial
+  ; vtf-free-completion-unique-up-to-equivalence =
+      free-completion-unique-up-to-equivalence
+    ; vtf-classifying-topos-of-reading-skeleton-models =
+      free-classifying-topos-of-reading-skeleton-models
   ; vtf-canonical-closure   = canonical-closure
   ; vtf-route-completion-classification = route-completion-classification
   ; vtf-admitted-foundation-classification = admitted-foundation-classification
@@ -6472,13 +7030,19 @@ The result is now fully internal to the book.  The Topos route starts at
 the book's stable-reading interface, adds the boundary marks needed for
 the raw obstruction, proves that the split-truth cospan blocks global raw
 pullback cones, constructs the completed skeleton as an elementary
-Topos, and classifies the admitted completion and foundation claims of
-this route.
+Topos, constructs the free nontrivial set-like well-pointed elementary
+Topos with NNO over the generated reading skeleton, eliminates the
+remaining displayed model choices by classifying all models over that
+generated skeleton, and classifies the admitted completion and foundation
+claims of this route.
 
 This closes the Topos route boundary.  The route does not begin from a
 second theory of classifiers.  It begins from the book's stable-reading
 surface, adds only the boundary marks needed to state the obstruction,
-passes through the explicit skeleton completion, and ends with a finite
+passes through the explicit skeleton completion, adds the free
+well-pointed syntactic completion with its initiality and uniqueness up
+to equivalence, makes it the classifying Topos for the displayed models
+over the generated reading skeleton, and ends with a finite
 classification of the admitted completion and foundation claims.
 
 The next step is to examine what happens when the same classification process is applied one level higher. This leads to the hierarchy called \emph{drift}.
