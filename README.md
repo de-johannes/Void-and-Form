@@ -5,230 +5,165 @@
 
 Start with the compact companion: [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) / [PDF](latex/VoidCompanion.pdf).
 
-## What This Is
+## What This Repository Tests
 
-`Void and Form` is a foundations project in a specific sense: it studies the formal threshold at which two can be held apart as two.
+`Void and Form` is a foundations project in intensional Martin-Löf type theory, checked in Agda. The literate Agda sources declare `--safe --without-K`; the full `Void` development uses no postulates.
 
-The guiding question is small:
-
-> When are two really two, and not just one appearing twice?
-
-The project does not begin with particles, space, time, geometry, or physical law. It begins with a prior formal problem: if a system cannot separate two alleged elements by anything available inside the system, then the system has no formal reason to maintain them as two.
-
-This is expressed by a small Leibniz-style collapse principle:
-
-```agda
-leibniz-collapse :
-  {S : Set} (a b : S) →
-  ((P : S → Set) → P a → P b) →
-  a ≡ b
-leibniz-collapse a b ind = ind (λ x → a ≡ x) refl
-```
-
-The proof chooses the predicate:
-
-```agda
-P x = a ≡ x
-```
-
-Since `P a` holds by `refl`, the assumed transfer of every predicate from `a` to `b` yields `a ≡ b`.
-
-The point is not metaphysical. The project does not claim that indistinguishable things “do not exist”. The claim is narrower and formal:
-
-> inside a given formal language, if nothing separates `a` from `b`, then the system cannot hold them as a stable pair.
-
-Most formal systems begin after this point.
-
-They already use terms, judgments, equality, functions, relations, and objects. But all of these presuppose that something can be held apart from something else. They presuppose stable distinction.
-
-`Void and Form` does not claim to replace those systems. It tries to expose a smaller threshold that they normally pass over silently: the point at which two positions can be maintained as two rather than collapsing into one.
-
-In this limited sense, the project is foundational. It does not provide a new foundation for all mathematics. It investigates a condition that formal foundations already rely on before they can begin to operate.
-
-The checked development therefore does not start from a bare pair of names. It starts only after non-collapse and exhaustion have been rendered as explicit data: a carrier, two named boundary positions, a proof that they are distinct, and a cover saying that every point of the carrier is one of the two.
-
-The compact checked spine is:
+The entry question is deliberately small:
 
 ```text
-Distinction -> Two -> End(Two) -> minimal K4 closure -> Distinction
+A formal system says that there are two positions.
+What inside the system licenses that claim as two?
 ```
 
-The point is not that a two-element type can be formalized. The point is that, once the displayed distinction record is granted, the subsequent normal form, endomorphism classification, closure conditions, and return to the originating datum are machine-checked terms rather than prose.
+Two names are not enough. They may name one position twice, or they may sit inside a carrier with further unaccounted points. The project therefore begins from a licensing problem, not from `K4`, not from physics, and not from a completed truth-value object.
 
-The larger volumes continue from that spine. `Void` carries the full formal development, including arithmetic and invariant ledgers. `VoidTopos` follows the categorical route: it builds the raw reading category, locates the obstruction to a raw Topos, and classifies the free well-pointed completion that remains. `Form` is the interpretive volume: it reads the checked kernel against physical and epistemological structure, but its physical identifications are hypotheses, not Agda theorems.
+The pre-formal pressure is Leibnizian: if two alleged positions cannot be distinguished by anything expressible in the system, the system has no internal ground for keeping them apart as two. That pressure is not itself an Agda theorem. The checked development begins only after it is represented as explicit data.
 
-## Terminology Used Here
+The compact spine is:
 
-The words below are used in a narrow technical sense throughout this README.
+```text
+Leibniz pressure -> Distinction -> Two -> End(Two) -> K4 closure -> Distinction
+```
 
-- **Carrier** means the type `S` in which the two named positions live.
-
-- **Boundary positions** means the two distinguished points `left right : S`. The word “boundary” is not topological here; it only marks the two named endpoints of the displayed distinction.
-
-- **Non-collapse** or **separation** means that the two named positions are not propositionally equal. In the code this is the field:
-
-  ```agda
-  separated : ¬ (left ≡ right)
-  ```
-
-- **Exhaustion** or **cover** means that every element of the carrier is one of the two named positions. In the code this is the field:
-
-  ```agda
-  cover : (x : S) → (x ≡ left) ⊎ (x ≡ right)
-  ```
-
-- **No-surplus** means that a later representation may not contain additional vertices, cases, or degrees of freedom not forced by the classified data.
-
-- **Return to the datum** means that the closure structure does not become a new independent starting point; it yields back the distinction from which it arose.
-
-These terms are introduced here to avoid treating project-specific language as if it were standard terminology.
+Everything before `Distinction` explains why the datum is being asked for. Everything after `Distinction` is a formal consequence inside the stated Agda fragment.
 
 ## Formal Threshold
 
-The checked layer begins at the `Distinction` record. In the companion, it is displayed at [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex#L408):
+The main file represents the threshold by the record `Distinction`:
 
 ```agda
-record Distinction : Set₁ where
+record Distinction : Set1 where
   field
-    S         : Set
-    left      : S
-    right     : S
-    separated : ¬ (left ≡ right)
-    cover     : (x : S) → (x ≡ left) ⊎ (x ≡ right)
+    S     : Set
+    ℓ     : S
+    r     : S
+    ℓ≠r   : ℓ ≠ r
+    cover : (x : S) → (x ≡ ℓ) ⊎ (x ≡ r)
 ```
 
-The fields matter independently.
+The fields have different jobs.
 
-- `S` is the carrier.
-- `left` and `right` name the boundary positions.
-- `separated` prevents the Leibniz collapse of the two boundary positions.
-- `cover` says that the carrier is exhausted by those two positions.
+- `S` is the carrier in which positions can be addressed.
+- `ℓ` and `r` are the displayed boundary positions.
+- `ℓ≠r` is anti-collapse data: the two displayed positions are not one position.
+- `cover` is anti-surplus data: every carrier point is one of the displayed positions.
 
-Separation alone says that the two named points are not equal. It does not say that the carrier has no further inhabitants. The cover field supplies that exhaustion explicitly.
+The compact companion uses the readable field names `left`, `right`, `separated`, and `cover`; the full book uses `ℓ`, `r`, and `ℓ≠r`. The content is the same threshold discipline: no collapse, no hidden surplus.
 
-In Martin-Löf type theory, two named points do not make a two-point type. The normal-form theorem needs both separation and cover.
+## Terms
 
-Everything before this threshold explains why this datum is chosen. Everything listed in the checked spine below is a formal object after the threshold has been crossed.
+- **Carrier** means the type in which the named positions live.
+- **Boundary positions** means the two displayed points of the distinction record. The word is not topological here.
+- **Anti-collapse** means that the two displayed positions are not propositionally equal.
+- **Anti-surplus** means that every element of the carrier is accounted for by the displayed positions.
+- **No-surplus representation** means that a later closure may not add extra vertices, cases, or degrees of freedom beyond the classified data.
+- **Return to the datum** means that the closure record does not become a new independent starting point; it yields back the distinction from which it arose.
 
-## Checked Spine
+## Checked Kernel
 
-- **Normal form.** `two-normal-form` proves that every inhabitant of the distinction record is boundary-preservingly isomorphic to the canonical two-point distinction ([VoidCompanion.lagda.tex](VoidCompanion.lagda.tex#L835), full version in [Void.lagda.tex](Void.lagda.tex#L3582)).
+The first formal route is narrow and explicit.
 
-- **Endomorphism classification.** `EndoCase`, `classify-sound`, and `classify-unique` classify the function space `Two -> Two` into the four cases: identity, swap, and the two constants ([VoidCompanion.lagda.tex](VoidCompanion.lagda.tex#L887), [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex#L918), [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex#L957)).
+- `leibniz-collapse` records the formal echo of the opening pressure after a carrier and equality have already been fixed.
+- `Two-distinction` gives a concrete inhabitant of `Distinction`.
+- `two-normal-form` proves that every `Distinction` is boundary-preservingly isomorphic to the canonical two-point distinction.
+- `EndoCase`, `classify-sound`, and `classify-unique` classify the endomorphisms `Two -> Two` into the two constants, identity, and swap.
+- `FaithfulClosure`, `MinimalClosure`, and the richer `K4Record` state the representation contract for those four cases: separated cases, complete realisation, and no surplus.
+- `record-presupposes-distinction` reads the originating distinction back from the closure record.
 
-- **Closure.** `FaithfulClosure` and `MinimalClosure` state the representation contract: separated cases, complete realization, and no surplus vertices. The canonical closure is in checked bijection with `EndoCase`, and the full book packages the richer `K4Record` ([VoidCompanion.lagda.tex](VoidCompanion.lagda.tex#L1041), [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex#L1049), [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex#L1297), [Void.lagda.tex](Void.lagda.tex#L31474)).
+The four endomorphisms of `Two` are not claimed to be the Klein four-group. They form the four-case endomorphism space used by the representation contract. The complete graph `K4` appears only after those cases are represented as separated, fully realised, and non-surplus vertices.
 
-- **Return to the datum.** `k4-presupposes-distinction` in the companion and `record-presupposes-distinction` in the full file read a distinction back from the closure record ([VoidCompanion.lagda.tex](VoidCompanion.lagda.tex#L1328), [Void.lagda.tex](Void.lagda.tex#L36450)).
-
-- **Categorical continuation.** `VoidTopos` builds the free well-pointed completion with NNO and packages it as a classifying topos for displayed models of the generated reading skeleton ([VoidTopos.lagda.tex](VoidTopos.lagda.tex#L2676), [VoidTopos.lagda.tex](VoidTopos.lagda.tex#L2903), [VoidTopos.lagda.tex](VoidTopos.lagda.tex#L2924)).
-
-The long file then develops the arithmetic and invariant ledger over the same formal kernel. For example, the Cauchy-completeness theorem for the constructed real numbers is in [Void.lagda.tex](Void.lagda.tex#L28982).
-
-## What Kind of Project This Is
-
-`Void and Form` is not primarily a construction project.
-
-It is an eliminative stability programme.
-
-The central question is not:
-
-> What structures can we freely build?
-
-The central question is:
-
-> What structures remain once non-forced freedom is systematically removed?
-
-This is why the project repeatedly uses normal forms, exhaustive classifications, no-surplus conditions, canonical closure records, uniqueness proofs, and definitional collapse by `refl`.
-
-Many equalities close by `refl` because the development is arranged to remove non-canonical freedom until different routes reduce to the same normal form.
-
-In this project, `refl` is often not the beginning of a trick, but the endpoint of elimination.
-
-## Start Here
+## Reading Order
 
 If you are opening the repository for the first time, read in this order:
 
-1. [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) / [PDF](latex/VoidCompanion.pdf): the compact kernel and map of the project.
-2. [VoidTopos.lagda.tex](VoidTopos.lagda.tex) / [PDF](latex/VoidTopos.pdf): the standalone route from the reading structure to obstruction and classifying completion.
-3. [Void.lagda.tex](Void.lagda.tex): the full book-length formal development.
-4. [Form.lagda.tex](Form.lagda.tex): the structural and physical interpretation layer.
+1. [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) / [PDF](latex/VoidCompanion.pdf): the compact licensing problem and checked kernel.
+2. [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf): the full book-length development, with internal equality, arithmetic, rational structure, and later invariant machinery rebuilt inside the file.
+3. [VoidTopos.lagda.tex](VoidTopos.lagda.tex) / [PDF](latex/VoidTopos.pdf): the categorical route from distinction-induced readings to raw obstruction, quotient/skeleton completion, and displayed set-like burden.
+4. [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf): the interpretive layer. It reads the checked kernel structurally and physically, but those readings are hypotheses rather than Agda theorems.
 
-The companion is the intended first inspection point. It is short enough to check the spine directly, and it keeps the pre-formal motivation separate from the Agda-checked claims.
+The companion is the intended first inspection point. It is short enough to check the load-bearing hinge directly, and it keeps the pre-formal pressure separate from the checked claims.
 
 ## Status Map
 
 | Layer | Status | What to inspect |
 |---|---|---|
-| Pre-formal motivation | Not an Agda theorem. It names why stable distinction is treated as the entry condition for description. | This README and the opening of the companion. |
-| Compact kernel | Agda-checked spine from `Distinction` through closure and return. | [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex). |
-| Full `Void` development | Book-length formal development under `--safe --without-K`; no postulates. | [Void.lagda.tex](Void.lagda.tex). |
-| Topos route | Categorical obstruction, completion, and classification layer. | [VoidTopos.lagda.tex](VoidTopos.lagda.tex). |
-| `Form` interpretation | Physical and epistemological readings of the checked kernel. These are explicit hypotheses and can fail without breaking `Void`. | [Form.lagda.tex](Form.lagda.tex). |
+| Licensing problem | Pre-formal motivation. Not an Agda theorem. | This README and the openings of [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) and [Void.lagda.tex](Void.lagda.tex). |
+| Formal threshold | Explicit data supplied to MLTT/Agda. | The `Distinction` record. |
+| Compact kernel | Agda-checked route from `Distinction` through normal form, four-case classification, closure, and return. | [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex). |
+| Full `Void` development | Book-length formal development under `--safe --without-K`, without postulates. | [Void.lagda.tex](Void.lagda.tex). |
+| Topos route | Categorical obstruction, quotient/skeleton completion, and displayed classification layer. | [VoidTopos.lagda.tex](VoidTopos.lagda.tex). |
+| `Form` interpretation | Structural and physical readings of the checked kernel. They can fail without breaking the kernel. | [Form.lagda.tex](Form.lagda.tex). |
 
-This separation is the central discipline of the project. Treat the pre-formal boundary as a theorem and the beginning overclaims. Treat the checked terms as metaphor and the execution is lost. Treat the physical readings as compiler-certified and the interpretation becomes confused.
+This separation is the central discipline of the project. Treat the licensing pressure as a theorem and the opening overclaims. Treat the checked terms as metaphor and the execution is lost. Treat interpretation as compiler-certified and the layers collapse.
 
 ## What Is Not Claimed
 
 - `Void` does not prove physics.
-- `Void` does not simulate a universe.
-- `Void` does not prove that every possible formal theory reduces to a binary distinction.
-- `Void` does not replace MLTT.
-- `Form` does not add mathematical content to `Void`; it imports the formal ledger and proposes interpretations.
-- The names in the intellectual background below do not certify the results. They locate the question.
+- `Void` does not prove that every possible formal system must be rebuilt from this exact record.
+- `K4` is not the starting axiom. It appears after the endomorphism cases of `Two` are represented under the stated contract.
+- `Form` does not add mathematical content to `Void`; it proposes interpretations of the formal ledger.
+- Names in the intellectual background do not certify the results. They locate the question.
 
-The strongest formal claims are internal to the stated setting: once the distinction record is given, the normal form, four-case endomorphism classification, closure contract, and return map are checked objects.
+The strongest formal claims are internal to the stated setting: once the distinction record is given, the normal form, four-case endomorphism classification, representation closure, and return map are checked objects.
 
-## Why This Is Worth Inspecting
+## Why Inspect It
 
-The unusual part is not the constructor pair `L` and `R`.
+The unusual part is not the pair of constructors `L` and `R`. The unusual part is the refusal to let prose do the mathematical work. The project asks what data license a two-count, then requires the next steps to be definitions, classifications, equivalences, and contradiction eliminations.
 
-The unusual part is the burden placed on stable two-ness.
+That is why the README leads to the companion instead of asking the reader to begin with the full book. If the hinge from `Distinction` to normal form and closure fails, the project fails at its root. If it holds, the larger files can be read as continuation, categorical routing, and interpretation rather than as substitutes for proof.
 
-The project asks a narrow question with a large reach: after the minimal distinction datum is made explicit, what remains if the next steps are forced to be definitions, classifications, equivalences, contradiction eliminations, no-surplus constraints, and return maps?
+## Intellectual Placement
 
-That is also why the README leads to the companion instead of asking the reader to begin with the full book. The companion gives the shortest route to the load-bearing hinge. If that hinge fails, the project fails at its root. If it holds, the larger volumes can be read as continuation and interpretation rather than as a substitute for proof.
+The question is not launched from nowhere. These names locate the neighborhood; they do not function as proof.
 
-## Intellectual Location
+- Leibniz supplies the entry pressure through the identity of indiscernibles: without expressible difference, two alleged positions collapse.
+- Constructive type theory supplies the execution discipline: witnesses, proof terms, explicit case splits, and no hidden postulates.
+- George Spencer-Brown's `Laws of Form` stands near the distinctional starting point, but this project asks what happens when distinction is represented as explicit type-theoretic data.
+- Gregory Bateson's phrase "a difference that makes a difference" motivates the information-theoretic reading of distinguishability. The checked layer begins later, at the displayed record.
+- Lawvere and Tarski mark the later semantic and categorical orientation: structures are studied by the maps and interpretations they admit.
 
-The question is not launched from nowhere. It stands near several older threads, without claiming their authority.
+The contribution is not the invention of distinction as a theme. It is the attempt to make a small threshold mechanically inspectable and to keep the pre-formal, formal, categorical, and interpretive layers from replacing one another.
 
-- George Spencer-Brown's `Laws of Form` treats distinction as a primitive mark. This project asks what happens when a distinction is represented as explicit type-theoretic data and then checked.
-- Gregory Bateson's phrase "a difference that makes a difference" motivates the information-theoretic reading of distinguishability. The formal layer here begins later, at a displayed record.
-- Wheeler's `it from bit` is a nearby physical slogan, but `Void` does not derive the physical world. Physical readings belong to `Form` and remain empirical hypotheses.
-- Wittgenstein, Gödel, Tarski, and the Russell-Girard boundary mark the limits of total internal self-description. This project does not cross that boundary; it makes the internal threshold it can check explicit.
+## Verification
 
-The contribution is therefore not the invention of the question. It is the attempt to make a small version of the threshold mechanically inspectable, and then to keep the formal, categorical, and interpretive layers from collapsing into each other.
+The main type checks are:
+
+```sh
+agda VoidCompanion.lagda.tex
+agda VoidTopos.lagda.tex
+agda Void.lagda.tex
+agda Form.lagda.tex
+```
+
+To regenerate the PDFs, run `agda --latex` on the corresponding literate source and then run XeLaTeX twice in [latex/](latex/) for the generated `.tex` file.
+
+For example:
+
+```sh
+agda --latex Void.lagda.tex
+cd latex
+xelatex -interaction=nonstopmode Void.tex
+xelatex -interaction=nonstopmode Void.tex
+```
+
+The generated PDFs in [latex/](latex/) are produced from the literate Agda/LaTeX sources.
+
+## Files
+
+- [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) / [PDF](latex/VoidCompanion.pdf): compact companion and first inspection point.
+- [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf): full formal development.
+- [VoidTopos.lagda.tex](VoidTopos.lagda.tex) / [PDF](latex/VoidTopos.pdf): categorical obstruction, completion, and classification route.
+- [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf): interpretive volume and empirical exposure of later readings.
+- [latex/](latex/): generated LaTeX/PDF output.
+- [LICENSE](LICENSE): license terms.
 
 ## Author and Method
 
 This project was developed outside an institutional mathematics setting and with the help of large language models. Those facts describe the working process; they do not decide the status of the checked claims.
 
-For that reason the repository foregrounds inspectable artifacts: Agda files, explicit theorem names, line pointers, PDFs generated from the literate sources, a DOI, and a main-branch CI badge.
-
-The relevant question is not whether the prose sounds familiar. The relevant question is whether the formal claims type-check under the stated flags and whether the interpretive claims are kept in their proper layer.
-
-## Verification
-
-The main checks are:
-
-```sh
-agda --safe --without-K VoidCompanion.lagda.tex
-agda --safe --without-K VoidTopos.lagda.tex
-agda --safe --without-K Void.lagda.tex
-agda --safe --without-K Form.lagda.tex
-```
-
-The compact companion uses standard-library imports for readability. The full `Void` file carries the book-length development and has no postulates. The generated PDFs in [latex/](latex/) are produced from the literate Agda/LaTeX sources.
-
-## Files
-
-- [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) / [PDF](latex/VoidCompanion.pdf): compact companion and first inspection point.
-- [VoidTopos.lagda.tex](VoidTopos.lagda.tex) / [PDF](latex/VoidTopos.pdf): categorical obstruction, completion, and classification route.
-- [Void.lagda.tex](Void.lagda.tex): full formal development.
-- [Form.lagda.tex](Form.lagda.tex): interpretive volume and empirical exposure of the physical readings.
-- [latex/](latex/): generated LaTeX/PDF output.
-- [LICENSE](LICENSE): license terms.
+For that reason the repository foregrounds inspectable artifacts: Agda sources, explicit theorem names, generated PDFs, a DOI, and a main-branch CI badge. The relevant question is whether the formal claims type-check under the stated flags and whether the interpretive claims remain in their proper layer.
 
 ## Citation
 
-Use the DOI shown above and cite specific formal claims by file and commit hash. `Form` should be cited separately from `Void`, because its physical identifications are interpretive hypotheses rather than Agda theorems.
+Use the DOI shown above and cite specific formal claims by file and commit hash. Cite `Form` separately from `Void`, because its physical identifications are interpretive hypotheses rather than Agda theorems.
