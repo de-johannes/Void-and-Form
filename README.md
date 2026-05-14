@@ -284,11 +284,23 @@ The project keeps those two modes of accountability separate.
 - [latex/](latex/): generated LaTeX/PDF output.
 - [LICENSE](LICENSE): license terms.
 
-## Author And Method
+## Author and Method
 
-The repository presents its claims through inspectable material: Agda sources, theorem names, generated PDFs, a DOI, and a main-branch CI badge.
+The author has no institutional affiliation, no formal background in
+mathematics or physics, and no prior training in type theory or formal
+verification. The development was built over eighteen months with the
+assistance of large language models.
 
-The relevant question is whether the formal claims type-check under the stated options, whether the prose reports those claims faithfully, and whether the interpretive layers keep their stated status.
+The Agda type checker under `--safe --without-K` is the sole formal judge.
+It does not check credentials. It checks proofs. Every claim marked as
+machine-verified in this repository has passed that check. Every claim
+that has not is marked accordingly.
+
+The relevant question is therefore not who built this, but whether the
+formal claims type-check under the stated options, whether the prose
+reports those claims faithfully, and whether the interpretive layers keep
+their stated status.
+
 
 ## Citation
 
