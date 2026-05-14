@@ -169,6 +169,112 @@ Lawvere and Tarski mark the later semantic and categorical neighborhood: structu
 
 The contribution of this repository is the mechanically inspectable route through one small threshold, together with a book-length attempt to keep formal proof, categorical continuation, and interpretation in contact without confusing their statuses.
 
+---
+
+## Selected Void–Form Ledger
+
+The compact companion isolates the checked entry kernel:
+
+$$
+\text{Distinction}
+\;\longrightarrow\;
+\text{Two}
+\;\longrightarrow\;
+\mathrm{End}(\text{Two})
+\;\longrightarrow\;
+K_4
+\;\longrightarrow\;
+\text{Distinction}.
+$$
+
+`Void` develops the larger formal ledger downstream of that closure.  
+`Form` asks whether selected parts of that ledger can be read as structural
+candidates for physical description.
+
+The tables below are not a substitute for the proofs or for the two full volumes.
+They are a navigation aid. They show, in compressed form,
+
+- what is already fixed in the `Void` ledger,
+- what `Form` reads from it,
+- and where the status changes from **formal/forced arithmetic** to
+  **physical identification** and **empirical test**.
+
+The epistemic separation used throughout `Form` is:
+
+| Level | Meaning |
+|---|---|
+| `formal-ledger` | Machine-checked theorem or construction inside the Agda development. |
+| `forced-ledger` | A downstream arithmetic/formula structure fixed by the displayed Void ledger and its explicit classification rules. |
+| `physical-identification` | Form's interpretive step: a ledger object is read as a physical quantity or structure. |
+| `experimental-test` | Comparison of that reading with measured data. |
+
+### A. Numerically exposed readings
+
+| Formula / ledger expression | Form value | Reading and status |
+|---|---:|---|
+| $\displaystyle \alpha^{-1}=137+\frac{11}{306}+\frac{295}{306\cdot137^2}$ | $\displaystyle 137.035\,999\,076\ldots$ | **Measured:** $137.035\,999\,084(21)$. **Deviation:** about **0.4σ**. `Void` fixes $C=137$, the loop numerator $11$, and the coupling-volume data used by the correction. `Form` closes the affine second-order correction chain and then reads the resulting rational as the inverse fine-structure constant. **Status:** correction chain = `forced-ledger`; physical name = `physical-identification`; CODATA comparison = `experimental-test`. |
+| $\displaystyle \frac{m_p}{m_e}=1836+\frac{11}{72}-\frac{2}{137^2}+\frac{1}{8\cdot3\cdot137^2}$ | $\displaystyle 1836.152\,673\,439\ldots$ | **Measured:** $1836.152\,673\,43(11)$. **Deviation:** about **0.08σ** in `Form`. The tree value $1836=\chi^2d^3F_2$ is fixed from the $K_4$ ledger; the later terms are part of the classified correction chain. `Form` reads the value as the proton–electron mass ratio. **Status:** formula and correction structure = `forced-ledger`; mass-ratio reading = `physical-identification`; comparison = `experimental-test`. |
+| $\displaystyle \frac{m_\mu}{m_e}=207-\frac{16}{69}+\frac{2}{137^2}+\frac{9}{8\cdot137^2}$ | $\displaystyle 206.768\,282\,440\ldots$ | **Deviation:** about **0.12σ** in `Form`. The tree value $207=d^2(E+F_2)$ is classified as forced; the inter-channel bridge $16/69$ is not inserted freely but derived through the spinor bridge structure $\kappa\chi=16$. `Form` reads the result as the muon–electron mass ratio. **Status:** arithmetic chain = `forced-ledger`; physical reading = `physical-identification`; comparison = `experimental-test`. |
+| $\displaystyle \frac{m_\tau}{m_\mu}=17-\frac{28}{153}$ | $\displaystyle 16.816\,993\,464\ldots$ | **Deviation:** about **0.1σ** in `Form`. The bare value $17=F_2$ is inherited from the $K_4$ compactification layer; the correction $28/153$ is classified from the three-channel tau structure. `Form` reads the result as the tau–muon mass ratio. **Status:** value and correction form = `forced-ledger`; mass reading = `physical-identification`; comparison = `experimental-test`. |
+| $\displaystyle \sin^2\theta_W=\left(\frac{2}{8}-\frac{11}{576}\right)+\frac{2}{137^2}+\frac{9}{8\cdot137^2}+\frac{169}{8^2\cdot137^2}$ | $\displaystyle 0.231\,209\,966\ldots$ | `Form` reports a final residual of about **0.001σ** after the depth-2 weak-mixing correction. The additional term $\frac{169}{8^2\cdot137^2}$ is not shared by the mass ratios; it is introduced only for the $\kappa$-dependent weak-mixing channel. **Status:** correction-depth assignment and rational structure = `forced-ledger`; weak-angle reading = `physical-identification`; measurement comparison = `experimental-test`. |
+| $\displaystyle \Omega_m=\frac{V}{2\pi\chi}$ | $\displaystyle 0.3183$ | `Void` already realizes the scaled density quotient $3183$. `Form` reads it as the cosmological matter fraction. Against the Planck-center value $0.3150\pm0.0070$ quoted in the book, the decimal value is about **0.47σ** away; the internal $K_3/K_4/K_5$ filter also isolates the $K_4$ candidate. **Status:** quotient realization = `forced-ledger`; cosmological name = `physical-identification`; Planck comparison = `experimental-test`. |
+| $\displaystyle n_s=\frac{VE-1}{VE}+\frac{1}{V^d\chi}=\frac{2968}{3072}$ | $\displaystyle 0.966\,145\,833\ldots$ | **Measured in `Form`:** $0.9649\pm0.0042$. **Deviation:** about **0.30σ**. `Void` already realizes the finite-capacity quotient, including the scaled value $9661$; `Form` reads it as the primordial spectral index. **Status:** quotient = `forced-ledger`; cosmological reading = `physical-identification`; Planck comparison = `experimental-test`. |
+
+The seven rows above are selected because they show the most exposed part of the
+programme: `Form` does not stop at integer correspondences, but reads concrete
+rational/decimal values from the closed $K_4$ ledger and compares them with external
+measurements.
+
+Further numerical readings are developed in the full volumes but omitted here for
+readability, including the inflationary e-fold candidate
+$(137-17)/2=60$, the bare Higgs candidate $257/2=128$,
+the geometric Cabibbo candidate $13.684^\circ$,
+the baryon fraction layer, quark-mass candidates, and additional correction-ledger
+structures.
+
+### B. Structural readings
+
+| Ledger structure | Form reading | Status |
+|---|---|---|
+| $V=4,\ d=3,\ V-d=1$ | Four-dimensional spacetime read as $3+1$: three spatial directions and one temporal direction. | The integers are fixed in `Void`; the reading as spacetime is `physical-identification`. |
+| $\eta=\mathrm{diag}(-1,+1,+1,+1)$, with $\mathrm{tr}(\eta)=2=\chi$ | Lorentz signature, with the trace matching the Euler characteristic of the $K_4$/tetrahedral ledger. | The equality pattern is internally closed in `Form`; the metric interpretation is `physical-identification`. |
+| $(V-d,\chi,d)=(1,2,3)$ | Gauge-rank pattern read as $U(1)\times SU(2)\times SU(3)$. | Rank arithmetic = `forced-ledger`; group names = `physical-identification`. |
+| $1+3+8=12=V\cdot d$ | Gauge-boson count: photon channel, weak-boson sector, gluon sector. | Count structure = `forced-ledger`; Standard-Model naming = `physical-identification`. |
+| $\mathrm{Spec}(L_{K_4})=\{0,4,4,4\}$ | Threefold non-zero spectral multiplicity read as the three-generation structure. | Spectrum = `formal/forced ledger`; generation reading = `physical-identification`. |
+| $\kappa=8$, $d=3$, $\kappa d=24=\lvert\mathrm{Aut}(K_4)\rvert$ | $8$ fermionic types per generation, $3$ generations, $24$ total fermionic types. | Arithmetic and symmetry count = `forced-ledger`; particle-content reading = `physical-identification`. |
+| $(V-d,\chi,d)=(1,2,3)$ as the internally exhausted monotone interval in $[1,d]$ | Generation-index structure receives an internal $1,2,3$ ordering rather than an imported label set. | The exhaustion argument belongs to `Void`; its use as a generation index is `physical-identification`. |
+
+These structural rows show why the numerical readings are not presented as isolated
+coincidences. In `Form`, they sit inside a wider interpretation of the same ledger:
+spacetime signature, gauge ranks, boson counts, spectral multiplicity, and fermion
+count are all read from the $K_4$ closure before external measurement enters.
+
+### C. What remains the formal spine
+
+The tables above do **not** alter the project’s status discipline.
+
+The formal kernel remains the conditional chain
+
+$$
+\text{Distinction}
+\to
+\text{Two}
+\to
+\mathrm{End}(\text{Two})
+\to
+K_4
+\to
+\text{Distinction}.
+$$
+
+`Void` checks that chain and develops the downstream invariant/arithmetic ledger.
+`Form` imports that ledger, assigns physical readings to selected parts of it, and
+exposes those readings to measurement.
+
+If the kernel fails, the formal programme fails.  
+If a physical identification fails, that `Form` reading fails.  
+The project keeps those two modes of accountability separate.
+
 ## Files
 
 - [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) / [PDF](latex/VoidCompanion.pdf): compact companion and first inspection point.
