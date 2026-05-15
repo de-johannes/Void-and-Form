@@ -464,7 +464,12 @@ The hierarchy problem is structurally similar. The Higgs mass is $\sim 125$ GeV;
 
 The flavor hierarchy is a third instance. The masses of the quarks span six orders of magnitude (up at $\sim 2$ MeV, top at $\sim 173$ GeV). The masses of the charged leptons span four orders. The neutrino masses, bounded above by tritium-decay experiments and oscillation data, are at least seven orders of magnitude smaller than the electron mass. Why these patterns? The Standard Model takes them as given.
 
-The neutrino sector needs one caveat early. This book later treats the generation count and mixing structure as structural candidates, but it does not claim to derive the absolute neutrino mass scale in the present state of the ledger. That quantity remains at the experimental frontier and is marked as such when it reappears.
+The neutrino sector needs one caveat early. In the Standard Model the
+absolute neutrino mass scale remains an input at the experimental frontier.
+The finite ledger developed here fixes the neutral depth, its square, and the
+rational structure by which the neutral scale is later read in Planck units.
+The formal content is the rational skeleton.  The claim that this skeleton
+describes nature remains empirical exposure.
 
 Hierarchies are not predictions; they are puzzles. They are places where theory and observation agree only because the theory has enough parameters to be told what to predict. Each hierarchy is, in effect, a hidden entry in the open ledger.
 
@@ -2800,6 +2805,58 @@ Under that physical reading the proton correction is $+11/72$, while
 the Weinberg correction is $-11/576$: the signs are fixed by the
 orientation of the two observables, not by a hidden extra theorem in
 \textit{Void}.
+
+This is the precise QFT/QCD interface used in the rest of the correction
+chain.  The finite ledger does not derive the QCD Lagrangian, the path
+integral, confinement dynamics, or a perturbative beta function.  It supplies
+the arithmetic slots at which a field-theoretic reading can attach: a
+universal loop numerator, an oriented bulk volume, an oriented electroweak
+extension, and a separate RG denominator.  The physical words ``QCD'',
+``electroweak'', and ``loop correction'' name those slots from the side of
+physics; they are not additional constructors in \textit{Void}.
+
+This distinction matters for the neutral chain.  The neutrino bridge may
+inherit the formal loop grammar---the numerator $11$, the RG denominator
+$274$, the degree-weighted running factor, and the sign-ordered tower.  It
+may not simply reuse the hadronic name ``QCD'' as a new neutrino input.  The
+correction tower therefore changes no number by appeal to QCD dynamics; it
+keeps the shared loop skeleton while moving through the Planck-electron
+neutral route classified later in the book.
+
+\begin{code}
+-- $ QFT/QCD interface boundary for the correction chain.
+record QFTQCDCorrectionInterface : Set where
+  field
+    formal-loop-scale-pair       : BulkExtendedLoopBridge
+    loop-numerator-forced        : loop-numerator ≡ 11
+    bulk-denominator-forced      : loop-scale-denominator bulk-role ≡ 72
+    extended-denominator-forced  : loop-scale-denominator extended-role ≡ 576
+    rg-denominator-forced        : rg-slope-denom ≡ 274
+    qft-loop-reading-level       : ClaimLevel
+    qcd-sector-name-level        : ClaimLevel
+    electroweak-sector-name-level : ClaimLevel
+    neutrino-inheritance-level   : ClaimLevel
+    qft-loop-reading-is-physical : qft-loop-reading-level ≡ physical-identification
+    qcd-name-is-physical         : qcd-sector-name-level ≡ physical-identification
+    electroweak-name-is-physical : electroweak-sector-name-level ≡ physical-identification
+    neutrino-inheritance-forced  : neutrino-inheritance-level ≡ forced-ledger
+
+theorem-qft-qcd-correction-interface : QFTQCDCorrectionInterface
+theorem-qft-qcd-correction-interface = record
+  { formal-loop-scale-pair        = theorem-bulk-extended-loop-bridge
+  ; loop-numerator-forced         = law-loop-num-11
+  ; bulk-denominator-forced       = refl
+  ; extended-denominator-forced   = refl
+  ; rg-denominator-forced         = law-rg-slope-274
+  ; qft-loop-reading-level        = physical-identification
+  ; qcd-sector-name-level         = physical-identification
+  ; electroweak-sector-name-level = physical-identification
+  ; neutrino-inheritance-level    = forced-ledger
+  ; qft-loop-reading-is-physical  = refl
+  ; qcd-name-is-physical          = refl
+  ; electroweak-name-is-physical  = refl
+  ; neutrino-inheritance-forced   = refl }
+\end{code}
 
 Both fractions share the same numerator because a single observable
 generates the correction at every scale.  The denominator changes from
@@ -7127,8 +7184,8 @@ theorem-gauge-coupling = record
 % ──────────────────────────────────────────────────────────────────────────────
 
 The preceding chapters fixed the finite ledger read as three gauge groups,
-their ranks, and their boson counts.  This chapter records the companion
-ledger for dynamics: Wilson-loop count, deficit-angle curvature, geodesic
+their ranks, and their boson counts.  This chapter records the dynamical
+ledger: Wilson-loop count, deficit-angle curvature, geodesic
 diameter, and area-law candidates.  A static catalogue of symmetries is inert
 without a rule for how it acts; $K_4$ supplies finite quantities that \textit{Form}
 can read as gauge motion, curvature, and confinement.
@@ -11990,6 +12047,11 @@ A derivation with zero free parameters makes rigid predictions. The following me
 \begin{enumerate}
 \item \textbf{Fine-structure constant.} $\alpha^{-1}(Q \to 0) \ne 137.036\ldots$ at the precision of the correction chain. Already constrained by CODATA to $\pm 1.5 \times 10^{-10}$ relative uncertainty.
 \item \textbf{Proton-to-electron mass ratio.} $m_p/m_e$ deviating from $1836.1527\overline{7}$ beyond the $\kappa C^2$ correction. Currently constrained: $1836.15267343(11)$.
+\item \textbf{Neutrino normal hierarchy.} A neutrino sector incompatible with
+  the normal-hierarchy readout $m_1=0$, $m_3/m_2=1770/306$, and
+  $\sum_i m_i\approx0.058271014350\,\mathrm{eV}$ would refute the
+  neutrino mass identification.  The exact Planck ratios are recorded below;
+  the electronvolt decimals are their physical readout.
 \item \textbf{Spacetime dimensions.} A fourth spatial dimension observed at accessible energies. The framework yields $d = 3$ exactly---no compactified extra dimensions, no Kaluza--Klein tower.
 \item \textbf{Fermion generations.} A fourth fermion generation at collider energies. The derivation yields exactly $d = 3$ degenerate Laplacian eigenvalues---three generations, no more.
 \item \textbf{Weinberg angle.} $\sin^2\!\theta_W$ at the $Z$-pole deviating from $133/576 + 169/1201216 \approx 0.23121$ beyond the running correction.
@@ -12139,21 +12201,242 @@ theorem-structural-predictions = record
 
 The most important predictions are those awaiting decisive measurement at the required precision. These are the cutting edge: the points where the $K_4$ framework sticks its neck out.
 
-\subsubsection*{Neutrino Mass Hierarchy: Loop Depth 5}
+\subsubsection*{Neutrino Mass Hierarchy: From Depth 5 to Planck Ratios}
 
-The seesaw mechanism in the Standard Model suppresses neutrino masses relative to the charged leptons. In the $K_4$ framework, the suppression has a combinatorial origin: the neutrino couples through the highest loop depth.
+The neutrino sector is where the mass programme becomes most exposed.  The
+charged particles can be compared through ratios to the electron, but the
+neutral sector asks for a smaller and harder object: an absolute scale, a
+normal hierarchy, and two squared splittings, all without inserting a measured
+neutrino mass as an anchor.
 
-The cycle rank of $K_4$ is $E - V + 1 = 6 - 4 + 1 = 3$. The seesaw loop depth is $2 \times \text{cycle-rank} - 1 = 5$. An independent derivation: $V + 1 = 5$. Both paths converge on the same number.
+The finite part begins before any electronvolt number appears.  The neutral
+slot is selected by a $K_4$ filter.  The generation depth $d=3$ is too low;
+it has not moved beyond the charged generation count.  The vertex carrier
+$V=4$ is already used as the four-case closure carrier.  The edge count
+$E=6$ belongs to the full edge sector.  The only remaining local depth is
+\[
+  d+\chi = 3+2 = 5.
+\]
+The associated square is $25$.  This is the neutral-depth theorem, not yet a
+mass theorem.  It says where the neutral slot sits in the finite ledger; it
+does not yet say how a Planck-scale unit descends to a low-energy mass.
 
-At the finite-ledger level, the theorem fixes two structural facts: the loop depth is $5$, and the associated seesaw denominator is $25$. It does not by itself compute an absolute neutrino mass in electronvolts or a complete neutrino-to-electron mass ratio. That conversion belongs to the continuum seesaw model. What $K_4$ supplies is the discrete suppression architecture that such a model must preserve.
+The same number also appears through the loop reading.  The cycle rank of
+$K_4$ is
+\[
+  E - V + 1 = 6 - 4 + 1 = 3,
+\]
+and the seesaw-style loop depth is
+\[
+  2\cdot 3 - 1 = 5.
+\]
+Independently, the vertex-plus-centre count gives $V+1=5$.  The two routes
+converge on the same depth.  This convergence matters because it prevents
+the neutral depth from looking like an isolated numerological pick.  It is
+seen once as a local candidate survivor and again as a loop-depth count.
 
-This prediction is testable at the structural level by DUNE (first physics run expected 2028--2029) and JUNO (commissioning 2025--2026), which will sharpen the neutrino mass ordering and constrain the absolute mass scale with unprecedented precision.
+The next question is scale.  A depth and a denominator do not by themselves
+produce an electronvolt number.  The electron-anchored reading uses the known
+electron mass as a low-energy physical scale and then reads the neutral
+masses as ratios to $m_e$:
+\[
+  m_1=0,\qquad
+  \frac{m_2}{m_e}=\frac{1}{6\cdot4\cdot137^3},\qquad
+  \frac{m_3}{m_e}=\frac{1}{4\cdot137^3}.
+\]
+That reading remains useful, but it is not the final claim.  It imports a
+measured low-energy anchor.  The stronger neutral claim starts from the
+Planck unit and lets the low-energy scale descend through classified
+structure.
 
-\textbf{Constraint:} The neutrino mass must emerge from the same loop-depth hierarchy that generates the charged lepton and quark masses.
+The Planck bridge is a finite classification.  Four routes are tested.  A
+direct Planck-to-neutrino route stays in the ultraviolet sector.  A
+Planck-to-Higgs route names an intermediate scale without deriving the
+running.  An electron-only route starts from a measured low-energy scale.  The
+surviving structured route is Planck-to-electron-to-neutral: not because the
+decimal output looks good, but because it is the only route in the displayed
+candidate space that has the right origin, target, and neutral interface.
 
-\textbf{Construction:} Cycle rank $E - V + 1 = 3$. Seesaw depth $2 \times 3 - 1 = 5$. Alternative derivation: $V + 1 = 5$. Both agree by \texttt{refl}. The mass suppression factor $1/\lambda^2 = 1/25$ is a $K_4$ invariant.
+This is the first lock in the neutral chain.  The route must begin at the
+Planck unit, must not jump directly to the neutral scale, must not stop at a
+named Higgs placeholder, and must pass through the electron interface before
+the neutral denominators act.  Once those four requirements are imposed, the
+route is no longer a matter of narrative convenience.  It is the surviving
+path through the scale ledger.
 
-\textbf{Consequence:} The loop-depth and denominator of the neutrino suppression are predicted, not fitted. A measurement incompatible with a depth-$5$ seesaw architecture would falsify this mass-generation identification.
+Once the route is fixed, the exponents are also classified.  The $\kappa$
+exponent is forced to the Euler slot, so it is $2$.  The Fermat exponent is
+forced to the carrier slot, so it is $4$.  The closure exponent is forced to
+the carrier-plus-generation slot, so it is $V+d=7$.  Together with the
+neutral depth $5$, this gives the bare Planck-to-electron denominator
+\[
+  5\cdot8^2\cdot17^4\cdot137^7
+  = 24209712604567890429760.
+\]
+This number is not a fitted suppression constant.  It is the product of the
+surviving route, the surviving exponents, and the inherited $K_4$ ledger.
+The route supplies the order of descent; the exponents supply the size of the
+descent.  The neutral depth contributes the leading factor $5$, the Euler
+slot contributes $8^2$, the carrier slot contributes $17^4$, and the
+carrier-plus-generation slot contributes $137^7$.
+
+Bare suppression is still not enough.  The running correction is classified
+next.  Among the finite candidates, the survivor is the degree-weighted RG
+loop correction
+\[
+  \frac{d\cdot274+11}{d\cdot274} = \frac{833}{822}.
+\]
+Here $274=2\cdot137$ is the already present coupling denominator, $d=3$ is
+the generation depth, and $11=E+d+\chi$ is the universal loop numerator.  No
+measured neutrino mass enters this correction.
+
+The correction tower then contributes a second exact factor.  Its interface
+has two positive entries,
+\[
+  \frac{2}{137^2},\qquad
+  \frac{1}{8\cdot3\cdot137^2},
+\]
+and two negative entries,
+\[
+  -\frac{3^2}{8\cdot137^2},\qquad
+  -\frac{(11+2)^2}{8^2\cdot137^2}.
+\]
+The admissible action is not arbitrary ordering.  The positive face acts
+first, then the negative face.  The exact tower factor is
+\[
+  \frac{1524775277821401191187}{1524915363442855784448}.
+\]
+Composed with the running correction and the Planck suppression, this locks
+the tower-corrected electron ratio and, by the neutral denominators, the
+tower-corrected neutral pair.
+
+This is the correction tower in its full role.  It is not an optional decimal
+repair placed after the fact.  It is the sign-ordered action that the bridge
+uses before any neutrino mass is read out.  The positive face opens the small
+boundary and mass channels; the negative face removes the degree and coupling
+excess.  The resulting factor is exact, and it stands between the bare
+Planck-to-electron denominator and the neutral mass pair.
+
+At this stage the neutrino numbers are already close to the final answer, but
+the splitting ratio is still the bare edge separator.  The two nonzero
+neutral denominators differ by the edge count $E=6$, so the tower-corrected
+readout still has $m_3/m_2=6$.  This is an intermediate layer: Planck bridge,
+running correction, tower action, and neutral pair separator before the
+residual carrier.
+
+The residual layer is where the charged and neutral sectors separate.  The
+charged masses still carry a small structured residual whose sign pattern
+distinguishes the hadronic and leptonic sides.  No exact charged residual
+carrier is selected by decimal matching; the charged residual remains a
+physical comparison boundary.  The neutral residual is different.  Its kind
+is forced by the data it must explain: a uniform shift of the whole neutrino
+scale would preserve the splitting ratio, but the observed pair of squared
+splittings requires a splitting-asymmetric carrier.
+
+The charged correction chain supplies the contrast.  The muon and tau bridges
+carry exact arithmetic corrections before the remaining ppm-scale comparison
+is reached.  Their residual signs still belong to the physical reading of the
+charged sectors.  The neutral chain is stricter at the final step: the mass
+sum and the two squared splittings require a carrier that changes the
+separator itself, not merely the common scale.
+
+The tempting local move is to put different weights on the three perfect
+matchings of $K_4$.  That move is blocked.  The automorphism group of $K_4$
+acts transitively on the three perfect matchings.  The matching-weight theorem
+says that any weight invariant under the two vertex transpositions that
+generate the matching action is constant.  So a $K_4$-intrinsic,
+$\mathrm{Aut}(K_4)$-invariant matching weight cannot distinguish $m_2$ from
+$m_3$ by generation index.  If the neutral splitting ratio is to move, the
+carrier must act one layer above the matchings.
+
+That obstruction fixes the shape of the allowed extension.  The residual
+ledger has two sides, three perfect matchings, and six residual cells, matching
+the six edges of $K_4$.  Read through the elementary slot count, the same
+structure gives twelve signed slots.  Read through the Laplacian signature,
+the zero mode and the three nonzero modes supply the formal $1+3$ pattern.
+These readings do not add a new physical object; they locate the layer at
+which a neutral residual carrier can act without breaking $K_4$ symmetry.
+
+That above-matching carrier is the coupling complement.  The same ledger that
+contains the loop numerator $11$ also contains the total coupling denominator
+$306$.  The complement is
+\[
+  306-11 = 295,
+\]
+so the residual carrier is
+\[
+  \frac{295}{306}.
+\]
+It does not change the heaviest neutral scale.  It changes the separator
+between the two nonzero neutral masses:
+\[
+  E_\nu = E\cdot\frac{295}{306}
+       = 6\cdot\frac{295}{306}
+       = \frac{1770}{306}.
+\]
+Thus the final formal readout has
+\[
+  \frac{m_3}{m_2}=\frac{1770}{306},\qquad
+  m_2=m_3\cdot\frac{306}{1770}.
+\]
+
+With the same Planck input used by the correction chain, the physical
+readout is
+\[
+  m_1=0,
+  \qquad
+  m_2\approx0.008589080150\,\mathrm{eV},
+  \qquad
+  m_3\approx0.049681934200\,\mathrm{eV},
+\]
+and
+\[
+  \sum_i m_i\approx0.058271014350\,\mathrm{eV}.
+\]
+The corresponding squared splittings are
+\[
+  \Delta m^2_{21}\approx7.3772297820\cdot10^{-5}\,\mathrm{eV}^2,
+  \qquad
+  \Delta m^2_{31}\approx2.4682945859\cdot10^{-3}\,\mathrm{eV}^2,
+\]
+with ratio approximately $33.45828527$.
+
+The exact Planck ratios are the real content of the formal layer:
+\[
+  \frac{m_1}{M_P}=0,
+\]
+\[
+  \frac{m_2}{M_P}=\frac{
+  388662168766119520831183926}{
+  552461668319475518343179050761041844482566504764565094400},
+\]
+and
+\[
+  \frac{m_3}{M_P}=\frac{
+  1270137806425227192258771}{
+  312125236338686733527219802689854149425178816251166720}.
+\]
+The sum is likewise exact:
+\[
+  \frac{\sum_i m_i}{M_P}=\frac{
+  2636806086138771651129208596}{
+  552461668319475518343179050761041844482566504764565094400}.
+\]
+
+The formal neutral chain is therefore not merely the depth-$5$ architecture.
+It is the closed rational skeleton of a normal hierarchy: route, exponents,
+running, tower action, separator, residual carrier, and final Planck ratios.
+What remains outside Agda is not the number chain.  What remains outside Agda
+is the physical assertion that this number chain is the neutrino mass spectrum
+of our world.
+
+DUNE, JUNO, Hyper-Kamiokande, KATRIN and cosmological surveys therefore do
+not merely test a qualitative hierarchy.  They test a locked
+normal-hierarchy mass ledger: zero lightest mass, separator $1770/306$, total
+mass near $0.05827\,\mathrm{eV}$, and the displayed splitting pair.  A failed
+comparison would refute the physical identification.  It would not erase the
+formal fact that the displayed finite candidate spaces close this rational
+chain.
 
 \begin{code}
 -- $ Neutrino seesaw prediction — loop depth 5, mass suppression 1/25.
@@ -12204,6 +12487,499 @@ theorem-neutrino-seesaw = record
   ; convergence         = refl
   ; suppression-factor  = refl
   ; cycle-rank-from-K4  = refl }
+
+-- $ Compact interface to the final Planck-ratio readout.  The exact rational
+-- $ skeleton is formal; the eV comparison remains at the physical/test
+-- $ boundary.
+
+record NeutrinoPlanckRatio : Set where
+  field
+    nu-planck-numerator   : ℕ
+    nu-planck-denominator : ℕ
+
+final-neutrino-lightest-planck-ratio : NeutrinoPlanckRatio
+final-neutrino-lightest-planck-ratio = record
+  { nu-planck-numerator   = 0
+  ; nu-planck-denominator = 1 }
+
+final-neutrino-middle-planck-ratio : NeutrinoPlanckRatio
+final-neutrino-middle-planck-ratio = record
+  { nu-planck-numerator   = 388662168766119520831183926
+  ; nu-planck-denominator =
+      552461668319475518343179050761041844482566504764565094400 }
+
+final-neutrino-heaviest-planck-ratio : NeutrinoPlanckRatio
+final-neutrino-heaviest-planck-ratio = record
+  { nu-planck-numerator   = 1270137806425227192258771
+  ; nu-planck-denominator =
+      312125236338686733527219802689854149425178816251166720 }
+
+final-neutrino-sum-planck-ratio : NeutrinoPlanckRatio
+final-neutrino-sum-planck-ratio = record
+  { nu-planck-numerator   = 2636806086138771651129208596
+  ; nu-planck-denominator =
+      552461668319475518343179050761041844482566504764565094400 }
+
+-- $ Full neutral bridge ledger: route, exponents, running, tower, residual,
+-- $ and final Planck-ratio readout.
+
+data NeutrinoScaleRoute : Set where
+  nu-direct-planck-neutral   : NeutrinoScaleRoute
+  nu-planck-higgs-neutral    : NeutrinoScaleRoute
+  nu-planck-electron-neutral : NeutrinoScaleRoute
+  nu-electron-neutral-only   : NeutrinoScaleRoute
+
+NeutrinoScaleRouteAdmissible : NeutrinoScaleRoute → Set
+NeutrinoScaleRouteAdmissible nu-direct-planck-neutral   = ⊥
+NeutrinoScaleRouteAdmissible nu-planck-higgs-neutral    = ⊥
+NeutrinoScaleRouteAdmissible nu-planck-electron-neutral = ⊤
+NeutrinoScaleRouteAdmissible nu-electron-neutral-only   = ⊥
+
+neutrino-scale-route-admissible :
+  NeutrinoScaleRouteAdmissible nu-planck-electron-neutral
+neutrino-scale-route-admissible = tt
+
+neutrino-scale-route-unique :
+  (route : NeutrinoScaleRoute) →
+  NeutrinoScaleRouteAdmissible route →
+  route ≡ nu-planck-electron-neutral
+neutrino-scale-route-unique nu-direct-planck-neutral ()
+neutrino-scale-route-unique nu-planck-higgs-neutral ()
+neutrino-scale-route-unique nu-planck-electron-neutral _ = refl
+neutrino-scale-route-unique nu-electron-neutral-only ()
+
+data NeutrinoKappaExponentCandidate : Set where
+  nu-kappa-boundary-slot : NeutrinoKappaExponentCandidate
+  nu-kappa-euler-slot    : NeutrinoKappaExponentCandidate
+  nu-kappa-degree-slot   : NeutrinoKappaExponentCandidate
+  nu-kappa-carrier-slot  : NeutrinoKappaExponentCandidate
+
+NeutrinoKappaExponentAdmissible : NeutrinoKappaExponentCandidate → Set
+NeutrinoKappaExponentAdmissible nu-kappa-boundary-slot = ⊥
+NeutrinoKappaExponentAdmissible nu-kappa-euler-slot    = ⊤
+NeutrinoKappaExponentAdmissible nu-kappa-degree-slot   = ⊥
+NeutrinoKappaExponentAdmissible nu-kappa-carrier-slot  = ⊥
+
+neutrino-kappa-exponent-unique :
+  (candidate : NeutrinoKappaExponentCandidate) →
+  NeutrinoKappaExponentAdmissible candidate →
+  candidate ≡ nu-kappa-euler-slot
+neutrino-kappa-exponent-unique nu-kappa-boundary-slot ()
+neutrino-kappa-exponent-unique nu-kappa-euler-slot _ = refl
+neutrino-kappa-exponent-unique nu-kappa-degree-slot ()
+neutrino-kappa-exponent-unique nu-kappa-carrier-slot ()
+
+data NeutrinoFermatExponentCandidate : Set where
+  nu-fermat-euler-slot   : NeutrinoFermatExponentCandidate
+  nu-fermat-degree-slot  : NeutrinoFermatExponentCandidate
+  nu-fermat-carrier-slot : NeutrinoFermatExponentCandidate
+  nu-fermat-neutral-slot : NeutrinoFermatExponentCandidate
+
+NeutrinoFermatExponentAdmissible : NeutrinoFermatExponentCandidate → Set
+NeutrinoFermatExponentAdmissible nu-fermat-euler-slot   = ⊥
+NeutrinoFermatExponentAdmissible nu-fermat-degree-slot  = ⊥
+NeutrinoFermatExponentAdmissible nu-fermat-carrier-slot = ⊤
+NeutrinoFermatExponentAdmissible nu-fermat-neutral-slot = ⊥
+
+neutrino-fermat-exponent-unique :
+  (candidate : NeutrinoFermatExponentCandidate) →
+  NeutrinoFermatExponentAdmissible candidate →
+  candidate ≡ nu-fermat-carrier-slot
+neutrino-fermat-exponent-unique nu-fermat-euler-slot ()
+neutrino-fermat-exponent-unique nu-fermat-degree-slot ()
+neutrino-fermat-exponent-unique nu-fermat-carrier-slot _ = refl
+neutrino-fermat-exponent-unique nu-fermat-neutral-slot ()
+
+data NeutrinoClosureExponentCandidate : Set where
+  nu-closure-degree-slot             : NeutrinoClosureExponentCandidate
+  nu-closure-carrier-slot            : NeutrinoClosureExponentCandidate
+  nu-closure-neutral-slot            : NeutrinoClosureExponentCandidate
+  nu-closure-edge-slot               : NeutrinoClosureExponentCandidate
+  nu-closure-carrier-generation-slot : NeutrinoClosureExponentCandidate
+
+NeutrinoClosureExponentAdmissible : NeutrinoClosureExponentCandidate → Set
+NeutrinoClosureExponentAdmissible nu-closure-degree-slot = ⊥
+NeutrinoClosureExponentAdmissible nu-closure-carrier-slot = ⊥
+NeutrinoClosureExponentAdmissible nu-closure-neutral-slot = ⊥
+NeutrinoClosureExponentAdmissible nu-closure-edge-slot = ⊥
+NeutrinoClosureExponentAdmissible nu-closure-carrier-generation-slot = ⊤
+
+neutrino-closure-exponent-unique :
+  (candidate : NeutrinoClosureExponentCandidate) →
+  NeutrinoClosureExponentAdmissible candidate →
+  candidate ≡ nu-closure-carrier-generation-slot
+neutrino-closure-exponent-unique nu-closure-degree-slot ()
+neutrino-closure-exponent-unique nu-closure-carrier-slot ()
+neutrino-closure-exponent-unique nu-closure-neutral-slot ()
+neutrino-closure-exponent-unique nu-closure-edge-slot ()
+neutrino-closure-exponent-unique nu-closure-carrier-generation-slot _ = refl
+
+neutrino-planck-electron-suppression-denominator : ℕ
+neutrino-planck-electron-suppression-denominator =
+  5 * (8 ^ 2) * (17 ^ 4) * (137 ^ 7)
+
+theorem-neutrino-planck-electron-denominator :
+  neutrino-planck-electron-suppression-denominator ≡
+  24209712604567890429760
+theorem-neutrino-planck-electron-denominator = refl
+
+data NeutrinoRunningCorrectionCandidate : Set where
+  nu-no-running-correction  : NeutrinoRunningCorrectionCandidate
+  nu-loop-only-correction   : NeutrinoRunningCorrectionCandidate
+  nu-rg-only-correction     : NeutrinoRunningCorrectionCandidate
+  nu-degree-rg-loop         : NeutrinoRunningCorrectionCandidate
+  nu-volume-loop-correction : NeutrinoRunningCorrectionCandidate
+
+NeutrinoRunningCorrectionAdmissible :
+  NeutrinoRunningCorrectionCandidate → Set
+NeutrinoRunningCorrectionAdmissible nu-no-running-correction = ⊥
+NeutrinoRunningCorrectionAdmissible nu-loop-only-correction = ⊥
+NeutrinoRunningCorrectionAdmissible nu-rg-only-correction = ⊥
+NeutrinoRunningCorrectionAdmissible nu-degree-rg-loop = ⊤
+NeutrinoRunningCorrectionAdmissible nu-volume-loop-correction = ⊥
+
+neutrino-running-correction-unique :
+  (candidate : NeutrinoRunningCorrectionCandidate) →
+  NeutrinoRunningCorrectionAdmissible candidate →
+  candidate ≡ nu-degree-rg-loop
+neutrino-running-correction-unique nu-no-running-correction ()
+neutrino-running-correction-unique nu-loop-only-correction ()
+neutrino-running-correction-unique nu-rg-only-correction ()
+neutrino-running-correction-unique nu-degree-rg-loop _ = refl
+neutrino-running-correction-unique nu-volume-loop-correction ()
+
+neutrino-running-denominator : ℕ
+neutrino-running-denominator = 3 * 274
+
+neutrino-running-numerator : ℕ
+neutrino-running-numerator = 3 * 274 + 11
+
+theorem-neutrino-running-denominator : neutrino-running-denominator ≡ 822
+theorem-neutrino-running-denominator = refl
+
+theorem-neutrino-running-numerator : neutrino-running-numerator ≡ 833
+theorem-neutrino-running-numerator = refl
+
+data NeutrinoTowerActionCandidate : Set where
+  nu-no-tower-action           : NeutrinoTowerActionCandidate
+  nu-positive-face-only-action : NeutrinoTowerActionCandidate
+  nu-negative-face-only-action : NeutrinoTowerActionCandidate
+  nu-unordered-full-action     : NeutrinoTowerActionCandidate
+  nu-sign-ordered-full-action  : NeutrinoTowerActionCandidate
+  nu-sector-named-action       : NeutrinoTowerActionCandidate
+
+NeutrinoTowerActionAdmissible : NeutrinoTowerActionCandidate → Set
+NeutrinoTowerActionAdmissible nu-no-tower-action = ⊥
+NeutrinoTowerActionAdmissible nu-positive-face-only-action = ⊥
+NeutrinoTowerActionAdmissible nu-negative-face-only-action = ⊥
+NeutrinoTowerActionAdmissible nu-unordered-full-action = ⊥
+NeutrinoTowerActionAdmissible nu-sign-ordered-full-action = ⊤
+NeutrinoTowerActionAdmissible nu-sector-named-action = ⊥
+
+neutrino-tower-action-unique :
+  (candidate : NeutrinoTowerActionCandidate) →
+  NeutrinoTowerActionAdmissible candidate →
+  candidate ≡ nu-sign-ordered-full-action
+neutrino-tower-action-unique nu-no-tower-action ()
+neutrino-tower-action-unique nu-positive-face-only-action ()
+neutrino-tower-action-unique nu-negative-face-only-action ()
+neutrino-tower-action-unique nu-unordered-full-action ()
+neutrino-tower-action-unique nu-sign-ordered-full-action _ = refl
+neutrino-tower-action-unique nu-sector-named-action ()
+
+neutrino-tower-boundary-denominator : ℕ
+neutrino-tower-boundary-denominator = 137 ^ 2
+
+neutrino-tower-mass-denominator : ℕ
+neutrino-tower-mass-denominator = 8 * 3 * (137 ^ 2)
+
+neutrino-tower-degree-denominator : ℕ
+neutrino-tower-degree-denominator = 8 * (137 ^ 2)
+
+neutrino-tower-coupling-denominator : ℕ
+neutrino-tower-coupling-denominator = (8 ^ 2) * (137 ^ 2)
+
+neutrino-tower-coupling-numerator : ℕ
+neutrino-tower-coupling-numerator = (11 + 2) ^ 2
+
+theorem-neutrino-tower-boundary-denominator :
+  neutrino-tower-boundary-denominator ≡ 18769
+theorem-neutrino-tower-boundary-denominator = refl
+
+theorem-neutrino-tower-mass-denominator :
+  neutrino-tower-mass-denominator ≡ 450456
+theorem-neutrino-tower-mass-denominator = refl
+
+theorem-neutrino-tower-degree-denominator :
+  neutrino-tower-degree-denominator ≡ 150152
+theorem-neutrino-tower-degree-denominator = refl
+
+theorem-neutrino-tower-coupling-denominator :
+  neutrino-tower-coupling-denominator ≡ 1201216
+theorem-neutrino-tower-coupling-denominator = refl
+
+theorem-neutrino-tower-coupling-numerator :
+  neutrino-tower-coupling-numerator ≡ 169
+theorem-neutrino-tower-coupling-numerator = refl
+
+neutrino-tower-factor-numerator : ℕ
+neutrino-tower-factor-numerator = 1524775277821401191187
+
+neutrino-tower-factor-denominator : ℕ
+neutrino-tower-factor-denominator = 1524915363442855784448
+
+data NeutrinoResidualCarrierCandidate : Set where
+  nu-uniform-scale-residual       : NeutrinoResidualCarrierCandidate
+  nu-matching-differential-weight : NeutrinoResidualCarrierCandidate
+  nu-coupling-complement-carrier  : NeutrinoResidualCarrierCandidate
+  nu-empirical-residual-patch     : NeutrinoResidualCarrierCandidate
+
+NeutrinoResidualCarrierAdmissible : NeutrinoResidualCarrierCandidate → Set
+NeutrinoResidualCarrierAdmissible nu-uniform-scale-residual = ⊥
+NeutrinoResidualCarrierAdmissible nu-matching-differential-weight = ⊥
+NeutrinoResidualCarrierAdmissible nu-coupling-complement-carrier = ⊤
+NeutrinoResidualCarrierAdmissible nu-empirical-residual-patch = ⊥
+
+neutrino-residual-carrier-unique :
+  (candidate : NeutrinoResidualCarrierCandidate) →
+  NeutrinoResidualCarrierAdmissible candidate →
+  candidate ≡ nu-coupling-complement-carrier
+neutrino-residual-carrier-unique nu-uniform-scale-residual ()
+neutrino-residual-carrier-unique nu-matching-differential-weight ()
+neutrino-residual-carrier-unique nu-coupling-complement-carrier _ = refl
+neutrino-residual-carrier-unique nu-empirical-residual-patch ()
+
+neutrino-coupling-total-denominator : ℕ
+neutrino-coupling-total-denominator = 306
+
+neutrino-coupling-loop-numerator : ℕ
+neutrino-coupling-loop-numerator = 11
+
+neutrino-coupling-complement : ℕ
+neutrino-coupling-complement =
+  neutrino-coupling-total-denominator ∸ neutrino-coupling-loop-numerator
+
+theorem-neutrino-coupling-complement :
+  neutrino-coupling-complement ≡ 295
+theorem-neutrino-coupling-complement = refl
+
+neutrino-effective-separator-numerator : ℕ
+neutrino-effective-separator-numerator = 6 * neutrino-coupling-complement
+
+theorem-neutrino-effective-separator-numerator :
+  neutrino-effective-separator-numerator ≡ 1770
+theorem-neutrino-effective-separator-numerator = refl
+
+record NeutrinoPlanckTowerChain : Set where
+  field
+    route-survivor               : NeutrinoScaleRoute
+    kappa-exponent-survivor      : NeutrinoKappaExponentCandidate
+    fermat-exponent-survivor     : NeutrinoFermatExponentCandidate
+    closure-exponent-survivor    : NeutrinoClosureExponentCandidate
+    running-survivor             : NeutrinoRunningCorrectionCandidate
+    tower-action-survivor        : NeutrinoTowerActionCandidate
+    residual-carrier-survivor    : NeutrinoResidualCarrierCandidate
+    bridge-denominator           : ℕ
+    running-numerator            : ℕ
+    running-denominator          : ℕ
+    tower-boundary-positive-num  : ℕ
+    tower-boundary-positive-den  : ℕ
+    tower-mass-positive-num      : ℕ
+    tower-mass-positive-den      : ℕ
+    tower-degree-negative-num    : ℕ
+    tower-degree-negative-den    : ℕ
+    tower-coupling-negative-num  : ℕ
+    tower-coupling-negative-den  : ℕ
+    tower-factor-num             : ℕ
+    tower-factor-den             : ℕ
+    residual-carrier-num         : ℕ
+    residual-carrier-den         : ℕ
+    separator-num                : ℕ
+    separator-den                : ℕ
+    final-lightest-ratio         : NeutrinoPlanckRatio
+    final-middle-ratio           : NeutrinoPlanckRatio
+    final-heaviest-ratio         : NeutrinoPlanckRatio
+    final-sum-ratio              : NeutrinoPlanckRatio
+    arithmetic-level             : ClaimLevel
+    ev-readout-level             : ClaimLevel
+    comparison-level             : ClaimLevel
+    route-is-planck-electron     :
+      route-survivor ≡ nu-planck-electron-neutral
+    kappa-is-euler               : kappa-exponent-survivor ≡ nu-kappa-euler-slot
+    fermat-is-carrier            :
+      fermat-exponent-survivor ≡ nu-fermat-carrier-slot
+    closure-is-carrier-generation :
+      closure-exponent-survivor ≡ nu-closure-carrier-generation-slot
+    running-is-degree-rg-loop    : running-survivor ≡ nu-degree-rg-loop
+    tower-action-is-sign-ordered :
+      tower-action-survivor ≡ nu-sign-ordered-full-action
+    residual-carrier-is-complement :
+      residual-carrier-survivor ≡ nu-coupling-complement-carrier
+    bridge-denominator-locked    :
+      bridge-denominator ≡ 24209712604567890429760
+    running-numerator-locked     : running-numerator ≡ 833
+    running-denominator-locked   : running-denominator ≡ 822
+    tower-boundary-num-locked    : tower-boundary-positive-num ≡ 2
+    tower-boundary-den-locked    : tower-boundary-positive-den ≡ 18769
+    tower-mass-num-locked        : tower-mass-positive-num ≡ 1
+    tower-mass-den-locked        : tower-mass-positive-den ≡ 450456
+    tower-degree-num-locked      : tower-degree-negative-num ≡ 9
+    tower-degree-den-locked      : tower-degree-negative-den ≡ 150152
+    tower-coupling-num-locked    : tower-coupling-negative-num ≡ 169
+    tower-coupling-den-locked    : tower-coupling-negative-den ≡ 1201216
+    tower-factor-num-locked      :
+      tower-factor-num ≡ 1524775277821401191187
+    tower-factor-den-locked      :
+      tower-factor-den ≡ 1524915363442855784448
+    residual-carrier-num-locked  : residual-carrier-num ≡ 295
+    residual-carrier-den-locked  : residual-carrier-den ≡ 306
+    separator-num-locked         : separator-num ≡ 1770
+    separator-den-locked         : separator-den ≡ 306
+    final-middle-numerator-locked :
+      NeutrinoPlanckRatio.nu-planck-numerator final-middle-ratio
+        ≡ 388662168766119520831183926
+    final-heaviest-numerator-locked :
+      NeutrinoPlanckRatio.nu-planck-numerator final-heaviest-ratio
+        ≡ 1270137806425227192258771
+    arithmetic-is-forced        : arithmetic-level ≡ forced-ledger
+    ev-readout-is-physical      : ev-readout-level ≡ physical-identification
+    comparison-is-experimental  : comparison-level ≡ experimental-test
+
+theorem-neutrino-planck-tower-chain : NeutrinoPlanckTowerChain
+theorem-neutrino-planck-tower-chain = record
+  { route-survivor                = nu-planck-electron-neutral
+  ; kappa-exponent-survivor       = nu-kappa-euler-slot
+  ; fermat-exponent-survivor      = nu-fermat-carrier-slot
+  ; closure-exponent-survivor     = nu-closure-carrier-generation-slot
+  ; running-survivor              = nu-degree-rg-loop
+  ; tower-action-survivor         = nu-sign-ordered-full-action
+  ; residual-carrier-survivor     = nu-coupling-complement-carrier
+  ; bridge-denominator            = neutrino-planck-electron-suppression-denominator
+  ; running-numerator             = neutrino-running-numerator
+  ; running-denominator           = neutrino-running-denominator
+  ; tower-boundary-positive-num   = 2
+  ; tower-boundary-positive-den   = neutrino-tower-boundary-denominator
+  ; tower-mass-positive-num       = 1
+  ; tower-mass-positive-den       = neutrino-tower-mass-denominator
+  ; tower-degree-negative-num     = 9
+  ; tower-degree-negative-den     = neutrino-tower-degree-denominator
+  ; tower-coupling-negative-num   = neutrino-tower-coupling-numerator
+  ; tower-coupling-negative-den   = neutrino-tower-coupling-denominator
+  ; tower-factor-num              = neutrino-tower-factor-numerator
+  ; tower-factor-den              = neutrino-tower-factor-denominator
+  ; residual-carrier-num          = neutrino-coupling-complement
+  ; residual-carrier-den          = neutrino-coupling-total-denominator
+  ; separator-num                 = neutrino-effective-separator-numerator
+  ; separator-den                 = neutrino-coupling-total-denominator
+  ; final-lightest-ratio          = final-neutrino-lightest-planck-ratio
+  ; final-middle-ratio            = final-neutrino-middle-planck-ratio
+  ; final-heaviest-ratio          = final-neutrino-heaviest-planck-ratio
+  ; final-sum-ratio               = final-neutrino-sum-planck-ratio
+  ; arithmetic-level              = forced-ledger
+  ; ev-readout-level              = physical-identification
+  ; comparison-level              = experimental-test
+  ; route-is-planck-electron      = refl
+  ; kappa-is-euler                = refl
+  ; fermat-is-carrier             = refl
+  ; closure-is-carrier-generation = refl
+  ; running-is-degree-rg-loop     = refl
+  ; tower-action-is-sign-ordered  = refl
+  ; residual-carrier-is-complement = refl
+  ; bridge-denominator-locked     = theorem-neutrino-planck-electron-denominator
+  ; running-numerator-locked      = theorem-neutrino-running-numerator
+  ; running-denominator-locked    = theorem-neutrino-running-denominator
+  ; tower-boundary-num-locked     = refl
+  ; tower-boundary-den-locked     = theorem-neutrino-tower-boundary-denominator
+  ; tower-mass-num-locked         = refl
+  ; tower-mass-den-locked         = theorem-neutrino-tower-mass-denominator
+  ; tower-degree-num-locked       = refl
+  ; tower-degree-den-locked       = theorem-neutrino-tower-degree-denominator
+  ; tower-coupling-num-locked     = theorem-neutrino-tower-coupling-numerator
+  ; tower-coupling-den-locked     = theorem-neutrino-tower-coupling-denominator
+  ; tower-factor-num-locked       = refl
+  ; tower-factor-den-locked       = refl
+  ; residual-carrier-num-locked   = theorem-neutrino-coupling-complement
+  ; residual-carrier-den-locked   = refl
+  ; separator-num-locked          = theorem-neutrino-effective-separator-numerator
+  ; separator-den-locked          = refl
+  ; final-middle-numerator-locked = refl
+  ; final-heaviest-numerator-locked = refl
+  ; arithmetic-is-forced          = refl
+  ; ev-readout-is-physical        = refl
+  ; comparison-is-experimental    = refl }
+
+record NeutrinoPlanckRatioPrediction : Set where
+  field
+    depth-kernel                 : NeutrinoSeesawPrediction
+    tower-chain                  : NeutrinoPlanckTowerChain
+    residual-carrier-numerator   : ℕ
+    residual-carrier-denominator : ℕ
+    effective-separator-numerator : ℕ
+    effective-separator-denominator : ℕ
+    lightest-ratio               : NeutrinoPlanckRatio
+    middle-ratio                 : NeutrinoPlanckRatio
+    heaviest-ratio               : NeutrinoPlanckRatio
+    sum-ratio                    : NeutrinoPlanckRatio
+    ratio-skeleton-level         : ClaimLevel
+    ev-readout-level             : ClaimLevel
+    comparison-level             : ClaimLevel
+    residual-carrier-is-295      : residual-carrier-numerator ≡ 295
+    residual-carrier-den-is-306  : residual-carrier-denominator ≡ 306
+    separator-num-is-1770        : effective-separator-numerator ≡ 1770
+    separator-den-is-306         : effective-separator-denominator ≡ 306
+    lightest-numerator-is-zero   :
+      NeutrinoPlanckRatio.nu-planck-numerator lightest-ratio ≡ 0
+    middle-numerator-locked      :
+      NeutrinoPlanckRatio.nu-planck-numerator middle-ratio
+        ≡ 388662168766119520831183926
+    middle-denominator-locked    :
+      NeutrinoPlanckRatio.nu-planck-denominator middle-ratio
+        ≡ 552461668319475518343179050761041844482566504764565094400
+    heaviest-numerator-locked    :
+      NeutrinoPlanckRatio.nu-planck-numerator heaviest-ratio
+        ≡ 1270137806425227192258771
+    heaviest-denominator-locked  :
+      NeutrinoPlanckRatio.nu-planck-denominator heaviest-ratio
+        ≡ 312125236338686733527219802689854149425178816251166720
+    sum-numerator-locked         :
+      NeutrinoPlanckRatio.nu-planck-numerator sum-ratio
+        ≡ 2636806086138771651129208596
+    sum-denominator-locked       :
+      NeutrinoPlanckRatio.nu-planck-denominator sum-ratio
+        ≡ 552461668319475518343179050761041844482566504764565094400
+    ratio-skeleton-is-forced     : ratio-skeleton-level ≡ forced-ledger
+    ev-readout-is-physical       : ev-readout-level ≡ physical-identification
+    comparison-is-test           : comparison-level ≡ experimental-test
+
+theorem-neutrino-planck-ratio-prediction : NeutrinoPlanckRatioPrediction
+theorem-neutrino-planck-ratio-prediction = record
+  { depth-kernel                  = theorem-neutrino-seesaw
+  ; tower-chain                   = theorem-neutrino-planck-tower-chain
+  ; residual-carrier-numerator    = 295
+  ; residual-carrier-denominator  = 306
+  ; effective-separator-numerator = 1770
+  ; effective-separator-denominator = 306
+  ; lightest-ratio                = final-neutrino-lightest-planck-ratio
+  ; middle-ratio                  = final-neutrino-middle-planck-ratio
+  ; heaviest-ratio                = final-neutrino-heaviest-planck-ratio
+  ; sum-ratio                     = final-neutrino-sum-planck-ratio
+  ; ratio-skeleton-level          = forced-ledger
+  ; ev-readout-level              = physical-identification
+  ; comparison-level              = experimental-test
+  ; residual-carrier-is-295       = refl
+  ; residual-carrier-den-is-306   = refl
+  ; separator-num-is-1770         = refl
+  ; separator-den-is-306          = refl
+  ; lightest-numerator-is-zero    = refl
+  ; middle-numerator-locked       = refl
+  ; middle-denominator-locked     = refl
+  ; heaviest-numerator-locked     = refl
+  ; heaviest-denominator-locked   = refl
+  ; sum-numerator-locked          = refl
+  ; sum-denominator-locked        = refl
+  ; ratio-skeleton-is-forced      = refl
+  ; ev-readout-is-physical        = refl
+  ; comparison-is-test            = refl }
 \end{code}
 
 \subsubsection*{Gravitational Wave Polarizations}
@@ -12257,6 +13033,10 @@ record FrontierPredictionRegister : Set where
   field
     -- $ Neutrino: loop depth 5, seesaw denominator 25
     neutrino-seesaw   : NeutrinoSeesawPrediction
+    -- $ Neutrino: route, exponents, running, tower and residual carrier
+    neutrino-planck-tower : NeutrinoPlanckTowerChain
+    -- $ Neutrino: residual-corrected Planck ratios
+    neutrino-planck-ratio : NeutrinoPlanckRatioPrediction
     -- $ GW: exactly 2 polarizations (no scalar/vector modes)
     gw-two-modes      : gw-polarizations ≡ 2
     -- $ Planck curvature: R = 12
@@ -12272,6 +13052,8 @@ record FrontierPredictionRegister : Set where
 theorem-frontier-predictions : FrontierPredictionRegister
 theorem-frontier-predictions = record
   { neutrino-seesaw   = theorem-neutrino-seesaw
+  ; neutrino-planck-tower = theorem-neutrino-planck-tower-chain
+  ; neutrino-planck-ratio = theorem-neutrino-planck-ratio-prediction
   ; gw-two-modes      = refl
   ; planck-R-12       = refl
   ; bh-area-law       = theorem-bekenstein-area-connection
@@ -12284,23 +13066,37 @@ theorem-frontier-predictions = record
 record FrontierFormulaClassificationLedger : Set where
   field
     neutrino-structure-level : ClaimLevel
+    neutrino-planck-tower-level : ClaimLevel
+    neutrino-planck-ratio-level : ClaimLevel
     neutrino-absolute-level  : ClaimLevel
     frontier-register-level  : ClaimLevel
     neutrino-structure-is-forced : neutrino-structure-level ≡ forced-ledger
+    neutrino-planck-tower-is-forced :
+      neutrino-planck-tower-level ≡ forced-ledger
+    neutrino-planck-ratio-is-forced :
+      neutrino-planck-ratio-level ≡ forced-ledger
     neutrino-absolute-is-physical : neutrino-absolute-level ≡ physical-identification
     frontier-register-is-test : frontier-register-level ≡ experimental-test
     neutrino-structure-checked : NeutrinoSeesawPrediction
+    neutrino-planck-tower-checked : NeutrinoPlanckTowerChain
+    neutrino-planck-ratio-checked : NeutrinoPlanckRatioPrediction
     frontier-register-checked : FrontierPredictionRegister
 
 theorem-frontier-formula-classification : FrontierFormulaClassificationLedger
 theorem-frontier-formula-classification = record
   { neutrino-structure-level = forced-ledger
+  ; neutrino-planck-tower-level = forced-ledger
+  ; neutrino-planck-ratio-level = forced-ledger
   ; neutrino-absolute-level = physical-identification
   ; frontier-register-level = experimental-test
   ; neutrino-structure-is-forced = refl
+  ; neutrino-planck-tower-is-forced = refl
+  ; neutrino-planck-ratio-is-forced = refl
   ; neutrino-absolute-is-physical = refl
   ; frontier-register-is-test = refl
   ; neutrino-structure-checked = theorem-neutrino-seesaw
+  ; neutrino-planck-tower-checked = theorem-neutrino-planck-tower-chain
+  ; neutrino-planck-ratio-checked = theorem-neutrino-planck-ratio-prediction
   ; frontier-register-checked = theorem-frontier-predictions }
 \end{code}
 
@@ -12312,7 +13108,13 @@ The predictions separate into two testability scales, each with a distinct exper
 
 \textbf{Planck scale.} The discrete curvature $R = 12$ is the framework's most radical prediction. At macroscopic scales, the continuum limit washes out the discrete structure. At the Planck scale, the discreteness should be visible. The horizon claim at the same frontier is not a factor-$2$ entropy excess; it is the survival of the $K_4$ area-law normalisation together with quotienting of labelled boundary data. Future quantum gravity experiments---tabletop gravity measurements at sub-millimeter scales, gravitational decoherence searches, or black hole spectroscopy---could probe this regime.
 
-Between these two scales sits particle physics, where the correction chain (Chapter~\ref{ch:correction-chain}) has already been tested to sub-$\sigma$ precision for five observables. The neutrino seesaw prediction at loop depth 5 is the next particle-physics test, accessible to DUNE, JUNO, and Hyper-Kamiokande within the coming decade.
+Between these two scales sits particle physics, where the correction chain
+(Chapter~\ref{ch:correction-chain}) has already been tested to sub-$\sigma$
+precision for five observables.  The neutrino sector is now sharper than the
+bare seesaw-depth statement: the depth-$5$ kernel is the entry point, and the
+residual-corrected Planck-ratio prediction is the exposed particle-physics
+test.  DUNE, JUNO, Hyper-Kamiokande, KATRIN and cosmological surveys all bear
+on different parts of that same readout.
 
 \begin{code}
 -- $ Two-scale testability — the framework's experimental footprint.
@@ -12330,6 +13132,8 @@ record TwoScaleTestability : Set where
     particle-alpha     : simplex-eval ≡ 137
     particle-proton    : proton-mass-formula ≡ 1836
     particle-seesaw    : NeutrinoSeesawPrediction
+    particle-neutrino-tower : NeutrinoPlanckTowerChain
+    particle-neutrino-planck : NeutrinoPlanckRatioPrediction
 
 theorem-two-scale-testability : TwoScaleTestability
 theorem-two-scale-testability = record
@@ -12340,7 +13144,9 @@ theorem-two-scale-testability = record
   ; planck-boundary-quotient = boundary-orbit-ledger
   ; particle-alpha     = refl
   ; particle-proton    = refl
-  ; particle-seesaw    = theorem-neutrino-seesaw }
+  ; particle-seesaw    = theorem-neutrino-seesaw
+  ; particle-neutrino-tower = theorem-neutrino-planck-tower-chain
+  ; particle-neutrino-planck = theorem-neutrino-planck-ratio-prediction }
 \end{code}
 
 The framework is falsifiable. It makes no adjustable parameters. It stands or falls on observation.

@@ -170,6 +170,7 @@ jobs:
             echo "agda --safe --without-K VoidTopos.lagda.tex"
             echo "agda --safe --without-K Void.lagda.tex"
             echo "agda --safe --without-K Form.lagda.tex"
+            echo "agda --safe --without-K FormNeutrinoMasses.lagda.tex"
             echo "\`\`\`"
           } > CHANGELOG.md
 

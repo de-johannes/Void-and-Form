@@ -105,6 +105,8 @@ The repository has several literate sources because the project has several laye
 
 4. [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf) is the interpretive volume. It reads the formal ledger structurally and physically. Its identifications are proposed readings over the checked kernel and belong to the interpretive layer.
 
+5. [FormNeutrinoMasses.lagda.tex](FormNeutrinoMasses.lagda.tex) / [PDF](latex/FormNeutrinoMasses.pdf) is the focused neutrino paper. It records the checked rational chain from neutral depth through the Planck bridge, correction tower, residual carrier, and final normal-hierarchy readout.
+
 A first inspection should begin with the companion. The full book is intentionally large; the companion gives the shortest route to the hinge on which the rest depends.
 
 ## How To Read The Claims
@@ -138,6 +140,7 @@ agda VoidCompanion.lagda.tex
 agda VoidTopos.lagda.tex
 agda Void.lagda.tex
 agda Form.lagda.tex
+agda FormNeutrinoMasses.lagda.tex
 ```
 
 To regenerate a PDF, run `agda --latex` on the corresponding literate source and then run XeLaTeX twice in [latex/](latex/) for the generated `.tex` file.
@@ -281,6 +284,7 @@ The project keeps those two modes of accountability separate.
 - [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf): full formal development.
 - [VoidTopos.lagda.tex](VoidTopos.lagda.tex) / [PDF](latex/VoidTopos.pdf): categorical obstruction, completion, and classification route.
 - [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf): interpretive volume and empirical exposure of later readings.
+- [FormNeutrinoMasses.lagda.tex](FormNeutrinoMasses.lagda.tex) / [PDF](latex/FormNeutrinoMasses.pdf): focused neutrino paper from neutral depth to Planck-ratio normal hierarchy.
 - [latex/](latex/): generated LaTeX/PDF output.
 - [LICENSE](LICENSE): license terms.
 
