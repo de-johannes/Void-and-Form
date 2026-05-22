@@ -166,11 +166,9 @@ jobs:
             echo ""
             echo "**Verify locally:**"
             echo "\`\`\`sh"
-            echo "agda --safe --without-K VoidCompanion.lagda.tex"
-            echo "agda --safe --without-K VoidTopos.lagda.tex"
-            echo "agda --safe --without-K Void.lagda.tex"
-            echo "agda --safe --without-K Form.lagda.tex"
-            echo "agda --safe --without-K FormNeutrinoMasses.lagda.tex"
+            echo "find . -type f -name '*.lagda.tex' -not -path './latex/*' | sort | while IFS= read -r file; do"
+            echo "  agda --safe --without-K \"\$file\""
+            echo "done"
             echo "\`\`\`"
           } > CHANGELOG.md
 

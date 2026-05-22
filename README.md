@@ -95,17 +95,13 @@ The geometry becomes legible after this route is visible: first the four cases a
 
 ## The Volumes
 
-The repository has several literate sources because the project has several layers.
+The repository has three primary literate sources.
 
 1. [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) / [PDF](latex/VoidCompanion.pdf) is the intended first reading. It gives the compact licensing problem, the `Distinction` record, the normal-form theorem, the endomorphism classification, the closure contract, and the return to the originating datum.
 
 2. [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf) is the full book-length development. It rebuilds the internal equality infrastructure, develops the distinction kernel, continues through arithmetic and rational structure, and carries later invariant machinery inside the same literate Agda file.
 
-3. [VoidTopos.lagda.tex](VoidTopos.lagda.tex) / [PDF](latex/VoidTopos.pdf) follows the categorical route. It treats distinction-induced readings, the raw obstruction, quotient and skeleton completion, and the displayed set-like burden that arises from the route.
-
-4. [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf) is the interpretive volume. It reads the formal ledger structurally and physically. Its identifications are proposed readings over the checked kernel and belong to the interpretive layer.
-
-5. [FormNeutrinoMasses.lagda.tex](FormNeutrinoMasses.lagda.tex) / [PDF](latex/FormNeutrinoMasses.pdf) is the focused neutrino paper. It records the checked rational chain from neutral depth through the Planck bridge, correction tower, residual carrier, and final normal-hierarchy readout.
+3. [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf) is the interpretive volume. It reads the formal ledger structurally and physically. Its identifications are proposed readings over the checked kernel and belong to the interpretive layer.
 
 A first inspection should begin with the companion. The full book is intentionally large; the companion gives the shortest route to the hinge on which the rest depends.
 
@@ -137,10 +133,8 @@ The main type checks are:
 
 ```sh
 agda VoidCompanion.lagda.tex
-agda VoidTopos.lagda.tex
 agda Void.lagda.tex
 agda Form.lagda.tex
-agda FormNeutrinoMasses.lagda.tex
 ```
 
 To regenerate a PDF, run `agda --latex` on the corresponding literate source and then run XeLaTeX twice in [latex/](latex/) for the generated `.tex` file.
@@ -282,9 +276,7 @@ The project keeps those two modes of accountability separate.
 
 - [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) / [PDF](latex/VoidCompanion.pdf): compact companion and first inspection point.
 - [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf): full formal development.
-- [VoidTopos.lagda.tex](VoidTopos.lagda.tex) / [PDF](latex/VoidTopos.pdf): categorical obstruction, completion, and classification route.
 - [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf): interpretive volume and empirical exposure of later readings.
-- [FormNeutrinoMasses.lagda.tex](FormNeutrinoMasses.lagda.tex) / [PDF](latex/FormNeutrinoMasses.pdf): focused neutrino paper from neutral depth to Planck-ratio normal hierarchy.
 - [latex/](latex/): generated LaTeX/PDF output.
 - [LICENSE](LICENSE): license terms.
 
