@@ -251,7 +251,7 @@
 \centering
 \vspace*{3cm}
 {\Huge\bfseries Void}\\[0.5cm]
-{\Large\itshape Conditions of Formulability}\\[0.4cm]
+{\Large\itshape After A Successful Distinction}\\[0.4cm]
 {\large A Formal Kernel for a Theory of Formulability}\\[2cm]
 {\large Johannes Michael Wielsch}\\[4cm]
 \begin{tikzpicture}[scale=2]
@@ -264,7 +264,7 @@
 {\small Built with AI}\\
 {\small Machine-verified in Agda}\\
 \vfill
-{\small May 2026}\\
+{\small June 2026}\\
 {\small DOI: 10.5281/zenodo.19491035}\\[0.5cm]
 \end{titlepage}
 
@@ -282,74 +282,37 @@
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-This volume begins earlier than its first theorem.  It begins from
-pressure: the pressure of the question of origin, the pressure of
-description on what it already presupposes, and the pressure on any
-formal system that claims to have two positions available inside it.
 \emph{Void} does not name an object from which the world is derived.  It
-names the pre-formal boundary at which the question has become sharp, but
-has not yet received a carrier.
+names the pre-formal boundary at which the question of distinction has
+become sharp, but no displayed carrier has yet been supplied.
 
-The first formal answer is therefore not \emph{Void} itself.  It is the
-record \texttt{Distinction}: a carrier, two boundary positions, a
-separation witness, and a cover.  The witness is anti-collapse data.  The
-cover is anti-surplus data.  Together they make explicit what a system
-must carry if its claim to two is to mean two rather than one position
-named twice or a larger field with residue left unaccounted.
+The first formal answer is the record \texttt{Distinction}: a carrier, two
+boundary positions, a separation witness, and a cover.  From that record
+onward, the route is checked.  Agda verifies the normal form, the
+endomorphism classification, the closure contract, and the dependency back
+to the originating datum.  Later arithmetic, categorical, spectral, and
+interpretive layers are downstream of this threshold.
 
-From that point onward the route is checked.  Agda verifies that every
-distinction has normal form \texttt{Two}, that its endomorphism space has
-exactly four cases up to the displayed equivalence, that the stated
-representation contract closes as $K_4$, and that the closure returns to
-the originating datum.  Later arithmetic, categorical, spectral, and
-interpretive layers are downstream of this threshold.  They do not serve
-as evidence for it.
-
-What this book proposes is not a theorem called ``formulability'' but an
-architectural reading of a checked chain.  The pre-formal pressure is not
-an Agda theorem.  The record is.  The closure route is.  The larger claim
-stands or falls with the visible order of those layers.
+The pre-formal pressure is not an Agda theorem.  The record is.  The
+closure route is.  The larger claim stands or falls with the visible order
+of those layers.
 
 \chapter*{Opening}
 \addcontentsline{toc}{chapter}{Opening}
 
-Why is there anything at all, rather than nothing?
+Why is there anything at all, rather than nothing?  The question already
+presupposes a separation: \emph{something} and \emph{nothing} must be in
+force as different possibilities.  The question of origin therefore leads
+to a more general question: under what conditions is distinction possible
+at all?
 
-Since Leibniz, that question has accompanied every inquiry into origin. In
-modern cosmology it appears again: the closer the description of the
-universe moves toward its beginning, the more clearly a limit comes into
-view. That limit is often read as a consequence of missing data. Yet the
-question of origin may touch a deeper level.
-
-And here a remarkable structure shows itself. The very formulation of the
-question already presupposes a separation. \emph{Something} and
-\emph{nothing} appear as distinguishable possibilities. A nothing that
-cannot be distinguished from something cannot be asserted as nothing at all.
-The pressure of the question thus already produces the distinction to which
-it points. The question of origin therefore leads immediately to the more
-general question of how distinction becomes possible at all.
-
-Spencer Brown observed that every description begins with a distinction
-drawn. Wheeler suspected that information is not posterior to the physical
-world but prior to it. Both thoughts direct attention to the conditions
-under which anything can be described, observed, or known at all.
-
-This volume follows that trail and carries it further into a larger formal
-kernel. Its starting conjecture is that every piece of information rests on
-a distinction successfully carried out. Before anything can be measured,
-classified, or explained, a difference must be brought forth and held
-stable. The question of origin therefore leads not only toward physics, but
-also toward the minimal performances that must already have been achieved if
-information is to arise at all.
-
-At the center of the inquiry, then, stands not an object but a process. The
-guiding question is this: what minimal structure must be in place so that a
-distinction does not collapse, remains complete, and allows stable
-information to emerge from it? The formal core appears not as the starting
-point of the inquiry, but as its first exact trace. From there the book
-moves deeper into a larger checked chain and later back toward origin,
-description, and the open question of what the world may already be forced
-to read.
+This volume follows that question into a formal kernel.  Its working
+conjecture is that every piece of information rests on a distinction
+successfully carried out.  Before anything can be measured, classified, or
+explained, a difference must be brought forth and held stable.  The guiding
+question is: what minimal structure must be in place so that a distinction
+does not collapse, remains complete, and allows stable information to
+emerge from it?
 
 \tableofcontents
 
@@ -357,375 +320,238 @@ to read.
 \part*{The First Threshold}
 \addcontentsline{toc}{part}{The First Threshold}
 
-\chapter{The Question of Origin}
+\chapter{Why Distinction?}
 \label{ch:origin-question}
 
 \epigraph{``Why is there something rather than nothing? For nothing is
 simpler and easier than something.''}{Gottfried Wilhelm Leibniz}
 
-In 1714 Leibniz gave the question of origin its sharpest form: why is there
-something rather than nothing? Its sharpness lies in a simple observation.
-Nothing, Leibniz remarks, is simpler and easier than something. If the
-world could just as well have been empty, then precisely its not being
-empty demands an account.
+The question of origin, determination, physics, and information approach
+the matter from four different sides.  Each leads to the same condition:
+determination presupposes successful distinction.
 
-No measurement answers this question. One can trace the history of the
+\section{The Question of Origin}
+
+In 1714 Leibniz formulated the question of origin in a form that remains
+sharp: why is there something rather than nothing?  Nothing, Leibniz says,
+is simpler and easier than something.  If the world could just as well have
+been empty, then precisely its not being empty calls for an account.
+
+No measurement answers this question.  One can trace the history of the
 cosmos back to the first physically describable state and still leave open
-why there is a cosmos whose history can be traced at all. The question
-reaches beyond everything data alone can decide.
+why there is a cosmos whose history can be traced at all.
 
-But it already carries its own condition within itself. To ask between
+But the question carries one of its own conditions.  To ask between
 \emph{something} and \emph{nothing}, both must already be in force as
-different. A nothing that could not be distinguished from something could
-not appear as nothing. The question of origin therefore already presupposes
+different.  A nothing that could not be distinguished from something could
+not appear as nothing.  The question of origin therefore already presupposes
 a distinction it does not itself explain.
 
-That is why it leads immediately further. Not only: why is there something
-rather than nothing? But also: what must already hold for something to be
+That is why it leads further.  Not only: why is there something rather than
+nothing?  But also: what must already hold for something to be
 distinguishable from nothing at all?
 
-\chapter{What Every Determination Already Presupposes}
+\section{Determination}
 \label{ch:description}
 
-If the question of origin really hangs on a distinction, then the next
-question follows at once: does this hold only for that one question, or
-wherever something appears as this and not as that?
+The condition visible in the question of origin holds wherever something is
+determined as this and not as that.
 
-The suspicion can be sharpened at the simplest case.
+A mark is this mark and not the blank place on the page.  This sheet is
+this sheet and not that one.  One side is this side and not the other.
+Wherever something is determinate, something else is excluded.
 
-A mark is this mark and not the blank place on the page. This sheet is this
-sheet and not that one. One side is this side and not the other. Wherever
-something is determinate, something else is excluded.
+One cannot step behind holding-apart itself in search of a purer ground.
+Without this elementary difference there would be no determinate something.
+A sign that is not distinguished from what it refers to is no sign.  A mark
+that does not stand out from the sheet on which it stands is no mark.
 
-That is why one cannot retreat behind the holding-apart itself and hope to
-find a deeper, purer ground there. Without this elementary difference there
-would be only that nothing which cannot count as determinate. A sign that is
-not distinguished from what it refers to is no sign. A mark that does not
-stand out from the sheet on which it stands is no mark.
+If that is right, the point should show itself most clearly where
+determination has been driven furthest: in physics.
 
-This does not yet settle everything. But the suspicion suggests itself:
-what became visible in the question of origin may reach further than that
-one question. Wherever something appears as this and not as that, something
-may already have been set off from something else. What became visible in
-Leibniz through the contrast between something and nothing may therefore
-concern not only the question of origin.
-
-If that is so, it should show itself most clearly where this pressure has
-been driven furthest: in physics. Does physics encounter here only a limit
-of our knowledge, or a condition for anything to appear as different at
-all?
-
-\chapter{The Edge of the Picture}
+\section{The Physical Limit}
 \label{ch:edge}
-
-If that boundary is real, physics is where it should be hardest to
-ignore --- the place where the attempt has been driven furthest to grasp the
-beginning of the universe as a state of the world.
 
 Modern cosmology reconstructs the history of the universe backward.
 Galaxies move closer together, the universe becomes hotter and denser,
-atoms dissolve into plasma, nuclei break apart. This reconstruction is
-quantitative, tested, and in important regions extraordinarily precise.
-Yet it does not reach its first state. The closer physics comes to the
-beginning, the thinner the data become. Light does not reach us from before
-a certain point. Energies climb beyond everything an experiment can
-reproduce. Space and time cease to behave like magnitudes that could simply
-be carried further within the same physical theory.
+atoms dissolve into plasma, nuclei break apart.  This reconstruction is
+quantitative, tested, and in important regions very precise.  Yet it does
+not reach its first state.
 
-One can take this to be merely a lack of data. Perhaps, so the natural
-expectation goes, deeper measurements or a deeper theory will suffice. But
-this expectation already carries an assumption of its own: that better data
-will in the end also yield better answers about origin.
+The history of physics shows a recurring form.  Newton brought celestial
+mechanics and falling bodies under a common law, but presupposed space,
+time, and mass.  Maxwell bound electricity, magnetism, and light into a few
+equations, but presupposed charge and the continuum.  Einstein made
+gravitation into the geometry of spacetime, but took matter and coupling
+constants as given.  Quantum field theory yields the most precise
+predictions we have, but requires a symmetry group, a particle inventory,
+and constant parameters that it does not generate from itself.
 
-The history of physics speaks cautiously against that hope. Newton brought
-celestial mechanics and falling bodies under a common law, but presupposed
-space, time, and mass. Maxwell bound electricity, magnetism, and light into
-a few equations, but presupposed charge and the continuum in which it
-appears. Einstein made gravitation into the geometry of spacetime, but took
-matter and coupling constants as given. Quantum field theory yields the
-most precise predictions we have, but in turn requires a symmetry group, a
-particle inventory, and constant parameters that it does not generate from
-itself.
+Each theory explains more than its predecessors and yet works with
+quantities, inventories, or constants it does not produce from itself.
 
-This is not an accident of individual theories. It is a recurring form.
-Each theory reaches a point at which it explains more than its predecessors
-and yet must presuppose something it does not itself produce.
+Data are always data of something.  For them to be data at all, something
+must be distinguished from something else.  The beginning of the universe
+is not simply one more state within an already differentiated world.  It
+concerns the question of how such a world can come into force at all.
 
-The same result can be reached without this history. Data are always data of
-something: states, events, relations, measured values. For them to be data
-at all, something must be distinguished from something else. The beginning
-of the universe, however, is not simply one more state within an already
-differentiated world. It concerns the question of how such a world can come
-into force at all.
+Physics works with distinguishable states.  Remove that presupposition, and
+no measurement, no dynamics, no information, and no theory remain.  The
+question is therefore not only: which state was the first?  But: what must
+hold for states to be in force at all?
 
-The first moment is therefore not only an unsolved problem of physics. It
-marks the place where physics touches its own presupposition. Physics works
-with distinguishable states. Remove that difference, and no measurement, no
-dynamics, no information, and no theory remain.
-
-The question thereby turns around. Not: which state was the first? But:
-what must hold for states to be in force at all? As soon as this becomes
-visible, the issue is no longer only the universe. It is the condition
-under which anything can appear as different at all. The suspicion from the
-question of origin therefore returns here on physical ground.
-But if that is so, why does information itself depend on distinction?
-
-\chapter{Why Information Needs Distinction}
+\section{Information}
 \label{ch:distinction-information}
 
-Once the boundary is no longer read as a peculiarity of cosmology, the
-next question comes into view: why does information depend on distinction?
+Information presupposes distinction.  A measured value is this value only
+because it is not another.  A recorded bit is this bit only because a
+different outcome remains excluded.
 
-A measured value is this value only because it is not another. A recorded
-bit is this bit only because a different outcome remains excluded. The
-direction of the suspicion is visible here, though not yet complete.
+Spencer Brown places at the beginning of his calculus the drawn distinction.
+Wheeler reads physical reality as an answer to yes-or-no questions.  In
+both cases information hangs on retained difference.
 
-Spencer Brown placed at the beginning of his calculus an instruction: draw
-a distinction. Everything else grows from that single act. Wheeler
-formulated his suspicion from the other side: \emph{it from bit}. Whatever
-occurs physically depends on answers to yes-or-no questions, and thus on
-differences held in place.
+Every piece of information rests on a successful act of distinction.
+\emph{Successful} means: the difference must be stateable, it must not
+collapse at once, and it must be determinate enough to present itself again
+as the same.
 
-Set beside one another, the two thoughts sharpen the same suspicion. A
-distinction drawn and a bit recorded may be the same event read twice: once
-as an act, once as a retained difference. Then the step that appeared in
-Leibniz as the pressure of the question, and in physics as the limit of
-states, appears here once more in another language. If that is so, then
-without a difference held in place there would be no information.
+The question thus shifts from boundary to performance.  What must a
+distinction do if it is to carry information?  Can a difference be stated
+at all?  Does it hold?  And is a field of such differences complete, with
+neither less nor more?
 
-This book takes that as its working conjecture. Every piece of information
-rests on a successful act of distinction. The weight falls on
-\emph{successful}. A difference that disintegrates at once carries nothing.
-A difference that cannot stand out from neighboring possibilities carries
-nothing. For information to arise, a difference must be produced, secured
-against collapse, and held completely enough to present itself again as the
-same.
-
-The inquiry therefore shifts from boundary to performance. If information
-rests on a successful act of distinction, what must that act be able to do?
-What is asked now is the minimal performance itself: can a difference be
-stated at all? Does it not fall back at once into one? And can a field of
-such differences be held completely, with neither less nor more?
-
-\chapter{The First Demand: Distinguishability}
+\chapter{Conditions of Stable Distinction}
 \label{ch:distinguishability}
 
-The first demand is distinguishability. Before anything can be counted,
+The previous question asks after a performance, not a boundary.  The answer
+develops in three stages: a difference must be stateable, it must hold, and
+an entire field of such differences must stand exactly.  No one stage is
+enough by itself.
+
+\section{Distinguishability}
+
+The first demand is distinguishability.  Before anything can be counted,
 ordered, or measured, there must somewhere be a difference that can make
 itself count --- the mere availability of this rather than that.
 
-And one must see how little this deliberately is. It is not yet counting:
-nothing in it says how many positions there are, or that they appear in any
-fixed number at all. It is not yet structure: nothing says how the sides
-are arranged, or which is which. It is not even yet stability: nothing says
-that the difference, once stated, can be found again. It is only the raw
-availability of a contrast, this set against that, holding so long as it is
-attended to.
+This is deliberately little.  It is not yet counting, not yet structure, not
+yet stability.  It is only the raw availability of a contrast.  Everything
+the book later builds is laid on top of this.
 
-Everything the book later builds --- Non-Collapse, plurality, and at last a
-determinate number --- is laid on top of this. None of it can be had
-without distinguishability; distinguishability can be had without any of
-it. That is what it means to come first. But the matter is not yet carried.
-A once-indicated difference could collapse again at once. What is needed so
-that it does not immediately fall back into one?
+But distinguishability alone does not carry.  A once-indicated difference
+could collapse again at once.
 
-\chapter{The Second Demand: Non-Collapse}
+\section{Non-Collapse}
 \label{ch:reference}
 
 What distinguishability leaves open is whether a difference holds as a
-difference at all. Something can lie apart for a moment and in the next
-fall back into one. Then the difference carries nothing. No mark would hold
-anything. No measured value could rest on it. No state could be asserted
-against another.
+difference at all.  Something can lie apart for a moment and in the next
+fall back into one.  Then the difference carries nothing.  No mark would
+hold anything.  No measured value could rest on it.  No state could be
+asserted against another.
 
-That is why a second demand follows distinguishability. A difference does
-not suffice merely because it flashes up once. It must be secured against
-collapse. Call this demand Non-Collapse.
-
-It is more fundamental than it first sounds. Long before there are scales,
-observers, or instruments, it must be possible for a difference not to
-vanish at once. The limit of this second demand is therefore visible as
-well: a difference can appear and yet fail to hold. Measurement does not
-create that. Recording does not create it. Both already presuppose it.
-
-Only after that does the path lead back to physics. The same demand appears
-there at a prominent point: in the black-hole information problem. The issue
-there is not first of matter or energy, but of whether differences once
-achieved can be lost without remainder. This is not a proof of the present
-argument. But it does show the same structural demand in a physical case.
-
-The demand can now be sharpened. Non-Collapse means: there must be a genuine
+A difference does not suffice merely because it flashes up once.  It must be
+secured against collapse.  Non-Collapse means: there must be a genuine
 separation between two positions, and that separation may not fall back into
-identity. That is exactly why the formal part will later have to work with
-inequality and equality.
+identity.
 
-With this much in hand, the next question arises. Is a single difference
-secured against collapse enough, or must an entire field of such
-differences stand complete?
+With this much in hand, the next question arises.  Is a single difference
+secured against collapse enough, or must an entire field of such differences
+stand complete?
 
-\chapter{The Third Demand: Exact Plurality}
+\section{Exact Plurality}
 \label{ch:plurality}
 
-So we reach the last of the three steps, the one the whole road has been
-climbing toward. The question is no longer whether a difference can be
-stated or recovered, but what it takes for a whole field of differences to
-stand exactly: not one difference that flashes up and vanishes, but a
-standing field of them, each held as itself. This is plurality --- and the
-question that has shadowed us from the first page can now be stated in its
-sharpest pre-formal form. What does it take for a system to be fixed to a
-determinate \emph{many}: to the claim that here are exactly these
-positions, neither fewer nor more?
+The question is no longer whether a difference can be stated or recovered,
+but what it takes for a whole field of differences to stand exactly.  What
+does it take for a system to be fixed to a determinate many: to the claim
+that here are exactly these positions, neither fewer nor more?
 
-The demand is felt most directly if one tries to hold a small plurality in
-place and watch what can go wrong. Lay a few blank sheets on a table and
-claim that there is a definite number of them. Two failures lie in wait,
-and they pull in opposite directions. The first: some of the sheets counted
-as different might not really be different at all --- if every way of
-pointing to one points equally well to another, then there are not distinct
-sheets, but one sheet pointed at twice. Call this collapse: the many
-secretly fall together into fewer. The second, less obvious case: there may
-be more on the table than the count ever mentioned --- a sheet at the edge
-that the accounting never ruled out. Call this surplus: the field hides
-elements the count never closed.
+Two failures lie in wait.  The first: some of the positions counted as
+different might not really be different at all --- one position pointed at
+twice.  Call this collapse.  The second: there may be more in the field than
+the count ever mentioned.  Call this surplus.  An exact plurality has to
+answer both dangers at once.
 
-These two dangers are distinct. Collapse means fewer than claimed. Surplus
-means more than claimed. Whoever prevents only collapse may still have too
-much in the field. Whoever excludes only surplus may still secretly identify
-two positions. An exact plurality has to answer both dangers at once.
+The demand that answers both has exactly two parts.  The named positions
+must really lie apart.  Call that \emph{separation}.  And every position of
+the field must be captured by the account.  Call that \emph{cover}.
+Separation prevents collapse.  Cover prevents surplus.  Only both together
+turn named positions into an exact plurality.
 
-The demand that answers both has exactly two parts. The named positions must
-really lie apart. Call that \emph{separation}. And every position of the
-field must be captured by the account. Call that \emph{cover}. Separation
-prevents collapse. Cover prevents surplus. Only both together turn named
-positions into an exact plurality.
-
-At this exact point something changes. Up to here the conditions have been
-worked out in ordinary prose. With separation and cover, there is for the
-first time a specification complete enough to be written down exactly.
-
-And now, for the first time, a determinate number steps forward. Ask where
-these two conditions can first be met completely, and the answer is: on the
-smallest field on which there is anything to hold apart at all, namely a
-field of two positions. With two, and not before, separation and cover can
-be written down completely and finitely. Two is not the origin of
-distinctness. But it is the first place at which its general conditions
-become fully explicit.
-
-Now the pressure changes once more. If two is the first place these demands
-can be discharged exactly, then two further clarifications are needed before
-formal writing begins. What does this book mean by \emph{Void} at this point
-of the road? And what inside a system licenses the claim to two at all,
-rather than one position named twice or a field larger than declared?
-
-\chapter{What Void Names}
-\label{ch:void-names}
-
-At this point the title of the book can finally be read correctly.
-\emph{Void} does not name an empty set, an empty type, a hidden object, or
-a first thing out of which the rest is built. It names the pre-formal
-boundary at which the pressure is real and the question sharp, but no
-displayed carrier has yet been supplied.
-
-That is why the boundary is not itself an Agda theorem. It is not something
-the later calculus proves from within. It is the place at which the later
-calculus receives the data it needs in order to begin. The first checkable
-step is not the word \emph{Void}. It is the explicit record that answers the
-pressure in a form the machine can inspect.
-the later calculus proves from within. It is the place at which the later
-calculus receives the data it needs in order to begin. The first checkable
-step is not the word \emph{Void}. It is the explicit record that answers the
-pressure in a form the machine can inspect.
-
-This matters because otherwise the book would confuse two claims. The
-boundary argument is pre-formal. Agda is the chosen execution environment in
-which one formal answer is checked. The machine-checked theorems begin only
-after that answer has been supplied as data.
-
-\chapter{What Licenses Two?}
-\label{ch:licensing-problem}
-
-The pressure can now be given its local formal shape.  A system may say
-that there are two positions. What inside the system licenses that claim as
-two, rather than one position named twice or a larger carrier with
-unmentioned points?
-
-This is the primitive question of this volume. It is smaller and sharper
-than a claim about the origin of the world, but it is reached by that larger
-pressure rather than replacing it. The book does not begin from $K_4$, from
-a truth-value object, or from a later interpretation. It begins, now in full
-view, from the local licensing problem of two.
-than a claim about the origin of the world, but it is reached by that larger
-pressure rather than replacing it. The book does not begin from $K_4$, from
-a truth-value object, or from a later interpretation. It begins, now in full
-view, from the local licensing problem of two.
-
-The entry pressure is Leibnizian, but not as an authority argument. In the
-form needed here, it says: if two alleged positions cannot be distinguished
-by anything expressible in the system, the system has no internal ground for
-holding them apart as two. That is not yet an Agda theorem. It is the
-collapse pressure that makes the formal datum necessary.
-
-To stabilize two positions, a system must therefore carry data that prevent
-their collapse. To stabilize exactly two positions, it must also carry data
-that prevent hidden surplus. The record will eventually make those two
-demands explicit as separation and cover. But first the book has to say how
-little can be granted for such a record to be written at all.
+At this exact point something changes.  With separation and cover, there is
+for the first time a specification complete enough to be written down
+exactly.  And now, for the first time, a determinate number steps forward.
+The smallest field on which there is anything to hold apart at all is a
+field of two positions.  With two, and not before, separation and cover can
+be written down completely and finitely.
 
 \part*{The First Formal Trace}
 \addcontentsline{toc}{part}{The First Formal Trace}
 
-\chapter{How Little Can Be Granted?}
+\chapter{The Formal Threshold}
 \label{ch:crossing}
 
-The previous chapters have driven the pressure to a small and exact
-target. The question is no longer why distinction matters, but how little
-must be granted to write its first stable trace in full.
+\section{What Void Names}
+\label{ch:void-names}
 
-There is such a language. The one used here is intensional Martin-L\"of
-type theory in the form realized by the proof assistant Agda. In it, to
-assert is to construct: a statement is a type, a proof is a term that
-inhabits that type, and a machine decides whether the term genuinely has the
-type claimed. Nothing is accepted on authority, and nothing on fluency. A
-proof that does not check is not a proof one has to argue about; it is a
-file that does not compile.
+At this point the title of the book can be read correctly.  \emph{Void}
+does not name an empty set, an empty type, a hidden object, or a first
+thing out of which the rest is built.  It names the pre-formal boundary at
+which the pressure is real and the question sharp, but no displayed carrier
+has yet been supplied.
 
-This is not because MLTT or Agda is metaphysically privileged. Another proof
-assistant may well carry the same content, and whether it does remains open
-until the reconstruction is written. The reason for working here is narrower
-and stricter: this environment makes the cost of each step visible and
-refuses to let the book move forward on credit.
-assistant may well carry the same content, and whether it does remains open
-until the reconstruction is written. The reason for working here is narrower
-and stricter: this environment makes the cost of each step visible and
-refuses to let the book move forward on credit.
+The boundary is not itself an Agda theorem.  It is the place at which the
+formal development receives the data it needs in order to begin.  The
+machine-checked theorems begin only after that data has been supplied.
 
-That refusal is exactly the discipline wanted here. Two settings, fixed at
-the head of the file before a single line of mathematics, govern what
-follows. The flag \AgdaFlag{safe} closes every escape hatch: no postulates,
-no asserted principle without proof, no back door through which an unearned
-result could enter. The flag \AgdaFlag{without-K} withholds a convenient but
-additional assumption about equality, so that nothing in the development
-rests on more than the bare identity type.
+\section{What Licenses Two?}
+\label{ch:licensing-problem}
+
+The pressure can now be given its local formal shape.  A system may say that
+there are two positions.  What inside the system licenses that claim as two,
+rather than one position named twice or a larger carrier with unmentioned
+points?
+
+This is the primitive question of this volume.  It is smaller and sharper
+than a claim about the origin of the world, but it is reached by that
+larger pressure rather than replacing it.
+
+To stabilize two positions, a system must carry data that prevent their
+collapse.  To stabilize exactly two positions, it must also carry data that
+prevent hidden surplus.  The record will make those two demands explicit as
+separation and cover.
+
+\section{How Little Can Be Granted?}
+
+The language used here is intensional Martin-L\"of type theory in the form
+realized by the proof assistant Agda.  In it, to assert is to construct: a
+statement is a type, a proof is a term that inhabits that type, and a
+machine decides whether the term genuinely has the type claimed.  Nothing is
+accepted on authority, and nothing on fluency.
+
+This is not because Agda is metaphysically privileged.  Another proof
+assistant may carry the same content.  The reason for working here is
+narrower: this environment makes the cost of each step visible and refuses
+to let the book move forward on credit.
+
+Two settings, fixed at the head of the file before a single line of
+mathematics, govern what follows.  The flag \AgdaFlag{safe} closes every
+escape hatch: no postulates, no asserted principle without proof, no back
+door through which an unearned result could enter.  The flag
+\AgdaFlag{without-K} withholds a convenient but additional assumption about
+equality, so that nothing in the development rests on more than the bare
+identity type.
 
 What the book is willing to grant can now be said in a single breath: a
 carrier with two positions, a witness that the two are not equal, and an
-account that leaves no point of the carrier unaddressed. No numbers, no
+account that leaves no point of the carrier unaddressed.  No numbers, no
 geometry, no physics, and no classical principle beyond what is built by
-hand. Other pieces of formal furniture will be needed downstream ---
-universe lifting, top-universe equality, contact relations --- but they do
-not need to stand between the pressure and the first exact trace.
+hand.
 
-Before the record itself can be written, the few pieces of logical
-furniture it stands on have to be set in place, and each is built rather
-than assumed. The order of writing is not the order of the inquiry. By the
-time the formal file begins, the argument has already reached
-distinguishability, Non-Collapse, exact plurality, and the local problem of
-what licenses two. But a checker cannot rely on what prose can leave
-operative in the background.
-
-The file therefore opens by importing only the bookkeeping of universe
-levels --- the type theory's internal device for keeping its own sizes
-straight. Nothing mathematical is imported with it.
+The file opens by importing only the bookkeeping of universe levels.
+Nothing mathematical is imported with it.
 
 \begin{code}[hide]%
 \>[0]\AgdaSymbol{\{-\#}\AgdaSpace{}%
@@ -197708,9 +197534,9 @@ $\mathrm{Aut}(K_4)$-invariant numerical reading possible.
 
 The Extract Concept consumes a transitivity witness on each cell
 stratum. The record \texttt{ExtractAutWitness} gathers the orbit
-theorems as that type-level discharge. Its inhabitant is
+theorems as that discharge. Its inhabitant is
 \texttt{theorem-aut-k4-orbits}; nothing further is constructed. The
-Extract Concept is thereby read directly from that orbit record.
+Extract Concept is therefore read directly from that orbit record.
 
 \begin{code}%
 \>[0]\AgdaKeyword{record}\AgdaSpace{}%
@@ -197826,8 +197652,7 @@ evaluation realises.
 
 The five identifications --- closure reading, boundary arity, form
 uniqueness, extract source, bulk exponent --- are now all inhabited as
-Agda records. A single closing record collects them. The chain of
-structural identifications is therefore packaged in one place:
+Agda records. A single closing record collects them.
 \texttt{ForcedFormulaWitness} assembles
 \texttt{SelfDualClosureWitness}, \texttt{BoundaryArityWitness},
 \texttt{FormUniquenessWitness}, \texttt{ExtractAutWitness},
@@ -198109,10 +197934,9 @@ four vertices added structure unsupported by the four cases. The
 closure that survived was the complete graph on four vertices, $K_4$.
 Its representation record was inhabited, propositionally unique, and
 stable under the orbit tests of Part~VI. The final theorem of that part
-proved that any inhabitant of the record already carries the original
+showed that any inhabitant of the record already carries the original
 separation witness. Distinction entered as the minimal grant;
-distinction re-emerged as a consequence. The arrow did not extend; it
-closed.
+distinction re-emerged as a consequence. The arrow closed.
 
 \section*{The Survivor}
 
@@ -198150,13 +197974,12 @@ value.
 
 The boundary of the proof is equally definite. No dynamics is derived
 here, no empirical constant is fixed by measurement, and no continuum
-theory is supplied by the formal apparatus. The claim is narrower and
-therefore harder to evade: under the stated minimal grant, the discrete
-record attached to $K_4$ is the unique closed endpoint of the
-elimination chain, the chain runs from distinction back to distinction
-without any external addition, and the four basic invariants of that
-record are identified inside the system by kind, source, arithmetic,
-position, and role.
+theory is supplied by the formal apparatus. Under the stated minimal
+grant, the discrete record attached to $K_4$ is the unique closed
+endpoint of the elimination chain, the chain runs from distinction back
+to distinction without any external addition, and the four basic
+invariants of that record are identified inside the system by kind,
+source, arithmetic, position, and role.
 
 For that reason the conclusion is not another construction. The
 internal loops have closed. The two-point base is forced as the normal
@@ -198221,7 +198044,7 @@ Its force comes from the fact that every formalism capable of statement
 must already separate marks, rules, judgements, and failures. Its
 formal weight comes from the Agda chain carried out here for one
 disciplined carrier. A reconstruction in another foundation would not
-weaken this claim. It would test and sharpen it.
+weaken this claim. It would test it and sharpen it.
 
 \section*{Where the text ends}
 
