@@ -3,20 +3,24 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20095626.svg)](https://doi.org/10.5281/zenodo.20095626)
 [![Release CI (main only)](https://github.com/de-johannes/Void-and-Form/actions/workflows/release-ci.yml/badge.svg)](https://github.com/de-johannes/Void-and-Form/actions/workflows/release-ci.yml)
 
-Start with the compact companion: [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) / [PDF](latex/VoidCompanion.pdf).
+Start with the front-door companion: [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf).
 
 ## The Question
 
 `Void and Form` is a literate Agda project about the first formal burden of distinction.
 
+The route into that question now begins with a Leibnizian pressure. If the contrast between something and nothing is to be stated at all, a distinction is already at work. The companion [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) starts from that pressure and then narrows toward the formal threshold at which the licensing problem can be stated exactly.
+
 Before a theory can count, compare, map, negate, classify, or interpret, it must already be able to hold something apart from something else. The project slows down at that hinge. It asks what has to be given inside a formal setting before the claim that there are two positions has any stable force.
 
-The guiding question is:
+The local formal question reached by that pressure is:
 
 ```text
 A formal system says that there are two positions.
 What inside the system licenses that claim as two?
 ```
+
+The licensing problem therefore does not disappear. It is the sharpened form of the opening pressure once the discussion is brought inside a formal setting. The companion does not begin there immediately, but it is the formal hinge toward which the opening movement is directed.
 
 The answer pursued here is deliberately austere. A stable two-count needs a carrier in which the positions live, two displayed positions in that carrier, a proof that the positions remain distinct, and a proof that the carrier contains no third unaccounted position. Only after those obligations have been made explicit does the checked development proceed.
 
@@ -30,7 +34,7 @@ The first phrase names the pressure that motivates the construction. The remaini
 
 ## The First Pressure
 
-The opening pressure is Leibnizian. If a system has no way to separate two alleged positions by any predicate available inside the system, then the system has no formal ground for treating them as a stable pair.
+The opening pressure is Leibnizian, and it is now the way into the companion. If a system has no way to separate two alleged positions by any predicate available inside the system, then the system has no formal ground for treating them as a stable pair.
 
 In the full file this appears as a small lemma after a carrier and equality have already been fixed:
 
@@ -67,7 +71,7 @@ Each field has a separate role.
 - `ℓ≠r` is anti-collapse data: the displayed positions are held apart.
 - `cover` is anti-surplus data: every carrier point is one of the displayed positions.
 
-The compact companion uses the readable field names `left`, `right`, `separated`, and `cover`. The full book uses `ℓ`, `r`, and `ℓ≠r`. The record is the same threshold in both presentations: separation and exhaustion are supplied as data inside the formal object.
+The companion [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) uses the readable field names `left`, `right`, `separated`, and `cover`. The full book uses `ℓ`, `r`, and `ℓ≠r`. The record is the same threshold in both presentations: separation and exhaustion are supplied as data inside the formal object.
 
 ## What The Kernel Checks
 
@@ -97,13 +101,13 @@ The geometry becomes legible after this route is visible: first the four cases a
 
 The repository has three primary literate sources.
 
-1. [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) / [PDF](latex/VoidCompanion.pdf) is the intended first reading. It gives the compact licensing problem, the `Distinction` record, the normal-form theorem, the endomorphism classification, the closure contract, and the return to the originating datum.
+1. [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf) is the intended first reading and now serves as the repository's companion. It begins with Leibnizian origin pressure, follows that pressure to the question of how distinction becomes possible at all, and then reaches the formal threshold where the licensing problem can be stated exactly through the `Distinction` record, the normal-form theorem, the endomorphism classification, the closure contract, and the return to the originating datum.
 
 2. [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf) is the full book-length development. It rebuilds the internal equality infrastructure, develops the distinction kernel, continues through arithmetic and rational structure, and carries later invariant machinery inside the same literate Agda file.
 
 3. [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf) is the interpretive volume. It reads the formal ledger structurally and physically. Its identifications are proposed readings over the checked kernel and belong to the interpretive layer.
 
-A first inspection should begin with the companion. The full book is intentionally large; the companion gives the shortest route to the hinge on which the rest depends.
+A first inspection should begin with [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex). The full book is intentionally large; the companion gives the shortest route from Leibniz pressure to the formal hinge on which the rest depends, even though the hinge itself is reached only after a broader opening movement.
 
 ## How To Read The Claims
 
@@ -132,7 +136,7 @@ This layer discipline is central to the project. The formal kernel should be ins
 The main type checks are:
 
 ```sh
-agda VoidCompanion.lagda.tex
+agda FirstDistinction.lagda.tex
 agda Void.lagda.tex
 agda Form.lagda.tex
 ```
@@ -142,10 +146,10 @@ To regenerate a PDF, run `agda --latex` on the corresponding literate source and
 Example:
 
 ```sh
-agda --latex Void.lagda.tex
+agda --latex FirstDistinction.lagda.tex
 cd latex
-xelatex -interaction=nonstopmode Void.tex
-xelatex -interaction=nonstopmode Void.tex
+xelatex -interaction=nonstopmode FirstDistinction.tex
+xelatex -interaction=nonstopmode FirstDistinction.tex
 ```
 
 The generated PDFs in [latex/](latex/) are produced from the literate Agda and LaTeX sources.
@@ -170,7 +174,7 @@ The contribution of this repository is the mechanically inspectable route throug
 
 ## Files
 
-- [VoidCompanion.lagda.tex](VoidCompanion.lagda.tex) / [PDF](latex/VoidCompanion.pdf): compact companion and first inspection point.
+- [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf): companion and first inspection point.
 - [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf): full formal development.
 - [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf): interpretive volume and empirical exposure of later readings.
 - [latex/](latex/): generated LaTeX/PDF output.
