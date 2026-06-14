@@ -3,56 +3,43 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20095626.svg)](https://doi.org/10.5281/zenodo.20095626)
 [![Release CI (main only)](https://github.com/de-johannes/Void-and-Form/actions/workflows/release-ci.yml/badge.svg)](https://github.com/de-johannes/Void-and-Form/actions/workflows/release-ci.yml)
 
-Start with the front-door companion: [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf).
+Start with the companion: [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf).
 
-## The Question
+## What This Repository Is
 
-`Void and Form` is a literate Agda project about the first formal burden of distinction.
+`Void and Form` is a literate Agda book project about the first formal burden of distinction.
 
-The route into that question now begins with a Leibnizian pressure. If the contrast between something and nothing is to be stated at all, a distinction is already at work. The companion [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) starts from that pressure and then narrows toward the formal threshold at which the licensing problem can be stated exactly.
+The opening pressure is simple. If the contrast between something and nothing is to be stated at all, then a distinction is already at work. Before a theory can count, compare, negate, classify, or interpret, it must already be able to hold something apart from something else.
 
-Before a theory can count, compare, map, negate, classify, or interpret, it must already be able to hold something apart from something else. The project slows down at that hinge. It asks what has to be given inside a formal setting before the claim that there are two positions has any stable force.
+This repository slows down at that hinge. It asks what must be granted inside a formal setting before the claim that there are two positions has any stable force.
 
-The local formal question reached by that pressure is:
+The local formal question is:
 
 ```text
 A formal system says that there are two positions.
 What inside the system licenses that claim as two?
 ```
 
-The licensing problem therefore does not disappear. It is the sharpened form of the opening pressure once the discussion is brought inside a formal setting. The companion does not begin there immediately, but it is the formal hinge toward which the opening movement is directed.
+The answer pursued here is deliberately austere: a carrier, two displayed positions, a witness that they do not collapse into one, and a witness that no third unaccounted position remains. Only after those obligations are explicit does the checked development proceed.
 
-The answer pursued here is deliberately austere. A stable two-count needs a carrier in which the positions live, two displayed positions in that carrier, a proof that the positions remain distinct, and a proof that the carrier contains no third unaccounted position. Only after those obligations have been made explicit does the checked development proceed.
+## Read Order
 
-This gives the project its basic rhythm:
+The repository has three primary literate sources.
 
-```text
-Leibniz pressure -> Distinction -> Two -> End(Two) -> K4 closure -> Distinction
-```
+1. [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf)
+   The companion and intended first reading. It begins from the question of origin, moves through determination, physical limit, and information, and reaches the first formal threshold at which stable distinction can be written exactly.
 
-The first phrase names the pressure that motivates the construction. The remaining phrases name the checked route: a distinction datum, its canonical two-point normal form, the four endomorphism cases of that normal form, a faithful four-vertex closure of those cases, and a return from the closure record to the originating distinction.
+2. [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf)
+   The full formal volume. It takes the threshold seriously as mathematics and continues the checked route through normal form, endomorphism classification, closure, arithmetic, and later invariant structure.
 
-## The First Pressure
+3. [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf)
+   The interpretive volume. It does not re-prove the kernel. It asks how the checked ledger may be read structurally and physically, while keeping those readings visibly distinct from theorem.
 
-The opening pressure is Leibnizian, and it is now the way into the companion. If a system has no way to separate two alleged positions by any predicate available inside the system, then the system has no formal ground for treating them as a stable pair.
+If you read only one file first, read [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex).
 
-In the full file this appears as a small lemma after a carrier and equality have already been fixed:
+## The Formal Hinge
 
-```agda
-leibniz-collapse :
-  {S : Set} (a b : S) ->
-  ((P : S -> Set) -> P a -> P b) ->
-  a ≡ b
-leibniz-collapse a b ind = ind (λ x -> a ≡ x) refl
-```
-
-The proof chooses the predicate `λ x -> a ≡ x`. Since `a ≡ a` is given by `refl`, complete predicate transfer from `a` to `b` yields `a ≡ b`.
-
-The lemma functions as a formal marker. It shows the cost of indistinguishability once a language already has a carrier, predicates, and equality. The constructive entry point of the project is the record that supplies the missing data explicitly.
-
-## The Formal Threshold
-
-The central record in the full book is `Distinction`:
+The first exact object is the distinction record:
 
 ```agda
 record Distinction : Set1 where
@@ -64,72 +51,41 @@ record Distinction : Set1 where
     cover : (x : S) -> (x ≡ ℓ) ⊎ (x ≡ r)
 ```
 
-Each field has a separate role.
+Its roles are local and strict.
 
-- `S` is the carrier in which positions can be addressed.
-- `ℓ` and `r` are the displayed boundary positions.
-- `ℓ≠r` is anti-collapse data: the displayed positions are held apart.
-- `cover` is anti-surplus data: every carrier point is one of the displayed positions.
+- `S` is the carrier.
+- `ℓ` and `r` are the displayed positions.
+- `ℓ≠r` prevents collapse.
+- `cover` prevents surplus.
 
-The companion [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) uses the readable field names `left`, `right`, `separated`, and `cover`. The full book uses `ℓ`, `r`, and `ℓ≠r`. The record is the same threshold in both presentations: separation and exhaustion are supplied as data inside the formal object.
+This is the first point at which the conditions of stable distinction become fully explicit and machine-checkable.
 
 ## What The Kernel Checks
 
-From `Distinction`, the companion and the full book verify a short spine of formal claims.
+From that record, the project verifies a short checked spine.
 
-`Two-distinction` supplies the canonical two-point witness. It is the concrete model against which arbitrary distinction records are compared.
+- Every distinction has a canonical two-point normal form.
+- The endomorphisms of that two-point form fall into exactly four cases.
+- Those four cases admit a faithful, no-surplus closure as a four-vertex structure.
+- The closure remains accountable to the distinction datum from which it arose.
 
-`two-normal-form` proves that every inhabitant of `Distinction` is boundary-preservingly isomorphic to that canonical witness. This is the point where the record stops being a suggestive shape and becomes a normal form theorem.
+In compact form, the route is:
 
-`EndoCase`, `classify-sound`, and `classify-unique` classify the endomorphisms `Two -> Two`. There are four cases: identity, swap, the constant-left map, and the constant-right map. The classification is a checked case analysis over the canonical two-point carrier.
+```text
+Distinction -> Two -> End(Two) -> K4 closure -> Distinction
+```
 
-`FaithfulClosure`, `MinimalClosure`, and the richer `K4Record` state the representation contract for those four cases. A closure must keep the four cases separated, realise all of them, and introduce no surplus vertices.
-
-`record-presupposes-distinction` then reads a distinction back from the closure record. The closure remains accountable to the datum that generated it.
-
-This is the compact load-bearing hinge of the repository. The longer files elaborate, route, and interpret it, but this spine is the first place to inspect the mathematical claim.
-
-## Why A Four-Vertex Closure Appears
-
-The four vertices arise from the four classified endomorphism cases of `Two`. Once the cases are represented under the separation, completeness, and no-surplus requirements, the resulting closure has the shape of a complete four-vertex graph.
-
-That is the role of `K4` in this repository. It is a representation of the classified endomorphism space under a stated contract. The important point is the dependency order: distinction gives the canonical two-point form; the two-point form gives four endomorphism cases; the representation contract gives the four-vertex closure; the closure record returns to the distinction datum.
-
-The geometry becomes legible after this route is visible: first the four cases are classified, then the closure represents them as a complete four-vertex object.
-
-## The Volumes
-
-The repository has three primary literate sources.
-
-1. [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf) is the intended first reading and now serves as the repository's companion. It begins with Leibnizian origin pressure, follows that pressure to the question of how distinction becomes possible at all, and then reaches the formal threshold where the licensing problem can be stated exactly through the `Distinction` record, the normal-form theorem, the endomorphism classification, the closure contract, and the return to the originating datum.
-
-2. [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf) is the full book-length development. It rebuilds the internal equality infrastructure, develops the distinction kernel, continues through arithmetic and rational structure, and carries later invariant machinery inside the same literate Agda file.
-
-3. [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf) is the interpretive volume. It reads the formal ledger structurally and physically. Its identifications are proposed readings over the checked kernel and belong to the interpretive layer.
-
-A first inspection should begin with [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex). The full book is intentionally large; the companion gives the shortest route from Leibniz pressure to the formal hinge on which the rest depends, even though the hinge itself is reached only after a broader opening movement.
+The opening pressure motivates the construction, but it is not itself an Agda theorem. The checked route begins only once the distinction datum has been supplied explicitly.
 
 ## How To Read The Claims
 
 The repository separates three kinds of statement.
 
-Formal statements are Agda terms. They have names such as `two-normal-form`, `classify-unique`, `K4Record`, and `record-presupposes-distinction`. These are the claims whose status is decided by type checking under the options declared in the literate files.
+- Formal statements are Agda terms checked under `--safe --without-K`.
+- Structural statements explain why the checked terms belong together as one argument.
+- Interpretive statements, concentrated in `Form`, test whether the checked ledger admits a physical reading.
 
-Structural statements explain why those checked terms matter. They connect the formal steps into a readable argument: pressure, datum, normal form, classification, closure, and return.
-
-Interpretive statements appear most clearly in `Form`. They ask how the checked ledger may be read in physical or epistemological terms. Their role is to expose hypotheses and interfaces while keeping them visibly separate from theorem.
-
-This layer discipline is central to the project. The formal kernel should be inspected as mathematics; the surrounding prose should be read as the guide that makes the mathematics legible.
-
-## Terms Used In The Repository
-
-- **Carrier** means the type in which the named positions live.
-- **Boundary positions** means the two displayed points of the distinction record. The word marks the named endpoints of the datum in this local vocabulary.
-- **Anti-collapse** means that the displayed positions are propositionally distinct.
-- **Anti-surplus** means that every element of the carrier is accounted for by the displayed positions.
-- **Endomorphism case** means one of the four functions `Two -> Two`: identity, swap, constant-left, or constant-right.
-- **No-surplus representation** means that a later closure uses exactly the vertices, cases, or degrees of freedom supplied by the classified data.
-- **Return to the datum** means that the closure record remains dependent on the distinction from which it arose.
+That separation matters. The formal kernel should be inspected as mathematics. The prose should be read as an account of what has been shown, what has not, and where later interpretation begins.
 
 ## Verification
 
@@ -141,7 +97,7 @@ agda Void.lagda.tex
 agda Form.lagda.tex
 ```
 
-To regenerate a PDF, run `agda --latex` on the corresponding literate source and then run XeLaTeX twice in [latex/](latex/) for the generated `.tex` file.
+To regenerate a PDF, run `agda --latex` on the relevant literate source and then run XeLaTeX twice in [latex/](latex/) on the generated `.tex` file.
 
 Example:
 
@@ -152,51 +108,19 @@ xelatex -interaction=nonstopmode FirstDistinction.tex
 xelatex -interaction=nonstopmode FirstDistinction.tex
 ```
 
-The generated PDFs in [latex/](latex/) are produced from the literate Agda and LaTeX sources.
-
-## Intellectual Placement
-
-The question stands near several older threads.
-
-Leibniz supplies the pressure of indistinguishability: where there is no expressible difference, the basis for a stable two-count disappears.
-
-Constructive type theory supplies the execution discipline: witnesses, proof terms, explicit case splits, and checked dependencies.
-
-George Spencer-Brown's `Laws of Form` stands near the distinctional starting point. This repository translates the pressure of distinction into explicit type-theoretic data and follows the consequences inside Agda.
-
-Gregory Bateson's phrase "a difference that makes a difference" names the information-theoretic resonance of the problem. The checked layer begins where that resonance is rendered as formal data.
-
-Lawvere and Tarski mark the later semantic and categorical neighborhood: structures become visible through the maps, models, and interpretations they admit.
-
-The contribution of this repository is the mechanically inspectable route through one small threshold, together with a book-length attempt to keep formal proof, categorical continuation, and interpretation in contact without confusing their statuses.
-
----
-
 ## Files
 
-- [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf): companion and first inspection point.
-- [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf): full formal development.
-- [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf): interpretive volume and empirical exposure of later readings.
-- [latex/](latex/): generated LaTeX/PDF output.
+- [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf): companion and first reading.
+- [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf): full formal volume.
+- [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf): interpretive volume.
+- [latex/](latex/): generated LaTeX and PDF output.
 - [LICENSE](LICENSE): license terms.
 
 ## Author and Method
 
-The author has no institutional affiliation, no formal background in
-mathematics or physics, and no prior training in type theory or formal
-verification. The development was built over eighteen months with the
-assistance of large language models.
+The author has no institutional affiliation, no formal background in mathematics or physics, and no prior training in type theory or formal verification. The development was built over eighteen months with the assistance of large language models.
 
-The Agda type checker under `--safe --without-K` is the sole formal judge.
-It does not check credentials. It checks proofs. Every claim marked as
-machine-verified in this repository has passed that check. Every claim
-that has not is marked accordingly.
-
-The relevant question is therefore not who built this, but whether the
-formal claims type-check under the stated options, whether the prose
-reports those claims faithfully, and whether the interpretive layers keep
-their stated status.
-
+The Agda type checker under `--safe --without-K` is the formal judge of the kernel. It does not check credentials. It checks proofs. The relevant question is therefore whether the formal claims type-check under the stated options, whether the prose reports them faithfully, and whether the interpretive layers keep their stated status.
 
 ## Citation
 
