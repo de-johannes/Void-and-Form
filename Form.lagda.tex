@@ -200,14 +200,15 @@
 }
 \usepackage{titlesec}
 \usepackage{etoolbox}
-\titleformat{\chapter}[display]{\normalfont\huge\bfseries\raggedright}{\chaptertitlename\ \thechapter}{20pt}{\Huge\raggedright}
+\titleformat{\chapter}[display]{\normalfont\huge\bfseries\raggedright}{}{0pt}{\Huge\raggedright}
+\titlespacing*{\chapter}{0pt}{40pt}{20pt}
 \pretocmd{\section}{\phantomsection}{}{}
 \pretocmd{\subsection}{\phantomsection}{}{}
 \pretocmd{\subsubsection}{\phantomsection}{}{}
 \pretocmd{\paragraph}{\phantomsection}{}{}
 \usepackage{epigraph}
 \setlength{\epigraphwidth}{0.7\textwidth}
-\setcounter{secnumdepth}{0}
+\setcounter{secnumdepth}{-2}
 
 %% Cross-reference helper: \VoidRef{label}{description}
 %% Renders description only; the label exists in Void, not Form.
@@ -304,7 +305,8 @@ module Form where
 %  naming the open ledger, and showing why the gaps are structural.
 % ─────────────────────────────────────────────────────────────────────
 
-\part{What Physics Has Done}
+\part*{What Physics Has Done}
+\addcontentsline{toc}{part}{What Physics Has Done}
 
 % ─────────────────────────────────────────────────────────────────────
 \chapter{Four Centuries of Motion}
@@ -588,7 +590,8 @@ The next part of the book takes the question seriously. If physics, as it stands
 %  executed the formal kernel.
 % ═════════════════════════════════════════════════════════════════════
 
-\part{The Question of the Beginning}
+\part*{The Question of the Beginning}
+\addcontentsline{toc}{part}{The Question of the Beginning}
 
 % ─────────────────────────────────────────────────────────────────────
 \chapter{Walking Backward}
@@ -735,7 +738,7 @@ This reading does not invoke substance, observer, time, or space. It invokes onl
 
 \section*{What Comes Next}
 
-The image of the pre-physical boundary gave a name to the place where no physical noun applies. The notion of distinction gave a name to the condition under which description avoids collapse. The remaining question of Part II is what non-collapse must mean if \textit{Form} is to read origin, contact, spatial separation, and temporal order without turning them into premises.
+The image of the pre-physical boundary gave a name to the place where no physical noun applies. The notion of distinction gave a name to the condition under which description avoids collapse. The remaining question of this part is what non-collapse must mean if \textit{Form} is to read origin, contact, spatial separation, and temporal order without turning them into premises.
 
 % ─────────────────────────────────────────────────────────────────────
 \chapter{Structural Non-Collapse}
@@ -780,7 +783,8 @@ The next part imports \textit{Void} in the technical sense. From that point onwa
 %  the minimal vocabulary for what follows.
 % ═════════════════════════════════════════════════════════════════════
 
-\part{The Import}
+\part*{The Import}
+\addcontentsline{toc}{part}{The Import}
 
 % ─────────────────────────────────────────────────────────────────────
 \chapter{Void's Answer, in Words}
@@ -828,7 +832,7 @@ Once $K_4$ is forced, the invariants of $K_4$ as a graph are also forced. \texti
 \item \emph{Edge count}: $E = 6$. Every pair among four vertices is connected; the count is $\binom{4}{2} = 6$.
 \item \emph{Degree}: $d = 3$. Each vertex has three edges, one to each other vertex.
 \item \emph{Euler characteristic}: $\chi = V - E + F = 4 - 6 + 4 = 2$, where $F = 4$ is the number of triangular faces in the unique tetrahedral embedding.
-\item \emph{Gravitational coupling}: $\kappa = 2(d+1) = 8$. This is the coefficient that arises in \textit{Void}'s derivation of the Laplacian eigenvalue structure on $K_4$, and it will play the role of Einstein's $\kappa$ in Part IV of this book.
+\item \emph{Gravitational coupling}: $\kappa = 2(d+1) = 8$. This is the coefficient that arises in \textit{Void}'s derivation of the Laplacian eigenvalue structure on $K_4$, and it will play the role of Einstein's $\kappa$ in the chapters on geometry and cosmos.
 \item \emph{Fermat prime}: $F_2 = 2^{2^2} + 1 = 17$. This appears in \textit{Void}'s analysis of the Clifford algebra associated with the $K_4$ structure, where the spinor representation has dimension $2^V = 16$, and the next prime number---the smallest integer larger than $16$ with no proper divisors---is $17$.
 \item \emph{Closure constant}: $\mathcal{C} = V^d \cdot \chi + d^2 = 64 \cdot 2 + 9 = 137$. This is the simplex evaluation: within the expression grammar and obligation record developed in \textit{Void}, the canonical formula is the unique admissible form, and on $K_4$ its value is $137$.
 \end{itemize}
@@ -951,7 +955,7 @@ Three things, going forward.
 
 \section*{What Is Next}
 
-The import is now made. The compiler has accepted it. Every exported name in \textit{Void}'s ledger is available. The next chapter introduces the small set of human-readable aliases that the rest of the book uses to keep the prose accessible. After that, Part IV begins the structural reading proper, with the spacetime interpretation built on top of the imported $K_4$ structure.
+The import is now made. The compiler has accepted it. Every exported name in \textit{Void}'s ledger is available. The next chapter introduces the small set of human-readable aliases that the rest of the book uses to keep the prose accessible. After that, the structural reading proper begins, with the spacetime interpretation built on top of the imported $K_4$ structure.
 
 % ─────────────────────────────────────────────────────────────────────
 \chapter{The Vocabulary}
@@ -1040,7 +1044,7 @@ $\kappa$       & gravitational coupling & 8 \\
 
 Each row is falsifiable. If the fine-structure constant turns out to be $138$ instead of $137$, the identification fails---not the mathematics. The mathematics is $V^d \cdot \chi + d^2 = 137$, and that is \texttt{refl}. The physics is ``$137 = \alpha^{-1}$,'' and that is experiment.
 
-The asymmetry here is not rhetorical---it is epistemological. The formal side carries zero auxiliary hypotheses: the compiler accepts or rejects, and no Duhem-shielded escape exists. The empirical side carries all of them: detector models, calibration chains, background subtraction, the entire interpretive apparatus of experimental physics. This asymmetry determines who bears the burden of proof when derivation and measurement are compared (Chapter~\ref{ch:predictions}, \textit{The Epistemological Asymmetry}).
+The asymmetry here is not rhetorical---it is epistemological. The formal side carries zero auxiliary hypotheses: the compiler accepts or rejects, and no Duhem-shielded escape exists. The empirical side carries all of them: detector models, calibration chains, background subtraction, the entire interpretive apparatus of experimental physics. This asymmetry determines who bears the burden of proof when derivation and measurement are compared (the chapter \emph{\nameref{ch:predictions}}, \textit{The Epistemological Asymmetry}).
 
 Think of it as a dictionary. The left column is a language that \textit{Void} speaks fluently. The right column is a language that accelerators and telescopes speak fluently. This book claims they are translations of each other. Whether they are is not a question for the type checker.
 
@@ -1129,7 +1133,7 @@ m_\tau / m_\mu &= F_2 = 17
 
 The Fermat prime $F_2 = 17$ appears in every mass formula. It entered the derivation through the Clifford algebra dimension $2^V = 16$: the next prime after $16$ is $17 = 2^{2^2} + 1$, the second Fermat prime.% \VoidRef{sec:k4-constants:clifford-spectral-constants}{Fermat prime derivation in Void}
 
-These are tree-level values---the bare ratios before loop corrections. The corrections themselves are derived in Part~III.
+These are tree-level values---the bare ratios before loop corrections. The corrections themselves are derived in the chapters on loops and corrections.
 
 \begin{code}
 -- $ Proton mass formula: χ² × d³ × F₂ = 4 × 27 × 17 = 1836
@@ -1564,7 +1568,8 @@ For example, $137$ is exactly the number of spanning trees ($16$) plus the facto
 The remainder of this book explores what happens if we treat this physical mapping as a working hypothesis. We proceed with the explicit caveat that the $K_4$ framework is not a physical axiom, but rather an exploratory formal tool whose physical validity rests entirely on the continued survival of its exact predictions against experimental data.
 
 %═══════════════════════════════════════════════════════════════════════════════
-\part{Geometry and Cosmos}
+\part*{Geometry and Cosmos}
+\addcontentsline{toc}{part}{Geometry and Cosmos}
 %═══════════════════════════════════════════════════════════════════════════════
 
 
@@ -2327,7 +2332,8 @@ theorem-alpha-falsification-threshold = record
 \end{code}
 
 %═══════════════════════════════════════════════════════════════════════════════
-\part{Loops and Corrections}
+\part*{Loops and Corrections}
+\addcontentsline{toc}{part}{Loops and Corrections}
 %═══════════════════════════════════════════════════════════════════════════════
 
 % ──────────────────────────────────────────────────────────────────────────────
@@ -6425,7 +6431,7 @@ No physics input is required for the tier assignment---it is read
 off the formula.  The three scales $\kappa^n C^2$ parallel the
 three gauge factors $\mathrm{U}(1) \times \mathrm{SU}(3) \times
 \mathrm{SU}(2)$ of the Standard Model (same count, same hierarchy).
-This parallel is noted in Chapter~\ref{ch:gauge-group} as an
+This parallel is noted in the chapter \emph{\nameref{ch:gauge-group}} as an
 identification; the correction chain itself needs no group theory,
 only structural depth.
 
@@ -6445,7 +6451,7 @@ elimination, and $\chi = V - E + F = 2$ is a topological invariant
 
 Why is the numerator $(p + \chi)^2$ rather than $p + \chi$ or
 $p \cdot \chi$?  The denominator $\kappa^2 = \kappa \cdot \kappa$
-carries two factors of $\kappa$.  In Void (Law~14F.0), a coupling
+carries two factors of $\kappa$.  In \textit{Void}'s cross-invariance theorem, a coupling
 is a relation between two copies of the EndoCase carrier, and
 cross-invariance forces symmetry between the two sides.  If each
 side of the coupling contributes the same channel count $p + \chi$,
@@ -6496,7 +6502,7 @@ The channel count $p + \chi = (E + d + \chi) + \chi = E + d + 2\chi = 13$
 carries two copies of $\chi$: one from the perturbative loop numerator,
 one from the boundary traversal forced by the Distinction cover
 (Void: \texttt{BoundaryChannelForcing}).
-The square arises from the Coupling structure (Void, Law~14F.0):
+The square arises from \textit{Void}'s coupling structure:
 the doublet has two sides, each contributing $p + \chi$, and
 cross-invariant self-coupling is ring multiplication.
 The denominator $\kappa^2 C^2$ continues the ascending scale $\kappa^n C^2$
@@ -8546,7 +8552,8 @@ opaque
 \end{code}
 
 %═══════════════════════════════════════════════════════════════════════════════
-\part{Spacetime}
+\part*{Spacetime}
+\addcontentsline{toc}{part}{Spacetime}
 %═══════════════════════════════════════════════════════════════════════════════
 
 % ──────────────────────────────────────────────────────────────────────────────
@@ -9048,7 +9055,8 @@ The \texttt{EinsteinFieldEquations} record is the full Einstein package: metric 
 % \VoidRef{forced-curvature}{Curvature forcing from Laplacian spectrum}
 
 % ══════════════════════════════════════════════════════════════════════════════
-\part{Symmetry and Matter}
+\part*{Symmetry and Matter}
+\addcontentsline{toc}{part}{Symmetry and Matter}
 \label{part:symmetry-matter}
 % ══════════════════════════════════════════════════════════════════════════════
 
@@ -10228,7 +10236,8 @@ and the unit cutoff.  The words Feynman diagram, UV regulator, and continuum
 QFT are the physical reading of that finite ledger.
 
 % ══════════════════════════════════════════════════════════════════════════════
-\part{Forces and Confinement}
+\part*{Forces and Confinement}
+\addcontentsline{toc}{part}{Forces and Confinement}
 \label{part:forces-confinement}
 % ══════════════════════════════════════════════════════════════════════════════
 
@@ -10627,7 +10636,8 @@ theorem-discrete-continuum-closure = record
 \end{code}
 
 % ══════════════════════════════════════════════════════════════════════════════
-\part{The Full Picture}
+\part*{The Full Picture}
+\addcontentsline{toc}{part}{The Full Picture}
 \label{part:full-picture}
 % ══════════════════════════════════════════════════════════════════════════════
 
@@ -10670,7 +10680,7 @@ $\mathbb{R}$ & Cauchy closure of $\mathbb{Q}$ & wavefunction amplitudes, field v
 
 Each step is forced by a specific computational need. The naturals arise because the Laplacian sums over neighbours and those neighbours must be counted. The integers arise because eigenvalues have signs. The rationals arise because eigenvalue \emph{ratios}---like $\lambda_4/R = 4/12 = 1/3$---are not integers. The reals arise because the metric on $\mathbb{Q}$ is incomplete: Cauchy sequences of rational spectral data have limits that $\mathbb{Q}$ cannot contain.
 
-The complex numbers $\mathbb{C}$ are the last step. The spinor dimension is $\chi = 2$: two real components. The Pauli algebra (Chapter~\ref{ch:pauli-matrices}) provides the multiplication rule $\sigma_z^2 = 1$, which splits the two-dimensional real spinor space into eigenspaces of $\pm 1$---exactly the structure of $\mathbb{R} \oplus i\mathbb{R}$. The complex unit $i$ is not introduced; it is the swap involution $\sigma_y$ acting on the $\chi = 2$ spinor space. Quantum phases are Pauli rotations.
+The complex numbers $\mathbb{C}$ are the last step. The spinor dimension is $\chi = 2$: two real components. The Pauli algebra (the chapter \emph{\nameref{ch:pauli-matrices}}) provides the multiplication rule $\sigma_z^2 = 1$, which splits the two-dimensional real spinor space into eigenspaces of $\pm 1$---exactly the structure of $\mathbb{R} \oplus i\mathbb{R}$. The complex unit $i$ is not introduced; it is the swap involution $\sigma_y$ acting on the $\chi = 2$ spinor space. Quantum phases are Pauli rotations.
 
 \textbf{Constraint:} Each number system in the tower $\mathbb{N} \to \mathbb{Z} \to \mathbb{Q} \to \mathbb{R} \to \mathbb{C}$ must be forced by a specific computational demand of $K_4$, not imported from a mathematical catalogue.
 
@@ -10824,7 +10834,7 @@ theorem-spectral-dispersion-interpretation-boundary = record
 \section{From Holonomy to Field Strength}
 \label{sec:holonomy-to-field-strength}
 
-Chapter~\ref{ch:gauge-fields} constructed gauge fields on $K_4$: a configuration $A : K_4\text{Vertex} \to \mathbb{Z}$, gauge links as phase differences, and holonomy as the sum of links around a closed path. All four triangle holonomies were proved to vanish for the linear-gradient configuration---confirming it is pure gauge ($F_{\mu\nu} = 0$).
+the chapter \emph{\nameref{ch:gauge-fields}} constructed gauge fields on $K_4$: a configuration $A : K_4\text{Vertex} \to \mathbb{Z}$, gauge links as phase differences, and holonomy as the sum of links around a closed path. All four triangle holonomies were proved to vanish for the linear-gradient configuration---confirming it is pure gauge ($F_{\mu\nu} = 0$).
 
 In the continuum, this structure becomes the familiar gauge theory machinery:
 
@@ -10917,7 +10927,7 @@ The answer is the \texttt{ContinuumBridge} record below. It contains two fields.
 
 That field has type \texttt{discrete-witness $\equiv$ discrete-witness}. Its inhabitant is \texttt{refl}.
 
-The formal definition of this record appears in Chapter~\ref{ch:master-record}, after the \texttt{StandardModelFromK4} witness it depends on has been constructed. The code is three lines. The meaning occupies the rest of this section.
+The formal definition of this record appears in the chapter \emph{\nameref{ch:master-record}}, after the \texttt{StandardModelFromK4} witness it depends on has been constructed. The code is three lines. The meaning occupies the rest of this section.
 
 This is not a joke, and it is not a proof that the universe is the record. It is the most honest statement the formal system can make: the internal witness is closed; the external identification remains an empirical claim.
 
@@ -11396,7 +11406,7 @@ The topological brake eliminates $K_5$, but the graph it would have been
 does not vanish without a trace.  A complete graph on $n$ vertices has
 Laplacian spectrum $\{0, n, n, \ldots, n\}$ with eigenvalue $n$ appearing
 at multiplicity $n - 1$.  For $K_4$, this gives $\{0, 4, 4, 4\}$---the
-spectrum already proved in Chapter~\ref{ch:topological-brake}.  For the
+spectrum already proved in the chapter \emph{\nameref{ch:topological-brake}}.  For the
 forbidden $K_5$, it would give $\{0, 5, 5, 5, 5\}$.  The eigenvalue
 $\lambda = 5$ does not belong to the $K_4$ spectrum: the type
 $(5 \equiv 0) \uplus (5 \equiv 4)$ is empty.  Nature eliminates $K_5$ as
@@ -11656,7 +11666,7 @@ experimental layers.
 
 This chapter gathers the computational consequences of the $K_4$ invariants into a single object: \texttt{StandardModelFromK4}. It is a record type with numerous fields, each a mechanised theorem proving a specific arithmetic identity. 
 
-Following the four-level epistemic separation established in Chapter \ref{ch:identity-ledger}:
+Following the four-level epistemic separation established in the chapter \emph{\nameref{ch:identity-ledger}}:
 \begin{enumerate}
 \item \textbf{Level 1 (Formal)}: The structural constants and integers generated by $K_4$ are unique and inevitable.
 \item \textbf{Level 2 (Forced Arithmetic)}: The record \texttt{StandardModelFromK4} bundles these integers and verifies that they combine exactly as the Agda types demand. The compiler's acceptance of this record is a mathematical proof that these numerical relations hold within $K_4$.
@@ -12984,7 +12994,7 @@ The $K_4$ framework therefore does not predict a factor-$2$ entropy excess from 
 
 \subsubsection*{Planck-Scale Curvature: $R = 12$}
 
-The Ricci scalar $R = 3\lambda_4 = 12$ is a theorem of the $K_4$ Laplacian spectrum (Chapter~\ref{ch:einstein-equations}). At macroscopic scales, the continuum limit dilutes this to the observed near-zero curvature. But at the Planck scale, the discrete curvature should be directly measurable. If future quantum gravity experiments find $R_{\text{Planck}} \ne 12$ in natural units, the framework is falsified.
+The Ricci scalar $R = 3\lambda_4 = 12$ is a theorem of the $K_4$ Laplacian spectrum (the chapter \emph{\nameref{ch:einstein-equations}}). At macroscopic scales, the continuum limit dilutes this to the observed near-zero curvature. But at the Planck scale, the discrete curvature should be directly measurable. If future quantum gravity experiments find $R_{\text{Planck}} \ne 12$ in natural units, the framework is falsified.
 
 \begin{code}
 -- $ Experimental frontier — testable consequences awaiting decisive measurement.
@@ -13097,7 +13107,7 @@ The predictions separate into two testability scales, each with a distinct exper
 \textbf{Planck scale.} The discrete curvature $R = 12$ is the framework's most radical prediction. At macroscopic scales, the continuum limit washes out the discrete structure. At the Planck scale, the discreteness should be visible. The horizon claim at the same frontier is not a factor-$2$ entropy excess; it is the survival of the $K_4$ area-law normalisation together with quotienting of labelled boundary data. Future quantum gravity experiments---tabletop gravity measurements at sub-millimeter scales, gravitational decoherence searches, or black hole spectroscopy---could probe this regime.
 
 Between these two scales sits particle physics, where the correction chain
-(Chapter~\ref{ch:correction-chain}) has already been tested to sub-$\sigma$
+(the chapter \emph{\nameref{ch:correction-chain}}) has already been tested to sub-$\sigma$
 precision for five observables.  The neutrino sector is now sharper than the
 bare seesaw-depth statement: the depth-$5$ kernel is the entry point, and the
 residual-corrected Planck-ratio prediction is the exposed particle-physics
@@ -13226,7 +13236,7 @@ The \textbf{logician} asks: are the rules of Agda's type theory themselves neces
 
 The \textbf{mathematician} asks: is the identification of $K_4$ invariants with physical constants genuinely forced, or merely consistent? That is the sharpest question, and it deserves a sharp answer. The mathematical survivor is not chosen here; it is imported from \textit{Void}, where the $K_4$ record is forced and shown unique. What \textit{Form} adds is narrower: once that record is accepted, the proposed physical ledger contains no adjustable arithmetic parameters. The challenge is therefore precise. Check the imported uniqueness proof; check the local identities; then attack the identifications as physics, not as hidden algebraic tuning.
 
-The \textbf{physicist} asks: where is the Lagrangian? Where are the Feynman rules? Where are the cross-section predictions? Fair. Those are the next presentations of the same closed structure, not repairs to an unfinished foundation. A Lagrangian compatible with this book must be a presentation of \texttt{StandardModelFromK4}; Feynman rules must respect \texttt{QFT-Loop-Structure}; cross-sections must reduce to the correction records and the Cauchy-real bridge already sealed. Designing a falsification experiment requires only the predictions in Chapter~\ref{ch:predictions}. Several of them are within current experimental reach. Go measure them.
+The \textbf{physicist} asks: where is the Lagrangian? Where are the Feynman rules? Where are the cross-section predictions? Fair. Those are the next presentations of the same closed structure, not repairs to an unfinished foundation. A Lagrangian compatible with this book must be a presentation of \texttt{StandardModelFromK4}; Feynman rules must respect \texttt{QFT-Loop-Structure}; cross-sections must reduce to the correction records and the Cauchy-real bridge already sealed. Designing a falsification experiment requires only the predictions in the chapter \emph{\nameref{ch:predictions}}. Several of them are within current experimental reach. Go measure them.
 
 The \textbf{philosopher} asks: what does it mean for the laws of physics to be \emph{forced}? The honest answer is layered. The formal kernel is forced relative to its minimal datum and representation contract. The physical reading is forced only if the open ledger of physics is indeed a reading of that kernel. Under that thesis, the question ``why these numbers?'' changes form: it no longer asks why nature selected one arbitrary parameter set from many, but why physical description has the only invariant grammar that survived the formal chain. Necessity of this kind is not magic. It is the absence of a surviving alternative at the relevant level.
 

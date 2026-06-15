@@ -233,14 +233,15 @@
 }
 \usepackage{titlesec}
 \usepackage{etoolbox}
-\titleformat{\chapter}[display]{\normalfont\huge\bfseries\raggedright}{\chaptertitlename\ \thechapter}{20pt}{\Huge\raggedright}
+\titleformat{\chapter}[display]{\normalfont\huge\bfseries\raggedright}{}{0pt}{\Huge\raggedright}
+\titlespacing*{\chapter}{0pt}{40pt}{20pt}
 \pretocmd{\section}{\phantomsection}{}{}
 \pretocmd{\subsection}{\phantomsection}{}{}
 \pretocmd{\subsubsection}{\phantomsection}{}{}
 \pretocmd{\paragraph}{\phantomsection}{}{}
 \usepackage{epigraph}
 \setlength{\epigraphwidth}{0.7\textwidth}
-\setcounter{secnumdepth}{0}
+\setcounter{secnumdepth}{-2}
 
 %% ─── Document ────────────────────────────────────────────────────────────────
 
@@ -251,8 +252,8 @@
 \centering
 \vspace*{3cm}
 {\Huge\bfseries Void}\\[0.5cm]
-{\Large\itshape After A Successful Distinction}\\[0.4cm]
-{\large A Formal Kernel for a Theory of Formulability}\\[2cm]
+{\Large\itshape A Theory of Common Origin}\\[0.4cm]
+\vfill
 {\large Johannes Michael Wielsch}\\[4cm]
 \begin{tikzpicture}[scale=2]
   \coordinate (A) at (0,0); \coordinate (B) at (1,0);
@@ -282,16 +283,25 @@
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-\emph{Void} does not name an object from which the world is derived.  It
-names the pre-formal boundary at which the question of distinction has
-become sharp, but no displayed carrier has yet been supplied.
+\emph{Void} is the formal kernel of a theory of common origin.  It does
+not name an object from which the world is derived.  It names the
+pre-formal boundary at which the question of distinction has become sharp,
+but no displayed carrier has yet been supplied.
 
-The first formal answer is the record \texttt{Distinction}: a carrier, two
-boundary positions, a separation witness, and a cover.  From that record
-onward, the route is checked.  Agda verifies the normal form, the
-endomorphism classification, the closure contract, and the dependency back
-to the originating datum.  Later arithmetic, categorical, spectral, and
-interpretive layers are downstream of this threshold.
+The companion volume \emph{The First Distinction} established a wager ---
+stable information presupposes a successfully carried distinction --- and
+arrived at the first point where that wager can be written completely: the
+record \texttt{Distinction}, a carrier with two boundary positions, a
+separation witness, and a two-class cover.
+
+This volume asks what follows from that record alone.  From the
+\texttt{Distinction} record onward, every step is machine-verified in Agda
+under \texttt{-{}-safe -{}-without-K}.  The route runs through the
+endomorphism classification, the two-element normal form, the $K_4$ closure
+contract, the drift hierarchy, the derived arithmetic of
+$\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, and $\mathbb{R}$, the spectral
+structure of the graph Laplacian, and the mechanical closure that returns
+to the originating separation witness.
 
 The pre-formal pressure is not an Agda theorem.  The record is.  The
 closure route is.  The larger claim stands or falls with the visible order
@@ -300,19 +310,29 @@ of those layers.
 \chapter*{Opening}
 \addcontentsline{toc}{chapter}{Opening}
 
-Why is there anything at all, rather than nothing?  The question already
-presupposes a separation: \emph{something} and \emph{nothing} must be in
-force as different possibilities.  The question of origin therefore leads
-to a more general question: under what conditions is distinction possible
-at all?
+The companion volume \emph{The First Distinction} asked under what
+conditions a distinction can be stable at all, and arrived at a minimal
+formal datum: the \texttt{Distinction} record in intensional Martin-L\"of
+type theory.  That record is where this volume begins.
 
-This volume follows that question into a formal kernel.  Its working
-conjecture is that every piece of information rests on a distinction
-successfully carried out.  Before anything can be measured, classified, or
-explained, a difference must be brought forth and held stable.  The guiding
-question is: what minimal structure must be in place so that a distinction
-does not collapse, remains complete, and allows stable information to
-emerge from it?
+The guiding question here is not why distinction, but what follows.  Once a
+carrier with two boundary positions, a separation witness, and a two-class
+cover has been granted, how much structure is already determined?
+
+The answer is more than might be expected.  The endomorphism space
+classifies into exactly four cases.  The carrier is uniquely isomorphic to
+the two-element type.  The complete graph $K_4$ emerges as the only closure
+that accommodates those four cases.  Iterating the classification produces
+a well-ordered drift hierarchy.  The arithmetic of natural numbers,
+integers, rationals, and reals is reconstructed from the graph data.  The
+spectral structure of the Laplacian is forced.  And at the end, the closure
+theorem shows that the separation witness with which the route began
+re-emerges as a consequence.
+
+Every step after the record is checked by Agda.  Every step before the
+record belongs to \emph{The First Distinction}.  The interpretive
+readings that follow belong to \emph{Form}.  This volume occupies the
+formal middle: what the first distinction forces, and nothing else.
 
 \tableofcontents
 
@@ -785,8 +805,8 @@ two marked points but no uniform way to classify arbitrary elements of
 the carrier, and the later eliminator would lose its basic case split.
 
 The four-element vertex type $K_4\mathrm{Vertex}$, introduced later in
-Chapter~\ref{ch:k4-representation-theory}, provides a concrete witness to
-this failure.  Lemma~\ref{lem:cover-necessary} records the argument
+the chapter \emph{\nameref{ch:k4-representation-theory}}, provides a concrete witness to
+this failure.  The corresponding lemma records the argument
 formally.  The cover is therefore not ornamental and not a workaround.  It
 is the exact two-class coverage data the type theory does not supply for
 free.
@@ -1043,7 +1063,7 @@ The record \texttt{Distinction} has now been defined, but a definition alone doe
 
 Under \AgdaFlag{safe}, no inhabitant of \texttt{Distinction} is simply postulated. The statement used here is the double-negation form $\neg\neg\,\mathit{Distinction}$. It does not yet supply a witness, but it excludes stable denial and is exactly the weaker non-vacuity guard needed before the later constructive witness appears.
 
-Stronger results appear later. Chapter~\ref{ch:two-normal-form} constructs \texttt{Two-distinction} without premises, and Chapter~\ref{ch:scale-closure} provides an independent route through measurement. By contrast, the stronger claim that every inhabited type already contains a distinction is false; the unit type $\top$ is the standard counterexample. The present chapter therefore uses the weaker formulation because it is both correct and sufficient for what follows.
+Stronger results appear later. The chapter \emph{\nameref{ch:two-normal-form}} constructs \texttt{Two-distinction} without premises, and the chapter \emph{\nameref{ch:scale-closure}} provides an independent route through measurement. By contrast, the stronger claim that every inhabited type already contains a distinction is false; the unit type $\top$ is the standard counterexample. The present chapter therefore uses the weaker formulation because it is both correct and sufficient for what follows.
 
 \begin{code}
 -- § Non-vacuity demands that Distinction cannot be refuted.
@@ -1054,7 +1074,7 @@ record NonVacuityLaw : Set1 where
 open NonVacuityLaw public
 \end{code}
 
-\subsection{Law 0.0: Distinction Is Irrefutable}
+\subsection{Distinction Is Irrefutable}
 \label{law:nonvacuity:irrefutable}
 
 The first law simply restates the field of \texttt{NonVacuityLaw}. Its role is foundational: without it, every later theorem quantified over distinctions would hold for purely vacuous reasons.
@@ -1065,7 +1085,7 @@ law0-0-nonvacuity : (nv : NonVacuityLaw) → ¬¬ Distinction
 law0-0-nonvacuity = nonvacuity
 \end{code}
 
-\subsection{Law 0.1: Non-Vacuity Is Non-Eliminability}
+\subsection{Non-Vacuity Is Non-Eliminability}
 \label{law:nonvacuity:non-eliminability}
 
 This is the same content in a slightly sharper form. The negation of \texttt{Distinction} is itself unstable, even though no explicit witness has yet been constructed.
@@ -1077,7 +1097,7 @@ law0-1-nonvacuity-is-non-eliminability :
 law0-1-nonvacuity-is-non-eliminability = nonvacuity
 \end{code}
 
-\subsection{Law 0.2: Distinction Carrier Is Inhabited}
+\subsection{Distinction Carrier Is Inhabited}
 \label{law:nonvacuity:carrier-inhabited}
 
 Once a distinction record is given, its carrier is inhabited, witnessed
@@ -1089,7 +1109,7 @@ law0-2-inhabited : (d : Distinction) → S d
 law0-2-inhabited d = ℓ d
 \end{code}
 
-\subsection{Law 0.3: Distinction Carrier Has A Distinct Pair}
+\subsection{Distinction Carrier Has A Distinct Pair}
 \label{law:nonvacuity:distinct-pair}
 
 The record also provides a distinct pair directly, namely the two boundary
@@ -1101,7 +1121,7 @@ law0-3-has-distinct-pair : (d : Distinction) → HasDistinctPair (S d)
 law0-3-has-distinct-pair d = (ℓ d , (r d , ℓ≠r d))
 \end{code}
 
-\subsection{Law 0.4: Distinction Carrier Is Non-Contractible}
+\subsection{Distinction Carrier Is Non-Contractible}
 \label{law:nonvacuity:non-contractible}
 
 The carrier of a distinction cannot be contractible. Under the record
@@ -1115,7 +1135,7 @@ law0-4-not-contractible d (c , collapse) =
   ℓ≠r d (trans (sym (collapse (ℓ d))) (collapse (r d)))
 \end{code}
 
-\subsection{Law 0.5: Distinct Pair Forces Non-Contractibility}
+\subsection{Distinct Pair Forces Non-Contractibility}
 \label{law:nonvacuity:distinct-pair-forces-noncontractible}
 
 The previous argument does not depend on the full distinction record. Any
@@ -1130,7 +1150,7 @@ law0-5-distinct-pair-forces-nontrivial (a , (b , a≠b)) (c , collapse) =
   a≠b (trans (sym (collapse a)) (collapse b))
 \end{code}
 
-\subsection{Law 0.6: Distinction Is Reconstructible From Its Data}
+\subsection{Distinction Is Reconstructible From Its Data}
 \label{law:nonvacuity:reconstruction}
 
 The distinction record contains no hidden structure beyond its displayed
@@ -1155,7 +1175,7 @@ law0-6-reconstruction :
 law0-6-reconstruction = fromDistinctCovered
 \end{code}
 
-\subsection{Law 0.7: Reconstruction Is Exact}
+\subsection{Reconstruction Is Exact}
 \label{law:nonvacuity:reconstruction-exact}
 
 This reconstruction is exact in the strongest available sense. If one
@@ -1187,7 +1207,7 @@ This chapter makes that observation precise and uses it to derive the four-funct
 \section{Two-Class Coverage}
 \label{sec:classification:two-class-coverage}
 
-\subsection{Law 1.1: Carrier Coverage Is Two-Class}
+\subsection{Carrier Coverage Is Two-Class}
 \label{law:classification:two-class-coverage}
 
 The first classification lemma is just the cover field restated for later
@@ -1214,7 +1234,7 @@ Two-class coverage is the first structural restriction on the carrier. Figure~\r
 \label{fig:first-distinction}
 \end{figure}
 
-\subsection{Law 1.2: Elimination Is Forced By Coverage}
+\subsection{Elimination Is Forced By Coverage}
 \label{law:classification:elimination-from-coverage}
 
 Coverage yields a canonical eliminator for predicates on the carrier. If a
@@ -1322,7 +1342,7 @@ Distinction-dual-involutive d =
     ... | inj₁ _   = refl
 \end{code}
 
-\subsection{Law 1.3: Duality Is An Involution}
+\subsection{Duality Is An Involution}
 \label{law:classification:duality-involution}
 
 The previous construction is summarized in theorem form here: duality is an
@@ -1677,7 +1697,7 @@ k4-classification-unique d f c₁ c₂ p₁ p₂ =
   K₄.interpret-injective d c₁ c₂ (K₄.≗-trans d p₁ (K₄.≗-sym d p₂))
 \end{code}
 
-\subsection{Law 1.4: Endo(S) Classifies Into Exactly Four Cases}
+\subsection{Endo(S) Classifies Into Exactly Four Cases}
 \label{law:k4:endo-four-case-classification}
 
 This law records the classifier introduced above. The word ``exactly'' is
@@ -1690,7 +1710,7 @@ law1-4-classify : (d : Distinction) → (S d → S d) → EndoCase
 law1-4-classify d = K₄.classify d
 \end{code}
 
-\subsection{Law 1.5: Classification Is Sound}
+\subsection{Classification Is Sound}
 \label{law:k4:classification-sound}
 
 Soundness says that interpreting the label assigned to an endomorphism
@@ -1702,7 +1722,7 @@ law1-5-classify-sound : (d : Distinction) → (f : S d → S d) → K₄.interpr
 law1-5-classify-sound d f = snd (k4-classification-sound d f)
 \end{code}
 
-\subsection{Law 1.6: Endo Is Determined By Boundary Values}
+\subsection{Endo Is Determined By Boundary Values}
 \label{law:k4:boundary-determination}
 
 On a two-class carrier, agreement at the two boundary points already
@@ -1719,7 +1739,7 @@ law1-6-endo-determined :
 law1-6-endo-determined d = K₄.endo-determined d
 \end{code}
 
-\subsection{Law 1.7: Classification Is Unique}
+\subsection{Classification Is Unique}
 \label{law:k4:classification-unique}
 
 If a case label $c$ interprets to an endomorphism pointwise equal to $f$,
@@ -1737,7 +1757,7 @@ law1-7-classify-unique d f c p =
   k4-classification-unique d f c (fst (k4-classification-sound d f)) p (snd (k4-classification-sound d f))
 \end{code}
 
-\subsection{Law 1.8: Classification Is a Bijection}
+\subsection{Classification Is a Bijection}
 \label{law:k4:classification-bijection}
 
 The preceding laws identify \texttt{EndoCase} with endomorphisms modulo
@@ -1826,7 +1846,7 @@ Two-distinction = record
 \end{code}
 
 This supplies the constructive witness whose existence was deferred in
-Chapter~\ref{ch:non-vacuity}. The object \texttt{Two-distinction} inhabits
+the chapter \emph{\nameref{ch:non-vacuity}}. The object \texttt{Two-distinction} inhabits
 \texttt{Distinction} without further hypotheses, and it will be used
 throughout the remainder of the text whenever a concrete distinction is
 required.
@@ -3699,7 +3719,7 @@ toTwo-fromTwo d L = toTwo-ℓ d
 toTwo-fromTwo d R = toTwo-r d
 \end{code}
 
-\subsection{Law 1.8: Every Distinction Is Isomorphic To Two}
+\subsection{Every Distinction Is Isomorphic To Two}
 \label{law:two-normal-form:isomorphic-to-two}
 
 This is the basic normal-form theorem for distinctions. Here the absolute statement is proved: every distinction is isomorphic to \texttt{Two}.
@@ -4235,7 +4255,7 @@ records the induced symmetry action on the four endomorphism witnesses.
 \label{fig:k4-orbits}
 \end{figure}
 
-\subsection{Law 1.9: The Two Isomorphism Is Unique}
+\subsection{The Two Isomorphism Is Unique}
 \label{law:two-normal-form:isomorphism-unique}
 
 Any boundary-preserving isomorphism from a distinction to \texttt{Two}
@@ -4293,7 +4313,7 @@ law1-9-iso-from-unique d i =
     (trans (sym (cong (from i) (to-r i))) (from-to i (r d)))
 \end{code}
 
-\subsection{Law 1.10: Two Normal Form Has Exactly Two Orientations}
+\subsection{Two Normal Form Has Exactly Two Orientations}
 \label{law:two-normal-form:two-orientations}
 
 Every equivalence from a distinction to \texttt{Two} has one of the two
@@ -4319,7 +4339,7 @@ law1-10-orientation-exhaustive :
 law1-10-orientation-exhaustive = orientation-exhaustive
 \end{code}
 
-\subsection{Law 1.11: Automorphisms Are Exactly id Or dual}
+\subsection{Automorphisms Are Exactly id Or dual}
 \label{law:two-normal-form:automorphisms-id-or-dual}
 
 Automorphisms are therefore exhausted by the identity and the dual map.
@@ -4336,7 +4356,7 @@ law1-11-Aut-sound :
 law1-11-Aut-sound = Aut-sound
 \end{code}
 
-\subsection{Law 1.12: Two-Orientation Classification Is Sound And Unique}
+\subsection{Two-Orientation Classification Is Sound And Unique}
 \label{law:two-normal-form:orientation-classification}
 
 The next step packages the two orientations into an explicit classifier.
@@ -4415,7 +4435,7 @@ law1-12-orientationCase-unique :
 law1-12-orientationCase-unique = orientationCase-unique
 \end{code}
 
-\subsection{Law 1.13: Automorphism Classification Is Sound And Unique}
+\subsection{Automorphism Classification Is Sound And Unique}
 \label{law:two-normal-form:automorphism-classification}
 
 This final classification statement records the same two properties as
@@ -4665,7 +4685,7 @@ law1-18-endo-presentation-unique d {X} pres =
     }
 \end{code}
 
-\subsection{Law 1.19--1.20: Orientation and Automorphism Presentation Uniqueness}
+\subsection{Orientation and Automorphism Presentation Uniqueness}
 \label{laws:presentation:orientation-automorphism-elimination}
 
 The same argument applies to the orientation and automorphism classifications. Once the classifier/interpreter pair is fixed, any alternative presentation satisfying the same soundness and injectivity requirements is isomorphic to that presentation. The freedom left by relabelling is therefore harmless: it changes names, not structure.
@@ -7193,9 +7213,10 @@ classification of the admitted completion and foundation claims.
 
 The next step is to examine what happens when the same classification process is applied one level higher. This leads to the hierarchy called \emph{drift}.
 
-\part{Drift and Reachability}
+\part*{Drift and Reachability}
+\addcontentsline{toc}{part}{Drift and Reachability}
 
-Part I analysed a single distinction and the finite classification data attached to it. Part II turns to the hierarchy obtained by iterating that analysis. Once classification data are themselves treated as mathematical objects, the development moves through higher universe levels in a controlled way.
+The preceding chapters analysed a single distinction and the finite classification data attached to it. This part turns to the hierarchy obtained by iterating that analysis. Once classification data are themselves treated as mathematical objects, the development moves through higher universe levels in a controlled way.
 
 This is the role of drift. The underlying idea is straightforward: once a structure has been introduced and classified at one level, the resulting data becomes the object of further classification at the next. The next chapters make that transition explicit and study the linear hierarchy it generates.
 
@@ -7260,7 +7281,7 @@ drift d = record
   ... | inj₂ x≡r = inj₂ (cong lift x≡r)
 \end{code}
 
-\subsection{Law 2.1: No Classification May Remain Unclassified}
+\subsection{No Classification May Remain Unclassified}
 \label{law:drift:no-classification-unclassified}
 
 This law records the drift construction as the formal expression of closure
@@ -7298,7 +7319,7 @@ records the answer formally. The key point is that \texttt{lift} is
 injective, so different elements of the original carrier remain different
 after embedding.
 
-\subsection{Law 3.1: Drift Does Not Fold The Prior Carrier}
+\subsection{Drift Does Not Fold The Prior Carrier}
 \label{law:drift:prior-carrier-not-folded}
 
 The proof is immediate from injectivity of \texttt{lift}. If two embedded
@@ -7364,7 +7385,7 @@ Distinctionℓ-determined d f g fℓ≡gℓ fr≡gr =
 \section{Tier 2 Normal Form}
 \label{sec:tier2-normal-form}
 
-The base-level normal-form theorem of Chapter~\ref{ch:two-normal-form}
+The base-level normal-form theorem of the chapter \emph{\nameref{ch:two-normal-form}}
 stated that every \texttt{Distinction} is isomorphic to \texttt{Two}. Once
 classification data themselves are lifted into higher universes, the same
 statement must hold there too, or the hierarchy would generate
@@ -7518,7 +7539,7 @@ driftUniversal = record
   }
 \end{code}
 
-\subsection{Law 4.1: Drift Is Universal Among Boundary-Preserving Lifts}
+\subsection{Drift Is Universal Among Boundary-Preserving Lifts}
 \label{law:drift:universal-lift}
 
 The mediator is defined by applying the target embedding after lowering
@@ -7594,7 +7615,7 @@ drift-factor-unique d t m =
   mediator-unique d t (map m) (comm m)
 \end{code}
 
-\subsection{Law 4.2: Drift-Step Factorization Is Unique}
+\subsection{Drift-Step Factorization Is Unique}
 \label{law:drift:factorization-unique}
 
 This is the corresponding uniqueness statement for factorizations through
@@ -7611,7 +7632,7 @@ law4-2-factor-unique :
 law4-2-factor-unique = drift-factor-unique
 \end{code}
 
-\subsection{Law 4.3: The Category of Boundary-Preserving Lifts}
+\subsection{The Category of Boundary-Preserving Lifts}
 \label{law:drift:category-of-lifts}
 
 Once the universal property has been stated, boundary-preserving lifts
@@ -7810,7 +7831,7 @@ reach-embed {s} stop     x = x
 reach-embed {s} (next p) x = reach⁺-embed p x
 \end{code}
 
-\subsection{Law 5.0: Drift Admits No Terminal State}
+\subsection{Drift Admits No Terminal State}
 \label{law:reachability:no-terminal-state}
 
 If a terminal state existed, then the strict successor supplied by
@@ -7822,7 +7843,7 @@ law5-0-no-terminal : (s : DriftState) → Terminal s → ⊥
 law5-0-no-terminal = no-terminal
 \end{code}
 
-\subsection{Law 5.1: Strict Successors Are Comparable}
+\subsection{Strict Successors Are Comparable}
 \label{law:reachability:strict-successors-comparable}
 
 Any two states strictly reachable from the same source are comparable:
@@ -7840,7 +7861,7 @@ law5-1-comparable :
 law5-1-comparable = Reach⁺-comparable
 \end{code}
 
-\subsection{Law 5.2: Every Finite Chain Extends}
+\subsection{Every Finite Chain Extends}
 \label{law:reachability:finite-chain-extends}
 
 Every finite chain of drift steps can be extended by one more step. This
@@ -7863,7 +7884,7 @@ law5-2-extend :
 law5-2-extend = Reach-extend
 \end{code}
 
-\subsection{Laws 5.3--5.7: Closure and Induction}
+\subsection{Closure and Induction}
 \label{laws:reachability:closure-induction}
 
 The remaining structural laws are direct consequences of the inductive
@@ -7924,7 +7945,7 @@ record DriftAcyclic : Setω where
 open DriftAcyclic public
 \end{code}
 
-\subsection{Law 6.0: Drift Has No Cycles}
+\subsection{Drift Has No Cycles}
 \label{law:acyclicity:no-cycles}
 
 Acyclicity is recorded as a constraint: any cycle $s \prec s$ leads to
@@ -7937,7 +7958,7 @@ law6-0-no-cycle : DriftAcyclic → (s : DriftState) → (s ≺ s) → ⊥
 law6-0-no-cycle ac s p = no-cycle ac s p
 \end{code}
 
-\subsection{Law 6.1: Strict Reachability Is Irreflexive}
+\subsection{Strict Reachability Is Irreflexive}
 \label{law:acyclicity:irreflexive}
 
 Irreflexivity is the immediate instance of acyclicity: $s \prec s$ is
@@ -7949,7 +7970,7 @@ law6-1-irreflexive : DriftAcyclic → (s : DriftState) → (s ≺ s) → ⊥
 law6-1-irreflexive ac s = no-cycle ac s
 \end{code}
 
-\subsection{Law 6.2: Strict Reachability Is Asymmetric}
+\subsection{Strict Reachability Is Asymmetric}
 \label{law:acyclicity:asymmetric}
 
 If both $s \prec t$ and $t \prec s$ held, transitivity would produce the
@@ -7963,7 +7984,7 @@ law6-2-asymmetric :
 law6-2-asymmetric ac p q = no-cycle ac _ (≺-trans p q)
 \end{code}
 
-\subsection{Law 6.3: Drift-Step Has No Fixed Point}
+\subsection{Drift-Step Has No Fixed Point}
 \label{law:acyclicity:no-fixed-point}
 
 If \texttt{stepState}~$s$ equalled $s$, then the single-step witness
@@ -7977,7 +7998,7 @@ law6-3-no-fixpoint-stepState ac s eq =
   no-cycle ac s (substω (λ u → Reach⁺ s u) eq one)
 \end{code}
 
-\subsection{Law 6.4: Drift Is a Strict Total Order}
+\subsection{Drift Is a Strict Total Order}
 \label{law:acyclicity:strict-total-order}
 
 Taken together, transitivity, irreflexivity, asymmetry, and
@@ -8012,7 +8033,8 @@ acyclicity constraint prevents it from folding back into itself.
 
 The next part extends the same classification ideas from endomorphisms to maps between different distinction carriers.
 
-\part{Heteromorphisms and Presentation}
+\part*{Heteromorphisms and Presentation}
+\addcontentsline{toc}{part}{Heteromorphisms and Presentation}
 
 The previous parts classified self-maps of a single distinction and
 analysed the hierarchy generated by drift. The next step is to consider
@@ -8226,7 +8248,7 @@ this yields uniqueness of classification.
     }
 \end{code}
 
-\subsection{Law 7.1: A Map Is Determined By Boundary Values}
+\subsection{A Map Is Determined By Boundary Values}
 \label{law:heteromorphisms:boundary-determination}
 
 Every input falls into one of the two boundary cases. Once the values at
@@ -8262,7 +8284,7 @@ law7-1-map-determined :
 law7-1-map-determined d₁ d₂ = K₄Map.map-determined d₁ d₂
 \end{code}
 
-\subsection{Law 7.2: K\texorpdfstring{$_4$}{4} Classification Produces A Witness For Any Map}
+\subsection{K\texorpdfstring{$_4$}{4} Classification Produces A Witness For Any Map}
 \label{law:heteromorphisms:k4-witness-sound}
 
 Every map between two distinctions receives a classification witness: a
@@ -8280,7 +8302,7 @@ law7-2-k4map-classification-sound :
 law7-2-k4map-classification-sound = k4map-classification-sound
 \end{code}
 
-\subsection{Law 7.3: K\texorpdfstring{$_4$}{4} Witness For Maps Is Unique}
+\subsection{K\texorpdfstring{$_4$}{4} Witness For Maps Is Unique}
 \label{law:heteromorphisms:k4-witness-unique}
 
 Two distinct case labels cannot interpret to the same map. If they did,
@@ -8300,7 +8322,7 @@ law7-3-k4map-classification-unique :
 law7-3-k4map-classification-unique = k4map-classification-unique
 \end{code}
 
-\subsection{Law 7.4: Map Presentation Is Unique Up To Isomorphism}
+\subsection{Map Presentation Is Unique Up To Isomorphism}
 \label{law:heteromorphisms:presentation-unique}
 
 Any alternative presentation of the four-case map classification, using
@@ -8362,7 +8384,7 @@ law7-4-map-presentation-unique d₁ d₂ {X} pres =
     }
 \end{code}
 
-\subsection{Law 7.5: Map Classification Is a Bijection}
+\subsection{Map Classification Is a Bijection}
 \label{law:heteromorphisms:k4-map-bijection}
 
 The inter-distinction classifier satisfies the same round-trip property
@@ -8461,7 +8483,7 @@ _≺ℕ_ : DriftStateℕ → DriftStateℕ → Setω
 s ≺ℕ t = Reach⁺ℕ s t
 \end{code}
 
-\subsection{Law 8.0: Tick Strictly Increases Along Reach\texorpdfstring{$^+_{\mathbb{N}}$}{+N}}
+\subsection{Tick Strictly Increases Along Reach\texorpdfstring{$^+_{\mathbb{N}}$}{+N}}
 \label{law:indexed-ledger:tick-increases}
 
 The key property of the indexed ledger is that every strict reachability
@@ -8476,7 +8498,7 @@ law8-0-tick-increases {s} (moreℕ p) =
   ≤-trans (≤-step (suc (tick s))) (law8-0-tick-increases p)
 \end{code}
 
-\subsection{Law 8.1: Indexed Drift Has No Cycles}
+\subsection{Indexed Drift Has No Cycles}
 \label{law:indexed-ledger:no-cycles}
 
 The indexed acyclicity statement is then immediate: a cycle would force
@@ -8489,7 +8511,7 @@ law8-1-no-cycleℕ : (s : DriftStateℕ) → (s ≺ℕ s) → ⊥
 law8-1-no-cycleℕ s p = suc≤-impossible (tick s) (law8-0-tick-increases p)
 \end{code}
 
-\subsection{Law 6.6 (deferred): Tick Presents Every Drift Orbit As \texorpdfstring{$\omega$}{omega}}
+\subsection{Tick Presents Every Drift Orbit As \texorpdfstring{$\omega$}{omega}}
 \label{law:indexed-ledger:tick-iso-omega}
 
 Fixing a base state produces a single drift orbit. The indexed
@@ -8610,7 +8632,7 @@ law6-6-tick-iso-ω b = record
   }
 \end{code}
 
-\subsection{Law 6.4 Refined: Orbit Trichotomy}
+\subsection{Orbit Trichotomy}
 \label{law:acyclicity:orbit-trichotomy}
 
 With the indexed orbit in hand, one obtains the expected trichotomy statement: along a fixed orbit, two states are either ordered one way, equal, or ordered the other way.
@@ -8694,7 +8716,7 @@ substω-more :
 substω-more reflω p = reflω
 \end{code}
 
-\subsection{Laws 9.0--9.2: Forget/Lift Round-Trip}
+\subsection{Forget/Lift Round-Trip}
 \label{laws:observables:forget-lift-roundtrip}
 
 These first lemmas show that forgetting and lifting behave exactly as
@@ -8728,7 +8750,7 @@ law9-2-forget-after-lift n {s} (more p) =
     (congω more (law9-2-forget-after-lift (suc n) p))
 \end{code}
 
-\subsection{Laws 9.3--9.9: Admissible Observables}
+\subsection{Admissible Observables}
 \label{laws:observables:admissible}
 
 An indexed observable is called admissible when it depends only on the
@@ -8923,7 +8945,7 @@ law9-x-tick-not-admissible rb =
     liftω-distinct ()
 \end{code}
 
-\subsection{Laws 9.10--9.14: Observational Normal Forms}
+\subsection{Observational Normal Forms}
 \label{laws:observables:normal-forms}
 
 Once admissibility has been isolated, the normal form for admissible
@@ -9037,7 +9059,8 @@ reachability apparatus collapses to normal presentations when only
 admissible information is retained. The next part turns this into an
 explicit theory of observables and fixpoints.
 
-\part{Observables and Fixpoint}
+\part*{Observables and Fixpoint}
+\addcontentsline{toc}{part}{Observables and Fixpoint}
 
 The next part asks which quantities survive the passage from indexed
 presentations to genuine observables. By construction, admissible
@@ -9091,7 +9114,7 @@ record AdmissibleReachObservable (Y : Setω) : Setω where
 open AdmissibleReachObservable public
 \end{code}
 
-\subsection{Laws 10.0--10.1: Admissible Reach Observables Factor Through Forget}
+\subsection{Admissible Reach Observables Factor Through Forget}
 \label{laws:reach-observables:factor-through-forget}
 
 These two lemmas unpack the definition. An admissible reach observable
@@ -9122,7 +9145,7 @@ law10-1-baseR-unique obsR' h₁ h₂ comm₁ comm₂ {s} {t} p =
       (transω (comm₂ q) (congω h₂ e)))
 \end{code}
 
-\subsection{Laws 10.2--10.3: Reach Observables And Transitivity}
+\subsection{Reach Observables And Transitivity}
 \label{laws:reach-observables:transitivity}
 
 The next pair of lemmas records compatibility of admissible reach
@@ -9175,7 +9198,7 @@ law10-3-obsR-extend a p =
   transω (commR a (Reach⁺ℕ-extend p)) (congω (baseR a) (forgetReach⁺-extend p))
 \end{code}
 
-\subsection{Laws 10.4--10.6: Reach Observable Infrastructure}
+\subsection{Reach Observable Infrastructure}
 \label{laws:reach-observables:infrastructure}
 
 The following auxiliary definitions put admissible reach observables
@@ -9237,7 +9260,7 @@ law10-6-baseR-pack-id :
 law10-6-baseR-pack-id h p = reflω
 \end{code}
 
-\subsection{Laws 10.7--10.11: Reach Observational Normal Forms}
+\subsection{Reach Observational Normal Forms}
 \label{laws:reach-observables:normal-forms}
 
 Reach observables have the same normal-form problem as the earlier
@@ -9375,7 +9398,7 @@ record DriftRank : Setω where
 open DriftRank public
 \end{code}
 
-\subsection{Law 11.0: Rank Is Monotone Along Reach\texorpdfstring{$^+$}{+}}
+\subsection{Rank Is Monotone Along Reach\texorpdfstring{$^+$}{+}}
 \label{law:ranking:monotone}
 
 Positive reachability is generated by one or more applications of
@@ -9401,7 +9424,7 @@ law11-0-rank-increases r {s} (more p) =
   ≤-trans (rank-step r s) (law11-0-rank-mono r p)
 \end{code}
 
-\subsection{Law 11.1: Ranking Forces Acyclicity}
+\subsection{Ranking Forces Acyclicity}
 \label{law:ranking:forces-acyclicity}
 
 Once monotonicity has been established, acyclicity follows immediately: a cycle would force a strict successor inequality back onto the same natural number.
@@ -9566,7 +9589,7 @@ transport≠ :
 transport≠ ea eb neq eq' = neq (trans ea (trans eq' (sym eb)))
 \end{code}
 
-\subsection{Law 13.0: The Canonical K\texorpdfstring{$_4$}{4} Graph Has Edge = Inequality}
+\subsection{The Canonical K\texorpdfstring{$_4$}{4} Graph Has Edge = Inequality}
 \label{law:graph-presentation:canonical-k4}
 
 The canonical $K_4$ graph is constructed with \texttt{EndoCase} as its
@@ -9605,7 +9628,7 @@ presentedGraph p = record
   }
 \end{code}
 
-\subsection{Law 13.1: Any K\texorpdfstring{$_4$}{4} Graph Presentation Collapses To The Canonical Graph Up To Iso}
+\subsection{Any K\texorpdfstring{$_4$}{4} Graph Presentation Collapses To The Canonical Graph Up To Iso}
 \label{law:graph-presentation:presentation-collapse}
 
 Any other presentation of the same four vertices is obtained by
@@ -9661,7 +9684,7 @@ law13-1-presentation-iso p = record
   }
 \end{code}
 
-\subsection{Law 13.2: K\texorpdfstring{$_3$}{3} Cannot Host the Four Cases}
+\subsection{K\texorpdfstring{$_3$}{3} Cannot Host the Four Cases}
 \label{law:graph-presentation:k3-failure}
 \phantomsection\label{ch:K3-failure}
 
@@ -9752,7 +9775,7 @@ law13-2-K3-fails f inj =
 \end{code}
 
 %───────────────────────────────────────────────────────────────────────────
-\section{Law 13.3: \texorpdfstring{$K_5$}{K5} Cannot Arise}
+\section{\texorpdfstring{$K_5$}{K5} Cannot Arise}
 \label{sec:k4-uniqueness:k5-cannot-arise}
 %───────────────────────────────────────────────────────────────────────────
 
@@ -9874,13 +9897,13 @@ proved. It is not a metric or physical interpretation.
 
 Three premises have been carried this far without being assembled.
 Non-collapse of distinction
-(\hyperref[ch:drift-noncollapse]{Chapter~\ref*{ch:drift-noncollapse}})
+(the chapter \emph{\nameref{ch:drift-noncollapse}})
 forbids the re-identification of what has been told apart. Drift
-non-triviality (\hyperref[ch:drift]{Chapter~\ref*{ch:drift}})
+non-triviality (the chapter \emph{\nameref{ch:drift}})
 forbids that ``differs from'' is a single binary flag: there are
 several independent ways in which two configurations may differ, and
 their count is precisely $d$. The symmetry of $K_4$ (the orbit theorems
-of \hyperref[ch:graph-presentation]{Chapter~\ref*{ch:graph-presentation}})
+of the chapter \emph{\nameref{ch:graph-presentation}})
 forbids that any vertex, edge, or independent direction is structurally
 distinguishable from any other.
 
@@ -10002,7 +10025,7 @@ The object that survives non-collapse, drift non-triviality, and
 isotropy is simultaneously a finite graph and a $d$-dimensional
 extension structure with $\mathrm{Aut} = S_4$. No separate construction
 is needed. The graph $K_4$ already proven in
-\hyperref[ch:graph-presentation]{Chapter~\ref*{ch:graph-presentation}}
+the chapter \emph{\nameref{ch:graph-presentation}}
 admits the extension reading because its three ingredients ---
 non-collapse, drift non-triviality, isotropy --- are precisely the
 ingredients used to characterise it as a graph.
@@ -10032,7 +10055,7 @@ An interpretive physical reading: the extension structure is invariant
 under the choice of what its configurations are. They may later be read
 as physical states, types in a type theory, objects in a category, or
 anything else that carries the three premises of
-\S\ref{sec:spatial-extension:order-of-forcing}. The companion volume
+the section \emph{\nameref{sec:spatial-extension:order-of-forcing}}. The companion volume
 \emph{Form} undertakes one such interpretation; this volume does not.
 
 A scalar value: the integer $\mathcal{C} = 137$ does not yet appear at
@@ -10040,7 +10063,7 @@ the level of this chapter. It is a particular invariant of the
 extension structure, evaluated by the arithmetic of the next part.
 The fact that the formula has the form $V^d \cdot \chi + d^2$ rather
 than another arithmetic combination is fixed inside the kind/formula framework ---
-\hyperref[ch:invariant-kinds]{Chapter~\ref*{ch:invariant-kinds}} closes
+the chapter \emph{\nameref{ch:invariant-kinds}} closes
 that question --- but the closure occurs after the arithmetic
 infrastructure is in place.
 
@@ -10054,7 +10077,8 @@ monotonicity, isotropy, $d$-dimensional extension --- and on nothing
 else.
 
 %═══════════════════════════════════════════════════════════════════════════
-\part{Derived Arithmetic}
+\part*{Derived Arithmetic}
+\addcontentsline{toc}{part}{Derived Arithmetic}
 %═══════════════════════════════════════════════════════════════════════════
 
 With the graph-theoretic core in place, the development turns to
@@ -10084,7 +10108,7 @@ rather than a consequence. The W-type over \texttt{Two} with branching
 shape $\texttt{L} \mapsto \bot$, $\texttt{R} \mapsto \mathbf{1}$ is
 well-defined inside MLTT. Its zero/successor encoding produces a
 forward map from the Peano naturals introduced in
-Chapter~\ref{ch:indexed-ledger} into this W-encoding; the inverse is
+the chapter \emph{\nameref{ch:indexed-ledger}} into this W-encoding; the inverse is
 structural recursion on \texttt{W}; the round-trip on the Peano side
 holds by \texttt{refl} after a single \texttt{cong\,suc}; the
 round-trip on the W-side holds up to a structural equivalence that does
@@ -10903,7 +10927,7 @@ transport2 {P = P} {a = a} {a' = a'} {b = b} {b' = b'} ea eb pab =
   subst (λ a0 → P a0 b') ea (subst (λ b0 → P a b0) eb pab)
 \end{code}
 
-\subsection{Law 14F.0: A Single Cross-Invariant Edge Forces All Edges}
+\subsection{A Single Cross-Invariant Edge Forces All Edges}
 \label{law:coupling:edge-forces-all}
 
 Cross-invariance is extremely rigid in this setting. If one cross-edge
@@ -12555,7 +12579,7 @@ Pairℕ-mul-neg-neg a b =
     pair-ext refl refl = refl
 \end{code}
 
-\subsection{Law 14P.0: Positive Nonzero Scalar Has No Torsion (Left)}
+\subsection{Positive Nonzero Scalar Has No Torsion (Left)}
 \label{law:integer-multiplication:positive-no-torsion-left}
 
 The first torsion-freeness statement says that multiplication by a
@@ -12619,7 +12643,7 @@ forces the remaining factor to vanish.
     caseSucZero ()
 \end{code}
 
-\subsection{Laws 14P.1--14P.2: Multiplication Commutes With Negation}
+\subsection{Multiplication Commutes With Negation}
 \label{laws:integer-multiplication:commutes-with-negation}
 
 The interaction of multiplication with negation is obtained from distributivity together with the additive inverse laws. Conceptually the argument is the standard one: $x \cdot (y + (-y)) = x \cdot 0$ and $((-x) + x) \cdot y = 0 \cdot y$.
@@ -12694,7 +12718,7 @@ The interaction of multiplication with negation is obtained from distributivity 
     (trans addInv rhsReduce)
 \end{code}
 
-\subsection{Law 14P.3: Negative Nonzero Scalar Has No Torsion (Left)}
+\subsection{Negative Nonzero Scalar Has No Torsion (Left)}
 \label{law:integer-multiplication:negative-no-torsion-left}
 
 Torsion-freeness for negative left factors is now immediate from the
@@ -14087,7 +14111,7 @@ combinatorial number $\binom{V}{2}$. It is a \emph{relational} quantity.
 
 The dimensional invariant $d$ counts the independent monotone directions
 of extension exhibited in
-\hyperref[ch:forced-spatial-extension]{Chapter~\ref*{ch:forced-spatial-extension}}.
+the chapter \emph{\nameref{ch:forced-spatial-extension}}.
 On a complete graph it equals $V - 1$, the dimension of the non-trivial
 eigenspace of the Laplacian, and the embedding dimension of the
 simplex carrier. Its constructor is dimension. It is a \emph{directional}
@@ -14348,7 +14372,7 @@ independent higher-dimensional stratum. The numerical readings
 available on the closed structure are therefore exactly four: the
 count of $0$-cells, the count of $1$-cells, the count of $2$-cells,
 and the ambient direction count $d$ established by
-\hyperref[ch:forced-spatial-extension]{Chapter~\ref*{ch:forced-spatial-extension}}.
+the chapter \emph{\nameref{ch:forced-spatial-extension}}.
 Anything else read off the record is a function of these four sources,
 not a fifth source, because the record carries no datum beyond cells
 and directions.
@@ -14382,13 +14406,13 @@ The four-element data type \texttt{InvariantKind} is therefore not a
 choice of categorisation. It is the unique enumeration of the record's
 primitive sources, and the four invariants are the unique
 refinement-stable readings of those sources. The disjointness lemmas of
-\S\ref{sec:invariant-kinds:disjointness} are then not the rigidity of
+the section \emph{\nameref{sec:invariant-kinds:disjointness}} are then not the rigidity of
 an external classification, but the separation carried by the record's
 own slot structure.
 
 The absorption of $F$ into $\chi$ on $K_4$ is not a refinement step
 but the conjunction of two computations already performed in
-\hyperref[ch:simplex-invariants-natural-multiplication]{Chapter~\ref*{ch:simplex-invariants-natural-multiplication}}:
+the chapter \emph{\nameref{ch:simplex-invariants-natural-multiplication}}:
 $F = V$ by self-duality of the tetrahedron
 (\texttt{simplex-faces $\equiv$ simplex-vertices} as
 \texttt{law14C-2a-faces}), and $\chi = V - E + F = 2$ by the
@@ -14460,7 +14484,7 @@ count $1$. The top-cell count is constant across all closed
 $3$-simplices and carries no further information; it is absorbed into
 the closure invariant. The remaining three cardinalities, plus the
 ambient direction count $d$ established in
-\hyperref[ch:forced-spatial-extension]{Chapter~\ref*{ch:forced-spatial-extension}},
+the chapter \emph{\nameref{ch:forced-spatial-extension}},
 are the four primitive cardinality sources of the closed record.
 
 Refinement-stability collapses $(V, E, F)$ to $(V, E, \chi)$ via the
@@ -14546,7 +14570,7 @@ bulk built on $V$ alone, or on $V^k$ with $k < d$, would count
 configurations across only $k$ of the $d$ extension directions,
 silently distinguishing those $k$ directions from the remaining ones.
 That distinction is forbidden by the isotropy result of
-\hyperref[sec:spatial-extension:isotropy]{\S\ref*{sec:spatial-extension:isotropy}}.
+\nameref{sec:spatial-extension:isotropy}.
 The exponent must therefore be exactly $d$.
 
 The multiplication by $\chi$ is fixed: $\chi$ is topological, distinct
@@ -14591,10 +14615,10 @@ either identifies kinds the disjointness lemmas keep apart, fails to
 multiply factors of the shared bulk kind, breaks isotropy across the
 $d$ directions of the bulk, or violates the binary along--transverse
 arity of the boundary. The first two failures are excluded by the
-lemmas of \S\ref{sec:invariant-kinds:disjointness} and the bulk
-witness of \S\ref{sec:invariant-kinds:bulk-boundary}; the third by the
+lemmas of the section \emph{\nameref{sec:invariant-kinds:disjointness}} and the bulk
+witness of the section \emph{\nameref{sec:invariant-kinds:bulk-boundary}}; the third by the
 isotropy result of
-\hyperref[sec:spatial-extension:isotropy]{\S\ref*{sec:spatial-extension:isotropy}};
+\nameref{sec:spatial-extension:isotropy};
 the fourth by the codimension structure of the present section.
 
 The simplex evaluation defined in the next section is therefore the
@@ -15032,8 +15056,8 @@ closed by enumeration; each is closed by a single structural witness.
 
 \begin{enumerate}
   \item \textbf{Choice of which invariants enter.} Eliminated by
-    \S\ref{sec:invariant-kinds:extract} together with
-    \S\ref{sec:invariant-kinds:source-indexing}: an extract is
+    the section \emph{\nameref{sec:invariant-kinds:extract}} together with
+    the section \emph{\nameref{sec:invariant-kinds:source-indexing}}: an extract is
     forced by the binary distinction to be a function on the
     cardinality sources of $\mathrm{Aut}(K_4)$-orbits, and those
     sources are exhausted by $V$, $E$, $d$, $\chi$. No fifth
@@ -15042,8 +15066,8 @@ closed by enumeration; each is closed by a single structural witness.
 
   \item \textbf{Choice of arithmetic operation between two invariants}
     (sum vs.\ product). Eliminated by
-    \S\ref{sec:invariant-kinds:disjointness} together with the
-    forgetful map of \S\ref{sec:invariant-kinds:forgetful}: shared
+    the section \emph{\nameref{sec:invariant-kinds:disjointness}} together with the
+    forgetful map of the section \emph{\nameref{sec:invariant-kinds:forgetful}}: shared
     kind admits the categorical product $\_\otimes\_$, whose forgetful
     reduction is multiplication; disjoint kinds admit the categorical
     coproduct $\_\oplus[\_]\_$, whose forgetful reduction is addition.
@@ -15051,14 +15075,14 @@ closed by enumeration; each is closed by a single structural witness.
 
   \item \textbf{Choice of which factors are bulk and which are
     boundary.} Eliminated by the bulk--boundary witness of
-    \S\ref{sec:invariant-kinds:bulk-boundary}: configurational and
+    the section \emph{\nameref{sec:invariant-kinds:bulk-boundary}}: configurational and
     topological share the closed extension as their carrier and
     accumulate inside the bulk; directional is disjoint from both
     and forms the boundary.
 
   \item \textbf{Choice of bulk exponent.} Eliminated by the isotropy
     result of
-    \hyperref[sec:spatial-extension:isotropy]{\S\ref*{sec:spatial-extension:isotropy}}:
+    \nameref{sec:spatial-extension:isotropy}:
     the bulk must count configurations across all $d$ extension
     directions symmetrically. Any exponent other than $d$ would
     distinguish a subset of the directions from the rest.
@@ -15093,20 +15117,20 @@ is the value of the only structurally admissible candidate there.
 Each of the six structural witnesses listed above is mechanically
 discharged by a record built from existing book lemmas: the
 self-dual closure record of
-\hyperref[sec:invariant-kinds:source-indexing]{\S\ref*{sec:invariant-kinds:source-indexing}}
+\nameref{sec:invariant-kinds:source-indexing}
 and the form-uniqueness record at the close of
-\hyperref[sec:invariant-kinds:form-forced]{\S\ref*{sec:invariant-kinds:form-forced}}
+\nameref{sec:invariant-kinds:form-forced}
 discharge the closure and uniqueness items; the boundary-arity
 record of
-\hyperref[sec:simplex-eval-exhaustion]{\S\ref*{sec:simplex-eval-exhaustion}}
+\nameref{sec:simplex-eval-exhaustion}
 discharges the boundary item; the orbit theorems of
-\hyperref[ch:forced-edge-matching-orbits]{Chapter~\ref*{ch:forced-edge-matching-orbits}}
+the chapter \emph{\nameref{ch:forced-edge-matching-orbits}}
 discharge the Aut-related items in
-\hyperref[ch:mechanical-closure]{Chapter~\ref*{ch:mechanical-closure}};
+the chapter \emph{\nameref{ch:mechanical-closure}};
 and the simplex evaluation of the next section produces the
 value~$137$. The six items together inhabit the record
 \texttt{AuditClosure} at the close of
-\hyperref[ch:mechanical-closure]{Chapter~\ref*{ch:mechanical-closure}};
+the chapter \emph{\nameref{ch:mechanical-closure}};
 each field of \texttt{audit-closure} is the named witness for the
 audit item carrying the same number.
 
@@ -15339,7 +15363,7 @@ self-product \texttt{p-dd}. Mechanically: $d = 3$ by
 \texttt{refl}. The codimension reading of $d^2$ as the binary
 along--transverse arity of a codimension-$1$ surface (made
 structurally in
-\hyperref[sec:invariant-kinds:form-forced]{\S\ref*{sec:invariant-kinds:form-forced}})
+\nameref{sec:invariant-kinds:form-forced})
 is therefore the value of \texttt{p-dd} inside \texttt{simplex-eval},
 fixed by computation.
 
@@ -15719,12 +15743,12 @@ same invariants, exactly one pair-sum decomposition --- the canonical
 identity $d^2 + V^3 \chi$. Both facts are machine-checked.
 
 \textbf{What is forced about the form.}
-\hyperref[ch:invariant-kinds]{Chapter~\ref*{ch:invariant-kinds}} closes
+the chapter \emph{\nameref{ch:invariant-kinds}} closes
 the question of why the aggregating expression has the shape it has.
 The four invariants are not interchangeable quantities: $V$ is
 configurational, $E$ relational, $d$ directional, $\chi$ topological.
 The six pairwise disjointness lemmas of
-\S\ref{sec:invariant-kinds:disjointness} eliminate every identification
+the section \emph{\nameref{sec:invariant-kinds:disjointness}} eliminate every identification
 between these kinds. Inside the bulk term, $V^d$ and $\chi$ share a
 single underlying carrier --- the closed extension structure --- and
 combine multiplicatively as a categorical product whose forgetful image
@@ -15733,10 +15757,10 @@ draws on a kind disjoint from both bulk factors and combines with the
 bulk additively as a categorical coproduct whose forgetful image is
 numerical addition. The form $V^d \cdot \chi + d^2$ is therefore the
 unique combination of these four invariants that respects the kind
-classification of \S\ref{sec:invariant-kinds:bulk-boundary}.
+classification of the section \emph{\nameref{sec:invariant-kinds:bulk-boundary}}.
 
 \textbf{What is forced about the meaning.}
-\hyperref[ch:forced-spatial-extension]{Chapter~\ref*{ch:forced-spatial-extension}}
+the chapter \emph{\nameref{ch:forced-spatial-extension}}
 shows that the closed record is not a passive tuple of numbers but the
 description of an isotropic, monotone, $d$-dimensional extension
 structure. The factors of the simplex evaluation are not arbitrarily
@@ -16678,13 +16702,13 @@ law14E-20-eigen4→sum0 = law14E-19-eigen4→sum0
 \section{Operator Identity and Kernel}
 \label{sec:laplacian-finite-index:operator-identity-kernel}
 
-\hyperref[law:laplacian-finite-index:operator-identity]{Law~14E.21}
+\nameref{law:laplacian-finite-index:operator-identity}
 establishes $L = 4I - J$ pointwise. From this identity the kernel is
 forced immediately: the equation $Lv_i = 0$ is equivalent to
 $4 v_i = Jv_i$, so every coordinate must agree with the same total sum,
 which is precisely the defining property of a constant vector.
-\hyperref[sec:laplacian-finite-index:operator-identity-kernel]{Laws~14E.22--14E.27}
-package this equivalence in both directions as reusable lemmas for the
+The section \emph{\nameref{sec:laplacian-finite-index:operator-identity-kernel}}
+packages this equivalence in both directions as reusable lemmas for the
 later spectral arguments. In this way the kernel is fixed as the
 one-dimensional space of constant vectors, exactly as connectivity of
 $K_4$ demands.
@@ -17536,7 +17560,7 @@ The symmetry operations on measurements must induce matching symmetries
 on their classification labels. The next two laws state exactly that
 compatibility for output swap and input swap.
 
-\subsection{Law 15C.0: Classification Respects Outcome Swap}
+\subsection{Classification Respects Outcome Swap}
 \label{law:measurement-symmetries:outcome-swap}
 
 This law says that classifying after swapping outputs yields exactly the
@@ -17567,7 +17591,7 @@ law15C-0-classify-swapOut d m =
           (swapOut-cong {d = d} (classify-sound m))
 \end{code}
 
-\subsection{Law 15C.1: Classification Respects Input Swap}
+\subsection{Classification Respects Input Swap}
 \label{law:measurement-symmetries:input-swap}
 
 The input version is analogous, except that the permutation
@@ -18156,7 +18180,7 @@ eightVec8ℤ v = eightVec4ℤ (left4 v) , eightVec4ℤ (right4 v)
 \section{Coupling Survivors and Laplacian Dispatch}
 \label{sec:coupled-k8:survivor-dispatch}
 
-Law~14G.6 has already reduced the coupling problem to exactly two
+The two-survivors result has already reduced the coupling problem to exactly two
 survivors, so at the operator level there are only two corresponding
 cases to track. The datatype \texttt{CouplingSurvivor} records these
 cases, \texttt{survivorCoupling} sends each of them to its forced
@@ -18195,7 +18219,7 @@ eightVec8ℤ-const x = constVec8ℤ (eightTimesℤ x)
 \section{Coupling Classification and Block Laws}
 \label{sec:coupled-k8:classification-block-laws}
 
-\subsection{Law 14G.0: Empty Coupling Is Block-Diagonal}
+\subsection{Empty Coupling Is Block-Diagonal}
 \label{law:coupled-k8:empty-block-diagonal}
 
 Nothing happens between the two blocks in the empty case. Accordingly,
@@ -18210,13 +18234,13 @@ law14G-0-empty-block : (v : Vec8ℤ) → Vec8Eq (laplacianSurvivorVec8ℤ surviv
 law14G-0-empty-block v = (λ _ → refl) , (λ _ → refl)
 \end{code}
 
-\subsection{Law 14G.1: Full Coupling Yields K\texorpdfstring{$_8$}{8} Laplacian}
+\subsection{Full Coupling Yields K\texorpdfstring{$_8$}{8} Laplacian}
 \label{law:coupled-k8:full-is-k8}
 
 In the full case the two blocks no longer remain separate. Each side
 acquires the extra $4 \cdot v_i$ contribution together with the
 negative sum over the opposite block. Rewriting the internal $L_4$ term
-via Law~14E.10 and regrouping the summands collapses both halves to the
+via the spectral form $L = 4I - J$ and regrouping the summands collapses both halves to the
 same $K_8$ expression $8 \cdot v_i - \Sigma_8 v$. Thus the full
 survivor case really is the $K_8$ Laplacian, and the corresponding
 spectral algebra is available everywhere this branch occurs.
@@ -18311,7 +18335,7 @@ law14G-1-full-is-K8 v =
   )
 \end{code}
 
-\subsection{Laws 14G.2--14G.5: Survivor names for the forced couplings}
+\subsection{Survivor names for the forced couplings}
 \label{laws:coupled-k8:coupling-form-constraints}
 
 These laws merely introduce convenient names for the two surviving
@@ -18337,7 +18361,7 @@ law14G-5-nonedge-empty : CouplingSurvivor
 law14G-5-nonedge-empty = survivor-empty
 \end{code}
 
-\subsection{Law 14G.6: The two survivor constructors}
+\subsection{The two survivor constructors}
 \label{law:coupled-k8:two-survivors}
 
 The type \texttt{CouplingSurvivor} has exactly two constructors, and the
@@ -18352,7 +18376,7 @@ law14G-6-survivor-cases survivor-empty = inj₁ refl
 law14G-6-survivor-cases survivor-full  = inj₂ refl
 \end{code}
 
-\subsection{Laws 14G.7--14G.8: Survivor-to-Operator Identification}
+\subsection{Survivor-to-Operator Identification}
 \label{laws:coupled-k8:survivor-operator-identification}
 
 Once the dispatcher is fixed, the two survivor values can be identified
@@ -18442,7 +18466,7 @@ zero. Once that is known, the expected annihilation identities with
 $J_8$ and the quadratic relation $L_8^2 = 8L_8$ follow by direct
 substitution.
 
-\subsection{Law 14G.12: \texorpdfstring{$\Sigma_8 (L_8\,v) = 0$}{8 (L8v) = 0}}
+\subsection{\texorpdfstring{$\Sigma_8 (L_8\,v) = 0$}{8 (L8v) = 0}}
 \label{law:coupled-k8:sum-l8-zero}
 
 Summing the coordinate formula for $L_8$ over all eight entries
@@ -18524,10 +18548,10 @@ law14G-12-sumL8-0 v =
           (+ℤ-inv-right (eightTimesℤ s)))))
 \end{code}
 
-\subsection{Law 14G.13: \texorpdfstring{$J_8 (L_8\,v) = 0$}{J8 (L8v) = 0}}
+\subsection{\texorpdfstring{$J_8 (L_8\,v) = 0$}{J8 (L8v) = 0}}
 \label{law:coupled-k8:j-after-l8-zero}
 
-Since $J_8$ broadcasts the global sum, Law~14G.12 immediately implies that $J_8$ annihilates every Laplacian image.
+Since $J_8$ broadcasts the global sum, the sum-zero property of $L_8$ immediately implies that $J_8$ annihilates every Laplacian image.
 
 \begin{code}
 -- § J₈ (L₈ v) = 0
@@ -18537,7 +18561,7 @@ law14G-13-JL-zero v =
   (λ _ → sum0) , (λ _ → sum0)
 \end{code}
 
-\subsection{Law 14G.14: \texorpdfstring{$L_8 (J_8\,v) = 0$}{L8 (J8v) = 0}}
+\subsection{\texorpdfstring{$L_8 (J_8\,v) = 0$}{L8 (J8v) = 0}}
 \label{law:coupled-k8:l-after-j8-zero}
 
 The converse composite vanishes for the complementary reason: applying $J_8$ first produces a constant vector, and constant vectors already lie in the kernel of the $K_8$ Laplacian.
@@ -18567,7 +18591,7 @@ law14G-14-LJ-zero v =
   )
 \end{code}
 
-\subsection{Law 14G.15: \texorpdfstring{$L_8 \circ L_8 = 8 \cdot L_8$}{L8 L8 = 8 L8}}
+\subsection{\texorpdfstring{$L_8 \circ L_8 = 8 \cdot L_8$}{L8 L8 = 8 L8}}
 \label{law:coupled-k8:minimal-polynomial}
 
 Applying $L_8$ to a vector already in the image removes the sum term and leaves pure multiplication by $8$. This is the precise analogue of the relation $L^2 = 4L$ from the four-vertex case.
@@ -18599,7 +18623,7 @@ exact: sum-zero vectors are precisely the $8$-eigenvectors, constants
 are precisely the $0$-eigenvectors, and the kernel condition can be
 rewritten in the broadcast form $8v = J_8 v$.
 
-\subsection{Law 14G.16: Sum-Zero Forces 8-Eigenvector}
+\subsection{Sum-Zero Forces 8-Eigenvector}
 \label{law:coupled-k8:sum-zero-implies-eigen8}
 
 Each coordinate of $L_8\,v$ is $8 \cdot v_i - \Sigma_8\,v$. Imposing
@@ -18622,7 +18646,7 @@ law14G-16-sum0-eigen8 v sum0 =
   )
 \end{code}
 
-\subsection{Law 14G.17: Pointwise 8-Eigen Forces Sum-Zero}
+\subsection{Pointwise 8-Eigen Forces Sum-Zero}
 \label{law:coupled-k8:eigen8-implies-sum-zero}
 
 If $L_8\,v = 8 \cdot v$ pointwise, then at the first coordinate one has
@@ -18642,11 +18666,11 @@ law14G-17-eigen8→sum0 v eigen8 =
   negℤ-zero→zero s (+ℤ-cancel-left a (negℤ s) eq₀)
 \end{code}
 
-\subsection{Law 14G.18: Biconditional Sum-Zero \texorpdfstring{$\Leftrightarrow$}{} 8-Eigen}
+\subsection{Biconditional Sum-Zero \texorpdfstring{$\Leftrightarrow$}{} 8-Eigen}
 \label{law:coupled-k8:sum-zero-iff-eigen8}
 
-\hyperref[law:coupled-k8:sum-zero-implies-eigen8]{Law~14G.16} and
-\hyperref[law:coupled-k8:eigen8-implies-sum-zero]{Law~14G.17} supply
+\nameref{law:coupled-k8:sum-zero-implies-eigen8} and
+\nameref{law:coupled-k8:eigen8-implies-sum-zero} supply
 the two directions of the equivalence between sum-zero and $8$-eigen.
 This subsection packages them into a reusable biconditional.
 
@@ -18659,7 +18683,7 @@ law14G-18-eigen8→sum0 : (v : Vec8ℤ) → Vec8Eq (K8LaplacianVec8ℤ v) (eight
 law14G-18-eigen8→sum0 = law14G-17-eigen8→sum0
 \end{code}
 
-\subsection{Law 14G.19: Constants Are Forced 0-Eigenvectors}
+\subsection{Constants Are Forced 0-Eigenvectors}
 \label{law:coupled-k8:constants-kernel}
 
 A constant vector with value $x$ has total sum $8 \cdot x$, and each
@@ -18690,7 +18714,7 @@ law14G-19-const-eigen0 x =
   )
 \end{code}
 
-\subsection{Law 14G.20: Kernel Condition \texorpdfstring{$L_8\,v = 0 \Leftrightarrow 8 \cdot v = J_8\,v$}{L8v = 0 8 v = J8v}}
+\subsection{Kernel Condition \texorpdfstring{$L_8\,v = 0 \Leftrightarrow 8 \cdot v = J_8\,v$}{L8v = 0 8 v = J8v}}
 \label{law:coupled-k8:kernel-iff-eightEqJ}
 
 The kernel equation at each coordinate reads
@@ -18753,13 +18777,13 @@ law14G-20-eightEqJ→L0 v eightEqJ =
   )
 \end{code}
 
-\subsection{Laws 14G.21--14G.22: Image Characterization}
+\subsection{Image Characterization}
 \label{laws:coupled-k8:image-characterization}
 
 The image of $L_8$ is obtained by applying $L_8$ once, so
-\hyperref[law:coupled-k8:minimal-polynomial]{Law~14G.15} applies
+\nameref{law:coupled-k8:minimal-polynomial} applies
 immediately and pins every image vector to the $8$-eigenspace.
-\hyperref[law:coupled-k8:sum-zero-implies-eigen8]{Law~14G.16} then
+\nameref{law:coupled-k8:sum-zero-implies-eigen8} then
 shows that every sum-zero vector supplies an explicit preimage after
 $8$-scaling. In this sense the image and the $8$-eigenspace coincide.
 
@@ -18860,12 +18884,12 @@ K8Laplacian-cong u v eq =
 \section{Full Survivor: Forced Spectral Consequences}
 \label{sec:coupled-k8:full-survivor-consequences}
 
-For the full survivor there is, in fact, no new operator to analyze. By \hyperref[laws:coupled-k8:survivor-operator-identification]{Law~14G.8} the dispatched Laplacian is pointwise equal to $L_8$, so the spectral theory established for $L_8$ carries over without alteration. What follows is therefore a sequence of transports: the sum law, the annihilation by $J_8$, and the equivalence between the sum-zero condition and the $8$-eigenvalue relation are simply the old K$_8$ facts viewed through the survivor dispatcher.
+For the full survivor there is, in fact, no new operator to analyze. By \nameref{laws:coupled-k8:survivor-operator-identification} the dispatched Laplacian is pointwise equal to $L_8$, so the spectral theory established for $L_8$ carries over without alteration. What follows is therefore a sequence of transports: the sum law, the annihilation by $J_8$, and the equivalence between the sum-zero condition and the $8$-eigenvalue relation are simply the old K$_8$ facts viewed through the survivor dispatcher.
 
-\subsection{Law 14G.23: \texorpdfstring{$\Sigma_8 (L_{\mathrm{full}}\,v) = 0$}{8 (Lfullv) = 0}}
+\subsection{\texorpdfstring{$\Sigma_8 (L_{\mathrm{full}}\,v) = 0$}{8 (Lfullv) = 0}}
 \label{law:coupled-k8:full-sum-zero}
 
-Since the full survivor agrees pointwise with $L_8$, the total sum of its image is computed by the same argument as before. One transports along \texttt{law14G-8-survivor-full-K8} using \texttt{sum8-cong} and then invokes \hyperref[law:coupled-k8:sum-l8-zero]{Law~14G.12}. Thus the full-survivor image lies entirely in the sum-zero subspace.
+Since the full survivor agrees pointwise with $L_8$, the total sum of its image is computed by the same argument as before. One transports along \texttt{law14G-8-survivor-full-K8} using \texttt{sum8-cong} and then invokes \nameref{law:coupled-k8:sum-l8-zero}. Thus the full-survivor image lies entirely in the sum-zero subspace.
 
 \begin{code}
 -- § global sum of the full-survivor Laplacian is 0
@@ -18876,10 +18900,10 @@ law14G-23-sumL-survivor-full-0 v =
     (law14G-12-sumL8-0 v)
 \end{code}
 
-\subsection{Law 14G.24: \texorpdfstring{$J_8 (L_{\mathrm{full}}\,v) = 0$}{J8 (Lfullv) = 0}}
+\subsection{\texorpdfstring{$J_8 (L_{\mathrm{full}}\,v) = 0$}{J8 (Lfullv) = 0}}
 \label{law:coupled-k8:full-jl-zero}
 
-The operator $J_8$ depends only on the global sum of its input. Once \hyperref[law:coupled-k8:full-sum-zero]{Law~14G.23} has shown that this sum vanishes for $L_{\mathrm{full}}v$, the action of $J_8$ collapses at once to the zero vector. In this sense the image of the full-survivor Laplacian is orthogonal to the broadcast direction singled out by $J_8$.
+The operator $J_8$ depends only on the global sum of its input. Once \nameref{law:coupled-k8:full-sum-zero} has shown that this sum vanishes for $L_{\mathrm{full}}v$, the action of $J_8$ collapses at once to the zero vector. In this sense the image of the full-survivor Laplacian is orthogonal to the broadcast direction singled out by $J_8$.
 
 \begin{code}
 -- § J₈ annihilates full-survivor image
@@ -18889,10 +18913,10 @@ law14G-24-JL-survivor-full-zero v =
   (λ _ → sum0) , (λ _ → sum0)
 \end{code}
 
-\subsection{Laws 14G.25--14G.26: Sum-Zero \texorpdfstring{$\Leftrightarrow$}{} 8-Eigen for Full Survivor}
+\subsection{Sum-Zero \texorpdfstring{$\Leftrightarrow$}{} 8-Eigen for Full Survivor}
 \label{laws:coupled-k8:full-sum-zero-iff-eigen8}
 
-No additional case distinction is needed for the eigenvalue statement either. Because the full survivor is merely $L_8$ in dispatched form, \hyperref[law:coupled-k8:sum-zero-implies-eigen8]{Law~14G.16} and \hyperref[law:coupled-k8:eigen8-implies-sum-zero]{Law~14G.17} pass across \hyperref[laws:coupled-k8:survivor-operator-identification]{Law~14G.8} exactly as they stand. The proof of the forward direction composes the identification with the known implication for $L_8$; the reverse direction transports an assumed $8$-eigen relation back to $L_8$ and applies the converse theorem there. Hence the familiar equivalence survives unchanged: for the full survivor, being sum-zero is exactly the same as being an $8$-eigenvector.
+No additional case distinction is needed for the eigenvalue statement either. Because the full survivor is merely $L_8$ in dispatched form, \nameref{law:coupled-k8:sum-zero-implies-eigen8} and \nameref{law:coupled-k8:eigen8-implies-sum-zero} pass across \nameref{laws:coupled-k8:survivor-operator-identification} exactly as they stand. The proof of the forward direction composes the identification with the known implication for $L_8$; the reverse direction transports an assumed $8$-eigen relation back to $L_8$ and applies the converse theorem there. Hence the familiar equivalence survives unchanged: for the full survivor, being sum-zero is exactly the same as being an $8$-eigenvector.
 
 \begin{code}
 -- § sum-zero → 8-eigenvector for full survivor
@@ -18917,12 +18941,12 @@ law14G-26-survivor-full-eigen8→sum0 v eigen8 =
 The empty survivor reduces to two independent K$_4$ blocks.
 Block diagonality eliminates every cross-term, so the surviving spectral laws are forced blockwise from the earlier K$_4$ development.
 
-\subsection{Law 14G.27: \texorpdfstring{$\Sigma_8 (L_{\mathrm{empty}}\,v) = 0$}{8 (Lemptyv) = 0}}
+\subsection{\texorpdfstring{$\Sigma_8 (L_{\mathrm{empty}}\,v) = 0$}{8 (Lemptyv) = 0}}
 \label{law:coupled-k8:empty-sum-zero}
 
 Block diagonality splits the total sum of the empty survivor into the
 left and right $K_4$ Laplacian sums.
-\hyperref[law:laplacian-finite-index:sum-laplacian-zero]{Law~14E.28}
+\nameref{law:laplacian-finite-index:sum-laplacian-zero}
 forces each block sum to vanish independently, so the empty-survivor
 image lies in the global sum-zero subspace.
 
@@ -18937,10 +18961,10 @@ law14G-27-sumL-survivor-empty-0 v =
       (+ℤ-zero-left 0ℤ))
 \end{code}
 
-\subsection{Law 14G.28: \texorpdfstring{$J_8 (L_{\mathrm{empty}}\,v) = 0$}{J8 (Lemptyv) = 0}}
+\subsection{\texorpdfstring{$J_8 (L_{\mathrm{empty}}\,v) = 0$}{J8 (Lemptyv) = 0}}
 \label{law:coupled-k8:empty-jl-zero}
 
-Since $J_8$ depends only on the global sum of its input and \hyperref[law:coupled-k8:empty-sum-zero]{Law~14G.27} eliminates that sum, the empty-survivor image is annihilated by $J_8$.
+Since $J_8$ depends only on the global sum of its input and \nameref{law:coupled-k8:empty-sum-zero} eliminates that sum, the empty-survivor image is annihilated by $J_8$.
 Nothing new happens here beyond substitution: once the global sum is known to vanish, the definition of $J_8$ immediately yields the zero vector.
 
 \begin{code}
@@ -18951,13 +18975,13 @@ law14G-28-JL-survivor-empty-zero v =
   (λ _ → sum0) , (λ _ → sum0)
 \end{code}
 
-\subsection{Laws 14G.29--14G.30: Blockwise Sum-Zero \texorpdfstring{$\Leftrightarrow$}{} 4-Eigen for Empty Survivor}
+\subsection{Blockwise Sum-Zero \texorpdfstring{$\Leftrightarrow$}{} 4-Eigen for Empty Survivor}
 \label{laws:coupled-k8:empty-blockwise-sum-zero-iff-eigen4}
 
 The empty survivor acts as two independent $K_4$ Laplacians.
-\hyperref[law:laplacian-finite-index:sum-zero-implies-eigen4]{Law~14E.11}
+\nameref{law:laplacian-finite-index:sum-zero-implies-eigen4}
 and
-\hyperref[law:laplacian-finite-index:eigen4-implies-sum-zero]{Law~14E.19}
+\nameref{law:laplacian-finite-index:eigen4-implies-sum-zero}
 therefore classify each block separately: blockwise sum-zero and
 pointwise $4$-eigen are the surviving conditions, with no cross-block
 interaction left to analyze.
@@ -18978,7 +19002,7 @@ law14G-30-survivor-empty-eigen4→sum0 v eigen4 =
   law14E-19-eigen4→sum0 (right4 v) (snd eigen4)
 \end{code}
 
-\subsection{Law 14G.31: Split Constants Are 0-Eigenvectors of the Empty Survivor}
+\subsection{Split Constants Are 0-Eigenvectors of the Empty Survivor}
 \label{law:coupled-k8:split-constants-kernel-empty}
 
 On each block, a constant vector is already a forced $0$-eigenvector of
@@ -19001,12 +19025,12 @@ law14G-31-splitConst-eigen0-empty x y =
   ( λ i → law14E-13-const-eigen0 y i )
 \end{code}
 
-\subsection{Law 14G.32: Empty Survivor Image is 4-Eigen}
+\subsection{Empty Survivor Image is 4-Eigen}
 \label{law:coupled-k8:empty-image-eigen4}
 
 Applying the empty survivor twice applies each $K_4$ Laplacian twice on
 its own block.
-\hyperref[law:laplacian-finite-index:minimal-polynomial]{Law~14E.29}
+\nameref{law:laplacian-finite-index:minimal-polynomial}
 collapses each repeated block action to $4$ times the first image,
 forcing every vector in the empty-survivor image into the $4$-eigenspace.
 
@@ -19020,10 +19044,10 @@ law14G-32-imageEmpty⊆eigen4 v =
   ( λ i → law14E-29-LL-fourL (right4 v) i )
 \end{code}
 
-\subsection{Law 14G.33: Sum-Zero \texorpdfstring{$\Rightarrow$}{} Image Witness After 4-Scaling}
+\subsection{Sum-Zero \texorpdfstring{$\Rightarrow$}{} Image Witness After 4-Scaling}
 \label{law:coupled-k8:sum-zero-image-witness-empty}
 
-\hyperref[laws:coupled-k8:empty-blockwise-sum-zero-iff-eigen4]{Law~14G.29}
+\nameref{laws:coupled-k8:empty-blockwise-sum-zero-iff-eigen4}
 already forces a blockwise sum-zero vector to satisfy the
 empty-survivor eigenvalue equation. Choosing the vector itself as
 preimage therefore yields an explicit image witness after $4$-scaling.
@@ -19040,13 +19064,13 @@ law14G-33-sum0→fourInImage-empty v sum0L sum0R = v , law14G-29-survivor-empty-
 
 The image law for the full survivor is a direct transport consequence.
 No new spectral case appears here;
-\hyperref[law:coupled-k8:minimal-polynomial]{Law~14G.15} is merely
+\nameref{law:coupled-k8:minimal-polynomial} is merely
 re-expressed through the survivor identification.
 
-\subsection{Law 14G.34: Full Survivor Image \texorpdfstring{$\subseteq$}{} 8-Eigenspace}
+\subsection{Full Survivor Image \texorpdfstring{$\subseteq$}{} 8-Eigenspace}
 \label{law:coupled-k8:full-image-eigen8}
 
-The full survivor is identified with $L_8$ both before and after one further application, so the claim reduces to \hyperref[law:coupled-k8:minimal-polynomial]{Law~14G.15} by transport on both sides. Scaling congruence carries the codomain back, forcing the full-survivor image into the $8$-eigenspace.
+The full survivor is identified with $L_8$ both before and after one further application, so the claim reduces to \nameref{law:coupled-k8:minimal-polynomial} by transport on both sides. Scaling congruence carries the codomain back, forcing the full-survivor image into the $8$-eigenspace.
 
 \begin{code}
 -- § full survivor image vectors are 8-eigenvectors
@@ -19079,13 +19103,13 @@ law14G-34-survivor-full-image⊆eigen8 v =
 The remaining task is purely organizational: the already established
 survivor consequences are collected into reusable spectral packages.
 
-\subsection{Law 14G.35: Full Survivor Spectral Package}
+\subsection{Full Survivor Spectral Package}
 \label{law:coupled-k8:full-spectral-package}
 
-\hyperref[law:coupled-k8:full-sum-zero]{Law~14G.23},
-\hyperref[law:coupled-k8:full-jl-zero]{Law~14G.24},
-\hyperref[laws:coupled-k8:full-sum-zero-iff-eigen8]{Laws~14G.25--14G.26},
-and \hyperref[law:coupled-k8:full-image-eigen8]{Law~14G.34} already
+\nameref{law:coupled-k8:full-sum-zero},
+\nameref{law:coupled-k8:full-jl-zero},
+\nameref{laws:coupled-k8:full-sum-zero-iff-eigen8},
+and \nameref{law:coupled-k8:full-image-eigen8} already
 contain the full-survivor spectral data. The package below simply
 collects these facts into one reusable witness.
 
@@ -19105,11 +19129,11 @@ law14G-35-survivor-full-spectral-package v =
     law14G-34-survivor-full-image⊆eigen8 v))
 \end{code}
 
-\subsection{Law 14G.36: Empty Survivor Spectral Package}
+\subsection{Empty Survivor Spectral Package}
 \label{law:coupled-k8:empty-spectral-package}
 
-\hyperref[law:coupled-k8:empty-sum-zero]{Law~14G.27} through
-\hyperref[law:coupled-k8:empty-image-eigen4]{Law~14G.32} already
+\nameref{law:coupled-k8:empty-sum-zero} through
+\nameref{law:coupled-k8:empty-image-eigen4} already
 contain the empty-survivor spectral data. The package below plays the
 same role on the decoupled side, with the additional split-constant
 kernel witness carried along explicitly.
@@ -19132,11 +19156,11 @@ law14G-36-survivor-empty-spectral-package v =
      law14G-32-imageEmpty⊆eigen4 v)))
 \end{code}
 
-\subsection{Law 14G.37: Spectral Package by Forced Case Split}
+\subsection{Spectral Package by Forced Case Split}
 \label{law:coupled-k8:spectral-package-case-split}
 
 The survivor type has exactly two constructors by
-\hyperref[law:coupled-k8:two-survivors]{Law~14G.6}. An exhaustive case
+\nameref{law:coupled-k8:two-survivors}. An exhaustive case
 split therefore leaves only \texttt{survivor-empty} and
 \texttt{survivor-full}, and each of these two cases already carries its
 own spectral package.
@@ -19239,7 +19263,7 @@ survivorPkg-splitConstKernel (_ , (_ , (_ , (splitConstKer , _)))) = splitConstK
 \label{sec:coupled-k8:convenience-layer}
 
 Once the survivor index and vector are fixed,
-\hyperref[law:coupled-k8:spectral-package-case-split]{Law~14G.37}
+\nameref{law:coupled-k8:spectral-package-case-split}
 determines the package witness, and every convenience projection then
 follows without further case analysis. The final wrappers merely expose
 those packaged facts in a convenient form, so later arguments can call
@@ -20401,9 +20425,9 @@ opaque
 The spectral theory of the coupled and triple $K_4$ Laplacians yields
 the operator identities $L^2 = 12 L$, $J^2 = 12 J$,
 $L J = J L = 0$ on $\mathrm{Vec12}_{\mathbb{Z}}$
-(Laws~14H.5, 14H.9--14H.11), the kernel-image equivalences
-(Laws~14H.12--14H.16), and the rigidity statement of
-\hyperref[sec:triple-k4:spectrum-rigidity]{Laws~14H.19--14H.21}, which
+(the operator algebra and minimal polynomial results), the kernel-image equivalences,
+and the rigidity statement in
+the section \emph{\nameref{sec:triple-k4:spectrum-rigidity}}, which
 shows that the eigen-residue is determined by $\Sigma_{12} v$ at every
 entry.
 
@@ -21057,7 +21081,7 @@ opaque
 \label{sec:laplacian-k12:iterated-operator-collapse}
 %───────────────────────────────────────────────────────────────────────────
 
-Laws~14K.0--14K.2 show that every iterate of $L_{12}$ or $J_{12}$
+The iterated operator identities show that every iterate of $L_{12}$ or $J_{12}$
 beyond the first is a $12$-scaled copy of its predecessor. The
 quadratic identities from the previous chapter turn directly into the
 recurrences for pure powers, and repeated transport then yields the
@@ -21107,7 +21131,7 @@ law14K-2-Jpow-scaling (suc n) v =
 The free monoid on the two generators $\{L, J\}$ evaluates to
 operators on $\mathrm{Vec}_{12}\mathbb{Z}$. Every word falls into one
 of four cases: the empty word, a pure $L$-power, a pure $J$-power, or a
-mixed word, which evaluates to zero. Law~14L.0 formalizes this by a
+mixed word, which evaluates to zero. The word classifier formalizes this by a
 recursive classifier that assigns to each word a canonical case together
 with the corresponding operator equality.
 
@@ -24478,7 +24502,7 @@ law14N-3-IJ-compose-closed (a , b) (c , d) v = eq0 , (eq1 , eq2)
 %----------------------------------------------------------------------
 
 The $(I,J)$-span from
-\hyperref[ch:z-span-k12]{Chapter~\ref*{ch:z-span-k12}} already fixes a
+the chapter \emph{\nameref{ch:z-span-k12}} already fixes a
 normal form for every operator in that algebra. This chapter extracts
 the corresponding spectral action: on sum-zero vectors,
 $aI + bJ$ acts by the scalar $a$, while on constant vectors it acts by
@@ -24825,7 +24849,7 @@ law14O-8-linIJ-preserves-sum0 a b v sum0 =
 \end{code}
 
 Constant-vector invariance uses the constant-eigenvalue formula from
-\hyperref[law:span-ij:constant-eigen-a-plus-twelve-b]{Law~14O.3}.
+\nameref{law:span-ij:constant-eigen-a-plus-twelve-b}.
 
 \begin{code}
 -- § Helper: scaling a constant vector yields a constant vector
@@ -27654,7 +27678,7 @@ positive rational tolerance, and $x <_{\mathbb{R}} y$ by eventual
 comparison with a fixed positive rational margin. The following
 results show that both relations are well defined on the quotient.
 
-\subsection*{Law 23.1: Non-strict asymptotic order}
+\subsection*{Non-strict asymptotic order}
 
 Non-strict order is expressed by eventual $\varepsilon$-comparison for
 every positive rational margin. In this form it depends only on tail
@@ -27673,7 +27697,7 @@ record _≤ℝ_ (x y : ℝ) : Set where
 ≤ℝP = _≤ℝ_
 \end{code}
 
-\subsection*{Law 23.2: Strict asymptotic order}
+\subsection*{Strict asymptotic order}
 
 Strict order is expressed by a positive rational witness that persists
 on a tail. In this way strictness is encoded by a stable asymptotic
@@ -27686,7 +27710,7 @@ record _<ℝ_ (x y : ℝ) : Set where
     ltWitness : Σ ℚ (λ ε → (0ℚ <ℚ ε) × Σ ℕ (λ N → (n : ℕ) → N ≤ n → ((seq x n) +ℚ ε) ≤ℚ (seq y n)))
 \end{code}
 
-\subsection*{Law 23.3: Strict order forces non-strict order}
+\subsection*{Strict order forces non-strict order}
 
 A strict witness immediately yields non-strict order once the positive
 margin has been used to obtain the eventual comparison.
@@ -27742,7 +27766,7 @@ margin has been used to obtain the eventual comparison.
   }
 \end{code}
 
-\subsection*{Law 23.4: Equivalence forces non-strict order}
+\subsection*{Equivalence forces non-strict order}
 
 Equivalent representatives satisfy the same non-strict order relation.
 The eventual distance bounds allow the termwise comparison to be
@@ -27780,7 +27804,7 @@ well. The only technical point is to shrink the given margins so that
 they can be combined within a single estimate. The quartering device
 provides a convenient common reserve.
 
-\subsection*{Law 23.5: Strict order is transitive}
+\subsection*{Strict order is transitive}
 
 The two witness margins compose after a controlled shrinking step.
 Quartering keeps the combined estimate within the available budget and
@@ -27917,7 +27941,7 @@ correction terms, so the original margin is reduced by repeated
 quartering to leave a positive remainder. This shows that strict order
 is well defined on the quotient.
 
-\subsection*{Law 23.6: Strict order is invariant under equivalence}
+\subsection*{Strict order is invariant under equivalence}
 
 Repeated quartering leaves enough of the original witness margin to
 absorb both equivalence corrections. The strict gap therefore persists
@@ -28193,7 +28217,7 @@ term of a representative sequence is at most itself plus
 $\varepsilon$, so the asymptotic definition gives self-comparison on
 every tail.
 
-\subsection*{Law 23.7: Non-strict order is reflexive}
+\subsection*{Non-strict order is reflexive}
 
 Reflexivity follows pointwise from the inequality
 $a \leq a + \varepsilon$.
@@ -28219,7 +28243,7 @@ reduced tolerance and then chaining the resulting inequalities. The
 only bookkeeping is to ensure that the two error terms stay below the
 requested $\varepsilon$.
 
-\subsection*{Law 23.8: Non-strict order is transitive}
+\subsection*{Non-strict order is transitive}
 
 \begin{code}
 -- § Transitivity of ≤ℝ via ε-splitting
@@ -28335,7 +28359,7 @@ then their representatives differ by at most an arbitrary positive
 tolerance on a tail. This is exactly the estimate required for
 equivalence.
 
-\subsection*{Law 23.9: Mutual non-strict order forces equivalence}
+\subsection*{Mutual non-strict order forces equivalence}
 
 \begin{code}
 -- § Antisymmetry: mutual ≤ℝ yields ≃ℝ
@@ -28430,7 +28454,7 @@ Equivalence already provides comparisons in both directions, so one
 composes those with the given order relation. Hence
 $\leq_{\mathbb{R}}$ depends only on the represented real numbers.
 
-\subsection*{Law 23.10: Non-strict order is invariant under equivalence}
+\subsection*{Non-strict order is invariant under equivalence}
 
 The congruence law is obtained by composing the order bounds induced
 by equivalence on the left and right.
@@ -28461,7 +28485,7 @@ representatives this is pointwise monotonicity of rational addition,
 together with a simple reassociation of the error term. The
 left-sided version is identical.
 
-\subsection*{Law 23.11: Right addition preserves non-strict order}
+\subsection*{Right addition preserves non-strict order}
 
 Right monotonicity follows from the corresponding rational
 monotonicity, with associativity used to place the
@@ -28522,7 +28546,7 @@ monotonicity of rational addition and carries the same tail estimate
 through unchanged. Together, the two monotonicity laws show that
 translation preserves asymptotic order on the reals.
 
-\subsection*{Law 23.12: Left addition preserves non-strict order}
+\subsection*{Left addition preserves non-strict order}
 
 \begin{code}
 -- § Left monotonicity of +ℝ under ≤ℝ
@@ -29187,10 +29211,11 @@ diagℝ-converges r ic = record
 
 
 %═══════════════════════════════════════════════════════════════════════════
-\part{Derived Constants of \texorpdfstring{$K_4$}{K4}}
+\part*{Derived Constants of \texorpdfstring{$K_4$}{K4}}
+\addcontentsline{toc}{part}{Derived Constants of K4}
 %═══════════════════════════════════════════════════════════════════════════
 
-Part~VI collects the combinatorial and spectral invariants of $K_4$
+This part collects the combinatorial and spectral invariants of $K_4$
 into explicit verified records and computes their numerical values.
 The aim is not to introduce new structure, but to evaluate, in closed
 form, what has already been derived.
@@ -29199,8 +29224,8 @@ The vertex count, edge count, Euler characteristic, and Laplacian
 eigenvalues are assembled into a single computation record, each field
 being witnessed by definitional or proved equality in Agda. In
 particular, the graph evaluation $\mathcal{C} = 137$ appears here as a
-consequence of the earlier derivation together with the arithmetic of
-Part~V.
+consequence of the earlier derivation together with the arithmetic
+developed in \emph{Derived Arithmetic}.
 
 The record is then shown to be unique: any two admissible invariant
 records agree fieldwise. The final results return to the represented
@@ -37163,17 +37188,17 @@ Most of the structural identifications attached to $(V, E, d, \chi)$
 were discharged in place, at the section that made the claim. Three of
 them belong to the kind classification and the simplex evaluation
 themselves: the refinement-stable closure reading
-(\hyperref[sec:invariant-kinds:source-indexing]{\S\ref*{sec:invariant-kinds:source-indexing}}),
+(\nameref{sec:invariant-kinds:source-indexing}),
 the boundary term inside the simplex evaluation
-(\hyperref[sec:simplex-eval-exhaustion]{\S\ref*{sec:simplex-eval-exhaustion}}),
+(\nameref{sec:simplex-eval-exhaustion}),
 and the uniqueness of the canonical bulk-plus-boundary form
-(\hyperref[sec:invariant-kinds:form-forced]{\S\ref*{sec:invariant-kinds:form-forced}}).
+(\nameref{sec:invariant-kinds:form-forced}).
 Each of these three stands as an Agda record at the section that
 produced it.
 
 Two identifications had to wait. The Extract Concept and the bulk
 exponent both consume the $\mathrm{Aut}(K_4)$-orbit theorem of
-\hyperref[ch:forced-edge-matching-orbits]{Chapter~\ref*{ch:forced-edge-matching-orbits}},
+the chapter \emph{\nameref{ch:forced-edge-matching-orbits}},
 which is proved later in the text. This chapter discharges those two
 and then assembles the five identifications into a single closing
 record.
@@ -37182,10 +37207,10 @@ record.
 \label{sec:mechanical-closure:aut-orbit}
 
 The Extract Concept of
-\hyperref[sec:invariant-kinds:extract]{\S\ref*{sec:invariant-kinds:extract}}
+\nameref{sec:invariant-kinds:extract}
 rests on the claim that $\mathrm{Aut}(K_4)$ acts transitively on each
 cell stratum of the closed record. The orbit theorems of
-\hyperref[ch:forced-edge-matching-orbits]{Chapter~\ref*{ch:forced-edge-matching-orbits}}
+the chapter \emph{\nameref{ch:forced-edge-matching-orbits}}
 discharge this claim directly: \texttt{k4Perm-send} witnesses vertex
 transitivity, \texttt{edge-transitive} witnesses edge transitivity, and
 \texttt{matching-transitive} witnesses matching transitivity. The
@@ -37213,11 +37238,11 @@ extract-aut-witness = record { orbit-record = theorem-aut-k4-orbits }
 \label{sec:mechanical-closure:bulk}
 
 The isotropy paragraph of
-\hyperref[sec:invariant-kinds:form-forced]{\S\ref*{sec:invariant-kinds:form-forced}}
+\nameref{sec:invariant-kinds:form-forced}
 fixed the bulk exponent at $d$ by the orbit transitivity that forbids
 any direction of drift from being singled out. The orbit machinery used
 in that argument is exactly \texttt{theorem-aut-k4-orbits} of
-\hyperref[ch:forced-edge-matching-orbits]{Chapter~\ref*{ch:forced-edge-matching-orbits}}.
+the chapter \emph{\nameref{ch:forced-edge-matching-orbits}}.
 On the simplex side the bulk reading is mechanical: the bulk term is
 \texttt{simplex-vertices~\^{}~simplex-degree~*~simplex-chi}, equal to
 $128$ by computation. Combined with the boundary term \texttt{p-dd},
@@ -37328,7 +37353,7 @@ cases. Three vertices failed by absurd-pattern elimination. More than
 four vertices added structure unsupported by the four cases. The
 closure that survived was the complete graph on four vertices, $K_4$.
 Its representation record was inhabited, propositionally unique, and
-stable under the orbit tests of Part~VI. The final theorem of that part
+stable under the orbit tests of \emph{Derived Constants of $K_4$}. The final theorem of that part
 showed that any inhabitant of the record already carries the original
 separation witness. Distinction entered as the minimal grant;
 distinction re-emerged as a consequence. The arrow closed.
@@ -37353,13 +37378,13 @@ source, a rule of combination, a position relative to the
 bulk--boundary split, and a role inside the closed record. Each of
 these attributes is discharged by an Agda record whose inhabitant is
 constructed from existing lemmas: the closure record at the close of
-\hyperref[sec:invariant-kinds:source-indexing]{\S\ref*{sec:invariant-kinds:source-indexing}},
+\nameref{sec:invariant-kinds:source-indexing},
 the form-uniqueness record at the close of
-\hyperref[sec:invariant-kinds:form-forced]{\S\ref*{sec:invariant-kinds:form-forced}},
+\nameref{sec:invariant-kinds:form-forced},
 the boundary-arity record at the close of
-\hyperref[sec:simplex-eval-exhaustion]{\S\ref*{sec:simplex-eval-exhaustion}},
+\nameref{sec:simplex-eval-exhaustion},
 and the two Aut-dependent records of
-\hyperref[ch:mechanical-closure]{Chapter~\ref*{ch:mechanical-closure}}.
+the chapter \emph{\nameref{ch:mechanical-closure}}.
 Any combination built from $(V, E, d, \chi)$ is therefore answerable to
 five structural obligations before its numerical value is even read.
 That is the structural acquisition the book carries beyond its target

@@ -219,56 +219,57 @@
 
 \frontmatter
 
-\chapter*{Opening}
-\addcontentsline{toc}{chapter}{Opening}
+\chapter*{Prologue: The Old Dream}
+\addcontentsline{toc}{chapter}{Prologue: The Old Dream}
 
-Why is there anything at all, rather than nothing?
+One of the oldest dreams of science is that explanation can advance by
+reducing the number of independent assumptions. Leibniz imagined a reasoned
+calculus strong enough to replace endless dispute with demonstrable
+connection. Newton showed that the fall of a stone and the motion of the
+planets need not belong to separate worlds. Maxwell brought electricity,
+magnetism, and light under one field description. Einstein joined space and
+time into a single kinematic structure. Modern physics has continued the
+same pressure in different forms, again and again asking whether what looks
+plural can be read from something more elementary.
 
-Since Leibniz, this question has accompanied every inquiry into origin. In
-modern cosmology it appears again: the closer the description of the
-universe moves toward its beginning, the clearer a limit becomes. Even an
-ever more exact history of the cosmos would still not explain why there is
-a cosmos at all.
+These moments matter not only because they unify results already known. They
+change what counts as basic. Domains that once appeared independent begin to
+look like different expressions of a deeper order. Much of the power of
+science lies precisely here: not merely in adding facts, but in discovering
+that fewer principles can carry more.
 
-The question already presupposes a distinction. \emph{Something} and
-\emph{nothing} must be in force as different possibilities. A nothing that
-could not be distinguished from something could not appear as nothing. The
-question of origin thus leads to a more general question: under what
-conditions is distinction possible at all?
+This book stands inside that movement, but not at its familiar level. It
+does not begin by asking which equation might join gravitation and quantum
+theory, or which model might absorb all particles and forces into one more
+comprehensive system. It asks a prior question.
 
-The suspicion that difference, determination, and information belong
-together is not new. It appears in different forms in Aristotle, Hegel,
-Spencer Brown, Gregory Bateson, Claude Shannon, John Archibald Wheeler, and
-in relational ways of thinking in modern mathematics and logic. These names
-are not invoked as authorities. They mark only the direction to which this
-book belongs.
+Is there a common origin still beneath logic, mathematics, and physical
+description themselves?
 
-That is why the book does not begin with things, objects, or an ontology.
-Its starting point is the question of what must happen for anything at all
-to appear as different from something else. Its guiding working assumption
-is this: determination presupposes successful distinction.
+That question is larger than a technical unification problem and smaller
+than a proclamation about reality as a whole. Nothing here claims that the
+world has already been derived. The issue is whether the possibility of
+description may rest on a common minimal structure.
 
-If every description begins with a distinction and physical reality hangs on
-information, then before measurement, classification, and explanation there
-must already be a stable difference available. The book therefore asks for
-the minimal structure that carries a distinction: it must be stateable, it
-must not collapse, and it must be complete enough to make information
-possible.
+The wager of the present project can therefore be stated plainly. Stable
+information presupposes a successfully carried distinction. If that wager
+fails, the route ends at once. If it holds, the question becomes how far
+the first distinction can carry.
 
-Up to the formalization, the text speaks at the level of philosophical
-orientation and working assumptions. Only later do formal results enter.
-Physical readings are separated from those again. The formal core therefore
-does not answer Leibniz's question as a whole. It marks only the first
-point at which this condition can be formulated exactly and checked in
-intensional Martin-Löf type theory with Agda.
+This companion takes only the first formally controlled step in that longer
+route. It does not present the full theory. It does not present the
+physics. It does not present the unification as accomplished. It seeks the
+first point at which the conditions of stable distinction can be written
+completely, constructed explicitly, and checked by machine in intensional
+Martin-L\"of type theory with Agda.
 
-The path can be read as a sequence of questions. Why do origin,
-determination, physics, and information point toward distinction? What
-conditions must a successful distinction satisfy? In what language can
-those conditions be written exactly? What is the first such form? What
-already follows from it? What has thereby been shown, and what has not? And
-what happens when the same distinction is allowed to continue running in
-\textit{Void} and \textit{Form}? Each answer generates the next question.
+Its path is therefore narrow and deliberate. Why distinction at all? What
+conditions must a stable distinction satisfy? In what formal language can
+those conditions be made exact? What is the first fully writable carrier of
+those conditions? What already follows from so little?
+
+Everything beyond that belongs to the larger investigation of \textit{Void}
+and \textit{Form}. This book marks the threshold.
 
 \tableofcontents
 
@@ -304,10 +305,12 @@ what happens when the same distinction is allowed to continue running in
 \epigraph{``Why is there something rather than nothing? For nothing is
 simpler and easier than something.''}{Gottfried Wilhelm Leibniz}
 
-The question of origin, determination, physics, and information approach the
-matter from four different sides. This chapter argues that they point to the
-same condition. It gathers not four unrelated claims, but four witnesses to
-one conjecture: that determination presupposes successful distinction.
+The prologue placed this inquiry inside an older scientific movement toward
+fewer independent assumptions. This chapter pushes that movement below
+objects, laws, and theories themselves. Origin, determination, physics, and
+information approach the matter from four different sides. They are
+gathered here not as four unrelated claims, but as four witnesses to one
+conjecture: that determination presupposes successful distinction.
 
 \section{The Question of Origin}
 
@@ -559,61 +562,75 @@ must be granted to write it down exactly?
 \label{ch:crossing}
 % ─────────────────────────────────────────────────────────────────
 
+At this point the question changes character.
+
+Up to now the discussion has been exploratory. The issue was whether certain
+conditions seem necessary for a distinction to persist. But necessity stated
+in ordinary language is still only a proposal.
+
+The next question is stricter.
+
+Can these conditions be written in a form precise enough that every
+consequence becomes checkable and every hidden assumption becomes visible?
+
+The inquiry therefore moves from philosophical orientation to formal
+specification.
+
+From here on, every claim must be paid for by construction.
+
 The previous chapter narrowed the question to a small finite
 specification: separation and cover on a field of two positions. At that
 point ordinary language reaches its limit. What is now missing is not
-another argument, but a tool in which writing and checking are one and the
-same act.
-
-Up to this point, the text has unfolded philosophical motives and refined
-working assumptions. From here on it moves to the level of formal
-commitments and formal results. The question is no longer which
-orientation is plausible, but in what language the minimal conditions of a
-successful distinction can be written so exactly that they can actually be
-checked. Physical readings do not enter at this point.
-
-What follows is not a tutorial in Agda. What matters is only why exactly
-these few means are needed. Each of them answers a question that has
-already arisen in the earlier movement.
+another argument, but a language in which every step can be stated exactly
+and checked.
 
 There is such a language. The one used here is Martin-L\"of type theory in
-the form realized by the proof assistant Agda. In it, to assert is to
-construct. A statement is a type, a proof is a term inhabiting that type,
-and a machine decides whether the term truly has the type claimed. A proof
-that does not check is here simply a file that does not compile. The
-argument is formulated in type theory not because it is the only possible
-carrier, but because it makes the cost of every step explicit.
-
-Everything the argument uses has to be declared, and two settings, fixed at
-the head of the file, govern everything that follows. The flag
-\AgdaFlag{safe} closes every escape hatch:
-no postulates, no principle asserted without proof, no back door through
-which an unearned result could enter. The flag \AgdaFlag{without-K}
-withholds a convenient but additional assumption about equality, so that
-nothing in the development rests on more than the bare identity type. Under
-them, only the things we build exist, in full view.
+the form realized by the proof assistant Agda.
 
 What is granted can be said briefly: a carrier with two positions, a
 witness that the two are not equal, and an account that leaves no point of
 the carrier unaddressed. No numbers, no geometry, no physics, and no
-classical logic beyond what is constructed by hand.
+classical logic beyond what is constructed explicitly.
+
+Everything else must be built.
+
+In this setting, to assert is to construct. A statement is a type, a proof
+is a term inhabiting that type, and a machine decides whether the term
+truly has the type claimed. A proof that does not check is simply a file
+that does not compile.
+
+The argument is formulated in type theory not because it is the only
+possible carrier, but because it makes the cost of every step visible.
+
+Two settings, fixed at the head of the file, govern everything that
+follows.
+
+The flag \AgdaFlag{safe} closes every escape hatch: no postulates, no
+principle asserted without proof, no back door through which an unearned
+result could enter.
+
+The flag \AgdaFlag{without-K} withholds a convenient but additional
+assumption about equality, so that nothing in the development rests on more
+than the bare identity type.
+
+Under these restrictions, only the things we actually build exist.
 
 If the formalization later seems to do more than this brief list suggests,
 that is only because much already follows from little. It is not because
-more was smuggled in beforehand.
+more was smuggled in beforehand. The order of writing is not the same as 
+the order of the inquiry.
 
-What follows is the same thought under stricter discipline. The previous
-chapters named in ordinary language the performances a stable distinction
-must carry. The file now writes those performances down one by one in a
-language where hidden shortcuts are not allowed.
+In the inquiry, distinction, Non-Collapse, and exact plurality appeared
+first. In the file, what appears first is whatever the checker requires in
+order for those conditions to be sayable at all.
 
-The order of writing is not the same as the order of the inquiry. In the
-inquiry, distinction, Non-Collapse, and exact plurality came first. In the
-file, what comes first is what the checker needs in order for those
-conditions to be sayable at all. No new content is introduced here. The
-file simply makes available the few means without which separation and cover
-could not be stated exactly. It begins with the mere bookkeeping of
-universe levels. Nothing mathematical is imported with that.
+No new content is introduced here. The file merely provides the few means
+without which separation and cover could not be stated exactly. These 
+constructions belong to the requirements of the formal language, not
+to the order in which the inquiry itself arrived at its result.
+
+It therefore begins with the bookkeeping required to manage universe
+levels. Nothing conceptual enters with that step.
 
 \begin{code}%
 \>[0]\AgdaKeyword{open}\AgdaSpace{}%
@@ -629,14 +646,18 @@ universe levels. Nothing mathematical is imported with that.
 
 That first line is only housekeeping. It gives the checker a way to track
 sizes consistently, and none of the conceptual weight of the argument rests
-on it. The real formal work begins with the thinnest device needed to say
-when something is the same and when it is not.
+on it.
+
+The real formal work begins with the thinnest device needed to say when
+something is the same and when it is not.
 
 That is why equality comes first in the file. Not because sameness would be
-prior to distinction in the order of the book, but because separation and
-cover are not even formulable without a minimal way to say same, not the
-same, and substitution. The identity type gives exactly that. At this stage
-it is not meant to do more.
+prior to distinction in the order of the inquiry, but because separation
+and cover are not even formulable without a minimal way to say same, not
+the same, and substitution.
+
+The identity type provides exactly that, and at this stage it is not meant
+to do more.
 
 \begin{code}%
 \>[0]\AgdaKeyword{infix}\AgdaSpace{}%
@@ -1047,15 +1068,16 @@ translated into a single exact object. What does this smallest object look
 like, the one that carries separation and cover together?
 
 % ─────────────────────────────────────────────────────────────────
-\chapter{The Distinction Record}
+\chapter{The First Distinction}
 \label{ch:the-record}
 % ─────────────────────────────────────────────────────────────────
 
 The previous question asked how little has to be granted for the minimal
-conditions of successful distinction to be writable exactly. The
-Distinction Record is the first complete answer. Formally it is a record.
-In content it is not an inventory of a thing, but a certificate of
-conditions: exactly the data needed for a difference to persist stably as a
+conditions of successful distinction to be writable exactly. Here the title
+of the book is earned. The Distinction Record is the first complete answer.
+Formally it is a record. In content it is the first fully writable carrier
+of a stable distinction: not an inventory of a thing, but a certificate of
+conditions, exactly the data needed for a difference to persist stably as a
 difference.
 
 \begin{code}%
@@ -1236,16 +1258,21 @@ Taken together, separation and cover yield a stable two. The next question
 is what self-maps such a carrier admits.
 
 % ─────────────────────────────────────────────────────────────────
-\chapter{What Already Follows from the Record}
+\chapter{What Already Follows}
 \label{ch:endomorphisms-closure}
 % ─────────────────────────────────────────────────────────────────
 
-Once the Distinction Record is given, the next question follows at once:
-what self-maps does such a carrier admit? Once the carrier is fixed to two
-classes, self-maps are almost entirely determined by their values on
-\texttt{ℓ} and \texttt{r}. To compare two maps, we use pointwise
-equality. On this carrier it is especially manageable because
-\texttt{cover} reduces every argument to one of the two boundary cases.
+Once the first distinction is given, the next question follows at once:
+what self-maps does such a carrier admit? The point of this chapter is
+modest in claim and strong in consequence. It does not yet deliver the
+later closure reading of \textit{Void}. It shows that even at this first
+formal threshold the space of endomorphisms is no longer open-ended.
+
+Once the carrier is fixed to two classes, self-maps are almost entirely
+determined by their values on \texttt{ℓ} and \texttt{r}. To compare two
+maps, we use pointwise equality. On this carrier it is especially
+manageable because \texttt{cover} reduces every argument to one of the two
+boundary cases.
 
 \begin{code}%
 \>[0]\AgdaKeyword{infix}\AgdaSpace{}%
@@ -2641,11 +2668,16 @@ self-maps. The next question no longer concerns the structure itself, but
 its status: what has thereby been shown, and what not?
 
 % ─────────────────────────────────────────────────────────────────────
-\chapter{Result and Boundary}
+\chapter{What Has Been Shown}
 \label{ch:reading-the-threshold}
 \label{ch:toward-form}
 \label{ch:conclusion}
 % ─────────────────────────────────────────────────────────────────────
+
+One sentence must now be said as sharply as possible. This book has not
+proved the world. It has shown that a stable distinction, once written
+exactly under the stated constraints, already carries a nontrivial closed
+structure.
 
 What has been shown is a small but precise stock: a carrier with two
 positions, a witness that they are apart, an exhaustion principle with no
@@ -2660,11 +2692,11 @@ distinction must satisfy minimal conditions. The formal result is the stock
 the file actually carries. It is on that level that this chapter moves.
 
 What has not been shown is that the world can be derived from nothing, or
-that every determination necessarily presupposes distinction. That
-pre-formal thesis motivates the inquiry; it is not the inquiry's formal
-result. Nor does Agda prove that no other formal carrier could realize the
-same content. What has been shown is only that this content can be
-constructed here without additional assumptions.
+that every determination necessarily presupposes distinction as a theorem
+of Agda. Those claims motivate the inquiry; they are not its checked
+result. Nor does the file show that no other formal carrier could realize
+the same content. It shows only that this content can be constructed here
+without additional assumptions.
 
 The result is nonetheless interesting. Once two positions are granted in
 full view and kept apart, that minimal grant already carries a closed
@@ -2673,71 +2705,78 @@ distinction become exact and machine-checkable. The step from
 philosophical question to formal structure remains small. That is exactly
 why it is robust.
 
-From here one can say exactly how far the step carries and where its
-boundary lies. Three different courts decide that: the compiler over the
-formal kernel, ordinary mathematics over the derivations around it, and
-experiment over any reading of the kernel as physics. That separation is
-not caution but a condition of honesty. The distance between a checked
-theorem and a measured quantity is the point at which a project can lose
-its integrity.
+From here one can also state the boundaries cleanly. The compiler judges
+the formal kernel. Ordinary mathematics judges the derivations built from
+that kernel. Experiment judges any later reading of the kernel as physics.
+The separation between those courts is not caution for its own sake. It is
+a condition of honesty.
 
 At the level of this book, the status is clear. That a stable distinction
-has exactly four self-maps up to pointwise equality is theorem. If one
-reads the four-case closure as a complete figure, then the number of its
-pairings, $\binom{4}{2} = 6$, is again pure arithmetic. None of that is a
-physical claim. They are integers, and they are theorems about integers.
-
-The larger books continue that arithmetic. A polynomial in the closure's
-invariants, for instance, yields $137$. As arithmetic, that too is theorem.
-Only when one reads such an integer as a constant of nature does theorem
-give way to structural hypothesis, and only measurement can decide the
-comparison. If a measurement fails, the identification fails; the
-arithmetic remains what it was.
+has exactly four self-maps up to pointwise equality is theorem. Further
+constructions remain mathematics so long as they remain explicit
+constructions. Only when a later stage gives such structures physical names
+does theorem give way to interpretation, and only confrontation with the
+world can decide whether an interpretation survives.
 
 The question of origin therefore remains unanswered. What has shifted is
 narrower and more precise: its first minimal step --- the holding-apart of
 one position from another --- is no longer mere intuition. It is present as
-normal form, four-case ledger, and return to its own datum, and a machine
-can check it.
+checked construction, bounded carrier, and four-case self-map structure.
 
 % ─────────────────────────────────────────────────────────────────────
-\chapter{Outlook: Void and Form}
+\chapter{The Reach of Distinction}
 \label{ch:outlook}
+\label{ch:reach}
 % ─────────────────────────────────────────────────────────────────────
 
-This book stops at the first formally secured datum. \textit{Void} asks
-what happens if that datum is not merely described but continued as a
-process. The question there is no longer what minimal structure a
-distinction must carry, but what follows mechanically from a separated and
-covered distinction under the same disciplines.
+This companion is not the theory as a whole. It is not the physics. It is
+not the unification. It marks the first point at which the conditions of
+stable distinction can be formulated completely and checked mechanically.
 
-The first part of that continuation is purely formal. A binary carrier with
-separation and cover normalizes to \texttt{Two}. Its endomorphism space has
-exactly four cases. Under the stated representation conditions that
-four-case space closes to $K_4$, and the closure returns to the original
-\texttt{Distinction} datum. From there the development continues without
-new postulates: arithmetic is built internally, and where rational data no
-longer suffice, the continuous arena is constructed within the same
-development.
+From here the larger investigation begins rather than ends.
+\textit{The First Distinction} establishes the datum. \textit{Void} asks
+what follows if nothing further is granted. It does not ask which external
+mathematics can be borrowed, but how much mathematics can be reconstructed
+from the same discipline. Only after that register exists does
+\textit{Form} begin. There the question is no longer what follows formally,
+but whether structures already present in the ledger can be read as
+structures of physical description.
 
-This yields a register that is initially purely mathematical. It contains
-finite invariants, arithmetic expressions, and the structures that follow
-from the closure. Only once this register is fully in place does the next
-question arise: whether its entries admit a physical reading.
+Above both stands the wider question that motivates the whole project:
+whether logic, mathematics, and physical description may be different
+appearances of a common origin.
 
-That is where \textit{Form} begins. \textit{Form} takes the register
-produced in \textit{Void} as a fixed formal constraint and tests sector
-assignments, correction chains, ratios, and mass readouts against it. The
-separation of levels remains strict. What the kernel forces remains theorem.
-The assignment of physical names to those structures is interpretation.
-Whether the interpretation holds is decided only by comparison with the
-world.
+\begin{center}
+\begin{tikzpicture}[node distance=8mm]
+  \node[stage, minimum width=44mm] (fd) {The First\\Distinction};
+  \node[stage, minimum width=44mm, below=of fd] (void) {Void};
+  \node[stage, minimum width=44mm, below=of void] (math) {Mathematical\\Reconstruction};
+  \node[stage, minimum width=44mm, below=of math] (phys) {Physical\\Reconstruction};
+  \node[stage, minimum width=44mm, below=of phys] (common) {Common-Origin\\Question};
 
-The continuation is therefore neither a new beginning nor a direct leap to
-physics. The process distinction is allowed to keep running under the same
-rules; its closure yields first normal form, four-case structure, $K_4$,
-register, and continuous arena. Only after that does the question arise
-whether this register can be read physically. This companion marks only the
-point at which that continuation begins.
+  \draw[routearrow] (fd) -- (void);
+  \draw[routearrow] (void) -- (math);
+  \draw[routearrow] (math) -- (phys);
+  \draw[routearrow] (phys) -- (common);
+\end{tikzpicture}
+\end{center}
+
+Void/Form investigates whether logic, mathematics, and physical description
+can be understood as different appearances of a common structure of
+distinction. \textit{The First Distinction} supplies the first formally
+secured step of that investigation.
+
+How far can this go? This book does not answer that question. It only makes
+the question exact enough to be pursued honestly. The chain may break
+early, and then its limit will have been identified. Or it may carry far,
+and then its reach will have been measured rather than proclaimed.
+
+Where a later physical reading is proposed, the formal system does not
+decide it. There the ledger meets experiment, and science begins in the
+strict sense.
+
+This book therefore ends where the larger inquiry truly begins: with the
+first distinction in hand, and with the reach of that distinction still
+open.
 
 \end{document}

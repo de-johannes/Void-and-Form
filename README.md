@@ -7,13 +7,20 @@ Start with the companion: [FirstDistinction.lagda.tex](FirstDistinction.lagda.te
 
 ## What This Repository Is
 
-`Void and Form` is a literate Agda book project about the first formal burden of distinction.
+`Void and Form` is a literate Agda book project investigating whether logic, mathematics, and physical description can be understood as different appearances of a common minimal structure of distinction.
 
-The opening pressure is simple. If the contrast between something and nothing is to be stated at all, then a distinction is already at work. Before a theory can count, compare, negate, classify, or interpret, it must already be able to hold something apart from something else.
+The project should not be described too narrowly and not too grandly.
 
-This repository slows down at that hinge. It asks what must be granted inside a formal setting before the claim that there are two positions has any stable force.
+- Too narrow would be: this repository studies distinction and `K4`.
+- Too grand would be: this repository has already proved reality.
 
-The local formal question is:
+The actual question is more interesting. Is there a common origin still beneath logic, mathematics, and physical description themselves?
+
+The wager that opens the route is simple. Stable information presupposes a successfully carried distinction. If that wager fails, the project ends early. If it holds, the inquiry becomes one of reach: how far can the first distinction carry?
+
+This repository slows down at the first formal threshold of that larger route. Before a theory can count, compare, negate, classify, or interpret, it must already be able to hold something apart from something else. The first task is therefore not yet physics and not yet full reconstruction. It is to ask what must be granted inside a formal setting before the claim that there are two positions has any stable force.
+
+The first local formal question is:
 
 ```text
 A formal system says that there are two positions.
@@ -22,20 +29,32 @@ What inside the system licenses that claim as two?
 
 The answer pursued here is deliberately austere: a carrier, two displayed positions, a witness that they do not collapse into one, and a witness that no third unaccounted position remains. Only after those obligations are explicit does the checked development proceed.
 
+The repository is organized around three books that keep the levels distinct.
+
+- `The First Distinction` establishes the first formally writable and machine-checkable carrier of stable distinction.
+- `Void` develops the formal consequences of that datum and asks how much mathematics can be reconstructed from the same discipline.
+- `Form` asks whether parts of that formal ledger admit a physical reading, while keeping interpretation visibly distinct from theorem.
+
 ## Read Order
 
 The repository has three primary literate sources.
 
 1. [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf)
-   The companion and intended first reading. It begins from the question of origin, moves through determination, physical limit, and information, and reaches the first formal threshold at which stable distinction can be written exactly.
+   The companion and intended first reading. It introduces the wager, begins from the pressure of origin, determination, physics, and information, and reaches the first formal threshold at which stable distinction can be written exactly.
 
 2. [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf)
-   The full formal volume. It takes the threshold seriously as mathematics and continues the checked route through normal form, endomorphism classification, closure, arithmetic, and later invariant structure.
+   The formal core. It takes the threshold seriously as mathematics and continues the checked route through normal form, endomorphism classification, closure, arithmetic, and later invariant structure.
 
 3. [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf)
-   The interpretive volume. It does not re-prove the kernel. It asks how the checked ledger may be read structurally and physically, while keeping those readings visibly distinct from theorem.
+   The interpretive volume. It does not re-prove the kernel. It asks how the checked ledger may be read structurally and physically, while keeping those readings visibly distinct from theorem and empirical claim.
 
 If you read only one file first, read [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex).
+
+In compact project form, the route is:
+
+```text
+The First Distinction -> Void -> Mathematical Reconstruction -> Physical Reconstruction -> Common-Origin Question
+```
 
 ## The Formal Hinge
 
@@ -86,6 +105,14 @@ The repository separates three kinds of statement.
 - Interpretive statements, concentrated in `Form`, test whether the checked ledger admits a physical reading.
 
 That separation matters. The formal kernel should be inspected as mathematics. The prose should be read as an account of what has been shown, what has not, and where later interpretation begins.
+
+The same discipline applies to the repository as a whole.
+
+- `The First Distinction` is not the completed theory.
+- `Void` is not yet physics.
+- `Form` is not automatically empirical success.
+
+The project asks a common-origin question, but each level has to earn its own claims.
 
 ## Verification
 
