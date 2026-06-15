@@ -262,13 +262,29 @@ does not answer Leibniz's question as a whole. It marks only the first
 point at which this condition can be formulated exactly and checked in
 intensional Martin-Löf type theory with Agda.
 
-The path can be read as a sequence of questions. Why do origin,
-determination, physics, and information point toward distinction? What
-conditions must a successful distinction satisfy? In what language can
-those conditions be written exactly? What is the first such form? What
-already follows from it? What has thereby been shown, and what has not? And
-what happens when the same distinction is allowed to continue running in
-\textit{Void} and \textit{Form}? Each answer generates the next question.
+The path can be read as a sequence of questions.
+
+Why do origin, determination, physics, and information point toward
+distinction? What conditions must a successful distinction satisfy? In what
+language can those conditions be written exactly? What is the first form
+that satisfies them? What follows from that form, and what does not?
+
+Each answer generates the next question.
+
+The present volume follows only the first part of a larger route.
+
+It begins with the pressure that determination, information, and physical
+description appear to depend upon successful distinction. From that pressure
+it asks what conditions a distinction must satisfy in order to remain
+stable. Those conditions are then written in a form precise enough to be
+checked formally.
+
+The larger developments of \textit{Void} and \textit{Form} begin only after
+that point.
+
+This book therefore does not present the completed construction. It
+establishes the first formally stable datum from which the later
+development proceeds.
 
 \tableofcontents
 
@@ -551,61 +567,73 @@ must be granted to write it down exactly?
 \label{ch:crossing}
 % ─────────────────────────────────────────────────────────────────
 
+At this point the question changes character.
+
+Up to now the discussion has been exploratory. The issue was whether certain
+conditions seem necessary for a distinction to persist. But necessity stated
+in ordinary language is still only a proposal.
+
+The next question is stricter.
+
+Can these conditions be written in a form precise enough that every
+consequence becomes checkable and every hidden assumption becomes visible?
+
+The inquiry therefore moves from philosophical orientation to formal
+specification.
+
 The previous chapter narrowed the question to a small finite
 specification: separation and cover on a field of two positions. At that
 point ordinary language reaches its limit. What is now missing is not
-another argument, but a tool in which writing and checking are one and the
-same act.
-
-Up to this point, the text has unfolded philosophical motives and refined
-working assumptions. From here on it moves to the level of formal
-commitments and formal results. The question is no longer which
-orientation is plausible, but in what language the minimal conditions of a
-successful distinction can be written so exactly that they can actually be
-checked. Physical readings do not enter at this point.
-
-What follows is not a tutorial in Agda. What matters is only why exactly
-these few means are needed. Each of them answers a question that has
-already arisen in the earlier movement.
+another argument, but a language in which every step can be stated exactly
+and checked.
 
 There is such a language. The one used here is Martin-L\"of type theory in
-the form realized by the proof assistant Agda. In it, to assert is to
-construct. A statement is a type, a proof is a term inhabiting that type,
-and a machine decides whether the term truly has the type claimed. A proof
-that does not check is here simply a file that does not compile. The
-argument is formulated in type theory not because it is the only possible
-carrier, but because it makes the cost of every step explicit.
-
-Everything the argument uses has to be declared, and two settings, fixed at
-the head of the file, govern everything that follows. The flag
-\AgdaFlag{safe} closes every escape hatch:
-no postulates, no principle asserted without proof, no back door through
-which an unearned result could enter. The flag \AgdaFlag{without-K}
-withholds a convenient but additional assumption about equality, so that
-nothing in the development rests on more than the bare identity type. Under
-them, only the things we build exist, in full view.
+the form realized by the proof assistant Agda.
 
 What is granted can be said briefly: a carrier with two positions, a
 witness that the two are not equal, and an account that leaves no point of
 the carrier unaddressed. No numbers, no geometry, no physics, and no
-classical logic beyond what is constructed by hand.
+classical logic beyond what is constructed explicitly.
+
+Everything else must be built.
+
+In this setting, to assert is to construct. A statement is a type, a proof
+is a term inhabiting that type, and a machine decides whether the term
+truly has the type claimed. A proof that does not check is simply a file
+that does not compile.
+
+The argument is formulated in type theory not because it is the only
+possible carrier, but because it makes the cost of every step visible.
+
+Two settings, fixed at the head of the file, govern everything that
+follows.
+
+The flag \AgdaFlag{safe} closes every escape hatch: no postulates, no
+principle asserted without proof, no back door through which an unearned
+result could enter.
+
+The flag \AgdaFlag{without-K} withholds a convenient but additional
+assumption about equality, so that nothing in the development rests on more
+than the bare identity type.
+
+Under these restrictions, only the things we actually build exist.
 
 If the formalization later seems to do more than this brief list suggests,
 that is only because much already follows from little. It is not because
-more was smuggled in beforehand.
+more was smuggled in beforehand. The order of writing is not the same as 
+the order of the inquiry.
 
-What follows is the same thought under stricter discipline. The previous
-chapters named in ordinary language the performances a stable distinction
-must carry. The file now writes those performances down one by one in a
-language where hidden shortcuts are not allowed.
+In the inquiry, distinction, Non-Collapse, and exact plurality appeared
+first. In the file, what appears first is whatever the checker requires in
+order for those conditions to be sayable at all.
 
-The order of writing is not the same as the order of the inquiry. In the
-inquiry, distinction, Non-Collapse, and exact plurality came first. In the
-file, what comes first is what the checker needs in order for those
-conditions to be sayable at all. No new content is introduced here. The
-file simply makes available the few means without which separation and cover
-could not be stated exactly. It begins with the mere bookkeeping of
-universe levels. Nothing mathematical is imported with that.
+No new content is introduced here. The file merely provides the few means
+without which separation and cover could not be stated exactly. These 
+constructions belong to the requirements of the formal language, not
+to the order in which the inquiry itself arrived at its result.
+
+It therefore begins with the bookkeeping required to manage universe
+levels. Nothing conceptual enters with that step.
 
 \begin{code}
 open import Agda.Primitive using (Level; lzero; lsuc; _⊔_; Setω)
@@ -613,14 +641,18 @@ open import Agda.Primitive using (Level; lzero; lsuc; _⊔_; Setω)
 
 That first line is only housekeeping. It gives the checker a way to track
 sizes consistently, and none of the conceptual weight of the argument rests
-on it. The real formal work begins with the thinnest device needed to say
-when something is the same and when it is not.
+on it.
+
+The real formal work begins with the thinnest device needed to say when
+something is the same and when it is not.
 
 That is why equality comes first in the file. Not because sameness would be
-prior to distinction in the order of the book, but because separation and
-cover are not even formulable without a minimal way to say same, not the
-same, and substitution. The identity type gives exactly that. At this stage
-it is not meant to do more.
+prior to distinction in the order of the inquiry, but because separation
+and cover are not even formulable without a minimal way to say same, not
+the same, and substitution.
+
+The identity type provides exactly that, and at this stage it is not meant
+to do more.
 
 \begin{code}
 infix 4 _≡_
@@ -1080,39 +1112,68 @@ can check it.
 \label{ch:outlook}
 % ─────────────────────────────────────────────────────────────────────
 
-This book stops at the first formally secured datum. \textit{Void} asks
-what happens if that datum is not merely described but continued as a
-process. The question there is no longer what minimal structure a
-distinction must carry, but what follows mechanically from a separated and
-covered distinction under the same disciplines.
+This companion stops at the first formally secured datum.
 
-The first part of that continuation is purely formal. A binary carrier with
-separation and cover normalizes to \texttt{Two}. Its endomorphism space has
-exactly four cases. Under the stated representation conditions that
-four-case space closes to $K_4$, and the closure returns to the original
-\texttt{Distinction} datum. From there the development continues without
-new postulates: arithmetic is built internally, and where rational data no
-longer suffice, the continuous arena is constructed within the same
+The question pursued in \textit{Void} is simple.
+
+What follows if nothing new is granted?
+
+Not a second postulate. Not a larger ontology. Not a physical assumption.
+
+What follows if the distinction established here is simply allowed to
+continue under the same discipline?
+
+The answer is considerably more than the size of the initial datum would
+suggest.
+
+The distinction normalizes to \texttt{Two}. Its endomorphisms classify into
+exactly four cases. Under the representation conditions developed in
+\textit{Void}, those four cases close to $K_4$, and the closure returns to
+the original distinction structure.
+
+From there the development continues without additional axioms. Arithmetic
+is constructed internally. Rational structure appears. Continuous structure
+is constructed where finite and rational data no longer suffice. Spectral,
+combinatorial, algebraic, and symmetry structures emerge within the same
 development.
 
-This yields a register that is initially purely mathematical. It contains
-finite invariants, arithmetic expressions, and the structures that follow
-from the closure. Only once this register is fully in place does the next
-question arise: whether its entries admit a physical reading.
+The central claim of \textit{Void} is not that these structures describe
+nature.
 
-That is where \textit{Form} begins. \textit{Form} takes the register
-produced in \textit{Void} as a fixed formal constraint and tests sector
-assignments, correction chains, ratios, and mass readouts against it. The
-separation of levels remains strict. What the kernel forces remains theorem.
-The assignment of physical names to those structures is interpretation.
-Whether the interpretation holds is decided only by comparison with the
-world.
+The central claim is that they arise mechanically once the initial datum is
+granted.
 
-The continuation is therefore neither a new beginning nor a direct leap to
-physics. The process distinction is allowed to keep running under the same
-rules; its closure yields first normal form, four-case structure, $K_4$,
-register, and continuous arena. Only after that does the question arise
-whether this register can be read physically. This companion marks only the
-point at which that continuation begins.
+By the end of that process the result is no longer a single record. It is a
+formal register containing normal forms, closure structures, arithmetic
+constructions, finite invariants, continuous domains, symmetry actions, and
+the relations forced between them.
+
+Only after this register is in place does a different question become
+possible.
+
+Can any part of it be read physically?
+
+That question belongs to \textit{Form}.
+
+\textit{Form} takes the formal register produced in \textit{Void} as fixed
+and asks whether observed regularities can be identified with structures
+already present there. Physical names enter only at that stage.
+
+The distinction between levels remains strict.
+
+What the formal kernel forces remains theorem.
+
+What the formal ledger forces remains arithmetic consequence.
+
+What receives a physical name becomes interpretation.
+
+What survives comparison with observation becomes empirical claim.
+
+Whether such identifications succeed is therefore not decided by the formal
+system. It is decided only by confrontation with the world.
+
+This companion establishes the first datum.
+
+\textit{Void} and \textit{Form} explore its consequences.
 
 \end{document}
