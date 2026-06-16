@@ -222,21 +222,20 @@
 \chapter*{Prologue: The Old Dream}
 \addcontentsline{toc}{chapter}{Prologue: The Old Dream}
 
-One of the oldest dreams of science is that explanation can advance by
-reducing the number of independent assumptions. Leibniz imagined a reasoned
-calculus strong enough to replace endless dispute with demonstrable
-connection. Newton showed that the fall of a stone and the motion of the
-planets need not belong to separate worlds. Maxwell brought electricity,
-magnetism, and light under one field description. Einstein joined space and
-time into a single kinematic structure. Modern physics has continued the
-same pressure in different forms, again and again asking whether what looks
-plural can be read from something more elementary.
+A recurring aim of science is to explain more with fewer independent
+assumptions. Leibniz imagined a reasoned calculus that would replace dispute
+with demonstrable connection. Newton showed that the fall of a stone and the
+motion of the planets need not belong to separate worlds. Maxwell brought
+electricity, magnetism, and light under one field description. Einstein
+joined space and time into a single kinematic structure. Modern physics
+continues that movement and repeatedly asks whether apparently different
+domains can be understood from fewer assumptions.
 
-These moments matter not only because they unify results already known. They
-change what counts as basic. Domains that once appeared independent begin to
-look like different expressions of a deeper order. Much of the power of
-science lies precisely here: not merely in adding facts, but in discovering
-that fewer principles can carry more.
+Such steps do not merely unify results already known. They also change what
+counts as basic. Domains that once appeared independent become readable as
+different cases of a common structure. A central strength of scientific
+explanation lies here: not just in collecting more facts, but in letting
+fewer principles carry more.
 
 This book stands inside that movement, but not at its familiar level. It
 does not begin by asking which equation might join gravitation and quantum
@@ -251,17 +250,16 @@ than a proclamation about reality as a whole. Nothing here claims that the
 world has already been derived. The issue is whether the possibility of
 description may rest on a common minimal structure.
 
-The wager of the present project can therefore be stated plainly. Stable
-information presupposes a successfully carried distinction. If that wager
-fails, the route ends at once. If it holds, the question becomes how far
-the first distinction can carry.
+The guiding assumption of the present project can therefore be stated
+plainly: stable information presupposes a successfully carried distinction.
+If that assumption fails, the route ends at once. If it holds, the question
+becomes how far the first distinction can carry.
 
 This companion takes only the first formally controlled step in that longer
-route. It does not present the full theory. It does not present the
-physics. It does not present the unification as accomplished. It seeks the
-first point at which the conditions of stable distinction can be written
-completely, constructed explicitly, and checked by machine in intensional
-Martin-L\"of type theory with Agda.
+route. It presents neither the full theory, nor finished physics, nor an
+accomplished unification. It seeks the first point at which the conditions
+of stable distinction can be written completely, constructed explicitly, and
+checked by machine in intensional Martin-L\"of type theory with Agda.
 
 Its path is therefore narrow and deliberate. Why distinction at all? What
 conditions must a stable distinction satisfy? In what formal language can
@@ -269,7 +267,10 @@ those conditions be made exact? What is the first fully writable carrier of
 those conditions? What already follows from so little?
 
 Everything beyond that belongs to the larger investigation of \textit{Void}
-and \textit{Form}. This book marks the threshold.
+and \textit{Form}. \textit{Void} asks next how much mathematics can be
+reconstructed under the same formal constraints. \textit{Form} is the later
+question of whether some of those structures can be read physically and
+tested against the world. This book marks only the entry into that chain.
 
 \tableofcontents
 
@@ -298,11 +299,11 @@ module FirstDistinction where
 simpler and easier than something.''}{Gottfried Wilhelm Leibniz}
 
 The prologue placed this inquiry inside an older scientific movement toward
-fewer independent assumptions. This chapter pushes that movement below
-objects, laws, and theories themselves. Origin, determination, physics, and
-information approach the matter from four different sides. They are
-gathered here not as four unrelated claims, but as four witnesses to one
-conjecture: that determination presupposes successful distinction.
+fewer independent assumptions. This chapter shifts the question below the
+level of objects, laws, and theories. Origin, determination, physics, and
+information are not presented as proofs from four disciplines. They clarify
+why the guiding assumption is plausible: determination presupposes
+successful distinction.
 
 \section{The Question of Origin}
 
@@ -316,11 +317,11 @@ back to the first physically describable state and still leave open why there
 is a cosmos whose history can be traced at all. The question reaches beyond
 everything data alone can decide.
 
-But the question already carries one of its own conditions. To ask between
-\emph{something} and \emph{nothing}, both must already be in force as
-different. A nothing that could not be distinguished from something could
-not appear as nothing. The question of origin therefore already
-presupposes a distinction it does not itself explain.
+But the question already contains one condition. To ask between
+\emph{something} and \emph{nothing}, both must be distinguishable. A nothing
+that could not be distinguished from something could not appear as nothing.
+The question of origin therefore already presupposes a distinction it does
+not itself explain.
 
 That is why it leads immediately further. Not only: why is there something
 rather than nothing? But also: what must already hold for something to be
@@ -347,23 +348,19 @@ Without this elementary difference there would be no determinate something.
 A sign that is not distinguished from what it refers to is no sign. A mark
 that does not stand out from the sheet on which it stands is no mark.
 
-At first this describes only the simplest case. But its reach is clear:
-wherever something appears as this and not as that, something must already
-be distinguished from something else.
+At first this describes only the simplest case. Its reach is limited but
+important: wherever something appears as this and not as that, something
+must already be distinguished from something else.
 
-If that is right, the point should show itself most clearly where
-determination has been driven furthest: in physics. Does physics encounter
-here only a limit of our knowledge, or a condition for anything to appear
-as different at all?
+The next section considers this condition where determination is treated
+with particular methodological strictness: in physics. The point is not to
+derive physics here, but to note that physics already works with
+distinguishable states.
 
 % ─────────────────────────────────────────────────────────────────────
 \section{The Physical Limit}
 \label{ch:edge}
 % ─────────────────────────────────────────────────────────────────────
-
-If this condition is real, it must be visible in physics. There the attempt
-to grasp the beginning of the universe as a state of the world has been
-driven furthest.
 
 Modern cosmology reconstructs the history of the universe backward.
 Galaxies move closer together, the universe becomes hotter and denser,
@@ -380,7 +377,7 @@ expectation goes, deeper measurements or a deeper theory will suffice. But
 that expectation already assumes that better data will in the end also give
 better answers about origin.
 
-The history of physics speaks cautiously against that hope. Newton brought
+The history of theory shows a recurring pattern here. Newton brought
 celestial mechanics and falling bodies under a common law, but presupposed
 space, time, and mass. Maxwell bound electricity, magnetism, and light into
 a few equations, but presupposed charge and the continuum in which it
@@ -390,21 +387,21 @@ precise predictions we have, but in turn requires a symmetry group, a
 particle inventory, and constant parameters that it does not generate from
 itself.
 
-The examples share a common form. Even the most successful theories explain
-more than their predecessors and yet still work with quantities,
-inventories, or constants they do not generate from themselves.
+In all these cases, a theory explains more than its predecessors and yet
+still works with quantities, inventories, or constants it does not derive
+from itself.
 
 The point can also be made without that history. Data are always data of
 something: states, events, relations, measured values. For them to be data
 at all, something must be distinguished from something else. The beginning
 of the universe, however, is not simply one more state within an already
-differentiated world. It concerns the question of how such a world can come
-into force at all.
+differentiated world. It concerns the question of how a field of
+distinguishable states can be present at all.
 
-The first moment is therefore not only an unsolved problem of physics. It
-marks the place where physics touches its own presupposition. Physics works
-with distinguishable states. Remove that presupposition, and no
-measurement, no dynamics, no information, and no theory remain.
+The early edge of physical description is therefore not only an open
+measurement problem. It shows that physics already reckons with
+distinguishable states. Remove that presupposition, and no measurement, no
+dynamics, no information, and no theory remain.
 
 The question is therefore not only: which state was the first? But: what
 must hold for states to be in force at all? Then the issue is no longer
@@ -428,14 +425,13 @@ questions. In both cases information hangs on retained difference.
 
 For the rest of the inquiry, that becomes a working assumption. Every piece
 of information rests on a successful act of distinction. \emph{Successful}
-means: the
-difference must be stateable, it must not collapse at once, and it must be
-determinate enough to present itself again as the same.
+means: the difference must be stateable, it must not collapse at once, and
+it must be determinate enough to present itself again as the same.
 
-The question thus shifts from a mere limit to the required performance.
-What must a distinction do if it is to carry information? Can a difference
-be stated at all? Does it hold? And is a field of such differences
-complete, with neither less nor more?
+The further question is therefore not only where a description reaches its
+limit. It is: what must a distinction do if it is to carry information? Can
+a difference be stated at all? Does it hold? And is a field of such
+differences complete, with neither less nor more?
 
 % ─────────────────────────────────────────────────────────────────────
 \chapter{Conditions of Stable Distinction}
@@ -481,7 +477,7 @@ anything. No measured value could rest on it. No state could be asserted
 against another.
 
 That is why a second demand follows distinguishability. A difference does
-not suffice merely because it flashes up once. It must be secured against
+not suffice merely because it occurs once. It must be secured against
 collapse. Call this demand Non-Collapse.
 
 Long before there are scales, observers, or instruments, it must be
@@ -491,17 +487,16 @@ create that. Recording does not create it. Both already presuppose it.
 The same demand appears in physics as well, for example in the black-hole
 information problem. The issue there is not first of matter or energy, but
 of whether differences once achieved can be lost without remainder. This is
-not a proof of the present argument, but it is a clear physical case of the
-same structure.
+not a proof of the present argument, but it is a physical example of the
+same form of question.
 
 The demand can now be sharpened. Non-Collapse means: there must be a genuine
 separation between two positions, and that separation may not fall back into
 identity. That is exactly why the formal part will later have to work with
 inequality and equality.
 
-With this much in hand, the next question arises. Is a single difference
-secured against collapse enough, or must an entire field of such
-differences stand complete?
+That raises the next question. Is a single difference secured against
+collapse enough, or must an entire field of such differences stand complete?
 
 % ─────────────────────────────────────────────────────────────────────
 \section{Exact Plurality}
@@ -513,22 +508,20 @@ field of differences. What does it take for a system to be fixed to a
 determinate plurality: that exactly these positions are here, neither fewer
 nor more?
 
-This demand is felt most directly by trying to hold a small plurality in
-place and seeing what can go wrong. Consider a few blank sheets on a table
-and suppose there is a definite number of them. Two failures lie in wait,
-and they pull in opposite directions. The first: some of the sheets counted
-as different might not really be different at all --- if every way of
-pointing to one points equally well to another, then there are not distinct
-sheets, but one sheet pointed at twice. Call this collapse: the many
-secretly fall together into fewer. The second, less obvious case: there may
-be more on the table than the count ever mentioned --- a sheet at the edge
-that the accounting never ruled out. Call this surplus: the field hides
-elements the count never closed.
+This demand can be shown by a small act of counting. Consider a few blank
+sheets on a table and suppose there is a definite number of them. Two errors
+are possible, and they pull in opposite directions. First, some of the sheets
+counted as different might not be different at all: every way of pointing to
+one then points equally well to another. There are not several sheets, but
+one sheet pointed at more than once. Call this collapse: the many become
+fewer than claimed. Second, there may be more on the table than the count
+has captured: perhaps a sheet at the edge that the accounting never ruled
+out. Call this surplus: the field contains more than the account covers.
 
-These two dangers are distinct. Collapse means fewer than claimed. Surplus
+These two errors are distinct. Collapse means fewer than claimed. Surplus
 means more than claimed. Whoever prevents only collapse may still have too
-much in the field. Whoever excludes only surplus may still secretly identify
-two positions. An exact plurality has to answer both dangers at once.
+much in the field. Whoever excludes only surplus may still identify two
+positions.
 
 The demand that answers both has exactly two parts. The named positions must
 really lie apart. Call that \emph{separation}. And every position of the
@@ -794,10 +787,10 @@ is what self-maps such a carrier admits.
 % ─────────────────────────────────────────────────────────────────
 
 Once the first distinction is given, the next question follows at once:
-what self-maps does such a carrier admit? The point of this chapter is
-modest in claim and strong in consequence. It does not yet deliver the
-later closure reading of \textit{Void}. It shows that even at this first
-formal threshold the space of endomorphisms is no longer open-ended.
+what self-maps does such a carrier admit? This chapter has a limited scope.
+It does not yet deliver the later closure reading of \textit{Void}. It shows
+only that even at this first formal threshold the space of endomorphisms is
+fixed to four cases.
 
 Once the carrier is fixed to two classes, self-maps are almost entirely
 determined by their values on \texttt{ℓ} and \texttt{r}. To compare two
@@ -1049,10 +1042,9 @@ its status: what has thereby been shown, and what not?
 \label{ch:conclusion}
 % ─────────────────────────────────────────────────────────────────────
 
-One sentence must now be said as sharply as possible. This book has not
-proved the world. It has shown that a stable distinction, once written
-exactly under the stated constraints, already carries a nontrivial closed
-structure.
+The status of the result is limited and exact. This book has not proved the
+world. It has shown that a stable distinction, once written exactly under
+the stated constraints, already carries a nontrivial closed structure.
 
 What has been shown is a small but precise stock: a carrier with two
 positions, a witness that they are apart, an exhaustion principle with no
@@ -1089,9 +1081,12 @@ a condition of honesty.
 At the level of this book, the status is clear. That a stable distinction
 has exactly four self-maps up to pointwise equality is theorem. Further
 constructions remain mathematics so long as they remain explicit
-constructions. Only when a later stage gives such structures physical names
-does theorem give way to interpretation, and only confrontation with the
-world can decide whether an interpretation survives.
+constructions. \textit{Void} belongs to this region: it asks how far such
+constructions reach without additional assumptions. \textit{Form} no longer
+belongs to this theorem, but to a later interpretive step. There, some
+structures receive physical readings; then theorem gives way to
+interpretation, and only confrontation with the world can decide whether an
+interpretation survives.
 
 The question of origin therefore remains unanswered. What has shifted is
 narrower and more precise: its first minimal step --- the holding-apart of
@@ -1104,18 +1099,19 @@ checked construction, bounded carrier, and four-case self-map structure.
 \label{ch:reach}
 % ─────────────────────────────────────────────────────────────────────
 
-This companion is not the theory as a whole. It is not the physics. It is
-not the unification. It marks the first point at which the conditions of
-stable distinction can be formulated completely and checked mechanically.
+This companion is not the theory as a whole. It is not a physical theory and
+not a completed unification. It marks the first point at which the
+conditions of stable distinction can be formulated completely and checked
+mechanically.
 
-From here the larger investigation begins rather than ends.
-\textit{The First Distinction} establishes the datum. \textit{Void} asks
-what follows if nothing further is granted. It does not ask which external
-mathematics can be borrowed, but how much mathematics can be reconstructed
-from the same discipline. Only after that register exists does
-\textit{Form} begin. There the question is no longer what follows formally,
-but whether structures already present in the ledger can be read as
-structures of physical description.
+From here a larger investigation begins, but not as an already completed
+derivation all the way to physics. \textit{The First Distinction}
+establishes the datum. \textit{Void} asks what follows formally if nothing
+further is granted. It does not ask which external mathematics can be
+borrowed, but how much mathematics can be reconstructed from the same
+discipline. \textit{Form} is the later change of level: there the question
+is no longer what follows formally, but whether certain formal structures
+can be read as structures of physical description.
 
 Above both stands the wider question that motivates the whole project:
 whether logic, mathematics, and physical description may be different
@@ -1123,23 +1119,24 @@ appearances of a common origin.
 
 \begin{center}
 \begin{tikzpicture}[node distance=8mm]
-  \node[stage, minimum width=44mm] (fd) {The First\\Distinction};
-  \node[stage, minimum width=44mm, below=of fd] (void) {Void};
-  \node[stage, minimum width=44mm, below=of void] (math) {Mathematical\\Reconstruction};
-  \node[stage, minimum width=44mm, below=of math] (phys) {Physical\\Reconstruction};
-  \node[stage, minimum width=44mm, below=of phys] (common) {Common-Origin\\Question};
+  \node[stage, minimum width=46mm] (fd) {The First\\Distinction};
+  \node[stage, minimum width=46mm, below=of fd] (void) {Void:\\mathematical\\reconstruction};
+  \node[stage, minimum width=46mm, below=of void] (form) {Form:\\physical\\reading};
+  \node[stage, minimum width=46mm, below=of form] (test) {Comparison with\\experiments};
+  \node[stage, minimum width=46mm, below=of test] (common) {Common-origin\\question};
 
   \draw[routearrow] (fd) -- (void);
-  \draw[routearrow] (void) -- (math);
-  \draw[routearrow] (math) -- (phys);
-  \draw[routearrow] (phys) -- (common);
+  \draw[routearrow] (void) -- (form);
+  \draw[routearrow] (form) -- (test);
+  \draw[routearrow] (test) -- (common);
 \end{tikzpicture}
 \end{center}
 
 Void/Form investigates whether logic, mathematics, and physical description
 can be understood as different appearances of a common structure of
-distinction. \textit{The First Distinction} supplies the first formally
-secured step of that investigation.
+distinction. The path to physics is not a theorem of this book, but a later
+program of interpretation and test. \textit{The First Distinction} supplies
+the first formally secured step of that investigation.
 
 How far can this go? This book does not answer that question. It only makes
 the question exact enough to be pursued honestly. The chain may break
