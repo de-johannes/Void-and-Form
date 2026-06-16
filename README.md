@@ -5,20 +5,46 @@
 
 Start with the companion: [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf).
 
-## What This Repository Is
+## What This Project Asks
 
-`Void and Form` is a literate Agda book project investigating whether logic, mathematics, and physical description can be understood as different appearances of a common minimal structure of distinction.
+`Void and Form` is a three-book literate Agda project asking whether logic, mathematics, and physical description may share a common origin in a minimal structure of distinction.
 
-The project should not be described too narrowly and not too grandly.
+Its opening wager is simple. Stable information presupposes a successfully carried distinction. If that wager fails, the route ends immediately. If it holds, the question becomes one of reach: how far can the first distinction carry?
 
-- Too narrow would be: this repository studies distinction and `K4`.
-- Too grand would be: this repository has already proved reality.
+That question should not be shrunk and it should not be inflated.
 
-The actual question is more interesting. Is there a common origin still beneath logic, mathematics, and physical description themselves?
+- Too narrow would be: this project studies distinction and `K4`.
+- Too grand would be: this project has already deduced reality.
 
-The wager that opens the route is simple. Stable information presupposes a successfully carried distinction. If that wager fails, the project ends early. If it holds, the inquiry becomes one of reach: how far can the first distinction carry?
+The actual question is harder and more interesting: is there a common origin still beneath logic, mathematics, and physical description themselves?
 
 This repository slows down at the first formal threshold of that larger route. Before a theory can count, compare, negate, classify, or interpret, it must already be able to hold something apart from something else. The first task is therefore not yet physics and not yet full reconstruction. It is to ask what must be granted inside a formal setting before the claim that there are two positions has any stable force.
+
+Type theory is used here not because it is the only possible language, but because it makes the cost of each step visible. Every claim must be paid for by construction. Hidden assumptions cannot pass silently; they have to show themselves.
+
+## The Three Books
+
+The repository is organized as one route in three books, each with its own level of claim.
+
+1. `The First Distinction` is the entry. It asks why distinction should be the place to begin and reaches the first formally writable and machine-checkable carrier of stable distinction.
+2. `Void` is the formal core. It takes that carrier seriously as mathematics and asks how much further structure can be reconstructed under the same discipline.
+3. `Form` is the interpretive volume. It asks whether parts of the checked ledger admit a physical reading, while keeping theorem, interpretation, and empirical exposure distinct.
+
+Read them in that order:
+
+1. [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf)
+2. [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf)
+3. [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf)
+
+If you read only one file first, read [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex).
+
+In compact project form, the route is:
+
+```text
+The First Distinction -> Void -> Mathematical Reconstruction -> Physical Reading -> Common-Origin Question
+```
+
+## The First Formal Threshold
 
 The first local formal question is:
 
@@ -28,35 +54,6 @@ What inside the system licenses that claim as two?
 ```
 
 The answer pursued here is deliberately austere: a carrier, two displayed positions, a witness that they do not collapse into one, and a witness that no third unaccounted position remains. Only after those obligations are explicit does the checked development proceed.
-
-The repository is organized around three books that keep the levels distinct.
-
-- `The First Distinction` establishes the first formally writable and machine-checkable carrier of stable distinction.
-- `Void` develops the formal consequences of that datum and asks how much mathematics can be reconstructed from the same discipline.
-- `Form` asks whether parts of that formal ledger admit a physical reading, while keeping interpretation visibly distinct from theorem.
-
-## Read Order
-
-The repository has three primary literate sources.
-
-1. [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex) / [PDF](latex/FirstDistinction.pdf)
-   The companion and intended first reading. It introduces the wager, begins from the pressure of origin, determination, physics, and information, and reaches the first formal threshold at which stable distinction can be written exactly.
-
-2. [Void.lagda.tex](Void.lagda.tex) / [PDF](latex/Void.pdf)
-   The formal core. It takes the threshold seriously as mathematics and continues the checked route through normal form, endomorphism classification, closure, arithmetic, and later invariant structure.
-
-3. [Form.lagda.tex](Form.lagda.tex) / [PDF](latex/Form.pdf)
-   The interpretive volume. It does not re-prove the kernel. It asks how the checked ledger may be read structurally and physically, while keeping those readings visibly distinct from theorem and empirical claim.
-
-If you read only one file first, read [FirstDistinction.lagda.tex](FirstDistinction.lagda.tex).
-
-In compact project form, the route is:
-
-```text
-The First Distinction -> Void -> Mathematical Reconstruction -> Physical Reconstruction -> Common-Origin Question
-```
-
-## The Formal Hinge
 
 The first exact object is the distinction record:
 
@@ -77,7 +74,7 @@ Its roles are local and strict.
 - `ℓ≠r` prevents collapse.
 - `cover` prevents surplus.
 
-This is the first point at which the conditions of stable distinction become fully explicit and machine-checkable.
+This is the first point at which the conditions of stable distinction become fully explicit and machine-checkable. Everything earlier motivates the threshold. The checked route begins only once the datum has been supplied.
 
 ## What The Kernel Checks
 
@@ -94,19 +91,21 @@ In compact form, the route is:
 Distinction -> Two -> End(Two) -> K4 closure -> Distinction
 ```
 
-The opening pressure motivates the construction, but it is not itself an Agda theorem. The checked route begins only once the distinction datum has been supplied explicitly.
+The opening pressure motivates the construction, but it is not itself an Agda theorem.
 
 ## How To Read The Claims
 
-The repository separates three kinds of statement.
+The project keeps its layers distinct.
 
-- Formal statements are Agda terms checked under `--safe --without-K`.
-- Structural statements explain why the checked terms belong together as one argument.
-- Interpretive statements, concentrated in `Form`, test whether the checked ledger admits a physical reading.
+1. Before the formal threshold there is a wager: stable information presupposes successful distinction.
+2. At the threshold and inside `Void`, claims are formal only when they are carried by the Agda development under `--safe --without-K`.
+3. Beyond the kernel, later mathematical reconstruction asks what reappears under the same discipline.
+4. In `Form`, physical statements are readings of the checked structure, not automatic consequences of it.
+5. Those readings face the world only at the point of empirical exposure.
 
 That separation matters. The formal kernel should be inspected as mathematics. The prose should be read as an account of what has been shown, what has not, and where later interpretation begins.
 
-The same discipline applies to the repository as a whole.
+The same discipline also sets the limit of what this repository claims.
 
 - `The First Distinction` is not the completed theory.
 - `Void` is not yet physics.
@@ -143,11 +142,9 @@ xelatex -interaction=nonstopmode FirstDistinction.tex
 - [latex/](latex/): generated LaTeX and PDF output.
 - [LICENSE](LICENSE): license terms.
 
-## Author and Method
+## Method
 
-The author has no institutional affiliation, no formal background in mathematics or physics, and no prior training in type theory or formal verification. The development was built over eighteen months with the assistance of large language models.
-
-The Agda type checker under `--safe --without-K` is the formal judge of the kernel. It does not check credentials. It checks proofs. The relevant question is therefore whether the formal claims type-check under the stated options, whether the prose reports them faithfully, and whether the interpretive layers keep their stated status.
+The Agda type checker under `--safe --without-K` is the formal judge of the kernel. It does not check vision, rhetoric, or credentials. It checks constructions. The relevant questions are therefore whether the formal claims type-check under the stated options, whether the prose reports them faithfully, and whether the interpretive layers keep their stated status.
 
 ## Citation
 
