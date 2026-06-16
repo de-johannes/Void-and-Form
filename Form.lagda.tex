@@ -300,113 +300,61 @@ module Form where
 \end{code}
 
 % ─────────────────────────────────────────────────────────────────────
-%  Part I — What Physics Has Done
-%  Three chapters, prose only.  Honoring four centuries of physics,
-%  naming the open ledger, and showing why the gaps are structural.
+%  Part I — Where Physics Stands
+%  One chapter.  Begin from the strongest success of physical theory,
+%  expose the common grammar of that success, and mark the boundary
+%  at which physics must still leave a ledger open.
 % ─────────────────────────────────────────────────────────────────────
 
-\part*{What Physics Has Done}
-\addcontentsline{toc}{part}{What Physics Has Done}
+\part*{Where Physics Stands}
+\addcontentsline{toc}{part}{Where Physics Stands}
 
 % ─────────────────────────────────────────────────────────────────────
-\chapter{Four Centuries of Motion}
-\label{ch:four-centuries}
+\chapter{The Boundary of Physics}
+\label{ch:boundary-of-physics}
 % ─────────────────────────────────────────────────────────────────────
 
 \epigraph{``I do not know what I may appear to the world; but to myself I seem to have been only like a boy playing on the seashore, and diverting myself in now and then finding a smoother pebble or a prettier shell than ordinary, whilst the great ocean of truth lay all undiscovered before me.''}{Isaac Newton}
 
-Before any new claim can be heard, the tradition that earned the right to be questioned must be honored. The questions this book asks are large. They become unbearable if they pretend to arise in a vacuum. They are tolerable---and worth the labor---only because four centuries of physical thought have made the ground on which they stand.
+\textit{Void} closed a formal chain: from a single datum of binary distinction, through classification, through the emergence of a four-case carrier, to a complete graph $K_4$ and the arithmetic it forces.  This volume asks whether that closed record can be read as physics.
 
-This chapter walks that ground. Not as a history---there are better books for that---but as a record of what has been won, in what order, and by what method. The point is not nostalgia. The point is to see what every successful theory of physics has had in common, so that the question of what it cannot do becomes precise.
+This chapter therefore does not begin with a new physical proposal.  It begins with a boundary.  Before one asks whether the formal kernel can be read physically, one must say what physics already accomplishes, what sort of accomplishment that is, and where even that accomplishment must stop.
 
-\section*{Newton: That the Same Law Applies}
+Physics appears here neither as ornament nor as adversary.  It appears because no other science has compressed so much of the world into so little law.  If even there a remainder persists that the theory must take as given, that remainder deserves to be named exactly.
 
-In 1687, Isaac Newton published the \textit{Philosophi\ae{} Naturalis Principia Mathematica}. It contained three laws of motion and a single law of gravitation. From these---no more---he derived the orbits of the planets, the motion of the moon, the tides, the precession of the equinoxes, and the trajectory of a falling apple.
+This chapter does that work.  It first recalls what makes physics the decisive test case, then identifies the common shape of successful theory, inventories what every such theory leaves open, and shows why those open entries amount to one question about beginnings.
 
-The mathematical achievement was enormous. The conceptual achievement was larger. Before Newton, the heavens and the earth were taken to obey different rules: incorruptible spheres above, corruptible matter below. Newton's claim was that the falling apple and the orbiting moon are governed by \textit{the same law}---a single inverse-square dependence applied to the same kind of mass. Heaven and earth became one mechanical system. The word \textit{universe}, in the sense in which physicists use it, dates from this moment.
+\section*{Success Has a Shape}
 
-Three properties of Newton's program would recur in every later theory:
+Physics earned the right to this question by its success.  Newton let the apple and the moon answer to one law.  Maxwell joined electricity, magnetism, and light in one field description.  Einstein made spacetime itself dynamical.  Quantum mechanics and quantum field theory carried the same compression into the microscopic regime, replacing sharp values with operators, amplitudes, and gauge structure whose predictions reach extraordinary precision.
 
-First, \emph{economy}. Three laws and one force describe an enormous range of phenomena. The expressive power-to-axiom ratio is high, and that ratio is itself a virtue. Theories that need a separate principle for each effect tend to be wrong; theories that derive many effects from few principles tend to last.
+Chronology is not the point.  These landmarks matter because each reduced a wider range of phenomena to a smaller set of principles in a more uniform language.  The nouns changed---positions, fields, spacetime, wavefunctions, operators---but the ambition remained the same: explain more by presupposing less, and make the resulting law hold as broadly as possible.
 
-Second, \emph{prediction}. Newton's laws did not merely describe what was already known. They predicted the return of comets (Halley, 1758), the existence of an unknown planet (Neptune, 1846), and the exact perturbations of Mercury's orbit---accurate to within an arc-second per century, the residual being precisely the puzzle that two centuries later would force the next revolution.
+That recurring achievement gives successful physics a recognizable form.
 
-Third, \emph{universality of variables}. Newton wrote his laws in coordinates that any observer could use. The mass on the left-hand side of $F = ma$ is the same mass that appears in $F = G m_1 m_2 / r^2$. There is no separate ``orbital mass'' or ``terrestrial mass.'' The variables of the theory are properties of the world, not properties of a particular use of the theory.
+\section*{The Common Shape}
 
-These three properties---economy, prediction, universality---would become non-negotiable. Any theory that aspired to be physics would have to have them.
+Strip any of these theories to its working core and the same architecture appears:
 
-\section*{Maxwell: That Three Phenomena Are One}
+\begin{enumerate}
+\item A \emph{state space}---possible configurations of the world.
+\item A \emph{law of evolution}---a rule that, given a configuration at one instant, determines the configuration at the next.
+\item A set of \emph{constants}---numbers that appear in the law but are not derived from it.
+\item An \emph{initial condition}---the configuration at a chosen reference time.
+\end{enumerate}
 
-A century and a half later, James Clerk Maxwell wrote down the equations that bear his name. His 1865 paper, \textit{A Dynamical Theory of the Electromagnetic Field}, took twenty equations in twenty variables and---through what he called the ``method of analogy''---compressed them. The compressed form would later be tightened further by Heaviside and Gibbs into the four equations every physics student now memorizes.
+This architecture is not an accident of history.  It is the working grammar of the differential equation, the instrument through which physics has most often expressed law since Newton.  A differential equation separates the world into ``what is given'' (initial data, constants, the form of the equation itself) and ``what follows'' (the evolved state).  What follows is the theory's prediction.  What is given is what the theory cannot address from inside itself.
 
-The equations did three things at once. They unified electricity and magnetism into a single object, the electromagnetic field. They explained light: Maxwell showed that a self-sustaining oscillation of the field must propagate at a speed determined by two electrostatic constants, and that speed---computed from laboratory measurements of capacitors and coils---came out to within a few percent of Fizeau's optical measurement of $c$. And they predicted, by the same equations, that the visible spectrum was only a sliver of a vastly broader band of electromagnetic radiation. Heinrich Hertz confirmed radio waves in 1887. Marconi sent a transatlantic signal in 1901. The internet is a Maxwell-equation phenomenon.
+A constant enters a physical equation as a parameter, not as a variable.  The equation does not act on it; it acts on the field, with the constant held fixed.  To derive the constant would require a different equation---one in which the constant becomes a variable selected by some additional principle.  That equation would be a larger theory, with its own constants, its own boundary.  Newton took $G$ as given; Einstein embedded $G$ inside a theory that took $\kappa = 8\pi G/c^4$ as given.  Each step pushed the boundary outward.  None erased it.
 
-The depth of this achievement is easy to underestimate now that it is taught in undergraduate courses. In 1865, the claim was extravagant: a phenomenon known to humanity since fire---light---is a wave in a field humans had only just learned to call electromagnetic. The mathematics was the only reason to believe it. Two constants, $\varepsilon_0$ and $\mu_0$, measured in entirely different experiments, combined to give a number that happened to equal a different number measured in entirely different experiments again. This is what physicists mean when they call mathematics ``unreasonably effective.'' Maxwell's equations were the first time mathematics did not merely \textit{describe} reality but \textit{anticipated} a feature of it that no one had been looking for.
+The same logic applies to initial conditions, even more sharply.  The Schr\"odinger equation determines the wavefunction at $t_1$ given the wavefunction at $t_0$.  It says nothing about which wavefunction is at $t_0$.  When the equation is Einstein's and the ``initial condition'' is a slice of the universe, the question becomes cosmological---and General Relativity does not answer it.  Inflation pushes it behind a horizon; it does not eliminate it.
 
-A second pattern was visible. The variables in Maxwell's equations were no longer ordinary: they were \textit{fields}, defined at every point of space, taking values that observers could measure but that did not belong to any particular object. The field has its own dynamics, its own energy, its own momentum. The world is not made only of things; it is made also of these continuous distributions of capacity-to-affect-things. Where Newton had unified the heavens and the earth, Maxwell unified \textit{things} and \textit{fields}.
+The instrument of the differential equation cannot, in principle, address its own initial data.  The boundary is structural, not provisional.
 
-\section*{Einstein: That the Stage Itself Moves}
+\section*{The Open Ledger}
+\label{sec:open-ledger}
 
-The third unification cut deeper. In 1905, in a paper that occupies thirty pages, Albert Einstein postulated that the laws of physics take the same form for all observers in uniform relative motion, and that the speed of light is the same for all of them. From these two statements he derived the relativity of simultaneity, length contraction, time dilation, the equivalence of mass and energy ($E = mc^2$), and the impossibility of accelerating any massive body to the speed of light. Within a decade he had extended the program to acceleration and gravitation: in 1915 the General Theory of Relativity replaced Newton's force law with a geometric statement. Mass-energy curves spacetime; spacetime tells mass-energy how to move.
-
-The shift was the deepest yet. Newton had unified the heavens and the earth on a single stage. Maxwell had filled that stage with fields. Einstein dissolved the stage. Space and time were no longer the fixed backdrop against which physics happened; they were themselves dynamical, themselves part of the physics. A moving clock ticks slower than a still one. A massive body bends the geodesics that other bodies follow. The Mercury-perihelion residual that Newton's law could not explain fell out of Einstein's equations on the first attempt, with no free parameter to adjust. The 1919 eclipse expedition measured starlight bending around the sun by exactly the amount General Relativity predicted, to within experimental error.
-
-Einstein's program took the lessons of Newton and Maxwell---economy, prediction, universality of variables---and added a fourth: \emph{covariance}. The laws of physics are statements that hold the same in every coordinate system. The variables of the theory are not just properties of the world; they are properties of the world \textit{independent of how we choose to look at it}. What had begun, with Newton, as the demand that the same law govern apple and moon ended, with Einstein, as the demand that the same law govern every observer who could be imagined.
-
-\section*{Quantum Mechanics: That What Is Computed Is Possibility}
-
-The fourth movement broke a different barrier. Beginning with Planck's 1900 quantum hypothesis and culminating in the 1925--1927 work of Heisenberg, Schrödinger, Born, Dirac, and others, quantum mechanics replaced \textit{the prediction of values} with \textit{the prediction of distributions over values}. The position of an electron in a hydrogen atom is not a number; it is a wavefunction, the squared magnitude of which gives the probability of finding the electron at any given location. The classical world of definite trajectories was revealed as a coarse-grained limit of a more fundamental theory in which the basic objects are amplitudes, complex numbers whose interference produces the patterns we see.
-
-Three features of this shift mattered for what was to come. First, \emph{the variables changed character}. Energy, momentum, angular momentum became operators on a Hilbert space, no longer just numbers. The state of a system became a vector. The questions one could ask of nature became projections onto subspaces. Second, \emph{noncommutativity entered}. The order in which observations are made is part of the physics. Position and momentum cannot both be specified arbitrarily precisely, not because of measurement clumsiness but because the operators that represent them do not commute. Third, \emph{the role of the observer became unavoidable}. A measurement is not a passive recording of a pre-existing fact. It is an interaction in which one of many possible outcomes becomes actual. What the formalism tells us is the relative weight of those possibilities; what selects one over the others, the formalism does not say.
-
-By the late 1940s, quantum field theory had married the Lorentz invariance of relativity to the operator algebra of quantum mechanics. By the 1970s, the Standard Model had organized the known elementary particles into three generations of quarks and leptons interacting via the gauge group $SU(3) \times SU(2) \times U(1)$. The agreement between theory and experiment is now extraordinary. The anomalous magnetic moment of the electron, $g{-}2$, is computed from quantum electrodynamics and measured in the laboratory; the two numbers agree to better than one part in $10^{12}$. No theory in any science has ever been verified to such precision.
-
-\section*{The Form Common to All Four}
-
-Four movements. Different mathematics, different vocabulary, different objects. But the same shape: each found a shorter language in which more phenomena appeared as consequences of fewer principles. Newton: three laws describe the cosmos. Maxwell: four equations describe electricity, magnetism, and light. Einstein: one geometric identity describes gravitation. Quantum field theory: a Lagrangian fits on a coffee cup and predicts $g{-}2$ to twelve decimals.
-
-Each movement also did something more specific. It \textit{enlarged the catalog of variables}. Newton accepted position, momentum, and mass as given; the laws acted on them. Maxwell added the field as a primary entity, as real as the charges that source it. Einstein added the metric of spacetime to the list of dynamical objects. Quantum mechanics added the wavefunction, the operator, the Hilbert-space structure itself. With each enlargement the description became more economical: more was explained, by fewer things-taken-as-given, in a more uniform language.
-
-This is what works in physics. When it works, a theory does not merely fit the data; it reveals that what looked like many phenomena were facets of one. The proof of the theory is not that it agrees with measurement---many wrong theories agree with measurement, in their narrow regime---but that it agrees with measurement \textit{while} compressing description.
-
-These four centuries have built tools that enable computers, navigation systems, medical imaging, telecommunications, the entire infrastructure of modern technology. They have also built a habit of mind: the belief that nature is intelligible, that its regularities can be expressed in mathematics, and that when a theory predicts a number that experiment then confirms, the agreement is not accident but evidence of structure. That habit of mind is the inheritance every later attempt builds on.
-
-\section*{What Each Theory Took as Given}
-
-There is, however, a regularity in these four movements that is rarely named directly. Each of them, in the moment of its triumph, \textit{took something as given}.
-
-Newton took space and time as the fixed backdrop. Mass was a property of bodies; the law of gravitation said how that property produced force across distance. Where mass came from, why bodies have it at all, why $F = G m_1 m_2 / r^2$ rather than $G m_1 m_2 / r^3$---these were not Newton's questions, and the theory did not pretend to answer them. The theory began \textit{after} certain decisions had been made.
-
-Maxwell took the field as a primary entity, but he took the spacetime in which the field lives as inherited from Newton. He took the existence of charge as given. He did not derive the value of the elementary charge $e$, nor explain why it is the same for every electron in the universe.
-
-Einstein generalized the stage---spacetime became dynamical---but he took the matter content as given. The right-hand side of $G_{\mu\nu} = \kappa T_{\mu\nu}$ contains the stress-energy tensor of whatever matter happens to exist; General Relativity does not say what species of matter exists, only how spacetime responds to them. The coupling constant $\kappa$ is not derived; it is measured.
-
-Quantum field theory took the spacetime arena, the gauge group, the matter representations, and the values of more than twenty coupling constants as given. The Standard Model is not a theory \textit{of} the electron mass; it is a theory \textit{using} the electron mass. Plug in the measured value of $\alpha$, and quantum electrodynamics produces $g{-}2$ to twelve decimals. The theory does not predict $\alpha$. It predicts what \textit{else} must hold, given $\alpha$.
-
-This is not a flaw. A theory must begin somewhere. To complain that Newton did not derive mass from first principles is to complain that he wrote a finite book. Every theory has a boundary at which the question ``why this and not that?'' is answered with: ``measure it.'' Beyond that boundary lies the regime the theory does not address.
-
-\section*{The Boundary as a Subject}
-
-What the next chapter will examine is what lies on the far side of those boundaries---the questions that physics, in its current form, takes as given rather than answers. There are, by now, many of them. The values of the fundamental constants. The number of generations. The dimension of spacetime. The cosmological hierarchy. The first instant.
-
-These are not loose ends in any particular theory. They are systematically the same kind of question: questions about what was \textit{taken as given} when each movement of the four-century chain began its work. Newton took space, time, and mass. Maxwell took the field. Einstein took matter. Quantum field theory took the parameters. Each theory pushed the boundary outward; none erased it.
-
-If a theory could be found that pushed it further---if the values that everyone has measured turned out to be derivable from a single, more austere starting point---it would not contradict the four centuries of work just summarized. It would extend them in the same direction they have always moved: toward shorter languages, fewer assumed quantities, more universal laws. This book proposes such a starting point, but not as a new physical substance or a hidden dynamical field. It proposes the checked closure of binary distinction as the formal skeleton of a theory of formulability. Before that proposal can be evaluated, the open ledger has to be named.
-
-% ─────────────────────────────────────────────────────────────────────
-\chapter{The Open Ledger}
-\label{ch:open-ledger}
-% ─────────────────────────────────────────────────────────────────────
-
-\epigraph{``If you ask me what holds the protons together inside the nucleus, I would say: ask the next person.''}{Richard Feynman, paraphrased from \textit{The Character of Physical Law}}
-
-Every theory has a boundary. On one side of it, the theory speaks; on the other, it points to a measurement. The boundary is not a defect---it is what tells the theory where its competence ends. Walk along that boundary, and what one sees is not a wall but a list. A list of quantities the theory uses but does not derive. A list of choices the theory respects but does not justify. A list of beginnings the theory builds on but cannot reach behind.
-
-This chapter walks the boundary. It does not predict; it inventories. The point is to make explicit what the Standard Model and General Relativity, taken together, owe to measurement rather than derive from principle. The list will be longer than expected. That length is not the failure of physics. It is the precise shape of what a more austere theory would, in principle, have to address.
-
-\section*{The Dimensionless Constants}
-
-The most precisely measured numbers in nature are dimensionless ratios. They are the same in every unit system and every era. They cannot be redefined away. The Standard Model assumes them; experiment delivers them.
+Once the common shape is explicit, its limit is explicit too.  Walk along that boundary and what one sees is a list---quantities the Standard Model and General Relativity use but do not derive.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.15}
@@ -426,33 +374,9 @@ $\alpha_s(M_Z)$ (strong, at $M_Z$) & $0.117\,9(9)$ & input \\
 \end{tabular}
 \end{center}
 
-There are at least eighteen such numbers in the Standard Model alone (the count varies depending on whether one separates the neutrino sector or not). Each one is a place where the theory says: ``the experiment goes here.'' Plug it in, and the rest follows. Refuse to plug it in, and there is no prediction.
+At least eighteen dimensionless numbers enter the Standard Model as input.  Each is a place where the theory says: ``the experiment goes here.''
 
-The fine-structure constant deserves a paragraph. It governs the strength of every electromagnetic interaction---the binding of atoms, the chemistry of life, the spectrum of every star. Its inverse, $137.035\,999\,084$, is one of the most carefully measured numbers in any science. Sommerfeld first isolated it in 1916. Eddington spent the last years of his life trying to derive it from a numerological argument; he died in 1944, leaving the question open. Pauli, who tutored him on the matter, is supposed to have remarked: when he died and was admitted to heaven, he was given a single audience with God, and the only question he asked was: \emph{why $\alpha$?} The story is apocryphal. The question is not.
-
-$\alpha$ is not the only such number. The proton-to-electron mass ratio $m_p / m_e \approx 1836$ determines, among many other things, why atoms have well-defined positions of nuclei surrounded by diffuse electron clouds rather than the reverse. The Weinberg angle $\theta_W$ controls the mixing of the photon and the neutral $Z$ boson. The Cabibbo angle and the CKM phase determine how quark generations communicate. None of these is derived. All of them are measured, repeatedly, in independent experiments that converge on the same value.
-
-\section*{The Counts}
-
-Some of the open ledger is not numerical at all. It is integer.
-
-The Standard Model has \emph{three generations} of matter: the electron, muon, and tau, each paired with a neutrino and accompanied by two quarks. The third generation looks just like the first, but heavier; the second looks just like the first, but less heavy. There is no third quark beyond bottom and top, no fourth lepton beyond tau. Why three? The theory does not say. Experiment confirms three (the LEP measurements of the $Z$ width, the absence of a heavy fourth-generation neutrino) but offers no explanation.
-
-Spacetime has \emph{four dimensions}: three spatial, one temporal. Newton, Maxwell, Einstein, and the Standard Model all assume this signature. None of them derives it. The number 3 (of spatial dimensions) is, like the 137, a brute fact taken as input.
-
-The gauge group is \emph{$SU(3) \times SU(2) \times U(1)$}: three colors of strong charge, a doublet of weak isospin, a single weak hypercharge. There are infinitely many possible gauge groups; nature chose one. The Standard Model is the theory that follows once that choice is made; it is not a theory of why that choice was made.
-
-The CKM matrix has \emph{three by three} entries because there are three generations; if generations were two, it would be two by two; if four, four by four. Its rotational angles and CP-violating phase would then be different numbers, drawn from a different parameter space. Each of these counts---generations, dimensions, group rank---propagates outward into every prediction the theory makes.
-
-\section*{The Hierarchies}
-
-A different category of open question arises when measured numbers are compared with the values one would naively expect from a theory.
-
-The cosmological constant problem is the most famous. The vacuum energy density of empty space, computed by summing zero-point fluctuations of all known quantum fields up to the Planck scale, comes out near $10^{112}$ erg/cm$^3$. The cosmological constant inferred from observations of distant supernovae and the cosmic microwave background, which is what would actually drive the accelerated expansion of the universe, comes out near $10^{-8}$ erg/cm$^3$. The discrepancy is one hundred and twenty orders of magnitude. No symmetry argument, no cancellation mechanism, no anthropic estimate has produced an agreed-upon resolution.
-
-The hierarchy problem is structurally similar. The Higgs mass is $\sim 125$ GeV; the Planck mass is $\sim 10^{19}$ GeV. The ratio is seventeen orders of magnitude. Quantum corrections to the Higgs mass should naturally drag it up to the Planck scale; that they do not is either a fine-tuning of one part in $10^{34}$ or evidence of a mechanism (supersymmetry, technicolor, extra dimensions) that has not been observed. The LHC, at $13.6$ TeV, has so far found no superpartners.
-
-The flavor hierarchy is a third instance. The masses of the quarks span six orders of magnitude (up at $\sim 2$ MeV, top at $\sim 173$ GeV). The masses of the charged leptons span four orders. The neutrino masses, bounded above by tritium-decay experiments and oscillation data, are at least seven orders of magnitude smaller than the electron mass. Why these patterns? The Standard Model takes them as given.
+The ledger is not only numerical.  It is also integer: three generations of matter, four spacetime dimensions, the gauge group $SU(3) \times SU(2) \times U(1)$.  None of these counts is derived.  It is also hierarchical: one hundred and twenty orders of magnitude between the computed and observed vacuum energy density; seventeen orders between the Higgs mass and the Planck mass; six orders across the quark masses.  And it reaches into the earliest universe: what came before the singularity, why the initial entropy was so low, what dark matter and dark energy are, why there is matter rather than antimatter.  The Standard Model has CP violation, but the magnitude is many orders too small to account for the observed baryon asymmetry.
 
 The neutrino sector needs one caveat early. In the Standard Model the
 absolute neutrino mass scale remains an input at the experimental frontier.
@@ -461,126 +385,19 @@ rational structure by which the neutral scale is later read in Planck units.
 The formal content is the rational skeleton.  The claim that this skeleton
 describes nature remains empirical exposure.
 
-Hierarchies are not predictions; they are puzzles. They are places where theory and observation agree only because the theory has enough parameters to be told what to predict. Each hierarchy is, in effect, a hidden entry in the open ledger.
+Inside quantum mechanics itself, the formalism provides two incompatible rules for time evolution: unitary Schr\"odinger evolution between measurements and non-unitary collapse during measurements.  The boundary between them is drawn, in practice, around the experimenter; in principle, it is undefined.  That a theory of this predictive power has, at its core, a discontinuity it cannot describe is itself an entry in the open ledger.
 
-\section*{The Beginnings}
+This list is not an indictment.  The Standard Model and General Relativity are the most successful physical theories ever constructed.  The list says where they end: below this line, we measure rather than derive.
 
-The deepest entries in the ledger are the ones that concern the very early universe.
+\section*{A Single Category of Question}
 
-What was there before the Big Bang? General Relativity, run backward, predicts a singularity: a moment at which curvature, density, and temperature all diverge. No one believes the singularity is real; everyone agrees the theory has broken down before reaching it. What replaces it depends on which speculation one prefers. Loop quantum cosmology suggests a bounce. String cosmology suggests a brane collision. Inflationary models stretch the unknown into a region behind a horizon we cannot see. None of these has a confirmed observational footprint.
+The entries differ in surface form, but not in kind.  Constants are pure numbers.  Counts are integers.  Hierarchies are ratios.  Beginnings are initial conditions.  Every entry is, in some form, a question about \emph{what was settled before the dynamics began}.
 
-Why did the universe begin in a state of such low entropy? The second law of thermodynamics says entropy never decreases. Tracing this backward, the early universe must have been in an extraordinarily ordered state---a configuration so improbable that the question ``why this initial condition?'' becomes physical, not philosophical. Penrose has estimated the required initial precision at one part in $10^{10^{123}}$.
+Every successful physical theory describes evolution from a starting point.  None describes the starting point itself.  The open ledger is a single category of question---a question about beginnings---disguised in many forms.
 
-What is dark matter? Galactic rotation curves, the bullet cluster, the cosmic microwave background, and weak lensing all point to a dominant non-baryonic component of cosmic matter. Direct detection experiments have searched for forty years and found nothing definitive. Whatever it is, it is not in the Standard Model.
+If one wished to address what lies beyond the boundary, one would need an instrument that operates without an assumed state space, without an assumed law of evolution, without assumed constants, and without assumed initial conditions.  What is left has nothing to act on except its own consistency requirements.  Self-consistency would have to do all the work that, in physics, is normally distributed across an enormous catalog of given quantities.
 
-What is dark energy? The same observational constraints that give us the cosmological constant give us a dominant component of the cosmic energy budget---about 68\% of the total---whose pressure is negative and whose density is constant in time. ``Cosmological constant'' is a name; it is not an explanation.
-
-Why is there matter rather than antimatter? At the Big Bang, the symmetric expectation is equal amounts of each, annihilating completely as the universe cooled, leaving only photons. Instead, we have galaxies. The Standard Model has CP violation in the CKM and PMNS sectors, but the magnitude is many orders of magnitude too small to account for the observed baryon asymmetry. Some additional source of asymmetry is required, and none has been confirmed.
-
-\section*{The Measurement Problem}
-
-A different kind of open ledger entry sits inside quantum mechanics itself.
-
-The formalism of quantum theory provides two distinct rules for how the state of a system changes in time. Between measurements, the wavefunction evolves continuously and deterministically according to the Schrödinger equation. \emph{During} a measurement, the wavefunction collapses---instantaneously, irreversibly, probabilistically---to one of the eigenstates of the measured observable, with probabilities given by the squared amplitudes (the Born rule).
-
-These two rules are incompatible in form. One is linear, unitary, and time-reversible. The other is nonlinear, non-unitary, and irreversible. The theory does not say when one applies and when the other does. The boundary between ``unitary evolution'' and ``measurement'' is drawn, in practice, around the experimenter; in principle, it is undefined. The various interpretations of quantum mechanics---Copenhagen, many-worlds, Bohmian, GRW, decoherence-based---differ on what to make of this incompatibility, but none has yet displaced the others on empirical grounds.
-
-That a theory of this predictive power has, at its core, a discontinuity it cannot describe is itself an entry in the open ledger.
-
-\section*{What the List Is Not}
-
-It is tempting, faced with such a list, to read it as indictment. That reading would be wrong.
-
-The Standard Model and General Relativity are the most successful physical theories ever constructed. Their predictions agree with experiment to a precision unmatched in any other science. The open ledger is not what they got wrong; it is what they did not, and could not, address. A theory that takes the masses of the leptons as input cannot, by construction, predict the muon-to-electron ratio. To complain that it does not is to misunderstand what the theory was built to do.
-
-The list is not an indictment. It is an inventory. It tells us, with precision, where physics currently ends. It says: ``below this line are the things we measure rather than derive.'' The boundary itself is not a flaw. The flaw, if there is one, would be to forget that the boundary exists.
-
-\section*{What the List Tells Us}
-
-There is one observation about the list that the next chapter will develop. Look at it closely. The dimensionless constants are pure numbers, with no units attached. The counts---generations, dimensions, group rank---are integers. The hierarchies are ratios of large to small. The beginnings are questions about initial conditions, taken as given.
-
-Every entry in the open ledger is, in some sense, a question of \emph{what was settled before the dynamics began}. Newton's laws act on positions and velocities; they do not say what positions or velocities to start with. Maxwell's equations act on fields; they do not say which charge configuration is initial. The Standard Model Lagrangian acts on quark and lepton fields with given masses; it does not say where those masses come from. General Relativity acts on a spacetime with given matter content; it does not say which matter exists.
-
-The pattern is consistent. Every successful theory of the last four centuries describes \emph{evolution from a starting point}. None of them describes \emph{the starting point itself}. The open ledger is, at its deepest, a single category of question---a question about beginnings---disguised in many forms.
-
-The next chapter examines whether this is accidental, or whether it reflects a structural property of the way physics has been done. If it is structural, then the only way to address the open ledger is to ask a question physics has not yet been willing to ask: what would a theory look like that began \textit{before} the starting point?
-
-% ─────────────────────────────────────────────────────────────────────
-\chapter{The Structural Boundary}
-\label{ch:structural-boundary}
-% ─────────────────────────────────────────────────────────────────────
-
-\epigraph{``The fact that everything works for me as if I knew the laws governing the actions of all things in nature must seem like a miracle to anyone who has not personally experienced it.''}{Albert Einstein, letter to Maurice Solovine, 1952}
-
-The previous chapter inventoried the open ledger. This one asks why the ledger is open---not in the trivial sense (``we have not yet measured well enough'') but in the structural sense: is there a property of how physics has been done for four hundred years that makes such an inventory \emph{inevitable}?
-
-The claim of this chapter is that there is. The pattern is not anecdotal. It is built into the form of every theory the previous two chapters discussed.
-
-\section*{The Shape of a Physical Theory}
-
-Strip a physical theory down to its essential parts and what remains is, almost without exception, the same shape:
-
-\begin{enumerate}
-\item A \emph{state space}---a set of possible configurations of the world. For Newton, configurations of positions and momenta. For Maxwell, configurations of electric and magnetic fields at every point. For General Relativity, four-manifolds equipped with a Lorentzian metric. For quantum mechanics, vectors in a Hilbert space.
-\item A \emph{law of evolution}---a rule that says, given a configuration at one instant, what the configuration will be at the next. For Newton, $F = m a$. For Maxwell, the field equations. For General Relativity, $G_{\mu\nu} = \kappa T_{\mu\nu}$. For quantum mechanics, the Schrödinger or Dirac equation.
-\item A set of \emph{constants and parameters}---numbers that appear in the law of evolution but are not themselves derived from it. The gravitational constant $G$, the elementary charge $e$, the Planck constant $\hbar$, the masses of the particles.
-\item An \emph{initial condition}---the configuration of the state space at some chosen reference time, from which evolution proceeds.
-\end{enumerate}
-
-This shape is not a coincidence. It is forced by the mathematical instrument every physical theory has used since Newton: the differential equation. A differential equation, by its very form, separates the world into ``what is given'' (the initial data, the constants of the equation, the form of the equation itself) and ``what follows'' (the evolved state at later times). What follows is the theory's prediction; what is given is what the theory cannot, in principle, address from inside itself.
-
-\section*{Why Constants Are Not Derivable}
-
-Consider a constant in a physical equation---say, the elementary charge $e$ that appears in Maxwell's source terms.
-
-The equation says: \emph{given} a charge $e$, the field it produces is such-and-such. This is a statement about how electric fields respond to the presence of charge. It is not, and cannot be, a statement about \emph{which value} of $e$ ought to appear in the equation. The equation is silent on that question for a perfectly precise reason: $e$ enters as a parameter, not as a variable. The equation does not act on $e$; it acts on the field, with $e$ held fixed.
-
-To derive the value of $e$ from within Maxwell's theory would require a different equation---one that takes $e$ as a variable and selects, by some additional principle, a unique value. But such an equation would no longer be Maxwell's theory. It would be a theory of which Maxwell's theory is a special case, evaluated at the right value of $e$.
-
-This pattern is general. A constant in a physical equation is, in the mathematical sense, an \emph{exogenous} quantity: it lives outside the dynamics that the equation describes. To derive it, one would have to embed the equation inside a larger framework in which the constant becomes an output, not an input. That larger framework would then have its own constants, its own exogenous quantities, its own boundary at which derivation gives way to measurement.
-
-In the four-century chain, this is what happened, again and again. Newton took $G$ as given; Einstein embedded $G$ inside a theory that took $\kappa = 8 \pi G / c^4$ as given. Maxwell took $e$ as given; quantum electrodynamics embedded $e$ inside a renormalization scheme that takes the renormalized coupling as given at some chosen scale. Each step pushed the boundary outward. None erased it. The structural property of the differential equation as the basic instrument of physics ensures that the boundary will always exist.
-
-\section*{Why Initial Conditions Are Not Derivable}
-
-The same logic applies, even more sharply, to initial conditions.
-
-The Schrödinger equation says: given a wavefunction at time $t_0$, the wavefunction at time $t_1 > t_0$ is determined. It says nothing about \emph{which} wavefunction is at $t_0$. The equation is, by construction, indifferent to its initial data. Plug in any normalizable function; you get a well-defined evolution. The choice of initial data is not made by the equation; it is made by the experimenter, the modeler, or the universe.
-
-When the equation in question is Einstein's---when the ``initial condition'' is a slice of the universe at some early time---the question becomes cosmological. What set the initial conditions for the entire universe? General Relativity does not answer. Inflation pushes the question back behind a horizon; it does not eliminate it. The answer ``we don't know'' is, on this account, not provisional; it is structural. The instrument of the differential equation cannot, in principle, address its own initial data.
-
-This is the same boundary observed before, in another form. A constant is, in a sense, an initial condition for the equation's own form: ``the equation is what it is, with $e$ taking the value it takes.'' An initial wavefunction is an initial condition for the equation's evolution: ``the system starts where it starts.'' Both lie outside the equation. Both are entries in the open ledger.
-
-\section*{The Cosmological Limit}
-
-Run the boundary all the way to its limit. The state space of the universe, at the moment we choose to call the beginning, must be specified by something. General Relativity does not specify it. Quantum field theory does not specify it. The Standard Model does not specify it. No combination of the four great theories, applied recursively to each other, specifies it. There is no equation in modern physics whose solution \emph{is} the initial condition of the universe.
-
-This is not because the relevant equation has not yet been found. It is because no equation of the form ``given configuration $A$, configuration $B$ follows'' can address what determines configuration $A$ when there is no earlier $A_0$ to refer to. The form of the differential equation, as the basic instrument of physics, has built the boundary into itself.
-
-Anything one might call ``the beginning'' lies, by construction, on the wrong side of that boundary. The fact that the open ledger reaches all the way back to the first instant is not a coincidence. It is the same boundary, encountered at its outermost extent.
-
-\section*{What Would Lie Beyond}
-
-If one wished to address what lies beyond the boundary---to derive the constants, to constrain the initial conditions, to ask what came ``before'' the beginning---one would need an instrument other than the differential equation. The instrument would have to:
-
-\begin{itemize}
-\item Operate without an assumed state space (because the state space is one of the things to be derived).
-\item Operate without an assumed law of evolution (because the law is also to be derived).
-\item Operate without assumed constants (because they are precisely what must be explained).
-\item Operate without assumed initial conditions (because the question is what made any initial condition possible).
-\end{itemize}
-
-What is left? The remaining instrument has nothing to act on except its own consistency requirements. Whatever can be said must follow from the demand that the resulting structure not contradict itself. \emph{Self-consistency} would have to do all the work that, in physics, is normally distributed across an enormous catalog of given quantities.
-
-This sounds austere. It is. The constraint of self-consistency, applied in a vacuum, is the strongest constraint imaginable, because it is the only one available. If anything can be derived in this regime---if any structure survives the demand that it consistent with its own existence---that structure will have an unusual property: it will not depend on any input the theorist supplied, because there is no input to supply.
-
-Whether such a derivation can be carried out, and what it produces, is the subject of \textit{Void}. Whether what it produces matches the open ledger is the subject of this book. The point of the present chapter is the more modest one: that the boundary is real, that it is structural, and that pushing through it requires a tool other than the differential equation.
-
-\section*{Where the Argument Goes Next}
-
-The first part of this book has now made three points. Physics has built four centuries of magnificent structure, each movement shorter and more general than the last (Chapter 1). Despite this, a precise inventory of what the latest theories take as given runs to dozens of dimensionless constants, integer counts, hierarchies, and initial conditions (Chapter 2). And this inventory is not provisional; it is a structural consequence of the differential equation as the basic instrument of physical reasoning (this chapter).
-
-The next part of the book takes the question seriously. If physics, as it stands, cannot address the open ledger from inside its own methods, then the open ledger has to be addressed from somewhere else. Where? The natural place to look is the formal threshold at which ``inside'' and ``outside'' can first be represented as distinguishable positions.
+Whether such a derivation can be carried out is the subject of \textit{Void}.  Whether what it produces can be read against the open ledger is the subject of this book.  The next part of this book walks the question backward: if the catalog of physical nouns is emptied one entry at a time, what remains when every familiar noun has failed?
 
 % ═════════════════════════════════════════════════════════════════════
 %  Part II — The Question of the Beginning
@@ -600,9 +417,9 @@ The next part of the book takes the question seriously. If physics, as it stands
 
 \epigraph{``The question is not what you look at, but what you see.''}{Henry David Thoreau}
 
-Cosmology is the practice of running physics backward. Take the universe as it is now, apply the equations of General Relativity and the thermal history of the matter content, and trace the state of the universe to earlier and earlier times. The procedure works remarkably well: the cosmic microwave background, the abundances of the light elements, the observed structure of galaxy clusters all confirm a model in which the universe was once much hotter, much denser, much more uniform, and much smaller.
+The previous chapter named the open ledger from the side of finished theory. This chapter approaches the same boundary from the side of cosmological reversal. Cosmology runs physics backward: take the universe as it is now, apply the equations of General Relativity and the thermal history of the matter content, and trace the state of the universe to earlier and earlier times. The procedure works remarkably well: the cosmic microwave background, the abundances of the light elements, and the observed large-scale structure all confirm a model in which the universe was once much hotter, much denser, much more uniform, and much smaller.
 
-Walk that history backward, slowly. With each step, ask what physical concepts are still well defined---and watch what happens to the catalog of available nouns.
+Walk that history backward, slowly. At each step ask which physical nouns still retain a clear meaning. The further back one goes, the thinner the catalog becomes.
 
 \section*{Today: the Catalog Is Full}
 
@@ -642,24 +459,24 @@ What is the catalog at this moment? The honest answer is: we do not know. There 
 
 \section*{The Singularity: the Catalog Empties}
 
-Beyond the Planck time, even the disagreements among quantum-gravity proposals start to dissolve. General Relativity, run backward classically, predicts a singularity at $t = 0$: a point at which curvature, density, and temperature all become infinite. No theory takes this prediction seriously; everyone agrees the equations have failed. But what \emph{replaces} the singularity is precisely the question that none of the four great theories of physics is equipped to answer.
+Beyond the Planck time, even the disagreements among quantum-gravity proposals begin to lose their present footing. General Relativity, run backward classically, predicts a singularity at $t = 0$: a point at which curvature, density, and temperature diverge. Contemporary physics reads this not as a literal final state, but as the sign that the equations have outrun their domain. What \emph{replaces} that breakdown is precisely what the present framework cannot say.
 
 If one insists on continuing backward, into a regime where no current theory applies, the catalog of physical objects empties one entry at a time. Spacetime is no longer well defined---no metric, no manifold, no points to locate things at. Energy and momentum lose meaning, because the symmetries of spacetime that gave rise to them through Noether's theorem are gone. Mass loses meaning, because mass is defined relative to a vacuum, and there is no vacuum. Charge loses meaning, because charge is associated with gauge fields propagating on a spacetime that no longer exists. Particles, fields, modes, excitations---each of them was a noun that referred to a structure built on a more primitive substrate. When the substrate goes, so do they.
 
-What is left when every familiar noun has dropped out of the catalog? The next chapter takes up the question.
+What is left when every familiar noun has dropped out of the catalog? The next chapter names only the boundary that question exposes.
 
 % ─────────────────────────────────────────────────────────────────────
-\chapter{The Pre-Physical State Space}
-\label{ch:pre-physical-state-space}
+\chapter{The Pre-Physical Boundary}
+\label{ch:pre-physical-boundary}
 % ─────────────────────────────────────────────────────────────────────
 
 \epigraph{``Whereof one cannot speak, thereof one must be silent.''}{Ludwig Wittgenstein, \textit{Tractatus Logico-Philosophicus} \S 7}
 
-The previous chapter walked the universe backward until every familiar physical noun had failed. This chapter marks the place where \textit{Form} begins: not by inventing a pre-physical object, and not by drawing an origin mark, but by asking which structural conditions must already hold if the closed kernel of \textit{Void} is later to be read physically.
+The previous chapter walked the universe backward until every familiar physical noun had failed. This chapter does not insert a new noun in their place. It marks only the boundary at which physical description falls silent while the question of formulability remains.
 
 \section*{The Structureless Regime}
 
-A theory that operates at the boundary of physical vocabulary needs a way to avoid smuggling in the world it is trying to explain. Call this boundary the pre-physical state space, but the name is deliberately negative. It has no metric; it has no manifold; it is not located anywhere, because location already presupposes space. It is not at any temperature, because temperature requires a statistical ensemble. It is not made of anything, because ``made of'' implies parts, and parts are nouns no longer available at this level.
+A theory that operates at the boundary of physical vocabulary needs a way to avoid smuggling in the world it is trying to explain. The safest name is therefore negative: the pre-physical boundary. It has no metric; it has no manifold; it is not located anywhere, because location already presupposes space. It is not at any temperature, because temperature requires a statistical ensemble. It is not made of anything, because ``made of'' implies parts, and parts are nouns no longer available at this level.
 
 What \emph{is} this regime, then? It is not a model and not a hidden substrate. It is the boundary at which physical description has no further physical noun to spend, while formal description still requires distinguishable positions before it can begin.
 
@@ -684,7 +501,7 @@ This is not a derivation. It is the status line that keeps the rest of the book 
 
 \epigraph{``A difference which makes a difference.''}{Gregory Bateson, definition of information}
 
-This chapter does not introduce distinction as a move. It clarifies the condition that \textit{Void} represents formally and that \textit{Form} later reads structurally. The intellectual tradition matters because it shows that the question is old; the present work matters only insofar as the status of each layer remains clean.
+This chapter does not introduce distinction as a move. It clarifies the condition that \textit{Void} represents formally and that \textit{Form} later reads structurally. Earlier names matter only to show that the question did not begin here; they do not strengthen the claim.
 
 \section*{Distinction Before Substance}
 
@@ -702,19 +519,19 @@ Bateson's definition predates the formalization of information theory by Shannon
 
 This is the reading the pre-physical boundary allows. There is no sender, no receiver, no channel, no alphabet. There is only the condition: a difference must be retrievable as a difference before any physical vocabulary can use it. Information, in Bateson's sense, is therefore not a substance added to the boundary. It is the first name for non-collapse.
 
-\section*{The Tradition That Prepared the Ground}
+\section*{Earlier Approaches to the Question}
 
-This way of thinking is not new. It has been articulated, in different vocabularies, by several thinkers who saw that the foundations of physics might lie not in what exists but in what is distinguishable.
+This way of thinking is not new. The vocabularies differ, and the positions should not be collapsed into one another. What matters here is narrower: several thinkers pressed toward a level at which form, binary decision, or distinguishability seemed more basic than the familiar inventory of physical objects.
 
 George Spencer-Brown, in his 1969 book \textit{Laws of Form}, took distinction itself as the primary object of mathematics. His ``calculus of indications'' begins with a mark and develops a system of equations whose interpretation depends on whether the mark has been drawn or not. The present work inherits the severity of the question, but it does not import the act of marking as an unanalysed formal step.
 
 John Archibald Wheeler, the physicist who taught Feynman and named the black hole, proposed in 1989 that physics might be reducible to binary distinctions. ``It from bit,'' he wrote: ``every it---every particle, every field of force, even the spacetime continuum itself---derives its function, its meaning, its very existence entirely---even if in some contexts indirectly---from the apparatus-elicited answers to yes-or-no questions, binary choices, bits.'' Wheeler did not formalize the proposal. He held it as a conjecture about where the next foundation of physics might be found.
 
-Ludwig Wittgenstein, in his 1921 \textit{Tractatus Logico-Philosophicus}, distinguished between what can be said (relations among propositions) and what can only be shown (the form of a proposition itself). The form of a proposition is, in Wittgenstein's account, what makes one proposition different from another; it is, in his terminology, the underlying logical scaffolding that distinctions ride on. The book ends with the celebrated proposition 7: ``Whereof one cannot speak, thereof one must be silent.'' What lies beyond the limits of language is, on his account, precisely the substance of the world before it has been articulated through distinctions.
+Ludwig Wittgenstein, in his 1921 \textit{Tractatus Logico-Philosophicus}, distinguished between what can be said (relations among propositions) and what can only be shown (the form of a proposition itself). His relevance here is narrower than any proto-physics. Logical form is not another object among objects; it is a condition under which propositions can differ and mean anything at all.
 
 Konrad Zuse, in his 1969 \textit{Calculating Space}, proposed that the universe is a computational process running on some discrete cellular automaton. Edward Fredkin extended this in the 1980s and 1990s. The proposal was not that the universe \emph{contains} computers, but that, at its base, every physical process is a transformation of distinguishable bits. None of these proposals has been confirmed; all of them have helped make the question askable.
 
-What unites Spencer-Brown, Wheeler, Wittgenstein, Bateson, Zuse, and Fredkin is the conviction that, when the catalog of physical nouns has been exhausted, what remains is not nothing but the bare relational fact of distinguishability. \textit{Void} formalizes the consequences of representing that fact as data. This book interprets the structural conditions carried by the survivor. The intellectual debt is older than either.
+These figures do not say the same thing, and this book does not rest on their authority. What matters is narrower: each, in a different register, pushed attention toward form, binary decision, or distinguishability at the point where ordinary physical nouns began to look derivative. \textit{Void} formalizes one such route. \textit{Form} tests whether its survivor can be read physically.
 
 \section*{What Distinction Is Not}
 
@@ -13194,13 +13011,9 @@ theorem-loop-closure = record
 % CONCLUSION
 % ══════════════════════════════════════════════════════════════════════════════
 
-\chapter*{Conclusion: What We Owe}
-\addcontentsline{toc}{chapter}{Conclusion: What We Owe}
+\chapter*{Conclusion: What the Chain Carries}
+\addcontentsline{toc}{chapter}{Conclusion: What the Chain Carries}
 \label{ch:conclusion}
-
-\epigraph{``Physics is like sex: sure, it may give some practical results, but that's not why we do it.''}{Richard P.~Feynman}
-
-\bigskip
 
 This book began at the boundary where physics can no longer supply its own first carrier. \textit{Void} represents distinguishability formally, closes the four-case ledger at $K_4$, and returns the invariant record that \textit{Form} reads. From $K_4$, a physical ledger becomes available as interpretation, not as an additional theorem of \textit{Void}.
 
@@ -13226,17 +13039,20 @@ The scattering machinery does not reopen the foundation. Lagrangians, Feynman ru
 
 \section*{The Debate That Follows}
 
-Here is the honest situation. The proofs either hold or they do not. That question belongs to logicians and mathematicians---not to taste, not to fashion, not to the sociology of physics departments. If a single \texttt{refl} in this book is wrong, the Agda compiler would have refused it. It did not. The proofs hold.
-
-What they \emph{mean} is a different matter entirely. That is where the real conversation starts, and it is not a small conversation.
+The proofs either hold or they do not.  That question is settled by the
+compiler.  What the proofs \emph{mean} is a different matter entirely.
+That is where the conversation begins, and it is not a small one.
 
 \medskip
 
-The \textbf{logician} asks: are the rules of Agda's type theory themselves necessary? The answer is that this book rests only on the safe constructive core exposed by Agda: inductive types, functions, dependent pairs, propositional equality, and computation by normalization. No postulate, no unsafe primitive, and no axiom K is imported to rescue the argument. Attack that bedrock if you like. But attacking it dismantles constructive mathematics itself, not merely this book.
+The \textbf{logician} asks: are the rules of Agda's type theory themselves necessary? The answer is that this book rests only on the safe constructive core exposed by Agda: inductive types, functions, dependent pairs, propositional equality, and computation by normalization. No postulate, no unsafe primitive, and no axiom K is imported to rescue the argument. A challenge to that bedrock would concern constructive mathematics
+itself, not merely this book.
 
 The \textbf{mathematician} asks: is the identification of $K_4$ invariants with physical constants genuinely forced, or merely consistent? That is the sharpest question, and it deserves a sharp answer. The mathematical survivor is not chosen here; it is imported from \textit{Void}, where the $K_4$ record is forced and shown unique. What \textit{Form} adds is narrower: once that record is accepted, the proposed physical ledger contains no adjustable arithmetic parameters. The challenge is therefore precise. Check the imported uniqueness proof; check the local identities; then attack the identifications as physics, not as hidden algebraic tuning.
 
-The \textbf{physicist} asks: where is the Lagrangian? Where are the Feynman rules? Where are the cross-section predictions? Fair. Those are the next presentations of the same closed structure, not repairs to an unfinished foundation. A Lagrangian compatible with this book must be a presentation of \texttt{StandardModelFromK4}; Feynman rules must respect \texttt{QFT-Loop-Structure}; cross-sections must reduce to the correction records and the Cauchy-real bridge already sealed. Designing a falsification experiment requires only the predictions in the chapter \emph{\nameref{ch:predictions}}. Several of them are within current experimental reach. Go measure them.
+The \textbf{physicist} asks: where is the Lagrangian? Where are the Feynman rules? Where are the cross-section predictions? Fair. Those are the next presentations of the same closed structure, not repairs to an unfinished foundation. A Lagrangian compatible with this book must be a presentation of \texttt{StandardModelFromK4}; Feynman rules must respect \texttt{QFT-Loop-Structure}; cross-sections must reduce to the correction records and the Cauchy-real bridge already sealed. Designing a falsification experiment requires only the predictions in
+the chapter \emph{\nameref{ch:predictions}}.  Several of them are within
+current experimental reach.
 
 The \textbf{philosopher} asks: what does it mean for the laws of physics to be \emph{forced}? The honest answer is layered. The formal kernel is forced relative to its minimal datum and representation contract. The physical reading is forced only if the open ledger of physics is indeed a reading of that kernel. Under that thesis, the question ``why these numbers?'' changes form: it no longer asks why nature selected one arbitrary parameter set from many, but why physical description has the only invariant grammar that survived the formal chain. Necessity of this kind is not magic. It is the absence of a surviving alternative at the relevant level.
 
@@ -13257,8 +13073,7 @@ Check it.
 \begin{center}
 \textit{The tetrahedron does not explain the universe.}\\
 \textit{The universe is intelligible only if something like the tetrahedron can be read.}\\
-\textit{We merely followed the chain.}\\
-\textit{Bless you.}
+\textit{We followed the chain.}
 \end{center}
 
 
